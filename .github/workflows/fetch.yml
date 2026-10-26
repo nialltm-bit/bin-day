@@ -1,0 +1,48 @@
+name: Fetch
+
+# End-to-end check of the fetcher: one real address, one request, using the pinned upstream version.
+# The scheduled production run is added once the private address store exists.
+on:
+  push:
+    branches: [claude/nifty-faraday-obdwan]
+    paths:
+      - .github/workflows/fetch.yml
+  workflow_dispatch:
+    inputs:
+      ons:
+        description: ONS code of the council
+        default: E06000022
+      uprn:
+        description: UPRN to fetch (default is upstream's public B&NES test address)
+        default: "100120000855"
+
+permissions:
+  contents: read
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r fetcher/requirements.txt
+      - name: Fetch one address
+        env:
+          ONS: ${{ inputs.ons || 'E06000022' }}
+          UPRN: ${{ inputs.uprn || '100120000855' }}
+        run: |
+          python -m fetcher.run add --store "$RUNNER_TEMP/store.json" --ons "$ONS" --uprn "$UPRN"
+          python -m fetcher.run fetch --store "$RUNNER_TEMP/store.json"
+      - name: Show the stored result
+        if: always()
+        run: |
+          {
+            echo '### Stored result'
+            echo '```json'
+            cat "$RUNNER_TEMP/store.json"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/store.json"

@@ -17,6 +17,7 @@
 | `needs_selenium` | `true` if the module drives a browser. Only `ukbcd` sources can. |
 | `bin_types` | Maps each of the council's own bin names to a waste `stream` (`general`, `recycling`, `food`, `garden`) with an optional `label` and `colour` to show people. |
 | `test_address` | A known-good address (every required input) for health checks. |
+| `min_interval_seconds` | Minimum gap between our requests to this council. Optional; the fetcher defaults to 10 seconds. |
 | `last_verified` | Date the source was last confirmed to work. |
 | `notes` | Anything worth knowing. |
 

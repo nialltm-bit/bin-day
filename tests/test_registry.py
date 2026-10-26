@@ -79,6 +79,8 @@ def test_load_raises_on_an_invalid_file(tmp_path):
         (lambda e: e.update(inputs=[]), "at least one input"),
         (lambda e: e.update(typo_field=1), "unknown key 'typo_field'"),
         (lambda e: e.update(last_verified="yesterday"), "last_verified must be a date"),
+        (lambda e: e.update(min_interval_seconds=0), "min_interval_seconds must be a positive number"),
+        (lambda e: e.update(min_interval_seconds="10"), "min_interval_seconds must be a positive number"),
         (lambda e: e.update(bin_types={}), "supported councils need bin_types"),
         (lambda e: e.update(bin_types={"Bin": {"stream": "glass"}}), "stream must be one of"),
         (lambda e: e.update(bin_types={"Bin": {"stream": "food", "color": "red"}}), "unknown key 'color'"),
