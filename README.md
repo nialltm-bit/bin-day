@@ -31,3 +31,7 @@ We fetch each address at most once a week, rate limit requests to each council, 
 ## Contributing
 
 This repo is public. Never commit API keys, tokens or other secrets. Use environment variables.
+
+## Licence
+
+MIT. See [LICENSE](LICENSE).
