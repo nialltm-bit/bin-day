@@ -13,7 +13,7 @@ on:
         description: ONS code of the council
         default: E06000022
       uprn:
-        description: UPRN to fetch. Public test addresses only (default is upstream's B&NES one): inputs and this job's output are visible on this public repo
+        description: "UPRN to fetch. Public test addresses only (default is upstream's B&NES one), because inputs and this job's output are visible on this public repo"
         default: "100120000855"
 
 permissions:
