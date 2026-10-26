@@ -41,7 +41,7 @@ nothing else. The secret is in the body because Apps Script can't read request h
 5. In the GitHub repo, **Settings**, **Secrets and variables**, **Actions**, add two repository secrets:
    `BIN_DAY_STORE_URL` (the `/exec` URL) and `BIN_DAY_STORE_SECRET` (the value from step 3). Do not put either in
    the repo or in chat.
-6. Check it: run the **Fetch (scheduled)** workflow by hand, or add an address and fetch it:
+6. Check it: in the repo's **Actions** tab, open **Fetch (scheduled)**, choose **Run workflow**, and enter `100120000855` as `add_uprn` (upstream's public B&NES test address). Or from a terminal:
 
    ```sh
    export BIN_DAY_STORE_URL=... BIN_DAY_STORE_SECRET=...

@@ -11,6 +11,14 @@ on:
         description: Fetch every address even if it is not due (use sparingly)
         type: boolean
         default: false
+      add_uprn:
+        description: Optional. Add this UPRN to the store before fetching (try 100120000855, upstream's public B&NES test address)
+        type: string
+        default: ""
+      add_ons:
+        description: ONS code for the UPRN above
+        type: string
+        default: E06000022
 
 permissions:
   contents: read
@@ -44,6 +52,12 @@ jobs:
           python-version: "3.12"
       - run: pip install -r fetcher/requirements.txt
         if: steps.config.outputs.configured == 'true'
+      - name: Add the address, if one was given
+        if: steps.config.outputs.configured == 'true' && inputs.add_uprn != ''
+        env:
+          ADD_UPRN: ${{ inputs.add_uprn }}
+          ADD_ONS: ${{ inputs.add_ons }}
+        run: python -m fetcher.run add --sheet --ons "$ADD_ONS" --uprn "$ADD_UPRN"
       - name: Fetch due addresses
         if: steps.config.outputs.configured == 'true'
         env:
