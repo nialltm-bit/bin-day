@@ -19,7 +19,19 @@ ONS_CODE = re.compile(r"^[ENSW][0-9]{8}$")
 MODULE_NAME = re.compile(r"^[A-Za-z][A-Za-z0-9_]*$")
 DATE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
 
-COUNCIL_KEYS = {"ons_code", "name", "status", "source", "inputs", "needs_selenium", "bin_types", "test_address", "last_verified", "notes"}
+COUNCIL_KEYS = {
+    "ons_code",
+    "name",
+    "status",
+    "source",
+    "inputs",
+    "needs_selenium",
+    "bin_types",
+    "test_address",
+    "last_verified",
+    "min_interval_seconds",
+    "notes",
+}
 SOURCE_KEYS = {"type", "module", "url", "skip_get_url"}
 BIN_KEYS = {"stream", "label", "colour"}
 
@@ -87,6 +99,9 @@ def _check_council(index: int, council: object, seen: set[str], problems: list[s
         problems.append(f"{where}: status must be one of {', '.join(STATUSES)}")
     if "last_verified" in council and not (isinstance(council["last_verified"], str) and DATE.match(council["last_verified"])):
         problems.append(f"{where}: last_verified must be a date like 2026-10-26")
+    interval = council.get("min_interval_seconds")
+    if "min_interval_seconds" in council and (isinstance(interval, bool) or not isinstance(interval, (int, float)) or interval <= 0):
+        problems.append(f"{where}: min_interval_seconds must be a positive number")
     if "needs_selenium" in council and not isinstance(council["needs_selenium"], bool):
         problems.append(f"{where}: needs_selenium must be true or false")
     inputs = council.get("inputs", [])

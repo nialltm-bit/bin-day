@@ -1,0 +1,2 @@
+# The pinned upstream version. Upgrade deliberately, then re-run the fetch workflow and the overrides check.
+uk_bin_collection==0.173.5
