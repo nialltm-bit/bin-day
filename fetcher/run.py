@@ -18,7 +18,7 @@ from datetime import UTC, date, datetime
 from pathlib import Path
 
 from fetcher import registry
-from fetcher.model import Address, FetchError
+from fetcher.model import Address, FetchError, UpstreamError
 from fetcher.normalise import normalise
 from fetcher.ratelimit import DEFAULT_MIN_INTERVAL, CouncilRateLimiter
 from fetcher.schedule import is_due
@@ -30,8 +30,15 @@ from fetcher.upstream import run_ukbcd
 @dataclass(frozen=True)
 class Outcome:
     uprn: str
+    council: str  # ONS code
     status: str  # fetched, failed or skipped
-    detail: str = ""
+    detail: str = ""  # may contain address details: for the store only, never for logs
+    log_detail: str = ""  # safe to print: this repo, and so its Actions logs, are public
+
+
+def format_outcome(outcome: Outcome) -> dict:
+    """What the command line prints. It never includes the UPRN or anything from an upstream error message."""
+    return {"council": outcome.council, "status": outcome.status, "detail": outcome.log_detail}
 
 
 def run(
@@ -53,23 +60,27 @@ def run(
             continue
         council = councils.get(address.ons_code)
         if council is None:
-            outcomes.append(Outcome(address.uprn, "skipped", f"no registry entry for {address.ons_code}"))
+            detail = f"no registry entry for {address.ons_code}"
+            outcomes.append(Outcome(address.uprn, address.ons_code, "skipped", detail, detail))
             continue
         if not registry.is_fetchable(council):
-            outcomes.append(Outcome(address.uprn, "skipped", f"{council['name']} is {council['status']}"))
+            detail = f"{council['name']} is {council['status']}"
+            outcomes.append(Outcome(address.uprn, address.ons_code, "skipped", detail, detail))
             continue
         if not force and not is_due(address.uprn, store.last_attempt(address.uprn), today):
-            outcomes.append(Outcome(address.uprn, "skipped", "not due"))
+            outcomes.append(Outcome(address.uprn, address.ons_code, "skipped", "not due", "not due"))
             continue
         limiter.wait(address.ons_code, council.get("min_interval_seconds", DEFAULT_MIN_INTERVAL))
         try:
             collections = normalise(council, fetch(council, address, selenium_url))
         except FetchError as err:
             store.save_failure(address.uprn, stamp, str(err))
-            outcomes.append(Outcome(address.uprn, "failed", str(err)))
+            safe = err.kind if isinstance(err, UpstreamError) else str(err)
+            outcomes.append(Outcome(address.uprn, address.ons_code, "failed", str(err), safe))
         else:
             store.save_success(address.uprn, stamp, collections)
-            outcomes.append(Outcome(address.uprn, "fetched", f"{len(collections)} collections"))
+            detail = f"{len(collections)} collections"
+            outcomes.append(Outcome(address.uprn, address.ons_code, "fetched", detail, detail))
     return outcomes
 
 
@@ -113,7 +124,9 @@ def main(argv: list[str] | None = None) -> int:
         only_uprn=args.uprn,
     )
     for outcome in outcomes:
-        print(json.dumps({"uprn": outcome.uprn, "status": outcome.status, "detail": outcome.detail}))
+        print(json.dumps(format_outcome(outcome)))
+    counts = {s: sum(o.status == s for o in outcomes) for s in ("fetched", "failed", "skipped")}
+    print(json.dumps({"summary": counts}))
     return 1 if any(o.status == "failed" for o in outcomes) else 0
 
 

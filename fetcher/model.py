@@ -6,6 +6,17 @@ class FetchError(Exception):
     """A fetch that must be recorded as a failure, not shown to people."""
 
 
+class UpstreamError(FetchError):
+    """An exception raised inside an upstream council module.
+
+    Its message can contain request URLs, which include the address, so logs show only `kind`.
+    """
+
+    def __init__(self, kind: str, message: str):
+        super().__init__(f"{kind}: {message}")
+        self.kind = kind
+
+
 class UnmappedBinError(FetchError):
     """The council returned a bin name that the registry has no stream for."""
 

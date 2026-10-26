@@ -12,7 +12,7 @@ on:
         type: boolean
         default: false
       add_uprn:
-        description: Optional. Add this UPRN to the store before fetching (try 100120000855, upstream's public B&NES test address)
+        description: Optional. Add this UPRN to the store before fetching. Only for public test addresses such as 100120000855, because workflow inputs are visible on this public repo
         type: string
         default: ""
       add_ons:
