@@ -10,6 +10,8 @@ Constraints: free to run, nearly everything in GitHub, a public repo with no sec
 | Signup, feed and database | Google Apps Script web apps in TypeScript (deployed with `clasp`), a private Google Sheet | Google, under a project account |
 | Postcode to council | postcodes.io (free, no key) | Called from the frontend or the script, with results cached |
 
+The council registry (`registry/councils.json`, checked by `fetcher/registry.py`) is the single table of how each council's data is fetched; adding a council is a data change.
+
 ## Why
 
 - The spike (`docs/spike-ukbincollectiondata.md`) found upstream works as a pinned library, so the fetcher is a scheduled job, not a server.

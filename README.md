@@ -38,7 +38,7 @@ Free to run, with as much as possible in GitHub. Full reasoning in [docs/stack.m
 
 ## Development
 
-Frontend, from `web/`: `npm install`, then `npm run dev`, `npm run lint`, `npm test`, `npm run build`. Python scripts, from the repo root: `pip install ruff pytest`, then `ruff check scripts` and `pytest`. CI runs the same checks on every pull request.
+Frontend, from `web/`: `npm install`, then `npm run dev`, `npm run lint`, `npm test`, `npm run build`. Python, from the repo root: `pip install ruff pytest`, then `ruff check scripts fetcher tests`, `pytest` and `python -m fetcher.registry` (checks the council registry in `registry/`). CI runs the same checks on every pull request.
 
 ## Using council data responsibly
 
