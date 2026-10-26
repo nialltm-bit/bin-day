@@ -28,7 +28,8 @@ PLAIN = [
     "CambridgeCityCouncil",
     "CardiffCouncil",
 ]
-SELENIUM = ["BexleyCouncil", "BrightonandHoveCityCouncil", "ArunCouncil"]
+# Bexley lists a web driver in input.json but its module does not use one; Barnet was added as a third real browser-driven council.
+SELENIUM = ["BexleyCouncil", "BrightonandHoveCityCouncil", "ArunCouncil", "BarnetCouncil"]
 
 PAUSE_SECONDS = 5
 TIMEOUT_SECONDS = 180
@@ -120,9 +121,11 @@ def main():
     selenium_url = sys.argv[3] if len(sys.argv) > 3 else "http://localhost:4444"
     inputs = json.loads(input_path.read_text())
     out_dir.mkdir(parents=True, exist_ok=True)
-    if (out_dir / "results.json").exists() and not os.environ.get("SPIKE_FORCE"):
-        print("results.json already exists; not calling councils again (set SPIKE_FORCE=1 to re-run)")
-        return
+    results_path = out_dir / "results.json"
+    previous = {}
+    if results_path.exists() and not os.environ.get("SPIKE_FORCE"):
+        previous = {r["council"]: r for r in json.loads(results_path.read_text())["results"]}
+        print(f"{len(previous)} councils already recorded; only calling the rest (SPIKE_FORCE=1 re-runs all)")
 
     signal.signal(signal.SIGALRM, on_alarm)
     http_log = []
@@ -130,6 +133,9 @@ def main():
 
     results = []
     for name in PLAIN + SELENIUM:
+        if name in previous:
+            results.append(previous[name])
+            continue
         results.append(run_one(name, inputs[name], selenium_url, http_log))
         print(json.dumps({k: results[-1][k] for k in ("council", "ok", "seconds")}), flush=True)
         time.sleep(PAUSE_SECONDS)
