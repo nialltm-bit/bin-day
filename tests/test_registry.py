@@ -77,6 +77,14 @@ def test_load_raises_on_an_invalid_file(tmp_path):
         (lambda e: e.update(inputs=["uprn", "uprn"]), "unique values"),
         (lambda e: e.update(inputs=["address"]), "unique values"),
         (lambda e: e.update(inputs=[]), "at least one input"),
+        (lambda e: e.pop("schedule"), "must say whether they return next_only dates or a full schedule"),
+        (lambda e: e.update(schedule="weekly"), "schedule must be one of"),
+        (lambda e: e["bin_types"]["Green Recycling Box"].pop("every_weeks"), "needs every_weeks because the council returns next_only"),
+        (lambda e: e["bin_types"]["Green Recycling Box"].update(every_weeks=0), "every_weeks must be one of 1, 2, 3, 4"),
+        (lambda e: e["bin_types"]["Green Recycling Box"].update(every_weeks=5), "every_weeks must be one of 1, 2, 3, 4"),
+        (lambda e: e["bin_types"]["Green Recycling Box"].update(every_weeks="2"), "every_weeks must be one of 1, 2, 3, 4"),
+        (lambda e: e["bin_types"]["Green Recycling Box"].update(every_weeks=True), "every_weeks must be one of 1, 2, 3, 4"),
+        (lambda e: e["bin_types"]["Green Recycling Box"].update(every_weeks=1.5), "every_weeks must be one of 1, 2, 3, 4"),
         (lambda e: e.update(typo_field=1), "unknown key 'typo_field'"),
         (lambda e: e.update(last_verified="yesterday"), "last_verified must be a date"),
         (lambda e: e.update(min_interval_seconds=0), "min_interval_seconds must be a positive number"),
@@ -107,3 +115,35 @@ def test_duplicate_ons_codes_are_rejected():
 
 def test_top_level_shape_is_checked():
     assert registry.validate([]) == ["registry must be an object with a 'councils' list"]
+
+
+def test_a_full_schedule_council_needs_no_frequencies():
+    entry = valid_entry()
+    entry["schedule"] = "full"
+    for bin_type in entry["bin_types"].values():
+        bin_type.pop("every_weeks")
+    assert problems_for(entry) == []
+
+
+def test_a_full_schedule_council_should_not_set_frequencies():
+    entry = valid_entry()
+    entry["schedule"] = "full"
+    assert any("should not set every_weeks" in p for p in problems_for(entry))
+
+
+def test_unsupported_councils_need_no_schedule():
+    entry = {"ons_code": "E06000023", "name": "Bristol, City of", "status": "unsupported"}
+    assert problems_for(entry) == []
+
+
+def test_bathnes_is_next_only_with_each_bins_frequency():
+    bathnes = registry.load()["E06000022"]
+    assert bathnes["schedule"] == "next_only"
+    assert registry.every_weeks(bathnes, "Black Rubbish Bin (140L)") == 2
+    assert registry.every_weeks(bathnes, "Food Recycling Collection Bin") == 1
+    assert registry.every_weeks(bathnes, "Green Recycling Box") == 1
+    assert registry.every_weeks(bathnes, "Blue Recycling Bag for Cardboard") == 1
+
+
+def test_every_weeks_for_an_unknown_bin_is_none():
+    assert registry.every_weeks(registry.load()["E06000022"], "Mystery Bin") is None

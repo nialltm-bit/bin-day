@@ -4,23 +4,47 @@
       "ons_code": "E06000022",
       "name": "Bath and North East Somerset",
       "status": "supported",
+      "schedule": "next_only",
       "source": {
         "type": "ukbcd",
         "module": "BathAndNorthEastSomersetCouncil",
         "url": "https://www.bathnes.gov.uk/webforms/waste/collectionday/",
         "skip_get_url": true
       },
-      "inputs": ["uprn"],
+      "inputs": [
+        "uprn"
+      ],
       "needs_selenium": false,
       "bin_types": {
-        "Black Rubbish Bin (140L)": { "stream": "general", "label": "Black bin", "colour": "black" },
-        "Blue Recycling Bag for Cardboard": { "stream": "recycling", "label": "Blue bag (cardboard)", "colour": "blue" },
-        "Green Recycling Box": { "stream": "recycling", "label": "Green box", "colour": "green" },
-        "Food Recycling Collection Bin": { "stream": "food", "label": "Food caddy" }
+        "Black Rubbish Bin (140L)": {
+          "stream": "general",
+          "label": "Black bin",
+          "colour": "black",
+          "every_weeks": 2
+        },
+        "Blue Recycling Bag for Cardboard": {
+          "stream": "recycling",
+          "label": "Blue bag (cardboard)",
+          "colour": "blue",
+          "every_weeks": 1
+        },
+        "Green Recycling Box": {
+          "stream": "recycling",
+          "label": "Green box",
+          "colour": "green",
+          "every_weeks": 1
+        },
+        "Food Recycling Collection Bin": {
+          "stream": "food",
+          "label": "Food caddy",
+          "every_weeks": 1
+        }
       },
-      "test_address": { "uprn": "100120000855" },
+      "test_address": {
+        "uprn": "100120000855"
+      },
       "last_verified": "2026-10-26",
-      "notes": "Plain HTTP, needs only a UPRN. Garden waste bin names have not been seen yet; map them when a garden-waste address is tested."
+      "notes": "Plain HTTP, needs only a UPRN. The API returns only the next collection date for each bin, so every_weeks says how often each bin is emptied. Frequencies are from the council's own pages (checked 2026-10-26): rubbish every other week (https://www.bathnes.gov.uk/rubbish), food waste weekly (https://www.bathnes.gov.uk/food-waste), green recycling box weekly (https://www.bathnes.gov.uk/green-recycling-box), blue recycling bag weekly (https://www.bathnes.gov.uk/blue-recycling-bag). Garden waste is fortnightly with a seasonal break, but its bin name has not been seen yet, so it is not mapped."
     }
   ]
 }
