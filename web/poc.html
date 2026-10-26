@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Bin Day: Apps Script test</title>
+  </head>
+  <body>
+    <main>
+      <h1>Apps Script test</h1>
+      <p>Temporary page for FRE-289. Paste your deployed web app URL (it ends in <code>/exec</code>).</p>
+      <p>
+        <label>Web app URL <input id="url" type="url" size="70" placeholder="https://script.google.com/macros/s/.../exec" /></label>
+      </p>
+      <p>
+        <button id="get" type="button">Call with GET</button>
+        <button id="post" type="button">Call with POST (plain text)</button>
+      </p>
+      <p id="feed"></p>
+      <pre id="result"></pre>
+    </main>
+    <script type="module" src="/src/poc.ts"></script>
+  </body>
+</html>

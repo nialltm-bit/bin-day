@@ -26,6 +26,25 @@ jobs:
       - run: npm test
       - run: npm run build
 
+  apps-script:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps-script
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps-script/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - name: Built files are up to date
+        run: git diff --exit-code -- dist
+
   python:
     runs-on: ubuntu-latest
     steps:
