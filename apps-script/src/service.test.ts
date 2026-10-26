@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { type AddressRow, type Deps, type ResultRow, type Tables, handle, safeEqual } from "./service";
+import { type Deps, handle, safeEqual } from "./service";
+import { memoryTables } from "./test-tables";
 
 const SECRET = "s3cret-value";
 const NOW = "2026-10-26T22:11:12+00:00";
@@ -7,18 +8,6 @@ const COLLECTIONS = [
   { date: "2026-10-30", bin_name: "Food Recycling Collection Bin", stream: "food" },
   { date: "2026-10-30", bin_name: "Black Rubbish Bin (140L)", stream: "general" },
 ];
-
-function memoryTables() {
-  const addresses: AddressRow[] = [];
-  const results = new Map<string, ResultRow>();
-  const tables: Tables = {
-    addresses: () => addresses.map((a) => ({ ...a })),
-    addAddress: (row) => void addresses.push({ ...row }),
-    getResult: (uprn) => results.get(uprn) ?? null,
-    putResult: (row) => void results.set(row.uprn, JSON.parse(JSON.stringify(row)) as ResultRow),
-  };
-  return { tables, addresses, results };
-}
 
 let store: ReturnType<typeof memoryTables>;
 let deps: Deps;
@@ -186,4 +175,102 @@ describe("locking", () => {
 
 it("rejects unknown actions", () => {
   expect(call({ action: "drop_everything" })).toEqual({ ok: false, error: "unknown action" });
+});
+
+describe("subscribe (public)", () => {
+  let counter = 0;
+  const publicDeps = (): Deps => ({
+    secret: SECRET,
+    tables: store.tables,
+    newToken: () => String(++counter).padStart(64, "a"),
+    newId: () => String(counter).padStart(8, "0"),
+    nowIso: () => NOW,
+  });
+  const subscribe = (body: Record<string, unknown> = {}, d: Deps = publicDeps()) =>
+    handle({ action: "subscribe", uprn: "100120000855", ons_code: "E06000022", ...body }, d);
+
+  beforeEach(() => {
+    counter = 0;
+  });
+
+  it("needs no secret, and gives back a new token", () => {
+    expect(subscribe()).toEqual({ ok: true, token: "a".repeat(63) + "1" });
+    expect(store.subscriptions).toEqual([
+      { token: "a".repeat(63) + "1", id: "00000001", uprn: "100120000855", ons_code: "E06000022", garden: false, created_at: NOW },
+    ]);
+  });
+
+  it("adds the address for the fetcher, once, however many people subscribe", () => {
+    subscribe();
+    subscribe();
+    expect(store.addresses).toEqual([{ uprn: "100120000855", ons_code: "E06000022" }]);
+    expect(store.subscriptions).toHaveLength(2);
+  });
+
+  it("gives each subscription its own token", () => {
+    const first = subscribe();
+    const second = subscribe();
+    expect(first.ok && second.ok && first.token !== second.token).toBe(true);
+  });
+
+  it("records the garden preference", () => {
+    subscribe({ garden: true });
+    expect(store.subscriptions[0].garden).toBe(true);
+  });
+
+  it("refuses councils that are not supported yet", () => {
+    expect(subscribe({ ons_code: "E06000023" })).toEqual({ ok: false, error: "council not supported yet" });
+    expect(store.subscriptions).toHaveLength(0);
+    expect(store.addresses).toHaveLength(0);
+  });
+
+  it("rejects bad input without writing anything", () => {
+    expect(subscribe({ uprn: "12 3" })).toEqual({ ok: false, error: "bad uprn" });
+    expect(subscribe({ ons_code: "nope" })).toEqual({ ok: false, error: "bad ons_code" });
+    expect(subscribe({ garden: "yes" })).toEqual({ ok: false, error: "bad garden" });
+    expect(subscribe({ postcode: "x".repeat(40) })).toEqual({ ok: false, error: "bad postcode" });
+    expect(store.subscriptions).toHaveLength(0);
+    expect(store.addresses).toHaveLength(0);
+  });
+
+  it("only lets plain characters into postcode and house number, so nothing can run as a formula in the Sheet", () => {
+    for (const bad of ["=IMPORTXML(A1)", "+1", "-1", "@SUM(A1)", " x", "x\n=1", "<b>", "x".repeat(101)]) {
+      expect(subscribe({ house_number: bad })).toEqual({ ok: false, error: "bad house_number" });
+    }
+    for (const bad of ["=1+1", "@x", "B1 1AA;", "x".repeat(11)]) {
+      expect(subscribe({ postcode: bad })).toEqual({ ok: false, error: "bad postcode" });
+    }
+    expect(subscribe({ postcode: "BA1 1AA", house_number: "Flat 2, 14-16 High St." }).ok).toBe(true);
+    expect(store.subscriptions).toHaveLength(1);
+  });
+
+  it("stops at the limits", () => {
+    expect(subscribe({}, { ...publicDeps(), maxPerAddress: 2 }).ok).toBe(true);
+    expect(subscribe({}, { ...publicDeps(), maxPerAddress: 2 }).ok).toBe(true);
+    expect(subscribe({}, { ...publicDeps(), maxPerAddress: 2 })).toEqual({ ok: false, error: "too many feeds for this address" });
+    expect(subscribe({ uprn: "1" }, { ...publicDeps(), maxSubscriptions: 2 })).toEqual({ ok: false, error: "full" });
+  });
+
+  it("is not configured without a way to make tokens", () => {
+    expect(subscribe({}, { secret: SECRET, tables: store.tables })).toEqual({ ok: false, error: "not configured" });
+  });
+
+  it("does not open up the secret-protected actions", () => {
+    expect(handle({ action: "addresses" }, publicDeps())).toEqual({ ok: false, error: "unauthorised" });
+    expect(handle({ action: "save_success", uprn: "1", now: NOW, collections: [] }, publicDeps())).toEqual({ ok: false, error: "unauthorised" });
+  });
+
+  it("locks while writing", () => {
+    const events: string[] = [];
+    subscribe({}, {
+      ...publicDeps(),
+      withLock: (work) => {
+        events.push("lock");
+        const value = work();
+        events.push("unlock");
+        return value;
+      },
+    });
+    expect(events).toEqual(["lock", "unlock"]);
+  });
 });

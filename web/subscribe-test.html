@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Bin Day: feed test</title>
+  </head>
+  <body>
+    <main>
+      <h1>Feed test</h1>
+      <p>Temporary page for FRE-272, until the real signup page exists (FRE-271). It makes a private calendar feed link for an address.</p>
+      <form id="form">
+        <p><label>Web app URL (ends in <code>/exec</code>) <input id="url" type="url" size="70" required /></label></p>
+        <p><label>ONS code <input id="ons" value="E06000022" size="12" required /></label> (E06000022 is Bath and North East Somerset)</p>
+        <p><label>UPRN <input id="uprn" size="14" inputmode="numeric" required /></label></p>
+        <p><label><input id="garden" type="checkbox" /> I have a garden waste bin</label></p>
+        <p><button type="submit">Make my feed link</button></p>
+      </form>
+      <p id="links"></p>
+      <pre id="result"></pre>
+    </main>
+    <script type="module" src="/src/subscribe-test.ts"></script>
+  </body>
+</html>
