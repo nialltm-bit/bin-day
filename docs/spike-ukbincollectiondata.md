@@ -14,7 +14,7 @@ How the run worked: the library interface (`UKBinCollectionApp`), one request pe
 
 **Which councils need Selenium, and what does it cost?** 82 of 353 council modules reference Selenium (static count). In the sample, only two of the three "Selenium" entries actually drove a browser: Arun (5.3 s) and Brighton and Hove (8.8 s). Bexley lists a web driver in `input.json` but its module doesn't use one, and answered in 1.5 s over HTTP. So browser-driven requests took about 5 to 9 s against 0.6 to 3.7 s for plain HTTP, and need a Chrome container (the runner used `--shm-size=2g`). I did not measure memory. At weekly refresh per address, Selenium councils are affordable if requests are queued through a small pool of browser sessions.
 
-**Inputs.** From `tests/input.json` (351 entries): UPRN 226, postcode 174, house number 124 (overlapping). The sample shows UPRN alone is enough for most, while Barnsley, Bolton-style portals and others also pull in a postcode. The council registry (FRE-267) must record the inputs per council.
+**Inputs.** From `tests/input.json` (351 entries): UPRN 226, postcode 174, house number 124 (overlapping). The sample shows UPRN alone is enough for most, while Barnsley also takes a postcode. The council registry (FRE-267) must record the inputs per council.
 
 **Response shape and bin type names.** The library returns `{"bins": [{"type": ..., "collectionDate": "dd/mm/YYYY"}]}`. Names are the council's own free text and vary wildly. Examples from the run:
 
