@@ -4,6 +4,7 @@ One request per council, run one after another with a pause between them, no ret
 Usage: spike_ukbcd.py <upstream tests/input.json> <output dir> [selenium url]
 """
 import json
+import os
 import signal
 import sys
 import time
@@ -119,6 +120,9 @@ def main():
     selenium_url = sys.argv[3] if len(sys.argv) > 3 else "http://localhost:4444"
     inputs = json.loads(input_path.read_text())
     out_dir.mkdir(parents=True, exist_ok=True)
+    if (out_dir / "results.json").exists() and not os.environ.get("SPIKE_FORCE"):
+        print("results.json already exists; not calling councils again (set SPIKE_FORCE=1 to re-run)")
+        return
 
     signal.signal(signal.SIGALRM, on_alarm)
     http_log = []

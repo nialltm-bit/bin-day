@@ -6,6 +6,8 @@ on:
     paths:
       - .github/workflows/spike-ukbcd.yml
       - scripts/spike_ukbcd.py
+      - scripts/spike_override.py
+      - scripts/overrides/**
   workflow_dispatch:
 
 permissions:
@@ -41,6 +43,8 @@ jobs:
           echo "Selenium not ready" >&2; exit 1
       - name: Run spike
         run: python scripts/spike_ukbcd.py "$RUNNER_TEMP/input.json" docs/spike-results http://localhost:4444
+      - name: Prove a scraper override
+        run: python scripts/spike_override.py docs/spike-results
       - name: Commit results
         run: |
           git config user.name "github-actions[bot]"
