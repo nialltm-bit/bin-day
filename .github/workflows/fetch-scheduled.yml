@@ -30,7 +30,7 @@ concurrency:
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 360  # the Sunday run fetches every next_only address; GitHub allows up to 6 hours
     env:
       BIN_DAY_STORE_URL: ${{ secrets.BIN_DAY_STORE_URL }}
       BIN_DAY_STORE_SECRET: ${{ secrets.BIN_DAY_STORE_SECRET }}
