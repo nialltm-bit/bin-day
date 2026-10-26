@@ -1,8 +1,8 @@
 # Spike results (FRE-263)
 
-Run: 2026-10-26T14:58:23+00:00, uk_bin_collection 0.173.5
+Run: 2026-10-26T15:56:15+00:00, uk_bin_collection 0.173.5
 
-15 of 15 councils returned bins.
+16 of 16 councils returned bins.
 
 | Council | Selenium | OK | Seconds | HTTP statuses | Bin types / error |
 |---|---|---|---|---|---|
@@ -21,3 +21,4 @@ Run: 2026-10-26T14:58:23+00:00, uk_bin_collection 0.173.5
 | BexleyCouncil | yes | yes | 1.5 | 200 | Blue Lidded Wheelie Bin (Paper and card); Brown Caddy (Food waste); Brown Wheelie Bin (Garden waste); Green Wheelie Bin (Non-recyclable waste); White Lidded Wheelie Bin (Plastics, cans and glass) |
 | BrightonandHoveCityCouncil | yes | yes | 8.8 | - | Food waste; Garden Waste; Recycling; Refuse |
 | ArunCouncil | yes | yes | 5.3 | 200 | Food; Garden; Recycling; Rubbish |
+| BarnetCouncil | yes | yes | 7.1 | 200 | Food Waste; General Waste; Recycling Bin |

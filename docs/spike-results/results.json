@@ -1,6 +1,6 @@
 {
   "meta": {
-    "run_at": "2026-10-26T14:58:23+00:00",
+    "run_at": "2026-10-26T15:56:15+00:00",
     "version": "0.173.5"
   },
   "results": [
@@ -329,6 +329,24 @@
       ],
       "collections": 4,
       "seconds": 5.3,
+      "http": [
+        {
+          "host": "api.postcodes.io",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "BarnetCouncil",
+      "selenium": true,
+      "ok": true,
+      "bin_types": [
+        "Food Waste",
+        "General Waste",
+        "Recycling Bin"
+      ],
+      "collections": 9,
+      "seconds": 7.1,
       "http": [
         {
           "host": "api.postcodes.io",
