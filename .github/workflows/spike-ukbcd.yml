@@ -1,0 +1,51 @@
+name: Spike UKBinCollectionData
+
+on:
+  push:
+    branches: [claude/nifty-faraday-obdwan]
+    paths:
+      - .github/workflows/spike-ukbcd.yml
+      - scripts/spike_ukbcd.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  spike:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      selenium:
+        image: selenium/standalone-chrome:latest
+        ports:
+          - 4444:4444
+        options: --shm-size=2g
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned upstream
+        run: pip install uk_bin_collection==0.173.5
+      - name: Fetch upstream test inputs at the same tag
+        run: curl -fsSL -o "$RUNNER_TEMP/input.json" https://raw.githubusercontent.com/robbrad/UKBinCollectionData/0.173.5/uk_bin_collection/tests/input.json
+      - name: Wait for Selenium
+        run: |
+          for i in $(seq 1 30); do
+            curl -fs http://localhost:4444/status | grep -q '"ready": *true' && exit 0
+            sleep 2
+          done
+          echo "Selenium not ready" >&2; exit 1
+      - name: Run spike
+        run: python scripts/spike_ukbcd.py "$RUNNER_TEMP/input.json" docs/spike-results http://localhost:4444
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/spike-results
+          git commit -m "Add FRE-263 spike results [skip ci]" || exit 0
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
