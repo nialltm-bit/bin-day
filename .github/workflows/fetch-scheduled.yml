@@ -1,0 +1,65 @@
+name: Fetch (scheduled)
+
+# Fetches every address that is due today from the private Google Sheet store and saves the results back.
+# Does nothing until the BIN_DAY_STORE_URL and BIN_DAY_STORE_SECRET repository secrets exist (see docs/store.md).
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Fetch every address even if it is not due (use sparingly)
+        type: boolean
+        default: false
+      add_uprn:
+        description: Optional. Add this UPRN to the store before fetching (try 100120000855, upstream's public B&NES test address)
+        type: string
+        default: ""
+      add_ons:
+        description: ONS code for the UPRN above
+        type: string
+        default: E06000022
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fetch-scheduled
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      BIN_DAY_STORE_URL: ${{ secrets.BIN_DAY_STORE_URL }}
+      BIN_DAY_STORE_SECRET: ${{ secrets.BIN_DAY_STORE_SECRET }}
+    steps:
+      - name: Check the store is configured
+        id: config
+        run: |
+          if [ -z "$BIN_DAY_STORE_URL" ] || [ -z "$BIN_DAY_STORE_SECRET" ]; then
+            echo "::notice::Store secrets are not set, so there is nothing to fetch. See docs/store.md."
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.config.outputs.configured == 'true'
+      - uses: actions/setup-python@v5
+        if: steps.config.outputs.configured == 'true'
+        with:
+          python-version: "3.12"
+      - run: pip install -r fetcher/requirements.txt
+        if: steps.config.outputs.configured == 'true'
+      - name: Add the address, if one was given
+        if: steps.config.outputs.configured == 'true' && inputs.add_uprn != ''
+        env:
+          ADD_UPRN: ${{ inputs.add_uprn }}
+          ADD_ONS: ${{ inputs.add_ons }}
+        run: python -m fetcher.run add --sheet --ons "$ADD_ONS" --uprn "$ADD_UPRN"
+      - name: Fetch due addresses
+        if: steps.config.outputs.configured == 'true'
+        env:
+          FORCE: ${{ inputs.force && '--force' || '' }}
+        run: python -m fetcher.run fetch --sheet $FORCE

@@ -1,4 +1,6 @@
 import { buildCalendar, pocEvents } from "./ics";
+import { handle } from "./service";
+import { sheetTables } from "./sheets";
 
 function json(body: unknown): GoogleAppsScript.Content.TextOutput {
   return ContentService.createTextOutput(JSON.stringify(body)).setMimeType(ContentService.MimeType.JSON);
@@ -14,12 +16,30 @@ function doGet(e: GoogleAppsScript.Events.DoGet): GoogleAppsScript.Content.TextO
   return json({ ok: true, service: "bin-day-poc", time: new Date().toISOString() });
 }
 
-function doPost(e: GoogleAppsScript.Events.DoPost): GoogleAppsScript.Content.TextOutput {
+function withScriptLock<T>(work: () => T): T {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
   try {
-    return json({ ok: true, received: JSON.parse(e?.postData?.contents ?? "null") });
+    return work();
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function doPost(e: GoogleAppsScript.Events.DoPost): GoogleAppsScript.Content.TextOutput {
+  let body: unknown;
+  try {
+    body = JSON.parse(e?.postData?.contents ?? "null");
   } catch {
     return json({ ok: false, error: "body is not JSON" });
   }
+  // Requests with an action are the fetcher's store API and need the shared secret.
+  if (typeof body === "object" && body !== null && "action" in body) {
+    const secret = PropertiesService.getScriptProperties().getProperty("FETCHER_SECRET") ?? undefined;
+    return json(handle(body, { secret, tables: sheetTables, withLock: withScriptLock }));
+  }
+  // Anything else is the proof-of-concept echo used by the Pages test page.
+  return json({ ok: true, received: body });
 }
 
 // Apps Script looks for top-level functions by name, so expose them on the global object.

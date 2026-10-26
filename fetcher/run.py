@@ -4,6 +4,9 @@ Usage:
   python -m fetcher.run add --store data.json --ons E06000022 --uprn 100120000855
   python -m fetcher.run fetch --store data.json [--selenium-url URL] [--force] [--uprn UPRN]
 
+Use --sheet instead of --store to use the Google Sheet store (BIN_DAY_STORE_URL and BIN_DAY_STORE_SECRET
+environment variables).
+
 There are no retry loops: a failed fetch is recorded and the address waits for its next slot.
 """
 import argparse
@@ -19,6 +22,7 @@ from fetcher.model import Address, FetchError
 from fetcher.normalise import normalise
 from fetcher.ratelimit import DEFAULT_MIN_INTERVAL, CouncilRateLimiter
 from fetcher.schedule import is_due
+from fetcher.sheet_store import SheetStore, StoreError
 from fetcher.store import FileStore, Store
 from fetcher.upstream import run_ukbcd
 
@@ -74,20 +78,28 @@ def main(argv: list[str] | None = None) -> int:
     commands = parser.add_subparsers(dest="command", required=True)
 
     add = commands.add_parser("add", help="add an address to a file store")
-    add.add_argument("--store", type=Path, required=True)
+    add_store = add.add_mutually_exclusive_group(required=True)
+    add_store.add_argument("--store", type=Path)
+    add_store.add_argument("--sheet", action="store_true")
     add.add_argument("--ons", required=True)
     add.add_argument("--uprn", required=True)
     add.add_argument("--postcode")
     add.add_argument("--house-number")
 
     fetch = commands.add_parser("fetch", help="fetch the addresses that are due")
-    fetch.add_argument("--store", type=Path, required=True)
+    fetch_store = fetch.add_mutually_exclusive_group(required=True)
+    fetch_store.add_argument("--store", type=Path)
+    fetch_store.add_argument("--sheet", action="store_true")
     fetch.add_argument("--selenium-url")
     fetch.add_argument("--force", action="store_true", help="fetch even if not due")
     fetch.add_argument("--uprn", help="only this address")
 
     args = parser.parse_args(argv)
-    store = FileStore(args.store)
+    try:
+        store = SheetStore.from_env() if args.sheet else FileStore(args.store)
+    except StoreError as err:
+        print(err, file=sys.stderr)
+        return 2
     if args.command == "add":
         store.add_address(Address(uprn=args.uprn, ons_code=args.ons, postcode=args.postcode, house_number=args.house_number))
         return 0
