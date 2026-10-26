@@ -1,0 +1,2116 @@
+{
+  "counts": {
+    "passed": 287,
+    "failed": 64,
+    "skipped": 0
+  },
+  "total": 351,
+  "cases": [
+    {
+      "test": "test_scenario_outline[AberdeenCityCouncil]",
+      "status": "passed",
+      "seconds": 2.428,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BromleyBoroughCouncil]",
+      "status": "failed",
+      "seconds": 2.05,
+      "message": "jsonschema.exceptions.ValidationError: [] should be non-empty"
+    },
+    {
+      "test": "test_scenario_outline[CheshireWestAndChesterCouncil]",
+      "status": "passed",
+      "seconds": 1.933,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BedfordBoroughCouncil]",
+      "status": "passed",
+      "seconds": 2.822,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ChesterfieldBoroughCouncil]",
+      "status": "passed",
+      "seconds": 2.864,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BromsgroveDistrictCouncil]",
+      "status": "passed",
+      "seconds": 0.912,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[AberdeenshireCouncil]",
+      "status": "passed",
+      "seconds": 0.985,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BedfordshireCouncil]",
+      "status": "passed",
+      "seconds": 1.802,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BroxbourneCouncil]",
+      "status": "passed",
+      "seconds": 18.609,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[AdurAndWorthingCouncils]",
+      "status": "passed",
+      "seconds": 1.286,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BelfastCityCouncil]",
+      "status": "passed",
+      "seconds": 1.248,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[AmberValleyBoroughCouncil]",
+      "status": "passed",
+      "seconds": 0.864,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ChichesterDistrictCouncil]",
+      "status": "failed",
+      "seconds": 113.039,
+      "message": "selenium.common.exceptions.TimeoutException: Message: "
+    },
+    {
+      "test": "test_scenario_outline[AngusCouncil]",
+      "status": "passed",
+      "seconds": 27.118,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BexleyCouncil]",
+      "status": "passed",
+      "seconds": 1.591,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BirminghamCityCouncil]",
+      "status": "passed",
+      "seconds": 2.028,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BlabyDistrictCouncil]",
+      "status": "passed",
+      "seconds": 3.924,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BlackburnCouncil]",
+      "status": "passed",
+      "seconds": 0.807,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BlackpoolCouncil]",
+      "status": "passed",
+      "seconds": 2.261,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BlaenauGwentCountyBoroughCouncil]",
+      "status": "passed",
+      "seconds": 11.322,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BroxtoweBoroughCouncil]",
+      "status": "passed",
+      "seconds": 4.799,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BuckinghamshireCouncil]",
+      "status": "passed",
+      "seconds": 1.782,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BolsoverCouncil]",
+      "status": "passed",
+      "seconds": 1.154,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BurnleyBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.145,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BoltonCouncil]",
+      "status": "passed",
+      "seconds": 2.549,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BuryCouncil]",
+      "status": "passed",
+      "seconds": 1.674,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CaerphillyCountyBoroughCouncil]",
+      "status": "passed",
+      "seconds": 2.057,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BostonBoroughCouncil]",
+      "status": "failed",
+      "seconds": 31.424,
+      "message": "selenium.common.exceptions.TimeoutException: Message:"
+    },
+    {
+      "test": "test_scenario_outline[AntrimAndNewtonabbeyCouncil]",
+      "status": "passed",
+      "seconds": 1.01,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CalderdaleCouncil]",
+      "status": "passed",
+      "seconds": 2.239,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ArdsAndNorthDownCouncil]",
+      "status": "passed",
+      "seconds": 1.829,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CambridgeCityCouncil]",
+      "status": "passed",
+      "seconds": 0.558,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ArgyllandButeCouncil]",
+      "status": "passed",
+      "seconds": 7.86,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CannockChaseDistrictCouncil]",
+      "status": "passed",
+      "seconds": 1.261,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CanterburyCityCouncil]",
+      "status": "failed",
+      "seconds": 0.49,
+      "message": "ConnectionError: Canterbury's bin collection API is returning 403 Forbidden - this looks like an outage or access restriction on the council's end, not this scraper. Try again later."
+    },
+    {
+      "test": "test_scenario_outline[CardiffCouncil]",
+      "status": "passed",
+      "seconds": 3.26,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CarmarthenshireCountyCouncil]",
+      "status": "passed",
+      "seconds": 1.211,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CastlepointDistrictCouncil]",
+      "status": "failed",
+      "seconds": 134.105,
+      "message": "requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='apps.castlepoint.gov.uk', port=443): Max retries exceeded with url: /cpapps/index.cfm?fa=myStreet.displayDetails (Caused by ConnectTimeout"
+    },
+    {
+      "test": "test_scenario_outline[ArmaghBanbridgeCraigavonCouncil]",
+      "status": "passed",
+      "seconds": 1.865,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ArunCouncil]",
+      "status": "passed",
+      "seconds": 5.029,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[AshfieldDistrictCouncil]",
+      "status": "failed",
+      "seconds": 13.687,
+      "message": "selenium.common.exceptions.TimeoutException: Message: "
+    },
+    {
+      "test": "test_scenario_outline[BracknellForestCouncil]",
+      "status": "passed",
+      "seconds": 1.627,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[AshfordBoroughCouncil]",
+      "status": "passed",
+      "seconds": 6.287,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BradfordMDC]",
+      "status": "passed",
+      "seconds": 0.969,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BraintreeDistrictCouncil]",
+      "status": "passed",
+      "seconds": 3.241,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BrecklandCouncil]",
+      "status": "failed",
+      "seconds": 0.277,
+      "message": "requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "test": "test_scenario_outline[BrentCouncil]",
+      "status": "passed",
+      "seconds": 1.598,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BCPCouncil]",
+      "status": "passed",
+      "seconds": 1.463,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BridgendCountyBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.5,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BaberghDistrictCouncil]",
+      "status": "passed",
+      "seconds": 5.039,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BrightonandHoveCityCouncil]",
+      "status": "passed",
+      "seconds": 8.325,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BarkingDagenham]",
+      "status": "failed",
+      "seconds": 21.621,
+      "message": "selenium.common.exceptions.TimeoutException: Message: Postcode input not found"
+    },
+    {
+      "test": "test_scenario_outline[BristolCityCouncil]",
+      "status": "passed",
+      "seconds": 2.868,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BroadlandDistrictCouncil]",
+      "status": "passed",
+      "seconds": 5.628,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[DorsetCouncil]",
+      "status": "passed",
+      "seconds": 3.406,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[DoverDistrictCouncil]",
+      "status": "passed",
+      "seconds": 2.01,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[DudleyCouncil]",
+      "status": "passed",
+      "seconds": 1.496,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[DumfriesandGallowayCouncil]",
+      "status": "failed",
+      "seconds": 0.125,
+      "message": "requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://www.dumfriesandgalloway.gov.uk/bins-recycling/waste-collection-schedule/download/137034556"
+    },
+    {
+      "test": "test_scenario_outline[DundeeCityCouncil]",
+      "status": "passed",
+      "seconds": 0.949,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[DurhamCouncil]",
+      "status": "passed",
+      "seconds": 2.807,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BarnetCouncil]",
+      "status": "passed",
+      "seconds": 9.757,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EalingCouncil]",
+      "status": "passed",
+      "seconds": 0.835,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EastAyrshireCouncil]",
+      "status": "passed",
+      "seconds": 1.296,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EastCambridgeshireCouncil]",
+      "status": "passed",
+      "seconds": 3.46,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EastDevonDC]",
+      "status": "failed",
+      "seconds": 0.627,
+      "message": "requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://eastdevon.gov.uk/recycling-and-waste/recycling-waste-information/when-is-my-bin-collected/future-collections-calendar/?UPRN="
+    },
+    {
+      "test": "test_scenario_outline[EastDunbartonshireCouncil]",
+      "status": "passed",
+      "seconds": 1.698,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EastHampshireDC]",
+      "status": "passed",
+      "seconds": 6.161,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BarnsleyMBCouncil]",
+      "status": "passed",
+      "seconds": 1.147,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BasildonCouncil]",
+      "status": "passed",
+      "seconds": 0.933,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BasingstokeCouncil]",
+      "status": "passed",
+      "seconds": 0.931,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BassetlawDistrictCouncil]",
+      "status": "passed",
+      "seconds": 1.07,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[BathAndNorthEastSomersetCouncil]",
+      "status": "passed",
+      "seconds": 0.823,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[FenlandDistrictCouncil]",
+      "status": "passed",
+      "seconds": 1.197,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EastHertsCouncil]",
+      "status": "failed",
+      "seconds": 0.766,
+      "message": "KeyError: 'transformed'"
+    },
+    {
+      "test": "test_scenario_outline[FermanaghOmaghDistrictCouncil]",
+      "status": "passed",
+      "seconds": 2.052,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EastLindseyDistrictCouncil]",
+      "status": "failed",
+      "seconds": 31.79,
+      "message": "selenium.common.exceptions.TimeoutException: Message: "
+    },
+    {
+      "test": "test_scenario_outline[FifeCouncil]",
+      "status": "passed",
+      "seconds": 19.311,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ChorleyCouncil]",
+      "status": "passed",
+      "seconds": 2.343,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ClackmannanshireCouncil]",
+      "status": "passed",
+      "seconds": 2.926,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CneSiarCouncil]",
+      "status": "passed",
+      "seconds": 14.233,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[FlintshireCountyCouncil]",
+      "status": "passed",
+      "seconds": 4.063,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ColchesterCityCouncil]",
+      "status": "passed",
+      "seconds": 5.411,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[FolkestoneandHytheDistrictCouncil]",
+      "status": "failed",
+      "seconds": 1.262,
+      "message": "jsonschema.exceptions.ValidationError: [] should be non-empty"
+    },
+    {
+      "test": "test_scenario_outline[ForestOfDeanDistrictCouncil]",
+      "status": "passed",
+      "seconds": 24.674,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ConwyCountyBorough]",
+      "status": "passed",
+      "seconds": 1.042,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CornwallCouncil]",
+      "status": "passed",
+      "seconds": 1.083,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CotswoldDistrictCouncil]",
+      "status": "passed",
+      "seconds": 25.598,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EastLothianCouncil]",
+      "status": "passed",
+      "seconds": 4.224,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EastRenfrewshireCouncil]",
+      "status": "failed",
+      "seconds": 31.585,
+      "message": "selenium.common.exceptions.TimeoutException: Message: "
+    },
+    {
+      "test": "test_scenario_outline[GatesheadCouncil]",
+      "status": "failed",
+      "seconds": 0.731,
+      "message": "curl_cffi.requests.exceptions.HTTPError: HTTP Error 403:"
+    },
+    {
+      "test": "test_scenario_outline[GedlingBoroughCouncil]",
+      "status": "failed",
+      "seconds": 30.135,
+      "message": "requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='api.gbcbincalendars.co.uk', port=443): Read timed out. (read timeout=30)"
+    },
+    {
+      "test": "test_scenario_outline[CoventryCityCouncil]",
+      "status": "passed",
+      "seconds": 0.938,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CrawleyBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.232,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CroydonCouncil]",
+      "status": "passed",
+      "seconds": 12.002,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CeredigionCountyCouncil]",
+      "status": "passed",
+      "seconds": 11.07,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EastRidingCouncil]",
+      "status": "passed",
+      "seconds": 3.326,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CumberlandCouncil]",
+      "status": "passed",
+      "seconds": 1.817,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EastStaffordshireBoroughCouncil]",
+      "status": "failed",
+      "seconds": 767.182,
+      "message": "requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='www.eaststaffsbc.gov.uk', port=443): Max retries exceeded with url: /bins-rubbish-recycling/collection-dates/68382 (Caused by ConnectTimeo"
+    },
+    {
+      "test": "test_scenario_outline[DacorumBoroughCouncil]",
+      "status": "failed",
+      "seconds": 300.641,
+      "message": "selenium.common.exceptions.InvalidSessionIdException: Message: Cannot find session with id: b716af95af2e816302966135cf76a6ab; For documentation on this error, please visit: https://www.selenium.dev/do"
+    },
+    {
+      "test": "test_scenario_outline[CharnwoodBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.748,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ChelmsfordCityCouncil]",
+      "status": "passed",
+      "seconds": 2.65,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CheltenhamBoroughCouncil]",
+      "status": "passed",
+      "seconds": 5.105,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[GlasgowCityCouncil]",
+      "status": "passed",
+      "seconds": 2.107,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CherwellDistrictCouncil]",
+      "status": "passed",
+      "seconds": 0.885,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[CheshireEastCouncil]",
+      "status": "passed",
+      "seconds": 1.131,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HighlandCouncil]",
+      "status": "passed",
+      "seconds": 0.871,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[GloucesterCityCouncil]",
+      "status": "passed",
+      "seconds": 21.982,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[Hillingdon]",
+      "status": "passed",
+      "seconds": 11.99,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HinckleyandBosworthBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.89,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HorshamDistrictCouncil]",
+      "status": "failed",
+      "seconds": 48.091,
+      "message": "requests.exceptions.ConnectionError: HTTPSConnectionPool(host='satellite.horsham.gov.uk', port=443): Max retries exceeded with url: /environment/refuse/cal2.asp (Caused by ProtocolError('Connection ab"
+    },
+    {
+      "test": "test_scenario_outline[GraveshamBoroughCouncil]",
+      "status": "passed",
+      "seconds": 3.371,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[GooglePublicCalendarCouncil]",
+      "status": "passed",
+      "seconds": 0.913,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[GosportBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.06,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[GreatYarmouthBoroughCouncil]",
+      "status": "failed",
+      "seconds": 11.25,
+      "message": "selenium.common.exceptions.TimeoutException: Message: "
+    },
+    {
+      "test": "test_scenario_outline[GuildfordCouncil]",
+      "status": "passed",
+      "seconds": 6.571,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[GwyneddCouncil]",
+      "status": "passed",
+      "seconds": 1.279,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HackneyCouncil]",
+      "status": "passed",
+      "seconds": 6.936,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HaltonBoroughCouncil]",
+      "status": "failed",
+      "seconds": 20.405,
+      "message": "ValueError: Halton rejected the search because the reCAPTCHA was not completed (Google served a challenge to the automated browser)."
+    },
+    {
+      "test": "test_scenario_outline[HullCityCouncil]",
+      "status": "passed",
+      "seconds": 0.607,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HuntingdonDistrictCouncil]",
+      "status": "passed",
+      "seconds": 0.952,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HyndburnBoroughCouncil]",
+      "status": "passed",
+      "seconds": 11.073,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HarboroughDistrictCouncil]",
+      "status": "passed",
+      "seconds": 1.636,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HaringeyCouncil]",
+      "status": "passed",
+      "seconds": 1.821,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[InverclydeCouncil]",
+      "status": "failed",
+      "seconds": 30.301,
+      "message": "requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='www.inverclyde.gov.uk', port=443): Max retries exceeded with url: /assets/attach/15406/Bin-Collection-Days-including-HR-T-12.09.22.pdf (Ca"
+    },
+    {
+      "test": "test_scenario_outline[HarlowCouncil]",
+      "status": "passed",
+      "seconds": 3.604,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HarrogateBoroughCouncil]",
+      "status": "failed",
+      "seconds": 133.791,
+      "message": "requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='secure.harrogate.gov.uk', port=443): Max retries exceeded with url: /inmyarea/Property/?uprn=100050414307 (Caused by ConnectTimeoutError(<"
+    },
+    {
+      "test": "test_scenario_outline[IpswichBoroughCouncil]",
+      "status": "failed",
+      "seconds": 1.058,
+      "message": "jsonschema.exceptions.ValidationError: [] should be non-empty"
+    },
+    {
+      "test": "test_scenario_outline[IsleOfAngleseyCouncil]",
+      "status": "passed",
+      "seconds": 1.678,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[IsleOfWightCouncil]",
+      "status": "passed",
+      "seconds": 14.508,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[IslingtonCouncil]",
+      "status": "passed",
+      "seconds": 2.355,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[KingsLynnandWestNorfolkBC]",
+      "status": "passed",
+      "seconds": 1.228,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[KingstonUponThamesCouncil]",
+      "status": "failed",
+      "seconds": 1.415,
+      "message": "jsonschema.exceptions.ValidationError: [] should be non-empty"
+    },
+    {
+      "test": "test_scenario_outline[KirkleesCouncil]",
+      "status": "passed",
+      "seconds": 3.942,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[KnowsleyMBCouncil]",
+      "status": "passed",
+      "seconds": 27.105,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LancasterCityCouncil]",
+      "status": "failed",
+      "seconds": 0.485,
+      "message": "requests.exceptions.MissingSchema: Invalid URL '': No scheme supplied. Perhaps you meant https://?"
+    },
+    {
+      "test": "test_scenario_outline[LeedsCityCouncil]",
+      "status": "passed",
+      "seconds": 1.301,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LeicesterCityCouncil]",
+      "status": "passed",
+      "seconds": 1.114,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LewesDistrictCouncil]",
+      "status": "passed",
+      "seconds": 1.133,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LichfieldDistrictCouncil]",
+      "status": "passed",
+      "seconds": 0.971,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LincolnCouncil]",
+      "status": "passed",
+      "seconds": 10.345,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LisburnCastlereaghCityCouncil]",
+      "status": "passed",
+      "seconds": 1.899,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LiverpoolCityCouncil]",
+      "status": "passed",
+      "seconds": 0.782,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LondonBoroughCamdenCouncil]",
+      "status": "passed",
+      "seconds": 1.889,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LondonBoroughEaling]",
+      "status": "passed",
+      "seconds": 1.017,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LondonBoroughHammersmithandFulham]",
+      "status": "failed",
+      "seconds": 0.424,
+      "message": "AttributeError: 'NoneType' object has no attribute 'find'"
+    },
+    {
+      "test": "test_scenario_outline[LondonBoroughHarrow]",
+      "status": "passed",
+      "seconds": 5.337,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LondonBoroughHavering]",
+      "status": "passed",
+      "seconds": 0.646,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LondonBoroughHounslow]",
+      "status": "passed",
+      "seconds": 2.813,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LondonBoroughLambeth]",
+      "status": "passed",
+      "seconds": 1.377,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LondonBoroughLewisham]",
+      "status": "passed",
+      "seconds": 0.487,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LondonBoroughOfRichmondUponThames]",
+      "status": "passed",
+      "seconds": 13.887,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LondonBoroughRedbridge]",
+      "status": "passed",
+      "seconds": 11.974,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HartDistrictCouncil]",
+      "status": "passed",
+      "seconds": 0.761,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HartlepoolBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.062,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HastingsBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.203,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LondonBoroughSutton]",
+      "status": "failed",
+      "seconds": 1.298,
+      "message": "jsonschema.exceptions.ValidationError: [] should be non-empty"
+    },
+    {
+      "test": "test_scenario_outline[HerefordshireCouncil]",
+      "status": "passed",
+      "seconds": 1.074,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[LutonBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.634,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HertsmereBoroughCouncil]",
+      "status": "passed",
+      "seconds": 4.822,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MaidstoneBoroughCouncil]",
+      "status": "passed",
+      "seconds": 23.226,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[HighPeakCouncil]",
+      "status": "passed",
+      "seconds": 1.743,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MidAndEastAntrimBoroughCouncil]",
+      "status": "failed",
+      "seconds": 0.579,
+      "message": "ValueError: Could not find the collections form start link"
+    },
+    {
+      "test": "test_scenario_outline[MidDevonCouncil]",
+      "status": "passed",
+      "seconds": 10.451,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MidSuffolkDistrictCouncil]",
+      "status": "passed",
+      "seconds": 5.142,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MidSussexDistrictCouncil]",
+      "status": "failed",
+      "seconds": 0.703,
+      "message": "requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://waste.services.midsussex.gov.uk/"
+    },
+    {
+      "test": "test_scenario_outline[MidUlsterDistrictCouncil]",
+      "status": "passed",
+      "seconds": 5.015,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MaldonDistrictCouncil]",
+      "status": "passed",
+      "seconds": 1.1,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MalvernHillsDC]",
+      "status": "passed",
+      "seconds": 1.081,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ManchesterCityCouncil]",
+      "status": "passed",
+      "seconds": 1.666,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MansfieldDistrictCouncil]",
+      "status": "passed",
+      "seconds": 0.781,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MiddlesbroughCouncil]",
+      "status": "passed",
+      "seconds": 1.279,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MedwayCouncil]",
+      "status": "passed",
+      "seconds": 0.679,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MidlothianCouncil]",
+      "status": "failed",
+      "seconds": 39.337,
+      "message": "selenium.common.exceptions.TimeoutException: Message:"
+    },
+    {
+      "test": "test_scenario_outline[MeltonBoroughCouncil]",
+      "status": "passed",
+      "seconds": 4.654,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MerthyrTydfilCountyBoroughCouncil]",
+      "status": "passed",
+      "seconds": 0.832,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MertonCouncil]",
+      "status": "failed",
+      "seconds": 3.663,
+      "message": "jsonschema.exceptions.ValidationError: [] should be non-empty"
+    },
+    {
+      "test": "test_scenario_outline[NorthDevonCountyCouncil]",
+      "status": "passed",
+      "seconds": 21.517,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NorthEastDerbyshireDistrictCouncil]",
+      "status": "passed",
+      "seconds": 0.864,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NorthEastLincs]",
+      "status": "passed",
+      "seconds": 2.281,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NorthHertfordshireDistrictCouncil]",
+      "status": "passed",
+      "seconds": 9.445,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MiltonKeynesCityCouncil]",
+      "status": "passed",
+      "seconds": 3.73,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[DarlingtonBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.802,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[DartfordBoroughCouncil]",
+      "status": "failed",
+      "seconds": 133.395,
+      "message": "requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='windmz.dartford.gov.uk', port=443): Max retries exceeded with url: /ufs/WS_CHECK_COLLECTIONS.eb?UPRN=100060861698 (Caused by ConnectTimeou"
+    },
+    {
+      "test": "test_scenario_outline[MoleValleyDistrictCouncil]",
+      "status": "passed",
+      "seconds": 0.924,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NorthKestevenDistrictCouncil]",
+      "status": "failed",
+      "seconds": 0.167,
+      "message": "requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://www.n-kesteven.org.uk/bins/display?uprn=10006545854"
+    },
+    {
+      "test": "test_scenario_outline[NorthLanarkshireCouncil]",
+      "status": "passed",
+      "seconds": 1.698,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MonmouthshireCountyCouncil]",
+      "status": "passed",
+      "seconds": 6.79,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NorthLincolnshireCouncil]",
+      "status": "passed",
+      "seconds": 3.282,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NorthNorfolkDistrictCouncil]",
+      "status": "passed",
+      "seconds": 26.37,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[MorayCouncil]",
+      "status": "passed",
+      "seconds": 14.274,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NeathPortTalbotCouncil]",
+      "status": "passed",
+      "seconds": 9.217,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NewForestCouncil]",
+      "status": "passed",
+      "seconds": 5.512,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NorthNorthamptonshireCouncil]",
+      "status": "passed",
+      "seconds": 1.054,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NorthSomersetCouncil]",
+      "status": "failed",
+      "seconds": 135.497,
+      "message": "requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='forms.n-somerset.gov.uk', port=443): Max retries exceeded with url: /Waste/CollectionSchedule (Caused by ConnectTimeoutError(<HTTPSConnect"
+    },
+    {
+      "test": "test_scenario_outline[NewarkAndSherwoodDC]",
+      "status": "passed",
+      "seconds": 1.256,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NewcastleCityCouncil]",
+      "status": "passed",
+      "seconds": 1.181,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NewcastleUnderLymeCouncil]",
+      "status": "passed",
+      "seconds": 0.521,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NewhamCouncil]",
+      "status": "passed",
+      "seconds": 1.116,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NewportCityCouncil]",
+      "status": "passed",
+      "seconds": 0.649,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NorthAyrshireCouncil]",
+      "status": "passed",
+      "seconds": 0.741,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NottinghamCityCouncil]",
+      "status": "passed",
+      "seconds": 1.314,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NuneatonBedworthBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.386,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[OadbyAndWigstonBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.054,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[OldhamCouncil]",
+      "status": "passed",
+      "seconds": 1.421,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[OrkneyIslandsCouncil]",
+      "status": "passed",
+      "seconds": 1.266,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[OxfordCityCouncil]",
+      "status": "passed",
+      "seconds": 5.262,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[PembrokeshireCountyCouncil]",
+      "status": "passed",
+      "seconds": 1.832,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[PerthAndKinrossCouncil]",
+      "status": "passed",
+      "seconds": 0.963,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[PeterboroughCityCouncil]",
+      "status": "passed",
+      "seconds": 3.694,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[PlymouthCouncil]",
+      "status": "passed",
+      "seconds": 2.045,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[PortsmouthCityCouncil]",
+      "status": "passed",
+      "seconds": 1.636,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[PowysCouncil]",
+      "status": "failed",
+      "seconds": 0.64,
+      "message": "requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://en.powys.gov.uk/binday"
+    },
+    {
+      "test": "test_scenario_outline[PrestonCityCouncil]",
+      "status": "failed",
+      "seconds": 300.501,
+      "message": "selenium.common.exceptions.InvalidSessionIdException: Message: Cannot find session with id: b9b947615bdb56549efc7e340054b7b3; For documentation on this error, please visit: https://www.selenium.dev/do"
+    },
+    {
+      "test": "test_scenario_outline[DenbighshireCouncil]",
+      "status": "failed",
+      "seconds": 135.008,
+      "message": "requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='refusecalendarapi.denbighshire.gov.uk', port=443): Max retries exceeded with url: /Csrf/token (Caused by ConnectTimeoutError(<HTTPSConnect"
+    },
+    {
+      "test": "test_scenario_outline[NorthTynesideCouncil]",
+      "status": "failed",
+      "seconds": 0.353,
+      "message": "requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://www.northtyneside.gov.uk/waste-collection-schedule/view/47097627"
+    },
+    {
+      "test": "test_scenario_outline[NorthWarwickshireBoroughCouncil]",
+      "status": "passed",
+      "seconds": 3.731,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NorthWestLeicestershire]",
+      "status": "passed",
+      "seconds": 2.769,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NorthYorkshire]",
+      "status": "passed",
+      "seconds": 1.292,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NorthumberlandCouncil]",
+      "status": "passed",
+      "seconds": 4.294,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[NorwichCityCouncil]",
+      "status": "failed",
+      "seconds": 0.577,
+      "message": "requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://bnr-wrp.whitespacews.com/"
+    },
+    {
+      "test": "test_scenario_outline[RedcarandClevelandCouncil]",
+      "status": "passed",
+      "seconds": 1.22,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[RedditchBoroughCouncil]",
+      "status": "passed",
+      "seconds": 0.701,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ReigateAndBansteadBoroughCouncil]",
+      "status": "passed",
+      "seconds": 16.117,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[RenfrewshireCouncil]",
+      "status": "passed",
+      "seconds": 2.417,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[RhonddaCynonTaffCouncil]",
+      "status": "passed",
+      "seconds": 2.695,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[RochdaleCouncil]",
+      "status": "passed",
+      "seconds": 1.883,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[RochfordCouncil]",
+      "status": "passed",
+      "seconds": 2.095,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[RotherDistrictCouncil]",
+      "status": "passed",
+      "seconds": 1.403,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[RotherhamCouncil]",
+      "status": "passed",
+      "seconds": 1.195,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[RoyalBoroughofGreenwich]",
+      "status": "passed",
+      "seconds": 1.604,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[RugbyBoroughCouncil]",
+      "status": "passed",
+      "seconds": 0.487,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[RunnymedeBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.045,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[RushcliffeBoroughCouncil]",
+      "status": "passed",
+      "seconds": 4.482,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[RushmoorCouncil]",
+      "status": "passed",
+      "seconds": 2.376,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SalfordCityCouncil]",
+      "status": "passed",
+      "seconds": 0.62,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SandwellBoroughCouncil]",
+      "status": "passed",
+      "seconds": 2.61,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ScottishBordersCouncil]",
+      "status": "passed",
+      "seconds": 1.155,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SeftonCouncil]",
+      "status": "passed",
+      "seconds": 2.208,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SevenoaksDistrictCouncil]",
+      "status": "passed",
+      "seconds": 5.544,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SheffieldCityCouncil]",
+      "status": "passed",
+      "seconds": 1.322,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ShetlandIslandsCouncil]",
+      "status": "failed",
+      "seconds": 0.841,
+      "message": "requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: https://www.shetland.gov.uk/directory/search?directoryID=12&keywords=ZE1+0NY"
+    },
+    {
+      "test": "test_scenario_outline[ShropshireCouncil]",
+      "status": "passed",
+      "seconds": 2.764,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SloughBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.44,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SolihullCouncil]",
+      "status": "passed",
+      "seconds": 1.251,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SomersetCouncil]",
+      "status": "passed",
+      "seconds": 5.808,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SouthAyrshireCouncil]",
+      "status": "passed",
+      "seconds": 1.821,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SouthCambridgeshireCouncil]",
+      "status": "passed",
+      "seconds": 1.689,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SouthDerbyshireDistrictCouncil]",
+      "status": "passed",
+      "seconds": 3.596,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SouthGloucestershireCouncil]",
+      "status": "passed",
+      "seconds": 1.004,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SouthHamsDistrictCouncil]",
+      "status": "failed",
+      "seconds": 0.612,
+      "message": "requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "test": "test_scenario_outline[SouthHollandDistrictCouncil]",
+      "status": "failed",
+      "seconds": 0.43,
+      "message": "requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "test": "test_scenario_outline[SouthKestevenDistrictCouncil]",
+      "status": "passed",
+      "seconds": 6.214,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SouthLanarkshireCouncil]",
+      "status": "passed",
+      "seconds": 3.052,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SouthNorfolkCouncil]",
+      "status": "passed",
+      "seconds": 1.106,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SouthOxfordshireCouncil]",
+      "status": "passed",
+      "seconds": 1.003,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[DerbyCityCouncil]",
+      "status": "passed",
+      "seconds": 1.324,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SouthRibbleCouncil]",
+      "status": "passed",
+      "seconds": 2.459,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[DerbyshireDalesDistrictCouncil]",
+      "status": "passed",
+      "seconds": 1.33,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[DoncasterCouncil]",
+      "status": "passed",
+      "seconds": 6.661,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SouthStaffordshireDistrictCouncil]",
+      "status": "passed",
+      "seconds": 0.964,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SouthTynesideCouncil]",
+      "status": "failed",
+      "seconds": 0.444,
+      "message": "json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "test": "test_scenario_outline[SouthamptonCityCouncil]",
+      "status": "passed",
+      "seconds": 1.27,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SouthendOnSeaCityCouncil]",
+      "status": "passed",
+      "seconds": 0.524,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SouthwarkCouncil]",
+      "status": "failed",
+      "seconds": 1.02,
+      "message": "jsonschema.exceptions.ValidationError: [] should be non-empty"
+    },
+    {
+      "test": "test_scenario_outline[SpelthorneBoroughCouncil]",
+      "status": "passed",
+      "seconds": 2.754,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[StAlbansCityAndDistrictCouncil]",
+      "status": "failed",
+      "seconds": 0.587,
+      "message": "requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "test": "test_scenario_outline[StHelensBC]",
+      "status": "passed",
+      "seconds": 12.915,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[StocktonOnTeesCouncil]",
+      "status": "failed",
+      "seconds": 33.367,
+      "message": "selenium.common.exceptions.TimeoutException: Message: "
+    },
+    {
+      "test": "test_scenario_outline[StaffordBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.211,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[StaffordshireMoorlandsDistrictCouncil]",
+      "status": "passed",
+      "seconds": 1.541,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[StevenageBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.607,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[StirlingCouncil]",
+      "status": "passed",
+      "seconds": 14.423,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[StockportBoroughCouncil]",
+      "status": "passed",
+      "seconds": 2.102,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SwanseaCouncil]",
+      "status": "failed",
+      "seconds": 0.319,
+      "message": "curl_cffi.requests.exceptions.HTTPError: HTTP Error 403:"
+    },
+    {
+      "test": "test_scenario_outline[StokeOnTrentCityCouncil]",
+      "status": "passed",
+      "seconds": 0.936,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SwindonBoroughCouncil]",
+      "status": "passed",
+      "seconds": 0.72,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[TamesideMBCouncil]",
+      "status": "failed",
+      "seconds": 135.161,
+      "message": "requests.exceptions.ConnectTimeout: HTTPConnectionPool(host='lite.tameside.gov.uk', port=80): Max retries exceeded with url: /BinCollections/CollectionService.svc/GetBinCollection (Caused by ConnectTi"
+    },
+    {
+      "test": "test_scenario_outline[StratfordUponAvonCouncil]",
+      "status": "passed",
+      "seconds": 2.193,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[StroudDistrictCouncil]",
+      "status": "passed",
+      "seconds": 2.931,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SunderlandCityCouncil]",
+      "status": "failed",
+      "seconds": 0.388,
+      "message": "curl_cffi.requests.exceptions.HTTPError: HTTP Error 403:"
+    },
+    {
+      "test": "test_scenario_outline[SurreyHeathBoroughCouncil]",
+      "status": "passed",
+      "seconds": 3.356,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[SwaleBoroughCouncil]",
+      "status": "passed",
+      "seconds": 5.76,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[TelfordAndWrekinCouncil]",
+      "status": "passed",
+      "seconds": 1.025,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[TendringDistrictCouncil]",
+      "status": "passed",
+      "seconds": 9.822,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[TestValleyBoroughCouncil]",
+      "status": "passed",
+      "seconds": 13.246,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[TewkesburyBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.056,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ThanetDistrictCouncil]",
+      "status": "passed",
+      "seconds": 2.991,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ThreeRiversDistrictCouncil]",
+      "status": "passed",
+      "seconds": 16.042,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ReadingBoroughCouncil]",
+      "status": "passed",
+      "seconds": 0.794,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[TorfaenCouncil]",
+      "status": "failed",
+      "seconds": 39.165,
+      "message": "selenium.common.exceptions.TimeoutException: Message: "
+    },
+    {
+      "test": "test_scenario_outline[ThurrockCouncil]",
+      "status": "failed",
+      "seconds": 16.138,
+      "message": "requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='www.thurrock.gov.uk', port=443): Read timed out. (read timeout=15)"
+    },
+    {
+      "test": "test_scenario_outline[TonbridgeAndMallingBC]",
+      "status": "failed",
+      "seconds": 0.638,
+      "message": "requests.exceptions.ConnectionError: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))"
+    },
+    {
+      "test": "test_scenario_outline[TorbayCouncil]",
+      "status": "passed",
+      "seconds": 10.429,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[UttlesfordDistrictCouncil]",
+      "status": "failed",
+      "seconds": 300.508,
+      "message": "selenium.common.exceptions.InvalidSessionIdException: Message: Cannot find session with id: d9b74939bb3e4a730e77f8e9701b1b8e; For documentation on this error, please visit: https://www.selenium.dev/do"
+    },
+    {
+      "test": "test_scenario_outline[TorridgeDistrictCouncil]",
+      "status": "passed",
+      "seconds": 2.734,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[TowerHamletsCouncil]",
+      "status": "passed",
+      "seconds": 1.558,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[TunbridgeWellsCouncil]",
+      "status": "passed",
+      "seconds": 1.415,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WakefieldCityCouncil]",
+      "status": "passed",
+      "seconds": 4.828,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WalsallCouncil]",
+      "status": "failed",
+      "seconds": 0.513,
+      "message": "jsonschema.exceptions.ValidationError: [] should be non-empty"
+    },
+    {
+      "test": "test_scenario_outline[WalthamForest]",
+      "status": "passed",
+      "seconds": 31.335,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[TamworthBoroughCouncil]",
+      "status": "passed",
+      "seconds": 0.96,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WandsworthCouncil]",
+      "status": "passed",
+      "seconds": 4.091,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[TandridgeDistrictCouncil]",
+      "status": "passed",
+      "seconds": 5.116,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WarringtonBoroughCouncil]",
+      "status": "failed",
+      "seconds": 0.672,
+      "message": "requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://www.warrington.gov.uk/bin-collections/get-jobs/10094964379"
+    },
+    {
+      "test": "test_scenario_outline[WarwickDistrictCouncil]",
+      "status": "passed",
+      "seconds": 2.918,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[TeignbridgeCouncil]",
+      "status": "failed",
+      "seconds": 0.499,
+      "message": "ConnectionError: Teignbridge's website returned 403 Forbidden - its Azure Application Gateway is blocking this client, not rejecting the UPRN."
+    },
+    {
+      "test": "test_scenario_outline[WealdenDistrictCouncil]",
+      "status": "failed",
+      "seconds": 0.655,
+      "message": "json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "test": "test_scenario_outline[WelhatCouncil]",
+      "status": "passed",
+      "seconds": 2.003,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WatfordBoroughCouncil]",
+      "status": "passed",
+      "seconds": 2.121,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WestBerkshireCouncil]",
+      "status": "failed",
+      "seconds": 31.645,
+      "message": "selenium.common.exceptions.TimeoutException: Message: "
+    },
+    {
+      "test": "test_scenario_outline[WaverleyBoroughCouncil]",
+      "status": "failed",
+      "seconds": 0.647,
+      "message": "IndexError: list index out of range"
+    },
+    {
+      "test": "test_scenario_outline[WestDunbartonshireCouncil]",
+      "status": "passed",
+      "seconds": 1.059,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WestLancashireBoroughCouncil]",
+      "status": "passed",
+      "seconds": 2.02,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WestLindseyDistrictCouncil]",
+      "status": "passed",
+      "seconds": 1.401,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EastSuffolkCouncil]",
+      "status": "passed",
+      "seconds": 13.058,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WestLothianCouncil]",
+      "status": "passed",
+      "seconds": 9.088,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WestMorlandAndFurness]",
+      "status": "passed",
+      "seconds": 1.313,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WestNorthamptonshireCouncil]",
+      "status": "passed",
+      "seconds": 0.507,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WestOxfordshireDistrictCouncil]",
+      "status": "passed",
+      "seconds": 11.371,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EastbourneBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.148,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EastleighBoroughCouncil]",
+      "status": "passed",
+      "seconds": 11.278,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WestSuffolkCouncil]",
+      "status": "passed",
+      "seconds": 5.225,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EdenDistrictCouncil]",
+      "status": "passed",
+      "seconds": 2.068,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WestDevonBoroughCouncil]",
+      "status": "failed",
+      "seconds": 17.131,
+      "message": "selenium.common.exceptions.TimeoutException: Message: "
+    },
+    {
+      "test": "test_scenario_outline[EdinburghCityCouncil]",
+      "status": "passed",
+      "seconds": 5.353,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WestminsterCityCouncil]",
+      "status": "passed",
+      "seconds": 0.848,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WiltshireCouncil]",
+      "status": "passed",
+      "seconds": 2.585,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WinchesterCityCouncil]",
+      "status": "passed",
+      "seconds": 5.198,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ElmbridgeBoroughCouncil]",
+      "status": "passed",
+      "seconds": 9.003,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WindsorAndMaidenheadCouncil]",
+      "status": "passed",
+      "seconds": 0.978,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WirralCouncil]",
+      "status": "passed",
+      "seconds": 3.169,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WokingBoroughCouncil]",
+      "status": "failed",
+      "seconds": 0.57,
+      "message": "IndexError: list index out of range"
+    },
+    {
+      "test": "test_scenario_outline[WokinghamBoroughCouncil]",
+      "status": "passed",
+      "seconds": 2.887,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EnfieldCouncil]",
+      "status": "passed",
+      "seconds": 47.166,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WiganBoroughCouncil]",
+      "status": "passed",
+      "seconds": 3.38,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WolverhamptonCityCouncil]",
+      "status": "failed",
+      "seconds": 1.776,
+      "message": "jsonschema.exceptions.ValidationError: [] should be non-empty"
+    },
+    {
+      "test": "test_scenario_outline[WrexhamCountyBoroughCouncil]",
+      "status": "passed",
+      "seconds": 13.812,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WorcesterCityCouncil]",
+      "status": "passed",
+      "seconds": 1.047,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WyreCouncil]",
+      "status": "passed",
+      "seconds": 1.046,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WyreForestDistrictCouncil]",
+      "status": "passed",
+      "seconds": 0.732,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[YorkCouncil]",
+      "status": "passed",
+      "seconds": 1.551,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[WychavonDistrictCouncil]",
+      "status": "passed",
+      "seconds": 65.359,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EnvironmentFirst]",
+      "status": "passed",
+      "seconds": 1.089,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EppingForestDistrictCouncil]",
+      "status": "passed",
+      "seconds": 2.408,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[EpsomandEwellBoroughCouncil]",
+      "status": "passed",
+      "seconds": 9.166,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ErewashBoroughCouncil]",
+      "status": "passed",
+      "seconds": 1.036,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ExeterCityCouncil]",
+      "status": "failed",
+      "seconds": 0.601,
+      "message": "requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://exeter.gov.uk/repositories/hidden-pages/address-finder/?qsource=UPRN&qtype=bins&term=100040212270"
+    },
+    {
+      "test": "test_scenario_outline[FalkirkCouncil]",
+      "status": "passed",
+      "seconds": 1.179,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[FarehamBoroughCouncil]",
+      "status": "passed",
+      "seconds": 0.827,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ValeofGlamorganCouncil]",
+      "status": "passed",
+      "seconds": 3.089,
+      "message": ""
+    },
+    {
+      "test": "test_scenario_outline[ValeofWhiteHorseCouncil]",
+      "status": "passed",
+      "seconds": 1.065,
+      "message": ""
+    }
+  ]
+}
