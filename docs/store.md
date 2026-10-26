@@ -63,23 +63,29 @@ column for debugging.
 
 ## Running on a schedule
 
-`.github/workflows/fetch-scheduled.yml` runs daily at 05:17 UTC. It does nothing, with a notice in the log, until
-the two secrets exist. How often each address is fetched depends on the council's `schedule` in the registry
-(see `fetcher/schedule.py`):
+`.github/workflows/fetch-scheduled.yml` runs daily at 05:17 UTC and does nothing, with a notice in the log, until
+the two secrets exist. What it fetches on a given day depends on the council's `schedule` in the registry (see
+`fetcher/schedule.py`):
 
-- `next_only` councils (B&NES) return only the next date for each bin, so every address is fetched **daily**. That
-  keeps the next date for each bin from ever being more than a day old.
-- `full` councils return a whole schedule, so each address is fetched **weekly**, on a weekday fixed by its UPRN so
+- `next_only` councils (B&NES) return only the next date for each bin. Their addresses are fetched **on Sundays**.
+  Councils don't collect on Sundays, so the date returned is always the real date for the coming week, with any bank
+  holiday shift already applied. Later dates are projected from each bin's `every_weeks` in the registry. If a Sunday
+  run is missed, the addresses are caught up the next day.
+- `full` councils return a whole schedule. Their addresses are fetched **weekly**, on a weekday fixed by the UPRN so
   that addresses spread evenly across the week.
+- An address that has never been fetched (a new signup) is fetched in the next run on any day, so people don't wait
+  for a Sunday. It is fetched again on the following Sunday, as part of the normal cycle.
 
-An address is fetched at most once per run, and a failed attempt counts, so a failing council is tried once a day
-(or once a slot) and never in a loop. Requests to one council are at least 10 seconds apart
+An address is fetched at most once per run, and a failed attempt counts, so a failing address is not retried until its
+next slot and the feed shows it as unconfirmed. Requests to one council are at least 10 seconds apart
 (`min_interval_seconds` in the registry changes this). Scheduled workflows are paused by GitHub after 60 days
 without repo activity.
 
-Rough capacity at the default 10 second gap, inside the workflow's 60 minute limit: one run fetches about 360
-addresses per council. For a `next_only` council that is about 360 addresses in total, because each is fetched every
-day. For a `full` council it is about 2,500, because each is fetched once a week. B&NES is a single JSON call of
-under a second, so this is mostly a politeness limit, not a technical one. To go further, lower `min_interval_seconds`
-for a council that tolerates it, raise the workflow's `timeout-minutes` (GitHub allows up to 6 hours), or fetch each
-address only the day after a collection and two days before the next (FRE-281).
+Capacity: at the default 10 second gap one council can be fetched about 360 times an hour, and the workflow may run
+for up to 6 hours, so about 2,100 addresses per council per run. For `next_only` councils that is the whole Sunday
+run, so about 2,100 B&NES addresses in total. B&NES is a single JSON call of under a second, so this is mostly a
+politeness limit. To go beyond it, lower `min_interval_seconds` for a council that tolerates it, or spread
+`next_only` addresses across the week like `full` ones (accurate too, because later dates are projected, but it
+gives up the "always next week" property of a Sunday fetch).
+
+Some councils do collect at weekends, so "Sunday" would need to become a per-council setting when one is added.

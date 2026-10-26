@@ -351,37 +351,59 @@ def test_skipped_outcomes_do_not_log_the_uprn(tmp_path, councils):
     assert UPRN not in json.dumps(format_outcome(outcomes[0]))
 
 
-# next_only councils are fetched daily, full-schedule councils weekly
+# next_only councils are fetched on Sundays, full-schedule councils on their weekly slot
+
+SUNDAY = date(2026, 11, 1)  # a Sunday
+assert SUNDAY.weekday() == 6
 
 
-def test_next_only_councils_are_due_the_day_after_a_fetch():
-    last = datetime(2026, 10, 26, 5, 17, tzinfo=UTC).isoformat()
-    assert is_due(UPRN, last, date(2026, 10, 27), "next_only")
+def stamp_for(day, hour=5):
+    return datetime(day.year, day.month, day.day, hour, 17, tzinfo=UTC).isoformat()
 
 
-def test_next_only_councils_are_not_due_twice_in_a_day():
-    last = datetime(2026, 10, 26, 5, 17, tzinfo=UTC).isoformat()
-    assert not is_due(UPRN, last, date(2026, 10, 26), "next_only")
+def test_next_only_councils_are_due_on_sunday_a_week_after_the_last_fetch():
+    assert is_due(UPRN, stamp_for(SUNDAY - timedelta(days=7)), SUNDAY, "next_only")
 
 
-def test_next_only_councils_are_due_every_day_whatever_the_weekday():
-    last = datetime(2026, 10, 25, 5, 17, tzinfo=UTC)
-    for offset in range(1, 15):
-        day = date(2026, 10, 25) + timedelta(days=offset)
-        assert is_due(UPRN, (datetime.combine(day - timedelta(days=1), last.time(), tzinfo=UTC)).isoformat(), day, "next_only")
+def test_next_only_councils_are_not_due_on_other_days():
+    last = stamp_for(SUNDAY - timedelta(days=7))
+    for offset in range(-6, 0):  # Monday to Saturday before that Sunday
+        assert not is_due(UPRN, last, SUNDAY + timedelta(days=offset), "next_only")
 
 
-def test_next_only_councils_that_were_never_fetched_are_due():
-    assert is_due(UPRN, None, date(2026, 10, 26), "next_only")
+def test_next_only_councils_are_not_due_twice_on_a_sunday():
+    assert not is_due(UPRN, stamp_for(SUNDAY), SUNDAY, "next_only")
 
 
-def test_full_schedule_councils_stay_weekly():
-    last = datetime(2026, 10, 26, 5, 17, tzinfo=UTC).isoformat()
-    assert not is_due(UPRN, last, date(2026, 10, 27), "full")
-    assert not is_due(UPRN, last, date(2026, 10, 31), "full")
+def test_a_new_next_only_address_is_due_straight_away_on_any_day():
+    for offset in range(7):
+        assert is_due(UPRN, None, SUNDAY + timedelta(days=offset), "next_only")
 
 
-def test_bathnes_is_fetched_again_the_next_day(tmp_path, councils):
+def test_a_midweek_signup_is_fetched_again_on_the_following_sunday():
+    wednesday = SUNDAY - timedelta(days=4)
+    assert not is_due(UPRN, stamp_for(wednesday), SUNDAY - timedelta(days=1), "next_only")
+    assert is_due(UPRN, stamp_for(wednesday), SUNDAY, "next_only")
+
+
+def test_a_missed_sunday_is_caught_up_the_next_day():
+    last = stamp_for(SUNDAY - timedelta(days=7))
+    assert is_due(UPRN, last, SUNDAY + timedelta(days=1), "next_only")
+    assert is_due(UPRN, last, SUNDAY, "next_only")  # and the Sunday itself is of course due
+
+
+def test_full_schedule_councils_stay_weekly_on_their_slot():
+    day = day_with_slot(UPRN, on_slot=True)
+    assert is_due(UPRN, stamp_for(day - timedelta(days=7)), day, "full")
+    assert not is_due(UPRN, stamp_for(day - timedelta(days=3)), day, "full")
+
+
+def run_on(store, councils, day, fetch, hour=5):
+    now = datetime(day.year, day.month, day.day, hour, 17, tzinfo=UTC)
+    return run(store, councils, now, fetch=fetch, limiter=no_wait())
+
+
+def test_bathnes_is_fetched_on_sundays_not_other_days(tmp_path, councils):
     store = make_store(tmp_path, UPRN)
     calls = []
 
@@ -389,12 +411,17 @@ def test_bathnes_is_fetched_again_the_next_day(tmp_path, councils):
         calls.append(1)
         return GOOD_RESPONSE
 
-    run(store, councils, NOW, fetch=fetch, limiter=no_wait())
-    run(store, councils, NOW + timedelta(hours=3), fetch=fetch, limiter=no_wait())
-    assert len(calls) == 1  # same day: not again
-    run(store, councils, NOW + timedelta(days=1), fetch=fetch, limiter=no_wait())
-    assert len(calls) == 2  # next day: B&NES only returns the next date, so refresh it
-    run(store, councils, NOW + timedelta(days=2), fetch=fetch, limiter=no_wait())
+    monday = SUNDAY - timedelta(days=6)
+    run_on(store, councils, monday, fetch)  # new signup: fetched straight away
+    assert len(calls) == 1
+    for day in range(1, 6):  # Tuesday to Saturday: nothing
+        run_on(store, councils, monday + timedelta(days=day), fetch)
+    assert len(calls) == 1
+    run_on(store, councils, SUNDAY, fetch)  # the Sunday after: fetched again
+    assert len(calls) == 2
+    run_on(store, councils, SUNDAY + timedelta(days=1), fetch)
+    assert len(calls) == 2
+    run_on(store, councils, SUNDAY + timedelta(days=7), fetch)  # the next Sunday
     assert len(calls) == 3
 
 
@@ -409,13 +436,12 @@ def test_a_full_schedule_council_is_only_fetched_weekly(tmp_path, councils):
         calls.append(1)
         return GOOD_RESPONSE
 
-    run(store, {BATHNES: full}, NOW, fetch=fetch, limiter=no_wait())
-    for days in (1, 2, 3):
-        run(store, {BATHNES: full}, NOW + timedelta(days=days), fetch=fetch, limiter=no_wait())
+    for days in range(4):
+        run_on(store, {BATHNES: full}, SUNDAY + timedelta(days=days), fetch)
     assert len(calls) == 1
 
 
-def test_a_failing_next_only_council_is_tried_once_a_day_not_every_run(tmp_path, councils):
+def test_a_failing_next_only_address_is_not_retried_until_the_next_sunday(tmp_path, councils):
     store = make_store(tmp_path, UPRN)
     calls = []
 
@@ -423,8 +449,9 @@ def test_a_failing_next_only_council_is_tried_once_a_day_not_every_run(tmp_path,
         calls.append(1)
         raise FetchError("site down")
 
-    for hours in (0, 1, 5):
-        run(store, councils, NOW + timedelta(hours=hours), fetch=broken, limiter=no_wait())
+    run_on(store, councils, SUNDAY, broken)
+    for day in range(1, 7):
+        run_on(store, councils, SUNDAY + timedelta(days=day), broken)
     assert len(calls) == 1
-    run(store, councils, NOW + timedelta(days=1), fetch=broken, limiter=no_wait())
+    run_on(store, councils, SUNDAY + timedelta(days=7), broken)
     assert len(calls) == 2

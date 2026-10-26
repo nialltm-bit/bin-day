@@ -9,7 +9,7 @@
 | `ons_code` | ONS authority code, for example `E06000022`. This is the key. |
 | `name` | Council name. |
 | `status` | `supported` (the fetcher calls it), `broken` (we have a source but it is failing, so the fetcher skips it) or `unsupported` (no source yet, so people join the waitlist). |
-| `schedule` | `next_only` if a fetch returns only the next collection date for each bin (B&NES does), or `full` if it returns a full schedule. Required for `supported` and `broken` councils. It also sets how often the fetcher fetches each address: daily for `next_only`, weekly for `full`. |
+| `schedule` | `next_only` if a fetch returns only the next collection date for each bin (B&NES does), or `full` if it returns a full schedule. Required for `supported` and `broken` councils. It also sets how often the fetcher fetches each address: once a week on a Sunday for `next_only` (councils don't collect on Sundays, so the date returned is the real one for the coming week, and later dates are projected from `every_weeks`), or once a week on a weekday fixed by the address for `full`. |
 | `source.type` | `ukbcd` (a UKBinCollectionData module), `api` (an official API) or `ical` (a published iCal feed). |
 | `source.module` | For `ukbcd`: the module name, for example `BathAndNorthEastSomersetCouncil`. |
 | `source.url` | The collection URL (for `ukbcd`, the URL argument the module is given). Must be https. |
