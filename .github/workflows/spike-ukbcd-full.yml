@@ -1,0 +1,66 @@
+name: Spike UKBinCollectionData full suite
+
+on:
+  push:
+    branches: [claude/nifty-faraday-obdwan]
+    paths:
+      - .github/workflows/spike-ukbcd-full.yml
+      - scripts/summarise_junit.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  full-suite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    services:
+      selenium:
+        image: selenium/standalone-chrome:latest
+        options: --shm-size=2gb
+        env:
+          SE_NODE_MAX_SESSIONS: 4
+          SE_NODE_OVERRIDE_MAX_SESSIONS: true
+        ports:
+          - 4444:4444
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          path: bin-day
+      - uses: actions/checkout@v4
+        with:
+          repository: robbrad/UKBinCollectionData
+          ref: 0.173.5
+          path: upstream
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - name: Install upstream with its dev dependencies
+        working-directory: upstream
+        run: |
+          pipx install poetry==1.8.4
+          poetry config virtualenvs.prefer-active-python true
+          poetry install
+      - name: Run upstream integration tests (one request per council, 4 councils at a time)
+        working-directory: upstream
+        env:
+          HEADLESS: "True"
+        run: |
+          mkdir -p "$RUNNER_TEMP/out"
+          set +e
+          poetry run pytest uk_bin_collection/tests/step_defs/ -n 4 -p no:cacheprovider --junit-xml="$RUNNER_TEMP/out/junit.xml"
+          echo "pytest exit code $?"
+          exit 0
+      - name: Summarise
+        run: python bin-day/scripts/summarise_junit.py "$RUNNER_TEMP/out/junit.xml" bin-day/docs/spike-results
+      - name: Commit results
+        working-directory: bin-day
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/spike-results
+          git commit -m "Add FRE-263 full upstream suite results [skip ci]" || exit 0
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"

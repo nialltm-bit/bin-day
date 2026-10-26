@@ -1,0 +1,358 @@
+{
+  "meta": {
+    "run_at": "2026-10-26T15:56:15+00:00",
+    "version": "0.173.5"
+  },
+  "results": [
+    {
+      "council": "BathAndNorthEastSomersetCouncil",
+      "selenium": false,
+      "ok": true,
+      "bin_types": [
+        "Black Rubbish Bin (140L)",
+        "Blue Recycling Bag for Cardboard",
+        "Food Recycling Collection Bin",
+        "Green Recycling Box"
+      ],
+      "collections": 4,
+      "seconds": 0.9,
+      "http": [
+        {
+          "host": "api.bathnes.gov.uk",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "AberdeenCityCouncil",
+      "selenium": false,
+      "ok": true,
+      "bin_types": [
+        "Garden",
+        "General",
+        "Recycling"
+      ],
+      "collections": 6,
+      "seconds": 2.8,
+      "http": [
+        {
+          "host": "integration.aberdeencity.gov.uk",
+          "status": 200
+        },
+        {
+          "host": "integration.aberdeencity.gov.uk",
+          "status": 200
+        },
+        {
+          "host": "integration.aberdeencity.gov.uk",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "AmberValleyBoroughCouncil",
+      "selenium": false,
+      "ok": true,
+      "bin_types": [
+        "RECYCLING",
+        "REFUSE"
+      ],
+      "collections": 2,
+      "seconds": 1.0,
+      "http": [
+        {
+          "host": "info.ambervalley.gov.uk",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "BCPCouncil",
+      "selenium": false,
+      "ok": true,
+      "bin_types": [
+        "Food waste",
+        "Garden Waste",
+        "Recycling",
+        "Rubbish"
+      ],
+      "collections": 8,
+      "seconds": 2.0,
+      "http": [
+        {
+          "host": "prod-17.uksouth.logic.azure.com",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "BarnsleyMBCouncil",
+      "selenium": false,
+      "ok": true,
+      "bin_types": [
+        "Blue bin",
+        "Brown bin",
+        "Green bin",
+        "Grey bin"
+      ],
+      "collections": 4,
+      "seconds": 1.1,
+      "http": [
+        {
+          "host": "api.postcodes.io",
+          "status": 200
+        },
+        {
+          "host": "waste.barnsley.gov.uk",
+          "status": 200
+        },
+        {
+          "host": "waste.barnsley.gov.uk",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "BasingstokeCouncil",
+      "selenium": false,
+      "ok": true,
+      "bin_types": [
+        "food",
+        "garden",
+        "glass",
+        "recycling",
+        "waste"
+      ],
+      "collections": 27,
+      "seconds": 1.3,
+      "http": [
+        {
+          "host": "www.basingstoke.gov.uk",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "BlackburnCouncil",
+      "selenium": false,
+      "ok": true,
+      "bin_types": [
+        "Blue 240L (paper and cardboard bin)",
+        "Burgundy 140L (refuse bin)",
+        "Grey 240L (glass, tins and plastics bin)"
+      ],
+      "collections": 4,
+      "seconds": 0.8,
+      "http": [
+        {
+          "host": "mybins.blackburn.gov.uk",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "BoltonCouncil",
+      "selenium": false,
+      "ok": true,
+      "bin_types": [
+        "140L grey rubbish bin",
+        "240L beige recycling bin",
+        "240L burgundy plastic bin",
+        "240L green garden bin"
+      ],
+      "collections": 14,
+      "seconds": 3.0,
+      "http": [
+        {
+          "host": "bolton.portal.uk.empro.verintcloudservices.com",
+          "status": 200
+        },
+        {
+          "host": "bolton.form.uk.empro.verintcloudservices.com",
+          "status": 200
+        },
+        {
+          "host": "bolton.form.uk.empro.verintcloudservices.com",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "BradfordMDC",
+      "selenium": false,
+      "ok": true,
+      "bin_types": [
+        "Garden Waste (Subscription Only)",
+        "General Waste",
+        "Recycling Waste"
+      ],
+      "collections": 24,
+      "seconds": 0.9,
+      "http": [
+        {
+          "host": "onlineforms.bradford.gov.uk",
+          "status": 200
+        },
+        {
+          "host": "onlineforms.bradford.gov.uk",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "BuckinghamshireCouncil",
+      "selenium": false,
+      "ok": true,
+      "bin_types": [
+        "Food waste",
+        "General waste",
+        "Mixed recycling",
+        "Paper and cardboard recycling",
+        "Small household electricals, batteries and textiles"
+      ],
+      "collections": 5,
+      "seconds": 2.0,
+      "http": [
+        {
+          "host": "itouchvision.app",
+          "status": 200
+        },
+        {
+          "host": "itouchvision.app",
+          "status": 200
+        },
+        {
+          "host": "itouchvision.app",
+          "status": 200
+        },
+        {
+          "host": "itouchvision.app",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "CambridgeCityCouncil",
+      "selenium": false,
+      "ok": true,
+      "bin_types": [
+        "Black Bin",
+        "Blue Bin",
+        "FOOD",
+        "Green Bin"
+      ],
+      "collections": 152,
+      "seconds": 0.6,
+      "http": [
+        {
+          "host": "servicelayer3c.azure-api.net",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "CardiffCouncil",
+      "selenium": false,
+      "ok": true,
+      "bin_types": [
+        "Food",
+        "Garden",
+        "General",
+        "Glass",
+        "Hygiene",
+        "Recycling"
+      ],
+      "collections": 9,
+      "seconds": 3.7,
+      "http": [
+        {
+          "host": "authwebservice.cardiff.gov.uk",
+          "status": 204
+        },
+        {
+          "host": "authwebservice.cardiff.gov.uk",
+          "status": 200
+        },
+        {
+          "host": "api.cardiff.gov.uk",
+          "status": 200
+        },
+        {
+          "host": "api.cardiff.gov.uk",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "BexleyCouncil",
+      "selenium": true,
+      "ok": true,
+      "bin_types": [
+        "Blue Lidded Wheelie Bin (Paper and card)",
+        "Brown Caddy (Food waste)",
+        "Brown Wheelie Bin (Garden waste)",
+        "Green Wheelie Bin (Non-recyclable waste)",
+        "White Lidded Wheelie Bin (Plastics, cans and glass)"
+      ],
+      "collections": 27,
+      "seconds": 1.5,
+      "http": [
+        {
+          "host": "waste.bexley.gov.uk",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "BrightonandHoveCityCouncil",
+      "selenium": true,
+      "ok": true,
+      "bin_types": [
+        "Food waste",
+        "Garden Waste",
+        "Recycling",
+        "Refuse"
+      ],
+      "collections": 4,
+      "seconds": 8.8,
+      "http": []
+    },
+    {
+      "council": "ArunCouncil",
+      "selenium": true,
+      "ok": true,
+      "bin_types": [
+        "Food",
+        "Garden",
+        "Recycling",
+        "Rubbish"
+      ],
+      "collections": 4,
+      "seconds": 5.3,
+      "http": [
+        {
+          "host": "api.postcodes.io",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "council": "BarnetCouncil",
+      "selenium": true,
+      "ok": true,
+      "bin_types": [
+        "Food Waste",
+        "General Waste",
+        "Recycling Bin"
+      ],
+      "collections": 9,
+      "seconds": 7.1,
+      "http": [
+        {
+          "host": "api.postcodes.io",
+          "status": 200
+        }
+      ]
+    }
+  ]
+}
