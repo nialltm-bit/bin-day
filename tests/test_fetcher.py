@@ -349,3 +349,82 @@ def test_skipped_outcomes_do_not_log_the_uprn(tmp_path, councils):
     store.add_address(Address(uprn=UPRN, ons_code="E06000099"))
     outcomes = run(store, councils, NOW, fetch=lambda *a: GOOD_RESPONSE, limiter=no_wait())
     assert UPRN not in json.dumps(format_outcome(outcomes[0]))
+
+
+# next_only councils are fetched daily, full-schedule councils weekly
+
+
+def test_next_only_councils_are_due_the_day_after_a_fetch():
+    last = datetime(2026, 10, 26, 5, 17, tzinfo=UTC).isoformat()
+    assert is_due(UPRN, last, date(2026, 10, 27), "next_only")
+
+
+def test_next_only_councils_are_not_due_twice_in_a_day():
+    last = datetime(2026, 10, 26, 5, 17, tzinfo=UTC).isoformat()
+    assert not is_due(UPRN, last, date(2026, 10, 26), "next_only")
+
+
+def test_next_only_councils_are_due_every_day_whatever_the_weekday():
+    last = datetime(2026, 10, 25, 5, 17, tzinfo=UTC)
+    for offset in range(1, 15):
+        day = date(2026, 10, 25) + timedelta(days=offset)
+        assert is_due(UPRN, (datetime.combine(day - timedelta(days=1), last.time(), tzinfo=UTC)).isoformat(), day, "next_only")
+
+
+def test_next_only_councils_that_were_never_fetched_are_due():
+    assert is_due(UPRN, None, date(2026, 10, 26), "next_only")
+
+
+def test_full_schedule_councils_stay_weekly():
+    last = datetime(2026, 10, 26, 5, 17, tzinfo=UTC).isoformat()
+    assert not is_due(UPRN, last, date(2026, 10, 27), "full")
+    assert not is_due(UPRN, last, date(2026, 10, 31), "full")
+
+
+def test_bathnes_is_fetched_again_the_next_day(tmp_path, councils):
+    store = make_store(tmp_path, UPRN)
+    calls = []
+
+    def fetch(*args):
+        calls.append(1)
+        return GOOD_RESPONSE
+
+    run(store, councils, NOW, fetch=fetch, limiter=no_wait())
+    run(store, councils, NOW + timedelta(hours=3), fetch=fetch, limiter=no_wait())
+    assert len(calls) == 1  # same day: not again
+    run(store, councils, NOW + timedelta(days=1), fetch=fetch, limiter=no_wait())
+    assert len(calls) == 2  # next day: B&NES only returns the next date, so refresh it
+    run(store, councils, NOW + timedelta(days=2), fetch=fetch, limiter=no_wait())
+    assert len(calls) == 3
+
+
+def test_a_full_schedule_council_is_only_fetched_weekly(tmp_path, councils):
+    full = {**councils[BATHNES], "schedule": "full"}
+    for bin_type in full["bin_types"].values():
+        bin_type.pop("every_weeks", None)
+    store = make_store(tmp_path, UPRN)
+    calls = []
+
+    def fetch(*args):
+        calls.append(1)
+        return GOOD_RESPONSE
+
+    run(store, {BATHNES: full}, NOW, fetch=fetch, limiter=no_wait())
+    for days in (1, 2, 3):
+        run(store, {BATHNES: full}, NOW + timedelta(days=days), fetch=fetch, limiter=no_wait())
+    assert len(calls) == 1
+
+
+def test_a_failing_next_only_council_is_tried_once_a_day_not_every_run(tmp_path, councils):
+    store = make_store(tmp_path, UPRN)
+    calls = []
+
+    def broken(*args):
+        calls.append(1)
+        raise FetchError("site down")
+
+    for hours in (0, 1, 5):
+        run(store, councils, NOW + timedelta(hours=hours), fetch=broken, limiter=no_wait())
+    assert len(calls) == 1
+    run(store, councils, NOW + timedelta(days=1), fetch=broken, limiter=no_wait())
+    assert len(calls) == 2

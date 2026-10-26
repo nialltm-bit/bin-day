@@ -67,7 +67,8 @@ def run(
             detail = f"{council['name']} is {council['status']}"
             outcomes.append(Outcome(address.uprn, address.ons_code, "skipped", detail, detail))
             continue
-        if not force and not is_due(address.uprn, store.last_attempt(address.uprn), today):
+        schedule = council.get("schedule", "full")
+        if not force and not is_due(address.uprn, store.last_attempt(address.uprn), today, schedule):
             outcomes.append(Outcome(address.uprn, address.ons_code, "skipped", "not due", "not due"))
             continue
         limiter.wait(address.ons_code, council.get("min_interval_seconds", DEFAULT_MIN_INTERVAL))
