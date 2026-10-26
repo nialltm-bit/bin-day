@@ -8,11 +8,11 @@ How the run worked: the library interface (`UKBinCollectionApp`), one request pe
 
 **Does the B&NES scraper work today?** Yes. With upstream's test UPRN `100120000855` it returned 4 bin types in 0.9 s via a single HTTP 200 from `api.bathnes.gov.uk`. It needs only a UPRN. It is plain HTTP, no Selenium.
 
-**Sample coverage.** 15 of 15 sampled councils returned bins, 12 plain HTTP and 3 whose `input.json` entry specifies a Selenium web driver. This is one request per council with upstream's own test address, so it shows the scrapers work for a known-good address, not that they work for any address. It says nothing about the other 340 councils.
+**Sample coverage.** 16 of 16 sampled councils returned bins: 12 plain HTTP, Bexley (which lists a web driver but doesn't use one) and 3 that really drive a browser (Arun, Brighton and Hove, Barnet). This is one request per council with upstream's own test address, so it shows the scrapers work for a known-good address, not that they work for any address. It says nothing about the other 340 councils.
 
-**Did any council block the GitHub runner?** No. Every recorded HTTP response was 200 (Cardiff also returned one 204 on an auth call). There were no 403s. Two caveats: Selenium browser traffic isn't captured by the status log (Brighton and Hove recorded no HTTP calls at all), and one request per council on one day is a weak test. Councils known from upstream's own March results to return 403 to automated clients (for example Blaby and Brent) were not in the sample, so cloud-IP blocking remains a risk for hosting. Plan for a fallback egress or a per-council allowlist.
+**Did any council block the GitHub runner?** No. Every recorded HTTP response was 200 (Cardiff also returned one 204 on an auth call). There were no 403s. Two caveats: Selenium browser traffic isn't captured by the status log (Brighton and Hove recorded no HTTP calls at all, and Arun and Barnet only one or two), and one request per council on one day is a weak test. Councils known from upstream's own March results to return 403 to automated clients (for example Blaby and Brent) were not in the sample, so cloud-IP blocking remains a risk for hosting. Plan for a fallback egress or a per-council allowlist.
 
-**Which councils need Selenium, and what does it cost?** 82 of 353 council modules reference Selenium (static count). In the sample, only two of the three "Selenium" entries actually drove a browser: Arun (5.3 s) and Brighton and Hove (8.8 s). Bexley lists a web driver in `input.json` but its module doesn't use one, and answered in 1.5 s over HTTP. So browser-driven requests took about 5 to 9 s against 0.6 to 3.7 s for plain HTTP, and need a Chrome container (the runner used `--shm-size=2g`). I did not measure memory. At weekly refresh per address, Selenium councils are affordable if requests are queued through a small pool of browser sessions.
+**Which councils need Selenium, and what does it cost?** 82 of 353 council modules reference Selenium (static count). In the sample, three councils drove a browser: Arun (5.3 s), Barnet (7.1 s) and Brighton and Hove (8.8 s). Bexley lists a web driver in `input.json` but its module doesn't use one, and answered in 1.5 s over HTTP. So browser-driven requests took about 5 to 9 s against 0.6 to 3.7 s for plain HTTP, and need a Chrome container (the runner used `--shm-size=2g`). I did not measure memory. At weekly refresh per address, Selenium councils are affordable if requests are queued through a small pool of browser sessions.
 
 **Inputs.** From `tests/input.json` (351 entries): UPRN 226, postcode 174, house number 124 (overlapping). The sample shows UPRN alone is enough for most, while Barnsley also takes a postcode. The council registry (FRE-267) must record the inputs per council.
 
@@ -47,5 +47,4 @@ Build on upstream, as a pinned library behind our own fetch service (FRE-268), n
 ## Open items
 
 1. Upstream's current nightly pass count (see above).
-2. The sample has two real Selenium councils, not three; Bexley doesn't use a browser. Add a third if the Selenium timing needs more evidence.
-3. Selenium memory per session wasn't measured.
+2. Selenium memory per session wasn't measured.
