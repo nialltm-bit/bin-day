@@ -1,6 +1,6 @@
 # Spike: UKBinCollectionData (FRE-263)
 
-**Status: partial.** Live results are in, with one question not answered: upstream's current nightly pass count (see below). Everything else was measured by running `uk_bin_collection` 0.173.5 (tag `0.173.5`, commit `0d1b26a`) on a GitHub-hosted runner. Raw results: [`docs/spike-results/results.md`](spike-results/results.md) and `results.json`, produced by [`scripts/spike_ukbcd.py`](../scripts/spike_ukbcd.py) via [the workflow](../.github/workflows/spike-ukbcd.yml).
+**Status: complete.** Every question is answered from live runs, except that Selenium memory wasn't measured. Everything was measured by running `uk_bin_collection` 0.173.5 (tag `0.173.5`, commit `0d1b26a`) on a GitHub-hosted runner. Raw results: [`docs/spike-results/results.md`](spike-results/results.md) and `results.json` (the sample), [`full-suite.md`](spike-results/full-suite.md) and `full-suite.json` (the full suite), produced by [`scripts/spike_ukbcd.py`](../scripts/spike_ukbcd.py) via [the workflow](../.github/workflows/spike-ukbcd.yml).
 
 How the run worked: the library interface (`UKBinCollectionApp`), one request per council, run one after another with 5 seconds between councils, no retries, using each council's entry from upstream's `tests/input.json`. A `selenium/standalone-chrome` service container handled the Selenium councils.
 
@@ -10,7 +10,7 @@ How the run worked: the library interface (`UKBinCollectionApp`), one request pe
 
 **Sample coverage.** 16 of 16 sampled councils returned bins: 12 plain HTTP, Bexley (which lists a web driver but doesn't use one) and 3 that really drive a browser (Arun, Brighton and Hove, Barnet). This is one request per council with upstream's own test address, so it shows the scrapers work for a known-good address, not that they work for any address. It says nothing about the other 340 councils.
 
-**Did any council block the GitHub runner?** No. Every recorded HTTP response was 200 (Cardiff also returned one 204 on an auth call). There were no 403s. Two caveats: Selenium browser traffic isn't captured by the status log (Brighton and Hove recorded no HTTP calls at all, and Arun and Barnet only one or two), and one request per council on one day is a weak test. Councils known from upstream's own March results to return 403 to automated clients (for example Blaby and Brent) were not in the sample, so cloud-IP blocking remains a risk for hosting. Plan for a fallback egress or a per-council allowlist.
+**Did any council block the GitHub runner?** In the 16-council sample, no: every recorded HTTP response was 200 (Cardiff also returned one 204 on an auth call). The full suite says otherwise. 15 of the 64 failures were 403s or a captcha, from councils such as Canterbury, Exeter, North Tyneside, Norwich, Powys, Sunderland, Swansea, Teignbridge and Warrington (Halton served a reCAPTCHA). A further 12 were connection timeouts or resets, which can also be IP-level blocking. A single run can't separate cloud-IP blocking from an outage or a site change, but the pattern (and error text such as "Azure Application Gateway is blocking this") means hosting on a cloud IP will lose some councils. Plan for a fallback egress or a per-council allowlist, and test from the real production egress.
 
 **Which councils need Selenium, and what does it cost?** 82 of 353 council modules reference Selenium (static count). In the sample, three councils drove a browser: Arun (5.3 s), Barnet (7.1 s) and Brighton and Hove (8.8 s). Bexley lists a web driver in `input.json` but its module doesn't use one, and answered in 1.5 s over HTTP. So browser-driven requests took about 5 to 9 s against 0.6 to 3.7 s for plain HTTP, and need a Chrome container (the runner used `--shm-size=2g`). I did not measure memory. At weekly refresh per address, Selenium councils are affordable if requests are queued through a small pool of browser sessions.
 
@@ -32,7 +32,20 @@ Some councils name the stream ("Food waste"), some give only a colour ("Blue bin
 
 **Pinning and overriding scrapers.** Pin with `uk_bin_collection==0.173.5` (the tag matches the PyPI version). Overriding works: `scripts/overrides/BathAndNorthEastSomersetCouncil.py` subclasses upstream's `CouncilClass`, and with that directory first on `sys.path` the same `UKBinCollectionApp` call used our module (`override_used: true`, 4 bins returned; see `docs/spike-results/override.json`). Upstream's loader appends its own councils directory to `sys.path`, so a same-named module placed earlier wins. This relies on upstream's import behaviour, so pin the version and re-run the override check on every upgrade.
 
-**How many councils pass upstream's nightly tests right now? Not answered.** Upstream's scheduled workflow ("Scheduled - Test All Councils") shows green for the last 10 nightly runs (17 to 26 Oct 2026), but that is misleading: the integration step is `continue-on-error: true`, so the run is green whatever the councils do. Per-council results go to Codecov, which this environment couldn't reach, and the Actions logs need a sign-in. Upstream's own `integration_test_results.md` (28 Mar 2026, 288 of 334 passing) is too old to rely on. To finish this, someone with a browser can open run 669's Codecov test results, or we can run the full suite ourselves in a separate workflow.
+**How many councils pass upstream's tests right now?** 287 of 351 tests passed (82%) and 64 failed, with none skipped. This is our own run of upstream's integration suite at tag `0.173.5` on a GitHub runner on 26 Oct 2026, 4 councils at a time and one request per council, not upstream's nightly figure: that isn't published (its scheduled workflow shows green for the last 10 runs because the integration step is `continue-on-error: true`, and per-council results go to Codecov, which wasn't reachable). Because it ran from a cloud IP, the pass count includes any blocking of cloud IPs, so it is probably a little lower than a run from a residential IP. It is a single run, so some failures will be transient. Upstream's own March results were 288 of 334, so the pass rate is about the same.
+
+The 64 failures, grouped by the error shown (my grouping, from the first line of each failure):
+
+| Cause | Count | Examples |
+|---|---|---|
+| Blocked (403 or captcha) | 15 | Canterbury, Exeter, Norwich, Sunderland, Swansea, Warrington |
+| Selenium errors (timeouts, lost sessions) | 15 | Boston, Chichester, Great Yarmouth, Torfaen, West Berkshire |
+| Connection timeouts or resets | 12 | Dartford, Harrogate, Horsham, Inverclyde, Thurrock |
+| Empty result (no bins returned) | 9 | Bromley, Ipswich, Kingston, Merton, Southwark, Walsall |
+| Non-JSON response | 6 | Breckland, South Hams, South Tyneside, St Albans |
+| Other (parser or site change) | 7 | East Herts, Lancaster, Shetland, Woking |
+
+So roughly one council in five is broken at any time, and a fifth of the failures need a browser. We need our own monitoring (FRE-270 and FRE-281) and should expect to fix or replace scrapers ourselves, which the override mechanism supports. The sampled councils all passed, so a sample from the working majority overstates reliability.
 
 ## Recommendation
 
@@ -42,9 +55,9 @@ Build on upstream, as a pinned library behind our own fetch service (FRE-268), n
 - Start with plain HTTP councils. B&NES is straightforward, fast and needs only a UPRN. Put Selenium councils behind a small pool of browser sessions and add them as demand appears.
 - Keep our own mapping from each council's bin names to waste streams (FRE-269). Upstream's names can't be normalised automatically.
 - Record required inputs per council in the registry (FRE-267).
-- Test hosting from the real production egress before launch, because 15 successes from a GitHub runner don't rule out 403s elsewhere.
+- Test hosting from the real production egress before launch. About one council in twenty returned 403 or a captcha to a GitHub runner, and others may do the same to our host.
+- Launch only councils that currently pass, and watch for breakage: roughly 18% of upstream's tests fail on any given run.
 
 ## Open items
 
-1. Upstream's current nightly pass count (see above).
-2. Selenium memory per session wasn't measured.
+1. Selenium memory per session wasn't measured.
