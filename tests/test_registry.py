@@ -1,0 +1,107 @@
+import copy
+import json
+
+import pytest
+
+from fetcher import registry
+
+
+def valid_entry():
+    return json.loads(json.dumps(json.loads(registry.REGISTRY_PATH.read_text())["councils"][0]))
+
+
+def problems_for(*entries):
+    return registry.validate({"councils": list(entries)})
+
+
+def test_shipped_registry_is_valid():
+    assert registry.validate(json.loads(registry.REGISTRY_PATH.read_text())) == []
+
+
+def test_load_keys_councils_by_ons_code():
+    councils = registry.load()
+    bathnes = registry.get_council(councils, "E06000022")
+    assert bathnes["name"] == "Bath and North East Somerset"
+    assert bathnes["source"]["module"] == "BathAndNorthEastSomersetCouncil"
+    assert bathnes["inputs"] == ["uprn"]
+    assert bathnes["needs_selenium"] is False
+    assert registry.is_fetchable(bathnes)
+
+
+def test_unknown_council_is_none():
+    assert registry.get_council(registry.load(), "E00000000") is None
+
+
+def test_bin_names_map_to_streams():
+    bathnes = registry.load()["E06000022"]
+    assert registry.stream_for(bathnes, "Food Recycling Collection Bin") == "food"
+    assert registry.stream_for(bathnes, "Black Rubbish Bin (140L)") == "general"
+
+
+def test_unmapped_bin_name_is_none_so_callers_can_treat_it_as_a_failure():
+    assert registry.stream_for(registry.load()["E06000022"], "Mystery Bin") is None
+
+
+def test_adding_a_council_is_only_data():
+    second = valid_entry()
+    second.update(ons_code="E06000023", name="Bristol, City of")
+    assert problems_for(valid_entry(), second) == []
+
+
+def test_unsupported_council_needs_only_the_basics():
+    entry = {"ons_code": "E06000023", "name": "Bristol, City of", "status": "unsupported"}
+    assert problems_for(entry) == []
+    assert not registry.is_fetchable(entry)
+
+
+def test_broken_council_is_not_fetchable():
+    entry = valid_entry()
+    entry["status"] = "broken"
+    assert problems_for(entry) == []
+    assert not registry.is_fetchable(entry)
+
+
+def test_load_raises_on_an_invalid_file(tmp_path):
+    bad = tmp_path / "councils.json"
+    bad.write_text(json.dumps({"councils": [{"ons_code": "nope"}]}))
+    with pytest.raises(registry.RegistryError):
+        registry.load(bad)
+
+
+@pytest.mark.parametrize(
+    ("change", "expected"),
+    [
+        (lambda e: e.update(ons_code="B1"), "ons_code must look like"),
+        (lambda e: e.update(name=""), "name is required"),
+        (lambda e: e.update(status="working"), "status must be one of"),
+        (lambda e: e.update(inputs=["uprn", "uprn"]), "unique values"),
+        (lambda e: e.update(inputs=["address"]), "unique values"),
+        (lambda e: e.update(inputs=[]), "at least one input"),
+        (lambda e: e.update(typo_field=1), "unknown key 'typo_field'"),
+        (lambda e: e.update(last_verified="yesterday"), "last_verified must be a date"),
+        (lambda e: e.update(bin_types={}), "supported councils need bin_types"),
+        (lambda e: e.update(bin_types={"Bin": {"stream": "glass"}}), "stream must be one of"),
+        (lambda e: e.update(bin_types={"Bin": {"stream": "food", "color": "red"}}), "unknown key 'color'"),
+        (lambda e: e.update(test_address={}), "test_address must give every required input"),
+        (lambda e: e["source"].update(url="http://example.com"), "source.url must be an https URL"),
+        (lambda e: e["source"].pop("module"), "need source.module"),
+        (lambda e: e["source"].update(type="scraper"), "source.type must be one of"),
+        (lambda e: e["source"].update(extra=1), "unknown source key 'extra'"),
+        (lambda e: e.pop("source"), "need a source"),
+        (lambda e: e.pop("needs_selenium"), "must say whether they need Selenium"),
+        (lambda e: e.update(needs_selenium="yes"), "needs_selenium must be true or false"),
+        (lambda e: (e["source"].update(type="ical"), e.update(needs_selenium=True)), "only ukbcd sources can need Selenium"),
+    ],
+)
+def test_validation_catches_mistakes(change, expected):
+    entry = copy.deepcopy(valid_entry())
+    change(entry)
+    assert any(expected in problem for problem in problems_for(entry)), problems_for(entry)
+
+
+def test_duplicate_ons_codes_are_rejected():
+    assert any("duplicate ons_code" in p for p in problems_for(valid_entry(), valid_entry()))
+
+
+def test_top_level_shape_is_checked():
+    assert registry.validate([]) == ["registry must be an object with a 'councils' list"]

@@ -1,0 +1,26 @@
+{
+  "councils": [
+    {
+      "ons_code": "E06000022",
+      "name": "Bath and North East Somerset",
+      "status": "supported",
+      "source": {
+        "type": "ukbcd",
+        "module": "BathAndNorthEastSomersetCouncil",
+        "url": "https://www.bathnes.gov.uk/webforms/waste/collectionday/",
+        "skip_get_url": true
+      },
+      "inputs": ["uprn"],
+      "needs_selenium": false,
+      "bin_types": {
+        "Black Rubbish Bin (140L)": { "stream": "general", "label": "Black bin", "colour": "black" },
+        "Blue Recycling Bag for Cardboard": { "stream": "recycling", "label": "Blue bag (cardboard)", "colour": "blue" },
+        "Green Recycling Box": { "stream": "recycling", "label": "Green box", "colour": "green" },
+        "Food Recycling Collection Bin": { "stream": "food", "label": "Food caddy" }
+      },
+      "test_address": { "uprn": "100120000855" },
+      "last_verified": "2026-10-26",
+      "notes": "Plain HTTP, needs only a UPRN. Garden waste bin names have not been seen yet; map them when a garden-waste address is tested."
+    }
+  ]
+}

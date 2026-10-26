@@ -53,5 +53,6 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install ruff pytest
-      - run: ruff check scripts tests
+      - run: ruff check scripts fetcher tests
       - run: pytest
+      - run: python -m fetcher.registry
