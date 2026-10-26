@@ -36,18 +36,23 @@ Google can take many hours to show a new subscribed calendar's events and to ref
 
 ## Results
 
-Fill in after testing.
+Tested on 26 October 2026 with a free Google account's script, deployed as a web app (Execute as: Me, access: Anyone).
 
 | Check | Result |
 |---|---|
-| Script returns JSON and `.ics` | |
-| Pages GET and POST to the script | |
-| Google Calendar subscribes, and how long events took to appear | |
-| Apple Calendar subscribes | |
-| Outlook subscribes | |
-| Reminder for A (all-day with alarm): Google / Apple / Outlook | |
-| Reminder for B (6pm event the day before): Google / Apple / Outlook | |
+| Script returns JSON and `.ics` | Pass. GET returned JSON, and `?feed=poc` downloads a calendar file (Apps Script serves it as `text/calendar`, and the browser names the download `echo.ics`, which does not matter for subscriptions). |
+| Pages GET and POST to the script | Pass. Both returned `HTTP 200` with JSON from the GitHub Pages test page. A plain-text POST body avoids the cross-origin block. |
+| Google Calendar subscribes, and how long events took to appear | Pass. Subscribed with the `https` feed URL. All-day collection events (A), timed 6pm events (B) and the warning event all appeared the same evening, with the right London times. Events show as Free. |
+| Apple Calendar subscribes | Not tested. |
+| Outlook subscribes | Not tested. |
+| Reminder for A (all-day with alarm): Google / Apple / Outlook | Not observed. Google ignores feed alarms by design. The next opportunity is 6pm on 2 November. |
+| Reminder for B (6pm event the day before): Google / Apple / Outlook | Not observed. Today's 6pm had passed when we subscribed. The next is 6pm on 2 November. |
 
 ## Decision
 
-Go or no-go on Apps Script for signup and the feed: to be decided.
+**Go on Apps Script for the MVP.** The two structural risks are cleared: Google Calendar accepts an Apps Script URL as a subscription (despite the redirect), and the GitHub Pages site can call the script. Google Calendar is the client we most needed, since it is the one that ignores alarms and so shaped the evening-event design.
+
+Left open, and not blocking the MVP:
+- Whether the 6pm "Bins out tonight" event (B) actually produces a notification in Google once the person has turned on notifications for the calendar. Check on 2 November, and record it here.
+- Apple Calendar and Outlook subscription and alarm behaviour.
+- Limits at scale (Apps Script quotas, Sheet speed), which the stack doc already lists as risks.
