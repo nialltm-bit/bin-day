@@ -41,7 +41,7 @@ nothing else. The secret is in the body because Apps Script can't read request h
 5. In the GitHub repo, **Settings**, **Secrets and variables**, **Actions**, add two repository secrets:
    `BIN_DAY_STORE_URL` (the `/exec` URL) and `BIN_DAY_STORE_SECRET` (the value from step 3). Do not put either in
    the repo or in chat.
-6. Check it: in the repo's **Actions** tab, open **Fetch (scheduled)**, choose **Run workflow**, and enter `100120000855` as `add_uprn` (upstream's public B&NES test address). Or from a terminal:
+6. Check it (use only the public test address here: workflow inputs are visible on this public repo, so never put a real person's UPRN in `add_uprn`; add real addresses by typing them into the Sheet's `addresses` tab): in the repo's **Actions** tab, open **Fetch (scheduled)**, choose **Run workflow**, and enter `100120000855` as `add_uprn` (upstream's public B&NES test address). Or from a terminal:
 
    ```sh
    export BIN_DAY_STORE_URL=... BIN_DAY_STORE_SECRET=...
@@ -53,6 +53,13 @@ nothing else. The secret is in the body because Apps Script can't read request h
 
 To change the script later, paste the new `Code.js`, then **Deploy**, **Manage deployments**, edit the deployment
 and choose a new version. The `/exec` URL stays the same.
+
+## Logs are public
+
+This repo is public, so its Actions logs are too. The fetcher therefore logs only the council's ONS code, a status and
+a count or error kind for each address. It never logs a UPRN, a postcode, or the text of an upstream error (which
+can contain the request URL, and so the address). The full error is saved to the private Sheet's `last_error`
+column for debugging.
 
 ## Running on a schedule
 

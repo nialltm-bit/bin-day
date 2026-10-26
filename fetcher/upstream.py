@@ -8,7 +8,7 @@ import signal
 import sys
 from pathlib import Path
 
-from fetcher.model import Address, FetchError
+from fetcher.model import Address, FetchError, UpstreamError
 
 OVERRIDES_DIR = Path(__file__).resolve().parent / "overrides"
 TIMEOUT_SECONDS = 180
@@ -53,7 +53,7 @@ def run_ukbcd(council: dict, address: Address, selenium_url: str | None = None, 
         app.set_args(args)
         return json.loads(app.run())
     except (Exception, SystemExit) as err:  # upstream modules raise anything; argparse raises SystemExit
-        raise FetchError(f"{type(err).__name__}: {str(err)[:300]}") from err
+        raise UpstreamError(type(err).__name__, str(err)[:300]) from err
     finally:
         signal.alarm(0)
         signal.signal(signal.SIGALRM, previous)

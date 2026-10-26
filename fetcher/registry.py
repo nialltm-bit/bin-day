@@ -12,6 +12,8 @@ REGISTRY_PATH = Path(__file__).resolve().parent.parent / "registry" / "councils.
 
 STATUSES = ("supported", "unsupported", "broken")
 SOURCE_TYPES = ("ukbcd", "api", "ical")
+SCHEDULES = ("next_only", "full")  # what a fetch returns: only the next date per bin, or a full schedule
+EVERY_WEEKS = (1, 2, 3, 4)
 INPUTS = ("uprn", "postcode", "house_number")
 STREAMS = ("general", "recycling", "food", "garden")
 
@@ -23,6 +25,7 @@ COUNCIL_KEYS = {
     "ons_code",
     "name",
     "status",
+    "schedule",
     "source",
     "inputs",
     "needs_selenium",
@@ -33,7 +36,7 @@ COUNCIL_KEYS = {
     "notes",
 }
 SOURCE_KEYS = {"type", "module", "url", "skip_get_url"}
-BIN_KEYS = {"stream", "label", "colour"}
+BIN_KEYS = {"stream", "label", "colour", "every_weeks"}
 
 
 class RegistryError(ValueError):
@@ -76,6 +79,10 @@ def _check_bin_types(where: str, bin_types: object, problems: list[str]) -> None
             problems.append(f"{where}: bin_types['{name}'] has unknown key '{key}'")
         if entry.get("stream") not in STREAMS:
             problems.append(f"{where}: bin_types['{name}'].stream must be one of {', '.join(STREAMS)}")
+        if "every_weeks" in entry:
+            weeks = entry["every_weeks"]
+            if isinstance(weeks, bool) or weeks not in EVERY_WEEKS:
+                problems.append(f"{where}: bin_types['{name}'].every_weeks must be one of {', '.join(map(str, EVERY_WEEKS))}")
 
 
 def _check_council(index: int, council: object, seen: set[str], problems: list[str]) -> None:
@@ -125,6 +132,20 @@ def _check_council(index: int, council: object, seen: set[str], problems: list[s
             problems.append(f"{where}: {status} councils need at least one input")
         if "needs_selenium" not in council:
             problems.append(f"{where}: {status} councils must say whether they need Selenium")
+    schedule = council.get("schedule")
+    if "schedule" in council and schedule not in SCHEDULES:
+        problems.append(f"{where}: schedule must be one of {', '.join(SCHEDULES)}")
+    if status in ("supported", "broken") and "schedule" not in council:
+        problems.append(f"{where}: {status} councils must say whether they return next_only dates or a full schedule")
+    bin_types = council.get("bin_types")
+    if isinstance(bin_types, dict) and schedule in SCHEDULES:
+        for name, entry in bin_types.items():
+            if not isinstance(entry, dict):
+                continue
+            if schedule == "next_only" and "every_weeks" not in entry:
+                problems.append(f"{where}: bin_types['{name}'] needs every_weeks because the council returns next_only dates")
+            if schedule == "full" and "every_weeks" in entry:
+                problems.append(f"{where}: bin_types['{name}'] should not set every_weeks because the council returns a full schedule")
     if status == "supported" and not council.get("bin_types"):
         problems.append(f"{where}: supported councils need bin_types")
     if council.get("needs_selenium") is True and isinstance(council.get("source"), dict) and council["source"].get("type") != "ukbcd":
@@ -166,6 +187,12 @@ def stream_for(council: dict, bin_name: str) -> str | None:
     """Maps the council's own bin name to a waste stream, or None if we haven't mapped that name."""
     entry = council.get("bin_types", {}).get(bin_name)
     return entry["stream"] if entry else None
+
+
+def every_weeks(council: dict, bin_name: str) -> int | None:
+    """How often (in weeks) the council empties this bin, for next_only councils; None if unknown or not needed."""
+    entry = council.get("bin_types", {}).get(bin_name)
+    return entry.get("every_weeks") if entry else None
 
 
 def main() -> int:

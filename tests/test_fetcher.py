@@ -4,10 +4,10 @@ from datetime import UTC, date, datetime, timedelta
 import pytest
 
 from fetcher import registry, upstream
-from fetcher.model import Address, FetchError, UnmappedBinError
+from fetcher.model import Address, FetchError, UnmappedBinError, UpstreamError
 from fetcher.normalise import normalise
 from fetcher.ratelimit import CouncilRateLimiter
-from fetcher.run import main, run
+from fetcher.run import format_outcome, main, run
 from fetcher.schedule import is_due, slot
 from fetcher.store import FileStore
 
@@ -306,3 +306,46 @@ def test_cli_add_writes_the_address(tmp_path, capsys):
     path = tmp_path / "store.json"
     assert main(["add", "--store", str(path), "--ons", BATHNES, "--uprn", "100120000855"]) == 0
     assert json.loads(path.read_text())["addresses"] == [{"ons_code": BATHNES, "uprn": "100120000855"}]
+
+
+# logs are public: they must never carry an address
+
+
+UPRN = "100120000855"
+
+
+def run_one(tmp_path, councils, fetch):
+    store = make_store(tmp_path, UPRN)
+    return run(store, councils, NOW, fetch=fetch, limiter=no_wait())[0], store
+
+
+def test_a_successful_fetch_logs_only_council_status_and_count(tmp_path, councils):
+    outcome, _ = run_one(tmp_path, councils, lambda *a: GOOD_RESPONSE)
+    assert format_outcome(outcome) == {"council": BATHNES, "status": "fetched", "detail": "3 collections"}
+
+
+def test_upstream_errors_log_only_their_kind_but_the_store_keeps_the_message(tmp_path, councils):
+    def broken(*args):
+        raise UpstreamError("ConnectionError", f"HTTPSConnectionPool: url: /CollectionSummary/{UPRN}")
+
+    outcome, store = run_one(tmp_path, councils, broken)
+    logged = json.dumps(format_outcome(outcome))
+    assert UPRN not in logged
+    assert format_outcome(outcome)["detail"] == "ConnectionError"
+    assert UPRN in store.result(UPRN)["last_error"]  # the private store keeps the full error for debugging
+
+
+def test_no_log_line_contains_the_uprn(tmp_path, councils):
+    odd = {"bins": [{"type": "Purple Garden Sack", "collectionDate": "03/11/2026"}]}
+    for index, fetch in enumerate((lambda *a: GOOD_RESPONSE, lambda *a: odd, lambda *a: {"bins": []})):
+        folder = tmp_path / str(index)
+        folder.mkdir()
+        outcome, _ = run_one(folder, councils, fetch)
+        assert UPRN not in json.dumps(format_outcome(outcome))
+
+
+def test_skipped_outcomes_do_not_log_the_uprn(tmp_path, councils):
+    store = FileStore(tmp_path / "store.json")
+    store.add_address(Address(uprn=UPRN, ons_code="E06000099"))
+    outcomes = run(store, councils, NOW, fetch=lambda *a: GOOD_RESPONSE, limiter=no_wait())
+    assert UPRN not in json.dumps(format_outcome(outcomes[0]))
