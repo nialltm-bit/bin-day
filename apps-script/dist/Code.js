@@ -143,8 +143,239 @@
     return events;
   }
 
+  // src/dates.ts
+  function utc(date) {
+    return /* @__PURE__ */ new Date(`${date}T00:00:00Z`);
+  }
+  function weekdayIndex(date) {
+    return (utc(date).getUTCDay() + 6) % 7;
+  }
+  function mondayOf(date) {
+    return addDays(date, -weekdayIndex(date));
+  }
+  function daysBetween(from, to) {
+    return Math.round((utc(to).getTime() - utc(from).getTime()) / 864e5);
+  }
+  function isoWeek(date) {
+    const monday = mondayOf(date);
+    const year = Number(addDays(monday, 3).slice(0, 4));
+    const week = 1 + daysBetween(mondayOf(`${year}-01-04`), monday) / 7;
+    return `${year}-W${String(week).padStart(2, "0")}`;
+  }
+
+  // src/projection.ts
+  var HORIZON_DAYS = 56;
+  var CHRISTMAS_START = "12-22";
+  var CHRISTMAS_END = "01-13";
+  function overlapsChristmas(weekStart, weekEnd) {
+    const year = Number(weekStart.slice(0, 4));
+    for (const y of [year - 1, year]) {
+      const start = `${y}-${CHRISTMAS_START}`;
+      const end = `${y + 1}-${CHRISTMAS_END}`;
+      if (weekStart <= end && weekEnd >= start) return true;
+    }
+    return false;
+  }
+  function inHolidayWeek(date, holidays) {
+    const start = mondayOf(date);
+    const end = addDays(start, 6);
+    return holidays.some((holiday) => holiday >= start && holiday <= end) || overlapsChristmas(start, end);
+  }
+  function projectCollections(input) {
+    const { collections, council, today, holidays } = input;
+    const binTypes = council.bin_types ?? {};
+    const horizon = addDays(today, HORIZON_DAYS);
+    const result = [];
+    const byBin = /* @__PURE__ */ new Map();
+    for (const collection of collections) {
+      if (!binTypes[collection.bin_name]) continue;
+      byBin.set(collection.bin_name, [...byBin.get(collection.bin_name) ?? [], collection.date]);
+    }
+    for (const [binName, dates] of byBin) {
+      const binType = binTypes[binName];
+      const label = binType.label ?? binName;
+      const confirmed = new Set(dates.filter((date) => date >= today));
+      for (const date of confirmed) {
+        result.push({ date, bin_name: binName, stream: binType.stream, label, confirmed: true });
+      }
+      const weeks = binType.every_weeks;
+      if (council.schedule !== "next_only" || weeks === void 0 || holidays === void 0) continue;
+      const anchor = [...dates].sort().at(-1);
+      for (let date = addDays(anchor, weeks * 7); date <= horizon; date = addDays(date, weeks * 7)) {
+        if (date < today || confirmed.has(date) || inHolidayWeek(date, holidays)) continue;
+        result.push({ date, bin_name: binName, stream: binType.stream, label, confirmed: false });
+      }
+    }
+    return result.sort((a, b) => a.date.localeCompare(b.date) || a.bin_name.localeCompare(b.bin_name));
+  }
+
+  // ../registry/bank-holidays.json
+  var bank_holidays_default = {
+    note: "Weekday bank holidays, including substitute days, used to avoid projecting dates into a holiday week. Sources: GOV.UK UK bank holidays, and the Privy Council proclamation for 2027. Only regions listed here are known; for any other region the feed does not project dates. A fuller calendar for all four nations is part of FRE-281.",
+    "england-and-wales": [
+      "2026-01-01",
+      "2026-04-03",
+      "2026-04-06",
+      "2026-05-04",
+      "2026-05-25",
+      "2026-08-31",
+      "2026-12-25",
+      "2026-12-28",
+      "2027-01-01",
+      "2027-03-26",
+      "2027-03-29",
+      "2027-05-03",
+      "2027-05-31",
+      "2027-08-30",
+      "2027-12-27",
+      "2027-12-28"
+    ]
+  };
+
+  // ../registry/councils.json
+  var councils_default = {
+    councils: [
+      {
+        ons_code: "E06000022",
+        name: "Bath and North East Somerset",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "BathAndNorthEastSomersetCouncil",
+          url: "https://www.bathnes.gov.uk/webforms/waste/collectionday/",
+          skip_get_url: true
+        },
+        inputs: [
+          "uprn"
+        ],
+        needs_selenium: false,
+        bin_types: {
+          "Black Rubbish Bin (140L)": {
+            stream: "general",
+            label: "Black bin",
+            colour: "black",
+            every_weeks: 2
+          },
+          "Blue Recycling Bag for Cardboard": {
+            stream: "recycling",
+            label: "Blue bag (cardboard)",
+            colour: "blue",
+            every_weeks: 1
+          },
+          "Green Recycling Box": {
+            stream: "recycling",
+            label: "Green box",
+            colour: "green",
+            every_weeks: 1
+          },
+          "Food Recycling Collection Bin": {
+            stream: "food",
+            label: "Food caddy",
+            every_weeks: 1
+          }
+        },
+        test_address: {
+          uprn: "100120000855"
+        },
+        last_verified: "2026-10-26",
+        notes: "Plain HTTP, needs only a UPRN. The API returns only the next collection date for each bin, so every_weeks says how often each bin is emptied. Frequencies are from the council's own pages and published calendar (checked 2026-10-26). The Monday A calendar for November 2025 to November 2026 (app.bathnes.gov.uk/WebForms/waste/attachments/) shows food bin, green box and blue bag collected every Monday, and the rubbish bin on alternate Mondays, so the same bins are emptied every 1 and 2 weeks. The council's pages say the same: rubbish every other week (https://www.bathnes.gov.uk/rubbish), food waste weekly (https://www.bathnes.gov.uk/food-waste), green recycling box weekly (https://www.bathnes.gov.uk/green-recycling-box), blue recycling bag weekly (https://www.bathnes.gov.uk/blue-recycling-bag). Garden waste is fortnightly on the same calendar, with a winter gap, but its bin name has not been seen yet, so it is not mapped. The frequencies were also confirmed by the project owner on 2026-10-26. Calendars exist per round (for example Monday A, Friday B). Only Monday A has been read so far; the other rounds are assumed to follow the same frequencies and should be checked against one more calendar."
+      }
+    ]
+  };
+
+  // src/registry.ts
+  var councils = councils_default.councils;
+  function getCouncil(onsCode) {
+    return councils.find((council) => council.ons_code === onsCode);
+  }
+  function regionFor(onsCode) {
+    return onsCode.startsWith("E") || onsCode.startsWith("W") ? "england-and-wales" : onsCode.startsWith("S") ? "scotland" : "northern-ireland";
+  }
+  function bankHolidaysFor(onsCode) {
+    const data = bank_holidays_default;
+    const dates = data[regionFor(onsCode)];
+    return Array.isArray(dates) ? dates : void 0;
+  }
+
+  // src/feed.ts
+  var STALE_DAYS = 14;
+  var ALARM_EVENING_BEFORE = "-PT6H";
+  var STREAM_ORDER = ["general", "recycling", "food", "garden"];
+  var STREAM_NAME = { general: "rubbish", recycling: "recycling", food: "food", garden: "garden" };
+  var UNCONFIRMED_SUMMARY = "Couldn't confirm this week's collection, check the council site";
+  var SETTING_UP_SUMMARY = "Bin Day is getting your collection dates, check back tomorrow";
+  function noticeEvent(id, kind, summary, today) {
+    return { uid: `${id}-${kind}@bin-day`, summary, start: { kind: "date", date: today } };
+  }
+  function groupByDate(collections) {
+    const groups = /* @__PURE__ */ new Map();
+    for (const collection of collections) {
+      groups.set(collection.date, [...groups.get(collection.date) ?? [], collection]);
+    }
+    return groups;
+  }
+  function eventFor(id, date, ordinal, group) {
+    const streams = STREAM_ORDER.filter((stream) => group.some((c) => c.stream === stream));
+    const ordered = [...group].sort((a, b) => STREAM_ORDER.indexOf(a.stream) - STREAM_ORDER.indexOf(b.stream) || a.bin_name.localeCompare(b.bin_name));
+    const labels = [...new Set(ordered.map((c) => c.label))];
+    const projected = group.some((c) => !c.confirmed);
+    const lines = [`Put out: ${labels.join(", ")}.`];
+    if (projected) lines.push("Expected date, confirmed nearer the time.");
+    return {
+      // Keyed on the week, not the date, so a date that moves within its week updates the event instead of duplicating it.
+      uid: `${id}-${isoWeek(date)}-${ordinal}@bin-day`,
+      summary: `Bins: ${streams.map((s) => STREAM_NAME[s]).join(" + ")}`,
+      description: lines.join("\n"),
+      start: { kind: "date", date },
+      alarm: ALARM_EVENING_BEFORE
+    };
+  }
+  function buildFeed(input) {
+    const { subscription, council, collections, fetchedAt, now, today, holidays } = input;
+    const id = subscription.id;
+    if (fetchedAt === null) {
+      return buildCalendar("Bin Day", [noticeEvent(id, "setup", SETTING_UP_SUMMARY, today)], now);
+    }
+    if (daysBetween(fetchedAt.slice(0, 10), today) > STALE_DAYS) {
+      return buildCalendar("Bin Day", [noticeEvent(id, "unconfirmed", UNCONFIRMED_SUMMARY, today)], now);
+    }
+    const wanted = projectCollections({ collections, council, today, holidays }).filter(
+      (collection) => subscription.garden || collection.stream !== "garden"
+    );
+    const events = [];
+    const ordinalsByWeek = /* @__PURE__ */ new Map();
+    for (const [date, group] of [...groupByDate(wanted)].sort(([a], [b]) => a.localeCompare(b))) {
+      const week = isoWeek(date);
+      const ordinal = (ordinalsByWeek.get(week) ?? 0) + 1;
+      ordinalsByWeek.set(week, ordinal);
+      events.push(eventFor(id, date, ordinal, group));
+    }
+    return buildCalendar("Bin Day", events, new Date(fetchedAt));
+  }
+  var FEED_TOKEN = /^[0-9a-f]{64}$/;
+  function feedFor(token, deps) {
+    if (!FEED_TOKEN.test(token)) return null;
+    const subscription = deps.tables.findSubscription(token);
+    if (!subscription) return null;
+    const council = getCouncil(subscription.ons_code);
+    if (!council) return null;
+    const result = deps.tables.getResult(subscription.uprn);
+    return buildFeed({
+      subscription: { id: subscription.id, garden: subscription.garden },
+      council,
+      collections: result?.collections ?? [],
+      fetchedAt: result?.fetched_at ?? null,
+      now: deps.now,
+      today: deps.today,
+      holidays: bankHolidaysFor(subscription.ons_code)
+    });
+  }
+
   // src/service.ts
   var STREAMS = ["general", "recycling", "food", "garden"];
+  var DEFAULT_MAX_SUBSCRIPTIONS = 5e3;
+  var DEFAULT_MAX_PER_ADDRESS = 20;
   var UPRN = /^[0-9]{1,12}$/;
   var ONS_CODE = /^[ENSW][0-9]{8}$/;
   var TIMESTAMP = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+(Z|[+-][0-9]{2}:[0-9]{2})$/;
@@ -177,9 +408,47 @@
     }
     return rows2;
   }
+  function subscribe(request, deps) {
+    const { uprn, ons_code, postcode, house_number, garden } = request;
+    if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+    if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
+    if (postcode !== void 0 && text(postcode, 10) === null) return fail("bad postcode");
+    if (house_number !== void 0 && text(house_number, 100) === null) return fail("bad house_number");
+    if (garden !== void 0 && typeof garden !== "boolean") return fail("bad garden");
+    const council = getCouncil(ons_code);
+    if (council?.status !== "supported") return fail("council not supported yet");
+    for (const input of council.inputs ?? []) {
+      if (input === "postcode" && typeof postcode !== "string") return fail("postcode needed");
+      if (input === "house_number" && typeof house_number !== "string") return fail("house_number needed");
+    }
+    if (!deps.newToken || !deps.newId) return fail("not configured");
+    const withLock = deps.withLock ?? ((work) => work());
+    const { tables } = deps;
+    return withLock(() => {
+      if (tables.countSubscriptions() >= (deps.maxSubscriptions ?? DEFAULT_MAX_SUBSCRIPTIONS)) return fail("full");
+      if (tables.countSubscriptions(uprn) >= (deps.maxPerAddress ?? DEFAULT_MAX_PER_ADDRESS)) return fail("too many feeds for this address");
+      if (!tables.addresses().some((address) => address.uprn === uprn)) {
+        const row = { uprn, ons_code };
+        if (typeof postcode === "string") row.postcode = postcode;
+        if (typeof house_number === "string") row.house_number = house_number;
+        tables.addAddress(row);
+      }
+      const token = deps.newToken?.();
+      tables.addSubscription({
+        token,
+        id: deps.newId?.(),
+        uprn,
+        ons_code,
+        garden: garden === true,
+        created_at: deps.nowIso?.() ?? (/* @__PURE__ */ new Date()).toISOString()
+      });
+      return { ok: true, token };
+    });
+  }
   function handle(body, deps) {
     if (typeof body !== "object" || body === null) return fail("bad request");
     const request = body;
+    if (request.action === "subscribe") return subscribe(request, deps);
     if (deps.secret === void 0 || deps.secret === "") return fail("not configured");
     if (typeof request.secret !== "string" || !safeEqual(request.secret, deps.secret)) return fail("unauthorised");
     const withLock = deps.withLock ?? ((work) => work());
@@ -244,14 +513,15 @@
   // src/sheets.ts
   var ADDRESS_HEADERS = ["uprn", "ons_code", "postcode", "house_number", "created_at"];
   var RESULT_HEADERS = ["uprn", "fetched_at", "last_attempt", "last_error", "consecutive_failures", "collections_json"];
-  function table(name, headers) {
+  var SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at"];
+  function table(name, headers, textColumns = [1]) {
     const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
     let sheet = spreadsheet.getSheetByName(name);
     if (!sheet) {
       sheet = spreadsheet.insertSheet(name);
       sheet.appendRow(headers);
       sheet.setFrozenRows(1);
-      sheet.getRange(1, 1, sheet.getMaxRows(), 1).setNumberFormat("@");
+      for (const column of textColumns) sheet.getRange(1, column, sheet.getMaxRows(), 1).setNumberFormat("@");
     }
     return sheet;
   }
@@ -310,6 +580,24 @@
       ];
       const rowNumber = findRow(sheet, row.uprn) ?? sheet.getLastRow() + 1;
       sheet.getRange(rowNumber, 1, 1, values.length).setValues([values]);
+    },
+    countSubscriptions(uprn) {
+      const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
+      const last = sheet.getLastRow();
+      if (last < 2) return 0;
+      if (uprn === void 0) return last - 1;
+      return sheet.getRange(2, 3, last - 1, 1).getValues().filter((row) => String(row[0]) === uprn).length;
+    },
+    addSubscription(row) {
+      const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
+      sheet.appendRow([row.token, row.id, row.uprn, row.ons_code, row.garden ? "yes" : "no", row.created_at]);
+    },
+    findSubscription(token) {
+      const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
+      const rowNumber = findRow(sheet, token);
+      if (rowNumber === null) return null;
+      const [, id, uprn, onsCode, garden, createdAt] = sheet.getRange(rowNumber, 1, 1, SUBSCRIPTION_HEADERS.length).getValues()[0];
+      return { token, id: String(id), uprn: String(uprn), ons_code: String(onsCode), garden: garden === "yes", created_at: String(createdAt) };
     }
   };
 
@@ -324,7 +612,20 @@
       const calendar = buildCalendar("Bin Day PoC", pocEvents(today), now);
       return ContentService.createTextOutput(calendar).setMimeType(ContentService.MimeType.ICAL);
     }
-    return json({ ok: true, service: "bin-day-poc", time: (/* @__PURE__ */ new Date()).toISOString() });
+    const token = e?.parameter?.feed;
+    if (token && token !== "poc") {
+      const now = /* @__PURE__ */ new Date();
+      const today = Utilities.formatDate(now, "Europe/London", "yyyy-MM-dd");
+      const calendar = FEED_TOKEN.test(token) ? feedFor(token, { tables: sheetTables, now, today }) : null;
+      if (calendar === null) return json({ ok: false, error: "not found" });
+      return ContentService.createTextOutput(calendar).setMimeType(ContentService.MimeType.ICAL);
+    }
+    return json({ ok: true, service: "bin-day", time: (/* @__PURE__ */ new Date()).toISOString() });
+  }
+  function randomHex(parts) {
+    let hex = "";
+    for (let i = 0; i < parts; i++) hex += Utilities.getUuid().replace(/-/g, "");
+    return hex;
   }
   function withScriptLock(work) {
     const lock = LockService.getScriptLock();
@@ -343,8 +644,20 @@
       return json({ ok: false, error: "body is not JSON" });
     }
     if (typeof body === "object" && body !== null && "action" in body) {
-      const secret = PropertiesService.getScriptProperties().getProperty("FETCHER_SECRET") ?? void 0;
-      return json(handle(body, { secret, tables: sheetTables, withLock: withScriptLock }));
+      const properties = PropertiesService.getScriptProperties();
+      const secret = properties.getProperty("FETCHER_SECRET") ?? void 0;
+      const max = Number(properties.getProperty("MAX_SUBSCRIPTIONS"));
+      return json(
+        handle(body, {
+          secret,
+          tables: sheetTables,
+          withLock: withScriptLock,
+          newToken: () => randomHex(2),
+          newId: () => randomHex(1).slice(0, 8),
+          nowIso: () => (/* @__PURE__ */ new Date()).toISOString(),
+          maxSubscriptions: max > 0 ? max : void 0
+        })
+      );
     }
     return json({ ok: true, received: body });
   }

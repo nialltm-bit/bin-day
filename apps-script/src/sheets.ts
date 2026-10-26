@@ -1,9 +1,10 @@
-import type { AddressRow, CollectionRow, ResultRow, Tables } from "./service";
+import type { AddressRow, CollectionRow, ResultRow, SubscriptionRow, Tables } from "./service";
 
 const ADDRESS_HEADERS = ["uprn", "ons_code", "postcode", "house_number", "created_at"];
 const RESULT_HEADERS = ["uprn", "fetched_at", "last_attempt", "last_error", "consecutive_failures", "collections_json"];
+const SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at"];
 
-function table(name: string, headers: string[]): GoogleAppsScript.Spreadsheet.Sheet {
+function table(name: string, headers: string[], textColumns: number[] = [1]): GoogleAppsScript.Spreadsheet.Sheet {
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = spreadsheet.getSheetByName(name);
   if (!sheet) {
@@ -11,7 +12,7 @@ function table(name: string, headers: string[]): GoogleAppsScript.Spreadsheet.Sh
     sheet.appendRow(headers);
     sheet.setFrozenRows(1);
     // Keep identifiers as text so a UPRN is never turned into a number.
-    sheet.getRange(1, 1, sheet.getMaxRows(), 1).setNumberFormat("@");
+    for (const column of textColumns) sheet.getRange(1, column, sheet.getMaxRows(), 1).setNumberFormat("@");
   }
   return sheet;
 }
@@ -77,5 +78,29 @@ export const sheetTables: Tables = {
     ];
     const rowNumber = findRow(sheet, row.uprn) ?? sheet.getLastRow() + 1;
     sheet.getRange(rowNumber, 1, 1, values.length).setValues([values]);
+  },
+
+  countSubscriptions(uprn?: string): number {
+    const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
+    const last = sheet.getLastRow();
+    if (last < 2) return 0;
+    if (uprn === undefined) return last - 1;
+    return sheet
+      .getRange(2, 3, last - 1, 1)
+      .getValues()
+      .filter((row) => String(row[0]) === uprn).length;
+  },
+
+  addSubscription(row: SubscriptionRow): void {
+    const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
+    sheet.appendRow([row.token, row.id, row.uprn, row.ons_code, row.garden ? "yes" : "no", row.created_at]);
+  },
+
+  findSubscription(token: string): SubscriptionRow | null {
+    const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
+    const rowNumber = findRow(sheet, token);
+    if (rowNumber === null) return null;
+    const [, id, uprn, onsCode, garden, createdAt] = sheet.getRange(rowNumber, 1, 1, SUBSCRIPTION_HEADERS.length).getValues()[0];
+    return { token, id: String(id), uprn: String(uprn), ons_code: String(onsCode), garden: garden === "yes", created_at: String(createdAt) };
   },
 };

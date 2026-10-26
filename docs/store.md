@@ -10,7 +10,10 @@ reached through the Apps Script web app in `apps-script/`. Nothing in the Sheet 
   `consecutive_failures`, `collections_json`. A failed fetch keeps the last good collections, so the feed can say
   it couldn't confirm this week's collection.
 
-The script creates both tabs, with a header row, the first time it needs them.
+- `subscriptions` tab, one row per feed: `token` (the secret in the person's feed URL), `id`, `uprn`, `ons_code`,
+  `garden`, `created_at`. Treat it like the secret itself. See `feed.md`.
+
+The script creates each tab, with a header row, the first time it needs it.
 
 ## The API
 

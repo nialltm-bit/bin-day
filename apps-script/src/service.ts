@@ -3,6 +3,8 @@
  * (addresses and results). Pure logic, so it can be tested without Apps Script.
  */
 
+import { getCouncil } from "./registry";
+
 export const STREAMS = ["general", "recycling", "food", "garden"] as const;
 
 export interface AddressRow {
@@ -27,11 +29,25 @@ export interface ResultRow {
   collections: CollectionRow[];
 }
 
+export interface SubscriptionRow {
+  /** The secret in the person's feed URL. */
+  token: string;
+  /** A short public id used in event UIDs. Not the token. */
+  id: string;
+  uprn: string;
+  ons_code: string;
+  garden: boolean;
+  created_at: string;
+}
+
 export interface Tables {
   addresses(): AddressRow[];
   addAddress(row: AddressRow): void;
   getResult(uprn: string): ResultRow | null;
   putResult(row: ResultRow): void;
+  countSubscriptions(uprn?: string): number;
+  addSubscription(row: SubscriptionRow): void;
+  findSubscription(token: string): SubscriptionRow | null;
 }
 
 export interface Deps {
@@ -40,7 +56,17 @@ export interface Deps {
   tables: Tables;
   /** Wraps writes so concurrent requests cannot interleave. */
   withLock?: <T>(work: () => T) => T;
+  /** Random values for new subscriptions. */
+  newToken?: () => string;
+  newId?: () => string;
+  nowIso?: () => string;
+  /** The most subscriptions allowed in total, and for one address. */
+  maxSubscriptions?: number;
+  maxPerAddress?: number;
 }
+
+export const DEFAULT_MAX_SUBSCRIPTIONS = 5000;
+export const DEFAULT_MAX_PER_ADDRESS = 20;
 
 export type Reply = { ok: true; [key: string]: unknown } | { ok: false; error: string };
 
@@ -82,9 +108,55 @@ function validCollections(value: unknown): CollectionRow[] | null {
   return rows;
 }
 
+/**
+ * Public: anyone can ask for a feed for an address. Every request gets its own new token, so a feed URL is never
+ * shared between people, and the address is added to the fetcher's list once however many people subscribe.
+ */
+function subscribe(request: Record<string, unknown>, deps: Deps): Reply {
+  const { uprn, ons_code, postcode, house_number, garden } = request;
+  if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+  if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
+  if (postcode !== undefined && text(postcode, 10) === null) return fail("bad postcode");
+  if (house_number !== undefined && text(house_number, 100) === null) return fail("bad house_number");
+  if (garden !== undefined && typeof garden !== "boolean") return fail("bad garden");
+
+  const council = getCouncil(ons_code);
+  if (council?.status !== "supported") return fail("council not supported yet");
+  for (const input of council.inputs ?? []) {
+    if (input === "postcode" && typeof postcode !== "string") return fail("postcode needed");
+    if (input === "house_number" && typeof house_number !== "string") return fail("house_number needed");
+  }
+  if (!deps.newToken || !deps.newId) return fail("not configured");
+
+  const withLock = deps.withLock ?? (<T>(work: () => T) => work());
+  const { tables } = deps;
+  return withLock(() => {
+    if (tables.countSubscriptions() >= (deps.maxSubscriptions ?? DEFAULT_MAX_SUBSCRIPTIONS)) return fail("full");
+    if (tables.countSubscriptions(uprn) >= (deps.maxPerAddress ?? DEFAULT_MAX_PER_ADDRESS)) return fail("too many feeds for this address");
+    if (!tables.addresses().some((address) => address.uprn === uprn)) {
+      const row: AddressRow = { uprn, ons_code };
+      if (typeof postcode === "string") row.postcode = postcode;
+      if (typeof house_number === "string") row.house_number = house_number;
+      tables.addAddress(row);
+    }
+    const token = deps.newToken?.() as string;
+    tables.addSubscription({
+      token,
+      id: deps.newId?.() as string,
+      uprn,
+      ons_code,
+      garden: garden === true,
+      created_at: deps.nowIso?.() ?? new Date().toISOString(),
+    });
+    return { ok: true, token } as Reply;
+  });
+}
+
 export function handle(body: unknown, deps: Deps): Reply {
   if (typeof body !== "object" || body === null) return fail("bad request");
   const request = body as Record<string, unknown>;
+
+  if (request.action === "subscribe") return subscribe(request, deps);
 
   if (deps.secret === undefined || deps.secret === "") return fail("not configured");
   if (typeof request.secret !== "string" || !safeEqual(request.secret, deps.secret)) return fail("unauthorised");
