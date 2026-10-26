@@ -21,8 +21,8 @@
     "END:STANDARD",
     "END:VTIMEZONE"
   ];
-  function escapeText(text) {
-    return text.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
+  function escapeText(text2) {
+    return text2.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
   }
   function utf8Length(char) {
     const code = char.codePointAt(0) ?? 0;
@@ -143,6 +143,176 @@
     return events;
   }
 
+  // src/service.ts
+  var STREAMS = ["general", "recycling", "food", "garden"];
+  var UPRN = /^[0-9]{1,12}$/;
+  var ONS_CODE = /^[ENSW][0-9]{8}$/;
+  var TIMESTAMP = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+(Z|[+-][0-9]{2}:[0-9]{2})$/;
+  var DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
+  var MAX_TEXT = 500;
+  function fail(error) {
+    return { ok: false, error };
+  }
+  function safeEqual(a, b) {
+    let diff = a.length ^ b.length;
+    const length = Math.max(a.length, b.length);
+    for (let i = 0; i < length; i++) {
+      diff |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0);
+    }
+    return diff === 0;
+  }
+  function text(value, max = MAX_TEXT) {
+    return typeof value === "string" && value.length <= max ? value : null;
+  }
+  function validCollections(value) {
+    if (!Array.isArray(value) || value.length > 200) return null;
+    const rows2 = [];
+    for (const item of value) {
+      if (typeof item !== "object" || item === null) return null;
+      const { date, bin_name, stream } = item;
+      if (typeof date !== "string" || !DATE.test(date)) return null;
+      if (text(bin_name, 200) === null || typeof bin_name !== "string") return null;
+      if (typeof stream !== "string" || !STREAMS.includes(stream)) return null;
+      rows2.push({ date, bin_name, stream });
+    }
+    return rows2;
+  }
+  function handle(body, deps) {
+    if (typeof body !== "object" || body === null) return fail("bad request");
+    const request = body;
+    if (deps.secret === void 0 || deps.secret === "") return fail("not configured");
+    if (typeof request.secret !== "string" || !safeEqual(request.secret, deps.secret)) return fail("unauthorised");
+    const withLock = deps.withLock ?? ((work) => work());
+    const { tables } = deps;
+    switch (request.action) {
+      case "addresses": {
+        const addresses = tables.addresses().map((address) => ({
+          ...address,
+          last_attempt: tables.getResult(address.uprn)?.last_attempt ?? null
+        }));
+        return { ok: true, addresses };
+      }
+      case "add_address": {
+        const { uprn, ons_code, postcode, house_number } = request;
+        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
+        if (postcode !== void 0 && text(postcode, 10) === null) return fail("bad postcode");
+        if (house_number !== void 0 && text(house_number, 100) === null) return fail("bad house_number");
+        const row = { uprn, ons_code };
+        if (typeof postcode === "string") row.postcode = postcode;
+        if (typeof house_number === "string") row.house_number = house_number;
+        withLock(() => {
+          if (!tables.addresses().some((a) => a.uprn === uprn)) tables.addAddress(row);
+        });
+        return { ok: true };
+      }
+      case "save_success": {
+        const { uprn, now } = request;
+        const collections = validCollections(request.collections);
+        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
+        if (collections === null) return fail("bad collections");
+        withLock(
+          () => tables.putResult({ uprn, fetched_at: now, last_attempt: now, last_error: null, consecutive_failures: 0, collections })
+        );
+        return { ok: true };
+      }
+      case "save_failure": {
+        const { uprn, now } = request;
+        const error = text(request.error);
+        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
+        if (error === null) return fail("bad error");
+        withLock(() => {
+          const previous = tables.getResult(uprn);
+          tables.putResult({
+            uprn,
+            fetched_at: previous?.fetched_at ?? null,
+            last_attempt: now,
+            last_error: error,
+            consecutive_failures: (previous?.consecutive_failures ?? 0) + 1,
+            collections: previous?.collections ?? []
+          });
+        });
+        return { ok: true };
+      }
+      default:
+        return fail("unknown action");
+    }
+  }
+
+  // src/sheets.ts
+  var ADDRESS_HEADERS = ["uprn", "ons_code", "postcode", "house_number", "created_at"];
+  var RESULT_HEADERS = ["uprn", "fetched_at", "last_attempt", "last_error", "consecutive_failures", "collections_json"];
+  function table(name, headers) {
+    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = spreadsheet.getSheetByName(name);
+    if (!sheet) {
+      sheet = spreadsheet.insertSheet(name);
+      sheet.appendRow(headers);
+      sheet.setFrozenRows(1);
+      sheet.getRange(1, 1, sheet.getMaxRows(), 1).setNumberFormat("@");
+    }
+    return sheet;
+  }
+  function rows(sheet) {
+    const last = sheet.getLastRow();
+    return last < 2 ? [] : sheet.getRange(2, 1, last - 1, sheet.getLastColumn()).getValues();
+  }
+  function findRow(sheet, uprn) {
+    const last = sheet.getLastRow();
+    if (last < 2) return null;
+    const column = sheet.getRange(2, 1, last - 1, 1).getValues();
+    const index = column.findIndex((row) => String(row[0]) === uprn);
+    return index === -1 ? null : index + 2;
+  }
+  function optional(value) {
+    return value === "" || value === void 0 || value === null ? void 0 : String(value);
+  }
+  var sheetTables = {
+    addresses() {
+      return rows(table("addresses", ADDRESS_HEADERS)).map((row) => {
+        const address = { uprn: String(row[0]), ons_code: String(row[1]) };
+        const postcode = optional(row[2]);
+        const houseNumber = optional(row[3]);
+        if (postcode) address.postcode = postcode;
+        if (houseNumber) address.house_number = houseNumber;
+        return address;
+      });
+    },
+    addAddress(row) {
+      const sheet = table("addresses", ADDRESS_HEADERS);
+      sheet.appendRow([row.uprn, row.ons_code, row.postcode ?? "", row.house_number ?? "", (/* @__PURE__ */ new Date()).toISOString()]);
+    },
+    getResult(uprn) {
+      const sheet = table("results", RESULT_HEADERS);
+      const rowNumber = findRow(sheet, uprn);
+      if (rowNumber === null) return null;
+      const [, fetchedAt, lastAttempt, lastError, failures, json2] = sheet.getRange(rowNumber, 1, 1, RESULT_HEADERS.length).getValues()[0];
+      return {
+        uprn,
+        fetched_at: optional(fetchedAt) ?? null,
+        last_attempt: String(lastAttempt),
+        last_error: optional(lastError) ?? null,
+        consecutive_failures: Number(failures) || 0,
+        collections: json2 ? JSON.parse(String(json2)) : []
+      };
+    },
+    putResult(row) {
+      const sheet = table("results", RESULT_HEADERS);
+      const values = [
+        row.uprn,
+        row.fetched_at ?? "",
+        row.last_attempt,
+        row.last_error ?? "",
+        row.consecutive_failures,
+        JSON.stringify(row.collections)
+      ];
+      const rowNumber = findRow(sheet, row.uprn) ?? sheet.getLastRow() + 1;
+      sheet.getRange(rowNumber, 1, 1, values.length).setValues([values]);
+    }
+  };
+
   // src/main.ts
   function json(body) {
     return ContentService.createTextOutput(JSON.stringify(body)).setMimeType(ContentService.MimeType.JSON);
@@ -156,12 +326,27 @@
     }
     return json({ ok: true, service: "bin-day-poc", time: (/* @__PURE__ */ new Date()).toISOString() });
   }
-  function doPost(e) {
+  function withScriptLock(work) {
+    const lock = LockService.getScriptLock();
+    lock.waitLock(2e4);
     try {
-      return json({ ok: true, received: JSON.parse(e?.postData?.contents ?? "null") });
+      return work();
+    } finally {
+      lock.releaseLock();
+    }
+  }
+  function doPost(e) {
+    let body;
+    try {
+      body = JSON.parse(e?.postData?.contents ?? "null");
     } catch {
       return json({ ok: false, error: "body is not JSON" });
     }
+    if (typeof body === "object" && body !== null && "action" in body) {
+      const secret = PropertiesService.getScriptProperties().getProperty("FETCHER_SECRET") ?? void 0;
+      return json(handle(body, { secret, tables: sheetTables, withLock: withScriptLock }));
+    }
+    return json({ ok: true, received: body });
   }
   Object.assign(globalThis, { doGet, doPost });
 })();
