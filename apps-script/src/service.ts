@@ -75,6 +75,10 @@ const ONS_CODE = /^[ENSW][0-9]{8}$/;
 const TIMESTAMP = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+(Z|[+-][0-9]{2}:[0-9]{2})$/;
 const DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 const MAX_TEXT = 500;
+// Postcodes and house numbers go into a Sheet, where a value starting with = + - or @ could run as a formula, so
+// only plain characters are allowed, and never a leading symbol.
+const POSTCODE = /^[A-Za-z0-9][A-Za-z0-9 ]{1,9}$/;
+const HOUSE_NUMBER = /^[A-Za-z0-9][A-Za-z0-9 ,'./-]{0,99}$/;
 
 function fail(error: string): Reply {
   return { ok: false, error };
@@ -116,8 +120,8 @@ function subscribe(request: Record<string, unknown>, deps: Deps): Reply {
   const { uprn, ons_code, postcode, house_number, garden } = request;
   if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
   if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
-  if (postcode !== undefined && text(postcode, 10) === null) return fail("bad postcode");
-  if (house_number !== undefined && text(house_number, 100) === null) return fail("bad house_number");
+  if (postcode !== undefined && !(typeof postcode === "string" && POSTCODE.test(postcode))) return fail("bad postcode");
+  if (house_number !== undefined && !(typeof house_number === "string" && HOUSE_NUMBER.test(house_number))) return fail("bad house_number");
   if (garden !== undefined && typeof garden !== "boolean") return fail("bad garden");
 
   const council = getCouncil(ons_code);
@@ -177,8 +181,8 @@ export function handle(body: unknown, deps: Deps): Reply {
       const { uprn, ons_code, postcode, house_number } = request;
       if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
       if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
-      if (postcode !== undefined && text(postcode, 10) === null) return fail("bad postcode");
-      if (house_number !== undefined && text(house_number, 100) === null) return fail("bad house_number");
+      if (postcode !== undefined && !(typeof postcode === "string" && POSTCODE.test(postcode))) return fail("bad postcode");
+      if (house_number !== undefined && !(typeof house_number === "string" && HOUSE_NUMBER.test(house_number))) return fail("bad house_number");
       const row: AddressRow = { uprn, ons_code };
       if (typeof postcode === "string") row.postcode = postcode;
       if (typeof house_number === "string") row.house_number = house_number;

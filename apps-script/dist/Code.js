@@ -381,6 +381,8 @@
   var TIMESTAMP = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+(Z|[+-][0-9]{2}:[0-9]{2})$/;
   var DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
   var MAX_TEXT = 500;
+  var POSTCODE = /^[A-Za-z0-9][A-Za-z0-9 ]{1,9}$/;
+  var HOUSE_NUMBER = /^[A-Za-z0-9][A-Za-z0-9 ,'./-]{0,99}$/;
   function fail(error) {
     return { ok: false, error };
   }
@@ -412,8 +414,8 @@
     const { uprn, ons_code, postcode, house_number, garden } = request;
     if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
     if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
-    if (postcode !== void 0 && text(postcode, 10) === null) return fail("bad postcode");
-    if (house_number !== void 0 && text(house_number, 100) === null) return fail("bad house_number");
+    if (postcode !== void 0 && !(typeof postcode === "string" && POSTCODE.test(postcode))) return fail("bad postcode");
+    if (house_number !== void 0 && !(typeof house_number === "string" && HOUSE_NUMBER.test(house_number))) return fail("bad house_number");
     if (garden !== void 0 && typeof garden !== "boolean") return fail("bad garden");
     const council = getCouncil(ons_code);
     if (council?.status !== "supported") return fail("council not supported yet");
@@ -465,8 +467,8 @@
         const { uprn, ons_code, postcode, house_number } = request;
         if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
         if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
-        if (postcode !== void 0 && text(postcode, 10) === null) return fail("bad postcode");
-        if (house_number !== void 0 && text(house_number, 100) === null) return fail("bad house_number");
+        if (postcode !== void 0 && !(typeof postcode === "string" && POSTCODE.test(postcode))) return fail("bad postcode");
+        if (house_number !== void 0 && !(typeof house_number === "string" && HOUSE_NUMBER.test(house_number))) return fail("bad house_number");
         const row = { uprn, ons_code };
         if (typeof postcode === "string") row.postcode = postcode;
         if (typeof house_number === "string") row.house_number = house_number;

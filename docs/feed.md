@@ -16,6 +16,12 @@ added to the fetcher's list once, however many people subscribe to it, and a new
 daily run. Until then the feed holds one all-day event saying it is getting the person's dates.
 Limits: 20 feeds per address and 5,000 in total (change the total with the `MAX_SUBSCRIPTIONS` script property).
 
+The `subscribe` request is public, so anyone can call it. It checks every field, only accepts plain characters in
+postcodes and house numbers (so nothing can run as a formula in the Sheet), and stops at the limits above. It cannot
+tell a real address from an invented one, and someone could use up the 5,000 total with invented ones. If that
+happens, raise the limit or put a bot check (such as Cloudflare Turnstile) in front of the sign-up page; Apps Script
+cannot limit by IP address.
+
 ## What is in the feed
 
 - One **all-day event per collection day**, with same-day bins merged: "Bins: rubbish + recycling + food". The

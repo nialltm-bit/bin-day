@@ -233,6 +233,17 @@ describe("subscribe (public)", () => {
     expect(store.addresses).toHaveLength(0);
   });
 
+  it("only lets plain characters into postcode and house number, so nothing can run as a formula in the Sheet", () => {
+    for (const bad of ["=IMPORTXML(A1)", "+1", "-1", "@SUM(A1)", " x", "x\n=1", "<b>", "x".repeat(101)]) {
+      expect(subscribe({ house_number: bad })).toEqual({ ok: false, error: "bad house_number" });
+    }
+    for (const bad of ["=1+1", "@x", "B1 1AA;", "x".repeat(11)]) {
+      expect(subscribe({ postcode: bad })).toEqual({ ok: false, error: "bad postcode" });
+    }
+    expect(subscribe({ postcode: "BA1 1AA", house_number: "Flat 2, 14-16 High St." }).ok).toBe(true);
+    expect(store.subscriptions).toHaveLength(1);
+  });
+
   it("stops at the limits", () => {
     expect(subscribe({}, { ...publicDeps(), maxPerAddress: 2 }).ok).toBe(true);
     expect(subscribe({}, { ...publicDeps(), maxPerAddress: 2 }).ok).toBe(true);
