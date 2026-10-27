@@ -44,7 +44,7 @@ Councils with `schedule: next_only` (B&NES) give one date per bin. For those the
   mid-January). Those dates appear only once the council confirms them. Projection carries on after the skipped week;
 - says **"Expected date, confirmed nearer the time."** in the description of projected events, and nothing of the
   kind on confirmed ones;
-- does not project at all for a region whose bank holidays we don't have (only England and Wales so far, in
+- does not project at all for a region whose bank holidays are not verified (only England and Wales so far, in
   `registry/bank-holidays.json`).
 
 Councils that return a full schedule are shown as returned, with no projection.

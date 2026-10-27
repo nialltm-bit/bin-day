@@ -26,14 +26,19 @@ export function getCouncil(onsCode: string): Council | undefined {
   return councils.find((council) => council.ons_code === onsCode);
 }
 
-/** England and Wales share bank holidays. Scotland and Northern Ireland are not built yet. */
+/** England and Wales share bank holidays; S is Scotland and N is Northern Ireland. */
 export function regionFor(onsCode: string): string {
   return onsCode.startsWith("E") || onsCode.startsWith("W") ? "england-and-wales" : onsCode.startsWith("S") ? "scotland" : "northern-ireland";
 }
 
-/** Bank holiday dates for the council's region, or undefined if we don't know them. */
+interface Region {
+  verified: boolean;
+  dates: string[];
+}
+
+/** Bank holiday dates for the council's region, or undefined unless that region has been verified. */
 export function bankHolidaysFor(onsCode: string): string[] | undefined {
-  const data = bankHolidayData as unknown as Record<string, unknown>;
-  const dates = data[regionFor(onsCode)];
-  return Array.isArray(dates) ? (dates as string[]) : undefined;
+  const regions = (bankHolidayData as unknown as { regions: Record<string, Region> }).regions;
+  const region = regions[regionFor(onsCode)];
+  return region?.verified ? region.dates : undefined;
 }

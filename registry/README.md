@@ -32,4 +32,11 @@ Unknown keys are rejected, so typos get caught.
 4. Run the module for the test address and list the bin names it returns. Add each one to `bin_types`. A name that is missing is treated as a failure by the fetcher, so that an unmapped bin never reaches a calendar silently.
 5. Run `python -m fetcher.registry`. CI runs the same check.
 
+## Bank holidays
+
+`bank-holidays.json` holds the weekday bank holidays for England and Wales, Scotland and Northern Ireland. It is used
+by the calendar feed (to avoid projecting into a holiday week) and by change detection (to tell holiday shifts from
+round changes). A region is only used once it is marked `"verified": true`, after every date has been checked against
+its official page. England and Wales is verified; Scotland and Northern Ireland are drafts. See `docs/changes.md`.
+
 Streams are limited to four for now. Some councils collect glass or hygiene waste separately, so the list may need to grow (FRE-269).

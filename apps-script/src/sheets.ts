@@ -1,8 +1,9 @@
-import type { AddressRow, CollectionRow, ResultRow, SubscriptionRow, Tables } from "./service";
+import type { AddressRow, ChangeRow, CollectionRow, ResultRow, SubscriptionRow, Tables } from "./service";
 
 const ADDRESS_HEADERS = ["uprn", "ons_code", "postcode", "house_number", "created_at"];
 const RESULT_HEADERS = ["uprn", "fetched_at", "last_attempt", "last_error", "consecutive_failures", "collections_json"];
 const SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at"];
+const CHANGE_HEADERS = ["at", "uprn", "ons_code", "bin_name", "kind", "before", "after", "note"];
 
 function table(name: string, headers: string[], textColumns: number[] = [1]): GoogleAppsScript.Spreadsheet.Sheet {
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -35,6 +36,13 @@ function optional(value: unknown): string | undefined {
 }
 
 export const sheetTables: Tables = {
+  addChanges(rows: ChangeRow[]): void {
+    // Every column is text, so Sheets leaves the ISO dates and timestamps as they are.
+    const sheet = table("changes", CHANGE_HEADERS, [1, 2, 3, 4, 5, 6, 7, 8]);
+    const values = rows.map((r) => [r.at, r.uprn, r.ons_code, r.bin_name, r.kind, r.before ?? "", r.after ?? "", r.note]);
+    if (values.length > 0) sheet.getRange(sheet.getLastRow() + 1, 1, values.length, CHANGE_HEADERS.length).setValues(values);
+  },
+
   addresses(): AddressRow[] {
     return rows(table("addresses", ADDRESS_HEADERS)).map((row) => {
       const address: AddressRow = { uprn: String(row[0]), ons_code: String(row[1]) };

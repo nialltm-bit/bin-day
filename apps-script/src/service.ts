@@ -40,7 +40,21 @@ export interface SubscriptionRow {
   created_at: string;
 }
 
+export interface ChangeRow {
+  at: string;
+  uprn: string;
+  ons_code: string;
+  bin_name: string;
+  kind: string;
+  before: string | null;
+  after: string | null;
+  note: string;
+}
+
+export const CHANGE_KINDS = ["expected_shift", "round_change"] as const;
+
 export interface Tables {
+  addChanges(rows: ChangeRow[]): void;
   addresses(): AddressRow[];
   addAddress(row: AddressRow): void;
   getResult(uprn: string): ResultRow | null;
@@ -96,6 +110,28 @@ export function safeEqual(a: string, b: string): boolean {
 
 function text(value: unknown, max = MAX_TEXT): string | null {
   return typeof value === "string" && value.length <= max ? value : null;
+}
+
+function optionalDate(value: unknown): string | null | undefined {
+  if (value === null) return null;
+  return typeof value === "string" && DATE.test(value) ? value : undefined;
+}
+
+function validChanges(value: unknown, uprn: string, onsCode: string, at: string): ChangeRow[] | null {
+  if (!Array.isArray(value) || value.length > 50) return null;
+  const rows: ChangeRow[] = [];
+  for (const item of value) {
+    if (typeof item !== "object" || item === null) return null;
+    const { bin_name, kind, before, after, note } = item as Record<string, unknown>;
+    const beforeDate = optionalDate(before);
+    const afterDate = optionalDate(after);
+    if (typeof bin_name !== "string" || bin_name.length > 200) return null;
+    if (typeof kind !== "string" || !(CHANGE_KINDS as readonly string[]).includes(kind)) return null;
+    if (beforeDate === undefined || afterDate === undefined) return null;
+    if (typeof note !== "string" || note.length > 300) return null;
+    rows.push({ at, uprn, ons_code: onsCode, bin_name, kind, before: beforeDate, after: afterDate, note });
+  }
+  return rows;
 }
 
 function validCollections(value: unknown): CollectionRow[] | null {
@@ -189,6 +225,23 @@ export function handle(body: unknown, deps: Deps): Reply {
       withLock(() => {
         if (!tables.addresses().some((a) => a.uprn === uprn)) tables.addAddress(row);
       });
+      return { ok: true };
+    }
+
+    case "get_result": {
+      const { uprn } = request;
+      if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+      return { ok: true, result: tables.getResult(uprn) };
+    }
+
+    case "save_changes": {
+      const { uprn, ons_code, now } = request;
+      if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+      if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
+      if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
+      const rows = validChanges(request.changes, uprn, ons_code, now);
+      if (rows === null) return fail("bad changes");
+      withLock(() => tables.addChanges(rows));
       return { ok: true };
     }
 

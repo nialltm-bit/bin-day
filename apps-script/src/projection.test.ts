@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import vectors from "../../registry/test-vectors/holiday-weeks.json";
 import { inHolidayWeek, projectCollections } from "./projection";
 import { type Council, bankHolidaysFor, getCouncil } from "./registry";
 
@@ -107,5 +108,20 @@ describe("other cases", () => {
     const result = projectCollections({ collections: stored("2026-10-20", ["Black Rubbish Bin (140L)"]), council: bathnes, today: "2026-10-26", holidays });
     expect(result.every((c) => c.date >= "2026-10-26")).toBe(true);
     expect(result[0].date).toBe("2026-11-03"); // 20 Oct plus two weeks
+  });
+});
+
+describe("bank holiday data", () => {
+  it("uses only verified regions", () => {
+    expect(bankHolidaysFor("E06000022")).toBeDefined(); // England and Wales are verified
+    expect(bankHolidaysFor("W06000015")).toEqual(bankHolidaysFor("E06000022"));
+    expect(bankHolidaysFor("S12000033")).toBeUndefined(); // Scotland is drafted but not yet checked against gov.scot
+    expect(bankHolidaysFor("N09000001")).toBeUndefined(); // so is Northern Ireland, against nidirect
+  });
+
+  it("agrees with the Python implementation on the shared holiday-week cases", () => {
+    for (const { date, holiday_week, why } of vectors.cases) {
+      expect(inHolidayWeek(date, holidays as string[]), `${date}: ${why}`).toBe(holiday_week);
+    }
   });
 });

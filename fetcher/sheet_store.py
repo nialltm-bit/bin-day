@@ -11,7 +11,9 @@ import json
 import os
 import urllib.request
 from collections.abc import Callable
+from dataclasses import asdict
 
+from fetcher.changes import Change
 from fetcher.model import Address, Collection
 
 TIMEOUT_SECONDS = 60
@@ -88,3 +90,18 @@ class SheetStore:
 
     def save_failure(self, uprn: str, now: str, error: str) -> None:
         self._call("save_failure", uprn=uprn, now=now, error=error[:500])
+
+    def previous_collections(self, uprn: str) -> list[dict]:
+        """The collections stored at the last fetch. An older script that doesn't know `get_result` gives none, so
+        fetching carries on without change detection until the script is redeployed."""
+        try:
+            result = self._call("get_result", uprn=uprn).get("result")
+        except StoreError as err:
+            if "unknown action" in str(err):
+                return []
+            raise
+        return list(result["collections"]) if result else []
+
+    def save_changes(self, uprn: str, ons_code: str, now: str, changes: list[Change]) -> None:
+        rows = [{**asdict(change), "note": change.note[:300]} for change in changes]
+        self._call("save_changes", uprn=uprn, ons_code=ons_code, now=now, changes=rows)

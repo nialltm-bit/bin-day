@@ -17,6 +17,10 @@ class UpstreamError(FetchError):
         self.kind = kind
 
 
+class SuspiciousResultError(FetchError):
+    """A response that parses but should not be trusted, such as one with no collection in the next two weeks."""
+
+
 class UnmappedBinError(FetchError):
     """The council returned a bin name that the registry has no stream for."""
 
