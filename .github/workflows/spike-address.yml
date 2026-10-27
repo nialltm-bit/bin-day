@@ -15,13 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Find the address lookup in the B&NES page scripts
+      - name: Read the postcode lookup scripts on the B&NES site
         run: |
           UA="Mozilla/5.0 (compatible; bin-day-spike; +https://github.com/nialltm-bit/bin-day)"
-          B=https://www.bathnes.gov.uk/webforms/waste/collectionday
-          for f in js/collectionday.js config/collectionday_config.js config/collectionday_configLive.js; do
+          W=https://www.bathnes.gov.uk/webforms
+          for f in waste/collectionday/modules/addressDetailsPC.js CommonFiles/modules/PostcodeLookup/PostcodeLookupCommon.js; do
             echo "--- $f"
-            curl -sSL -m 30 -A "$UA" -w "status %{http_code}\n" -o f.js "$B/$f"
-            grep -o -i "[^\"' ]*\(api\|address\|postcode\|uprn\|search\)[^\"' ]*" f.js | sort -u | head -40
+            curl -sSL -m 30 -A "$UA" -w "status %{http_code}\n" -o f.js "$W/$f"
+            grep -n -i "url\|http\|api\|ajax\|get(\|fetch\|getJSON" f.js | cut -c1-200 | head -40
             sleep 5
           done
+          echo "--- config"
+          curl -sSL -m 30 -A "$UA" $W/waste/collectionday/js/collectionday.js | grep -n -i "APIroot\|config" | cut -c1-200 | head
