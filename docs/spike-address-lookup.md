@@ -109,6 +109,16 @@ use FindMyAddress to find one. So for UPRN councils:
 UPRNs at a postcode for free. But the address text for each UPRN is Royal Mail or AddressBase data and is licensed, so
 we could show a list of numbers and no street names.
 
+## Free options tried after the first draft
+
+All tested on 2026-10-27. None gives a free, live, nationwide way to turn an address into a UPRN.
+
+- **Council lookups** (B&NES): its own page calls a public address search that returns UPRNs, but it is one lookup per council.
+- **ONS UPRN Directory + OS Open UPRN:** open and national, but it has no address text, and serving it means hosting a dataset. Not tried to completion.
+- **Geoapify:** free to 3,000 lookups a day, but it is built on OpenStreetMap, and it returns no UPRN. UK coverage not measured.
+- **Property Passport UK:** no public API today.
+- **InstaMaps** (`geocode_batch`, free to 2,500 lookups a day): of 24 real addresses from UKBinCollectionData's test inputs (postcode, house number and known UPRN), it placed all 24 but returned a UPRN for only 1, and that one did not match. Not usable for UPRNs as it stands. The test sent "house number, postcode" only, with no street name.
+
 ## Before spending any money, check
 
 - Ideal Postcodes terms on storing and caching: https://terms.ideal-postcodes.co.uk/ and the pack prices at https://ideal-postcodes.co.uk/pricing
