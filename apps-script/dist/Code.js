@@ -211,25 +211,81 @@
 
   // ../registry/bank-holidays.json
   var bank_holidays_default = {
-    note: "Weekday bank holidays, including substitute days, used to avoid projecting dates into a holiday week. Sources: GOV.UK UK bank holidays, and the Privy Council proclamation for 2027. Only regions listed here are known; for any other region the feed does not project dates. A fuller calendar for all four nations is part of FRE-281.",
-    "england-and-wales": [
-      "2026-01-01",
-      "2026-04-03",
-      "2026-04-06",
-      "2026-05-04",
-      "2026-05-25",
-      "2026-08-31",
-      "2026-12-25",
-      "2026-12-28",
-      "2027-01-01",
-      "2027-03-26",
-      "2027-03-29",
-      "2027-05-03",
-      "2027-05-31",
-      "2027-08-30",
-      "2027-12-27",
-      "2027-12-28"
-    ]
+    note: "Weekday bank holidays, including substitute days, per region. Used to avoid projecting dates into a holiday week (the calendar feed) and to tell expected holiday shifts from round changes (change detection). Only regions marked verified are used by the code. To verify a region, check every date against the official page named in its source, then set verified to true. The dates run to the end of 2027: add the next years before then (a test reminds us).",
+    regions: {
+      "england-and-wales": {
+        verified: true,
+        source: "GOV.UK UK bank holidays, and the Privy Council proclamation for 2027 (https://www.gov.uk/bank-holidays)",
+        dates: [
+          "2026-01-01",
+          "2026-04-03",
+          "2026-04-06",
+          "2026-05-04",
+          "2026-05-25",
+          "2026-08-31",
+          "2026-12-25",
+          "2026-12-28",
+          "2027-01-01",
+          "2027-03-26",
+          "2027-03-29",
+          "2027-05-03",
+          "2027-05-31",
+          "2027-08-30",
+          "2027-12-27",
+          "2027-12-28"
+        ]
+      },
+      scotland: {
+        verified: false,
+        source: "Draft, to check against https://www.gov.scot/publications/bank-holidays/. 4 January 2027 (in place of Saturday 2 January) and 31 May 2027 are confirmed by the Privy Council proclamation; the rest are the usual pattern (first Monday in August, 30 November St Andrew's Day) and are unconfirmed. A one-off 15 June 2026 holiday was mentioned by one source and is not included.",
+        dates: [
+          "2026-01-01",
+          "2026-01-02",
+          "2026-04-03",
+          "2026-05-04",
+          "2026-05-25",
+          "2026-08-03",
+          "2026-11-30",
+          "2026-12-25",
+          "2026-12-28",
+          "2027-01-01",
+          "2027-01-04",
+          "2027-03-26",
+          "2027-05-03",
+          "2027-05-31",
+          "2027-08-02",
+          "2027-11-30",
+          "2027-12-27",
+          "2027-12-28"
+        ]
+      },
+      "northern-ireland": {
+        verified: false,
+        source: "Draft, to check against https://www.nidirect.gov.uk/articles/bank-holidays. 12 July 2027 is confirmed by the Privy Council proclamation and several 2026 dates by a Northern Ireland health circular; the other 2027 dates are the usual pattern and are unconfirmed.",
+        dates: [
+          "2026-01-01",
+          "2026-03-17",
+          "2026-04-03",
+          "2026-04-06",
+          "2026-05-04",
+          "2026-05-25",
+          "2026-07-13",
+          "2026-08-31",
+          "2026-12-25",
+          "2026-12-28",
+          "2027-01-01",
+          "2027-03-17",
+          "2027-03-26",
+          "2027-03-29",
+          "2027-05-03",
+          "2027-05-31",
+          "2027-07-12",
+          "2027-08-30",
+          "2027-12-27",
+          "2027-12-28"
+        ]
+      }
+    }
   };
 
   // ../registry/councils.json
@@ -293,9 +349,9 @@
     return onsCode.startsWith("E") || onsCode.startsWith("W") ? "england-and-wales" : onsCode.startsWith("S") ? "scotland" : "northern-ireland";
   }
   function bankHolidaysFor(onsCode) {
-    const data = bank_holidays_default;
-    const dates = data[regionFor(onsCode)];
-    return Array.isArray(dates) ? dates : void 0;
+    const regions = bank_holidays_default.regions;
+    const region = regions[regionFor(onsCode)];
+    return region?.verified ? region.dates : void 0;
   }
 
   // src/feed.ts
@@ -374,6 +430,7 @@
 
   // src/service.ts
   var STREAMS = ["general", "recycling", "food", "garden"];
+  var CHANGE_KINDS = ["expected_shift", "round_change"];
   var DEFAULT_MAX_SUBSCRIPTIONS = 5e3;
   var DEFAULT_MAX_PER_ADDRESS = 20;
   var UPRN = /^[0-9]{1,12}$/;
@@ -396,6 +453,26 @@
   }
   function text(value, max = MAX_TEXT) {
     return typeof value === "string" && value.length <= max ? value : null;
+  }
+  function optionalDate(value) {
+    if (value === null) return null;
+    return typeof value === "string" && DATE.test(value) ? value : void 0;
+  }
+  function validChanges(value, uprn, onsCode, at) {
+    if (!Array.isArray(value) || value.length > 50) return null;
+    const rows2 = [];
+    for (const item of value) {
+      if (typeof item !== "object" || item === null) return null;
+      const { bin_name, kind, before, after, note } = item;
+      const beforeDate = optionalDate(before);
+      const afterDate = optionalDate(after);
+      if (typeof bin_name !== "string" || bin_name.length > 200) return null;
+      if (typeof kind !== "string" || !CHANGE_KINDS.includes(kind)) return null;
+      if (beforeDate === void 0 || afterDate === void 0) return null;
+      if (typeof note !== "string" || note.length > 300) return null;
+      rows2.push({ at, uprn, ons_code: onsCode, bin_name, kind, before: beforeDate, after: afterDate, note });
+    }
+    return rows2;
   }
   function validCollections(value) {
     if (!Array.isArray(value) || value.length > 200) return null;
@@ -477,6 +554,21 @@
         });
         return { ok: true };
       }
+      case "get_result": {
+        const { uprn } = request;
+        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        return { ok: true, result: tables.getResult(uprn) };
+      }
+      case "save_changes": {
+        const { uprn, ons_code, now } = request;
+        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
+        if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
+        const rows2 = validChanges(request.changes, uprn, ons_code, now);
+        if (rows2 === null) return fail("bad changes");
+        withLock(() => tables.addChanges(rows2));
+        return { ok: true };
+      }
       case "save_success": {
         const { uprn, now } = request;
         const collections = validCollections(request.collections);
@@ -516,6 +608,7 @@
   var ADDRESS_HEADERS = ["uprn", "ons_code", "postcode", "house_number", "created_at"];
   var RESULT_HEADERS = ["uprn", "fetched_at", "last_attempt", "last_error", "consecutive_failures", "collections_json"];
   var SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at"];
+  var CHANGE_HEADERS = ["at", "uprn", "ons_code", "bin_name", "kind", "before", "after", "note"];
   function table(name, headers, textColumns = [1]) {
     const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
     let sheet = spreadsheet.getSheetByName(name);
@@ -542,6 +635,11 @@
     return value === "" || value === void 0 || value === null ? void 0 : String(value);
   }
   var sheetTables = {
+    addChanges(rows2) {
+      const sheet = table("changes", CHANGE_HEADERS, [1, 2, 3, 4, 5, 6, 7, 8]);
+      const values = rows2.map((r) => [r.at, r.uprn, r.ons_code, r.bin_name, r.kind, r.before ?? "", r.after ?? "", r.note]);
+      if (values.length > 0) sheet.getRange(sheet.getLastRow() + 1, 1, values.length, CHANGE_HEADERS.length).setValues(values);
+    },
     addresses() {
       return rows(table("addresses", ADDRESS_HEADERS)).map((row) => {
         const address = { uprn: String(row[0]), ons_code: String(row[1]) };

@@ -10,6 +10,9 @@ reached through the Apps Script web app in `apps-script/`. Nothing in the Sheet 
   `consecutive_failures`, `collections_json`. A failed fetch keeps the last good collections, so the feed can say
   it couldn't confirm this week's collection.
 
+- `changes` tab, one row per change the fetcher found: `at`, `uprn`, `ons_code`, `bin_name`, `kind`
+  (`expected_shift` or `round_change`), `before` (the date we expected), `after` (the date we got), `note`. See
+  `changes.md`.
 - `subscriptions` tab, one row per feed: `token` (the secret in the person's feed URL), `id`, `uprn`, `ons_code`,
   `garden`, `created_at`. Treat it like the secret itself. See `feed.md`.
 
@@ -26,6 +29,8 @@ One endpoint, `POST` to the web app's `/exec` URL with a plain-text JSON body. E
 | `add_address` | `uprn`, `ons_code`, `postcode?`, `house_number?` | `{"ok":true}` (an existing UPRN is left alone) |
 | `save_success` | `uprn`, `now`, `collections: [{date, bin_name, stream}]` | `{"ok":true}` |
 | `save_failure` | `uprn`, `now`, `error` | `{"ok":true}` |
+| `get_result` | `uprn` | `{"ok":true,"result":{...}}`, or `"result":null` if there is none yet |
+| `save_changes` | `uprn`, `ons_code`, `now`, `changes: [{bin_name, kind, before, after, note}]` | `{"ok":true}` |
 
 Errors are `{"ok":false,"error":"..."}` with a short generic message. A request with the wrong secret learns
 nothing else. The secret is in the body because Apps Script can't read request headers. Writes take a script lock.

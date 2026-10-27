@@ -9,6 +9,7 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Protocol
 
+from fetcher.changes import Change
 from fetcher.model import Address, Collection
 
 
@@ -20,6 +21,10 @@ class Store(Protocol):
     def save_success(self, uprn: str, now: str, collections: list[Collection]) -> None: ...
 
     def save_failure(self, uprn: str, now: str, error: str) -> None: ...
+
+    def previous_collections(self, uprn: str) -> list[dict]: ...
+
+    def save_changes(self, uprn: str, ons_code: str, now: str, changes: list[Change]) -> None: ...
 
 
 class FileStore:
@@ -46,6 +51,16 @@ class FileStore:
     def last_attempt(self, uprn: str) -> str | None:
         result = self.result(uprn)
         return result["last_attempt"] if result else None
+
+    def previous_collections(self, uprn: str) -> list[dict]:
+        result = self.result(uprn)
+        return list(result["collections"]) if result else []
+
+    def save_changes(self, uprn: str, ons_code: str, now: str, changes: list[Change]) -> None:
+        log = self._data.setdefault("changes", [])
+        for change in changes:
+            log.append({"at": now, "uprn": uprn, "ons_code": ons_code, **asdict(change)})
+        self._write()
 
     def save_success(self, uprn: str, now: str, collections: list[Collection]) -> None:
         self._data["results"][uprn] = {

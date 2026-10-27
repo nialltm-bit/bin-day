@@ -274,3 +274,67 @@ describe("subscribe (public)", () => {
     expect(events).toEqual(["lock", "unlock"]);
   });
 });
+
+describe("get_result", () => {
+  it("gives the stored result so the fetcher can compare against it", () => {
+    call({ action: "save_success", uprn: "1", now: NOW, collections: COLLECTIONS });
+    const reply = call({ action: "get_result", uprn: "1" });
+    expect(reply.ok && (reply.result as { collections: unknown }).collections).toEqual(COLLECTIONS);
+  });
+
+  it("gives null for an address with no result yet", () => {
+    expect(call({ action: "get_result", uprn: "1" })).toEqual({ ok: true, result: null });
+  });
+
+  it("needs the secret and a sensible uprn", () => {
+    expect(call({ action: "get_result", uprn: "1" }, false)).toEqual({ ok: false, error: "unauthorised" });
+    expect(call({ action: "get_result", uprn: "x" })).toEqual({ ok: false, error: "bad uprn" });
+  });
+});
+
+describe("save_changes", () => {
+  const change = { bin_name: "Food Recycling Collection Bin", kind: "round_change", before: "2026-11-06", after: "2026-11-09", note: "weekday changed" };
+  const save = (changes: unknown, extra: Record<string, unknown> = {}) =>
+    call({ action: "save_changes", uprn: "1", ons_code: "E06000022", now: NOW, changes, ...extra });
+
+  it("logs each change with its address, council, time, before and after", () => {
+    expect(save([change, { ...change, kind: "expected_shift", before: null, after: null }])).toEqual({ ok: true });
+    expect(store.changes).toEqual([
+      { at: NOW, uprn: "1", ons_code: "E06000022", ...change },
+      { at: NOW, uprn: "1", ons_code: "E06000022", ...change, kind: "expected_shift", before: null, after: null },
+    ]);
+  });
+
+  it("appends rather than replacing", () => {
+    save([change]);
+    save([change]);
+    expect(store.changes).toHaveLength(2);
+  });
+
+  it("rejects bad changes without writing any of them", () => {
+    for (const bad of [
+      "no",
+      [null],
+      [{ ...change, kind: "mystery" }],
+      [{ ...change, before: "06/11/2026" }],
+      [{ ...change, after: undefined }],
+      [{ ...change, note: "x".repeat(301) }],
+      [{ ...change, bin_name: "x".repeat(201) }],
+      [change, { ...change, kind: "mystery" }],
+      Array.from({ length: 51 }, () => change),
+    ]) {
+      expect(save(bad)).toEqual({ ok: false, error: "bad changes" });
+    }
+    expect(store.changes).toHaveLength(0);
+  });
+
+  it("rejects a bad uprn, council or timestamp, and needs the secret", () => {
+    expect(save([change], { uprn: "no" })).toEqual({ ok: false, error: "bad uprn" });
+    expect(save([change], { ons_code: "no" })).toEqual({ ok: false, error: "bad ons_code" });
+    expect(save([change], { now: "yesterday" })).toEqual({ ok: false, error: "bad timestamp" });
+    expect(call({ action: "save_changes", uprn: "1", ons_code: "E06000022", now: NOW, changes: [change] }, false)).toEqual({
+      ok: false,
+      error: "unauthorised",
+    });
+  });
+});

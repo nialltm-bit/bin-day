@@ -17,7 +17,9 @@ from dataclasses import dataclass
 from datetime import UTC, date, datetime
 from pathlib import Path
 
+from fetcher import holidays as holiday_data
 from fetcher import registry
+from fetcher.changes import check_response, detect_changes
 from fetcher.model import Address, FetchError, UpstreamError
 from fetcher.normalise import normalise
 from fetcher.ratelimit import DEFAULT_MIN_INTERVAL, CouncilRateLimiter
@@ -34,11 +36,15 @@ class Outcome:
     status: str  # fetched, failed or skipped
     detail: str = ""  # may contain address details: for the store only, never for logs
     log_detail: str = ""  # safe to print: this repo, and so its Actions logs, are public
+    changes: tuple[str, ...] = ()  # the kind of each change found, for the log (never the dates or the address)
 
 
 def format_outcome(outcome: Outcome) -> dict:
     """What the command line prints. It never includes the UPRN or anything from an upstream error message."""
-    return {"council": outcome.council, "status": outcome.status, "detail": outcome.log_detail}
+    line: dict = {"council": outcome.council, "status": outcome.status, "detail": outcome.log_detail}
+    if outcome.changes:
+        line["changes"] = {kind: outcome.changes.count(kind) for kind in sorted(set(outcome.changes))}
+    return line
 
 
 def run(
@@ -50,8 +56,10 @@ def run(
     selenium_url: str | None = None,
     force: bool = False,
     only_uprn: str | None = None,
+    holiday_regions: dict[str, dict] | None = None,
 ) -> list[Outcome]:
     limiter = limiter or CouncilRateLimiter()
+    holiday_regions = holiday_data.load() if holiday_regions is None else holiday_regions
     stamp = now.isoformat(timespec="seconds")
     today: date = now.date()
     outcomes: list[Outcome] = []
@@ -74,14 +82,19 @@ def run(
         limiter.wait(address.ons_code, council.get("min_interval_seconds", DEFAULT_MIN_INTERVAL))
         try:
             collections = normalise(council, fetch(council, address, selenium_url))
+            previous = store.previous_collections(address.uprn)
+            check_response(collections, previous, today)
+            changes = detect_changes(council, previous, collections, today, holiday_data.dates_for(address.ons_code, holiday_regions))
         except FetchError as err:
             store.save_failure(address.uprn, stamp, str(err))
             safe = err.kind if isinstance(err, UpstreamError) else str(err)
             outcomes.append(Outcome(address.uprn, address.ons_code, "failed", str(err), safe))
         else:
             store.save_success(address.uprn, stamp, collections)
+            if changes:
+                store.save_changes(address.uprn, address.ons_code, stamp, changes)
             detail = f"{len(collections)} collections"
-            outcomes.append(Outcome(address.uprn, address.ons_code, "fetched", detail, detail))
+            outcomes.append(Outcome(address.uprn, address.ons_code, "fetched", detail, detail, tuple(c.kind for c in changes)))
     return outcomes
 
 
@@ -127,7 +140,8 @@ def main(argv: list[str] | None = None) -> int:
     for outcome in outcomes:
         print(json.dumps(format_outcome(outcome)))
     counts = {s: sum(o.status == s for o in outcomes) for s in ("fetched", "failed", "skipped")}
-    print(json.dumps({"summary": counts}))
+    kinds = [kind for o in outcomes for kind in o.changes]
+    print(json.dumps({"summary": counts, "changes": {k: kinds.count(k) for k in sorted(set(kinds))}}))
     return 1 if any(o.status == "failed" for o in outcomes) else 0
 
 
