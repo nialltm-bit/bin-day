@@ -354,8 +354,63 @@
     return region?.verified ? region.dates : void 0;
   }
 
+  // src/warnings.ts
+  var WARNING_LOOKBACK_DAYS = 28;
+  var WARNING_LEAD_DAYS = 7;
+  var WARNING_ALARM = "PT9H";
+  var DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  function dayName(date) {
+    return DAYS[weekdayIndex(date)];
+  }
+  function longDate(date) {
+    return `${dayName(date)} ${Number(date.slice(8, 10))} ${MONTHS[Number(date.slice(5, 7)) - 1]}`;
+  }
+  function describe(change, label) {
+    if (change.before && change.after) return `${label}: ${longDate(change.after)} instead of ${longDate(change.before)}.`;
+    if (change.after) return `${label}: a new collection on ${longDate(change.after)}.`;
+    return `${label}: the collection on ${longDate(change.before)} is no longer listed.`;
+  }
+  function when(eventDate, firstChange) {
+    const weeks = daysBetween(addDays(eventDate, -weekdayIndex(eventDate)), addDays(firstChange, -weekdayIndex(firstChange))) / 7;
+    if (weeks <= 0) return "this week";
+    if (weeks === 1) return "next week";
+    return `from ${longDate(firstChange)}`;
+  }
+  function changeWarnings(input) {
+    const { id, council, garden, changes, today } = input;
+    const binTypes = council.bin_types ?? {};
+    const byDay = /* @__PURE__ */ new Map();
+    for (const change of changes) {
+      if (change.kind !== "round_change") continue;
+      if (!garden && binTypes[change.bin_name]?.stream === "garden") continue;
+      const found = change.at.slice(0, 10);
+      if (daysBetween(found, today) > WARNING_LOOKBACK_DAYS) continue;
+      byDay.set(found, [...byDay.get(found) ?? [], change]);
+    }
+    const events = [];
+    for (const [found, group] of [...byDay].sort(([a], [b]) => a.localeCompare(b))) {
+      const targets = group.map((c) => c.after ?? c.before);
+      const first = [...targets].sort()[0];
+      if (daysBetween(first, today) > WARNING_LEAD_DAYS) continue;
+      const date = [addDays(first, -WARNING_LEAD_DAYS), found].sort().at(-1);
+      const weekdays = new Set(group.map((c) => c.after ? dayName(c.after) : ""));
+      const weekdayMoved = group.every((c) => c.before && c.after && weekdayIndex(c.before) !== weekdayIndex(c.after));
+      const now = weekdayMoved && weekdays.size === 1 ? `, now ${[...weekdays][0]}s` : "";
+      events.push({
+        uid: `${id}-change-${found}@bin-day`,
+        summary: `Bin days change ${when(date, first)}${now}`,
+        description: group.map((c) => describe(c, binTypes[c.bin_name]?.label ?? c.bin_name)).join("\n"),
+        start: { kind: "date", date },
+        alarm: WARNING_ALARM
+      });
+    }
+    return events;
+  }
+
   // src/feed.ts
   var STALE_DAYS = 14;
+  var UNCONFIRMED_DAYS = 8;
   var ALARM_EVENING_BEFORE = "-PT6H";
   var STREAM_ORDER = ["general", "recycling", "food", "garden"];
   var STREAM_NAME = { general: "rubbish", recycling: "recycling", food: "food", garden: "garden" };
@@ -390,11 +445,15 @@
   function buildFeed(input) {
     const { subscription, council, collections, fetchedAt, now, today, holidays } = input;
     const id = subscription.id;
+    const failures = input.consecutiveFailures ?? 0;
+    const unconfirmedNotice = noticeEvent(id, "unconfirmed", UNCONFIRMED_SUMMARY, today);
     if (fetchedAt === null) {
-      return buildCalendar("Bin Day", [noticeEvent(id, "setup", SETTING_UP_SUMMARY, today)], now);
+      const notice = failures > 0 ? unconfirmedNotice : noticeEvent(id, "setup", SETTING_UP_SUMMARY, today);
+      return buildCalendar("Bin Day", [notice], now);
     }
-    if (daysBetween(fetchedAt.slice(0, 10), today) > STALE_DAYS) {
-      return buildCalendar("Bin Day", [noticeEvent(id, "unconfirmed", UNCONFIRMED_SUMMARY, today)], now);
+    const age = daysBetween(fetchedAt.slice(0, 10), today);
+    if (age > STALE_DAYS) {
+      return buildCalendar("Bin Day", [unconfirmedNotice], now);
     }
     const wanted = projectCollections({ collections, council, today, holidays }).filter(
       (collection) => subscription.garden || collection.stream !== "garden"
@@ -407,6 +466,9 @@
       ordinalsByWeek.set(week, ordinal);
       events.push(eventFor(id, date, ordinal, group));
     }
+    events.push(...changeWarnings({ id, council, garden: subscription.garden, changes: input.changes ?? [], today }));
+    if (failures > 0 || age > UNCONFIRMED_DAYS) events.push(unconfirmedNotice);
+    events.sort((a, b) => a.start.date.localeCompare(b.start.date));
     return buildCalendar("Bin Day", events, new Date(fetchedAt));
   }
   var FEED_TOKEN = /^[0-9a-f]{64}$/;
@@ -424,7 +486,9 @@
       fetchedAt: result?.fetched_at ?? null,
       now: deps.now,
       today: deps.today,
-      holidays: bankHolidaysFor(subscription.ons_code)
+      holidays: bankHolidaysFor(subscription.ons_code),
+      consecutiveFailures: result?.consecutive_failures ?? 0,
+      changes: deps.tables.recentChanges(subscription.uprn)
     });
   }
 
@@ -608,6 +672,7 @@
   var ADDRESS_HEADERS = ["uprn", "ons_code", "postcode", "house_number", "created_at"];
   var RESULT_HEADERS = ["uprn", "fetched_at", "last_attempt", "last_error", "consecutive_failures", "collections_json"];
   var SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at"];
+  var RECENT_CHANGE_ROWS = 500;
   var CHANGE_HEADERS = ["at", "uprn", "ons_code", "bin_name", "kind", "before", "after", "note"];
   function table(name, headers, textColumns = [1]) {
     const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -635,6 +700,22 @@
     return value === "" || value === void 0 || value === null ? void 0 : String(value);
   }
   var sheetTables = {
+    recentChanges(uprn) {
+      const sheet = table("changes", CHANGE_HEADERS, [1, 2, 3, 4, 5, 6, 7, 8]);
+      const last = sheet.getLastRow();
+      if (last < 2) return [];
+      const first = Math.max(2, last - RECENT_CHANGE_ROWS + 1);
+      return sheet.getRange(first, 1, last - first + 1, CHANGE_HEADERS.length).getValues().filter((row) => String(row[1]) === uprn).map((row) => ({
+        at: String(row[0]),
+        uprn,
+        ons_code: String(row[2]),
+        bin_name: String(row[3]),
+        kind: String(row[4]),
+        before: optional(row[5]) ?? null,
+        after: optional(row[6]) ?? null,
+        note: String(row[7])
+      }));
+    },
     addChanges(rows2) {
       const sheet = table("changes", CHANGE_HEADERS, [1, 2, 3, 4, 5, 6, 7, 8]);
       const values = rows2.map((r) => [r.at, r.uprn, r.ons_code, r.bin_name, r.kind, r.before ?? "", r.after ?? "", r.note]);

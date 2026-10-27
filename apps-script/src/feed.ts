@@ -3,10 +3,13 @@ import { daysBetween, isoWeek } from "./dates";
 import { type FeedEvent, buildCalendar } from "./ics";
 import { type FeedCollection, type StoredCollection, projectCollections } from "./projection";
 import { type Council, type Stream, bankHolidaysFor, getCouncil } from "./registry";
-import type { Tables } from "./service";
+import type { ChangeRow, Tables } from "./service";
+import { changeWarnings } from "./warnings";
 
 /** A last good fetch older than this means we can't vouch for the dates (two missed weekly fetches). */
 export const STALE_DAYS = 14;
+/** Beyond this many days since the last good fetch (one weekly cycle and a day), the dates are flagged as unconfirmed. */
+export const UNCONFIRMED_DAYS = 8;
 export const ALARM_EVENING_BEFORE = "-PT6H"; // an all-day event starts at midnight, so 6 hours before is 6pm the day before
 
 const STREAM_ORDER: Stream[] = ["general", "recycling", "food", "garden"];
@@ -22,6 +25,10 @@ export interface FeedInput {
   /** Today in Europe/London, YYYY-MM-DD. */
   today: string;
   holidays: string[] | undefined;
+  /** Failed fetches in a row since the last good one. */
+  consecutiveFailures?: number;
+  /** The round changes the fetcher has recorded for this address. */
+  changes?: ChangeRow[];
 }
 
 export const UNCONFIRMED_SUMMARY = "Couldn't confirm this week's collection, check the council site";
@@ -60,12 +67,18 @@ function eventFor(id: string, date: string, ordinal: number, group: FeedCollecti
 export function buildFeed(input: FeedInput): string {
   const { subscription, council, collections, fetchedAt, now, today, holidays } = input;
   const id = subscription.id;
+  const failures = input.consecutiveFailures ?? 0;
+  const unconfirmedNotice = noticeEvent(id, "unconfirmed", UNCONFIRMED_SUMMARY, today);
 
   if (fetchedAt === null) {
-    return buildCalendar("Bin Day", [noticeEvent(id, "setup", SETTING_UP_SUMMARY, today)], now);
+    // Never fetched: either still waiting for the first fetch, or the first attempts have failed.
+    const notice = failures > 0 ? unconfirmedNotice : noticeEvent(id, "setup", SETTING_UP_SUMMARY, today);
+    return buildCalendar("Bin Day", [notice], now);
   }
-  if (daysBetween(fetchedAt.slice(0, 10), today) > STALE_DAYS) {
-    return buildCalendar("Bin Day", [noticeEvent(id, "unconfirmed", UNCONFIRMED_SUMMARY, today)], now);
+  const age = daysBetween(fetchedAt.slice(0, 10), today);
+  if (age > STALE_DAYS) {
+    // Too old to vouch for: show no dates at all.
+    return buildCalendar("Bin Day", [unconfirmedNotice], now);
   }
 
   const wanted = projectCollections({ collections, council, today, holidays }).filter(
@@ -79,6 +92,10 @@ export function buildFeed(input: FeedInput): string {
     ordinalsByWeek.set(week, ordinal);
     events.push(eventFor(id, date, ordinal, group));
   }
+  events.push(...changeWarnings({ id, council, garden: subscription.garden, changes: input.changes ?? [], today }));
+  // The last check failed or is overdue: keep the last good dates, but say so.
+  if (failures > 0 || age > UNCONFIRMED_DAYS) events.push(unconfirmedNotice);
+  events.sort((a, b) => a.start.date.localeCompare(b.start.date));
   // The calendar's timestamp is the fetch time, so it only changes when the stored dates are refreshed.
   return buildCalendar("Bin Day", events, new Date(fetchedAt));
 }
@@ -101,5 +118,7 @@ export function feedFor(token: string, deps: { tables: Tables; now: Date; today:
     now: deps.now,
     today: deps.today,
     holidays: bankHolidaysFor(subscription.ons_code),
+    consecutiveFailures: result?.consecutive_failures ?? 0,
+    changes: deps.tables.recentChanges(subscription.uprn),
   });
 }

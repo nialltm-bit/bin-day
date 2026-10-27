@@ -8,6 +8,7 @@ export function memoryTables() {
   const changes: ChangeRow[] = [];
   const tables: Tables = {
     addChanges: (rows) => void changes.push(...rows),
+    recentChanges: (uprn) => changes.filter((c) => c.uprn === uprn),
     addresses: () => addresses.map((a) => ({ ...a })),
     addAddress: (row) => void addresses.push({ ...row }),
     getResult: (uprn) => results.get(uprn) ?? null,

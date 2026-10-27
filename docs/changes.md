@@ -45,6 +45,9 @@ A bin we have not seen before, or one with no `every_weeks`, has nothing to comp
 The same rule is in the calendar feed, and both implementations are tested against the same cases in
 `registry/test-vectors/holiday-weeks.json`.
 
+A round change is what the calendar feed warns people about: see "Warning about changes" in `feed.md`. Expected shifts
+never produce a warning.
+
 ## 3. The log
 
 Each change is a row in the Sheet's `changes` tab: when, UPRN, council, bin name, kind, the date we expected, the date

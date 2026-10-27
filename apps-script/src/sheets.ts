@@ -3,6 +3,7 @@ import type { AddressRow, ChangeRow, CollectionRow, ResultRow, SubscriptionRow, 
 const ADDRESS_HEADERS = ["uprn", "ons_code", "postcode", "house_number", "created_at"];
 const RESULT_HEADERS = ["uprn", "fetched_at", "last_attempt", "last_error", "consecutive_failures", "collections_json"];
 const SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at"];
+const RECENT_CHANGE_ROWS = 500;
 const CHANGE_HEADERS = ["at", "uprn", "ons_code", "bin_name", "kind", "before", "after", "note"];
 
 function table(name: string, headers: string[], textColumns: number[] = [1]): GoogleAppsScript.Spreadsheet.Sheet {
@@ -36,6 +37,28 @@ function optional(value: unknown): string | undefined {
 }
 
 export const sheetTables: Tables = {
+  recentChanges(uprn: string): ChangeRow[] {
+    // Only the latest rows are read, so a long history doesn't slow every feed request.
+    const sheet = table("changes", CHANGE_HEADERS, [1, 2, 3, 4, 5, 6, 7, 8]);
+    const last = sheet.getLastRow();
+    if (last < 2) return [];
+    const first = Math.max(2, last - RECENT_CHANGE_ROWS + 1);
+    return sheet
+      .getRange(first, 1, last - first + 1, CHANGE_HEADERS.length)
+      .getValues()
+      .filter((row) => String(row[1]) === uprn)
+      .map((row) => ({
+        at: String(row[0]),
+        uprn,
+        ons_code: String(row[2]),
+        bin_name: String(row[3]),
+        kind: String(row[4]),
+        before: optional(row[5]) ?? null,
+        after: optional(row[6]) ?? null,
+        note: String(row[7]),
+      }));
+  },
+
   addChanges(rows: ChangeRow[]): void {
     // Every column is text, so Sheets leaves the ISO dates and timestamps as they are.
     const sheet = table("changes", CHANGE_HEADERS, [1, 2, 3, 4, 5, 6, 7, 8]);
