@@ -15,19 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Look for the address step in the B&NES collection day page
+      - name: Read the B&NES collection day page
         run: |
-          set -u
           UA="Mozilla/5.0 (compatible; bin-day-spike; +https://github.com/nialltm-bit/bin-day)"
-          curl -sSL -m 30 -A "$UA" -o page.html -w "page status %{http_code}, %{size_download} bytes\n" \
-            https://www.bathnes.gov.uk/webforms/waste/collectionday/
-          echo "--- script and api references in the page"; head -c 300 page.html | tr -d "\n" | cut -c1-200; echo
-          grep -o -i 'src="[^"]*\.js[^"]*"' page.html | sort -u | head -20
-          grep -o -i '[A-Za-z0-9_./:-]*\(api\|Address\|postcode\|uprn\)[A-Za-z0-9_./:-]*' page.html | sort -u | head -40
-          sleep 5
-          for js in $(grep -o -i 'src="[^"]*collection[^"]*\.js[^"]*"' page.html | sed 's/src="//;s/"$//' | head -3); do
-            case "$js" in http*) url="$js";; /*) url="https://www.bathnes.gov.uk$js";; *) url="https://www.bathnes.gov.uk/webforms/waste/collectionday/$js";; esac
-            echo "--- $url"
-            curl -sSL -m 30 -A "$UA" "$url" | grep -o -i '[A-Za-z0-9_./:-]*\(api\|Address\|postcode\|uprn\)[A-Za-z0-9_./:?=&{}-]*' | sort -u | head -40
-            sleep 5
-          done
+          curl -sSL -m 30 -A "$UA" https://www.bathnes.gov.uk/webforms/waste/collectionday/ | grep -v '^\s*$' | sed -n '1,400p' | cut -c1-220
