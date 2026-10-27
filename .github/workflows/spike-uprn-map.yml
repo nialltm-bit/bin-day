@@ -14,18 +14,20 @@ jobs:
   find:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      ITEM: 4198f5e0d6654d8a9661d0c15d4f912b
     steps:
-      - name: Find the ONS UPRN Directory on the Open Geography Portal
+      - name: Read the item's licence text and download details
         run: |
           set -u
-          curl -sSL -m 60 -G "https://www.arcgis.com/sharing/rest/search" \
-            --data-urlencode 'q=title:"ONS UPRN Directory" AND owner:ONSGeography_data' \
-            --data-urlencode 'sortField=modified' --data-urlencode 'sortOrder=desc' \
-            --data-urlencode 'num=8' --data-urlencode 'f=json' -o search.json
+          curl -sSL -m 60 "https://www.arcgis.com/sharing/rest/content/items/$ITEM?f=json" -o item.json
           python3 - <<'PY'
-          import json
-          d = json.load(open("search.json"))
-          print("total", d.get("total"))
-          for r in d.get("results", []):
-              print(r["id"], "|", r["title"], "|", r.get("type"), "|", r.get("size"), "|", r.get("licenseInfo", "")[:80].replace("\n", " "))
+          import json, re
+          d = json.load(open("item.json"))
+          for k in ("title", "type", "size", "url", "access"):
+              print(k, ":", d.get(k))
+          print("licence:", re.sub(r"<[^>]+>", " ", d.get("licenseInfo") or "")[:1200])
+          print("terms:", re.sub(r"<[^>]+>", " ", d.get("accessInformation") or "")[:600])
           PY
+          echo "--- data headers"
+          curl -sSIL -m 60 "https://www.arcgis.com/sharing/rest/content/items/$ITEM/data" | grep -i "^HTTP\|content-type\|content-length\|content-disposition" | head
