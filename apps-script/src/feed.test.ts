@@ -190,3 +190,113 @@ describe("feedFor", () => {
     expect(feedFor(TOKEN, deps(store))).toContain("getting your collection dates");
   });
 });
+
+describe("change warnings in the feed", () => {
+  const changes = [
+    {
+      at: "2026-11-01T05:17:00+00:00",
+      uprn: "100120000855",
+      ons_code: "E06000022",
+      bin_name: "Food Recycling Collection Bin",
+      kind: "round_change",
+      before: "2026-11-06",
+      after: "2026-11-05",
+      note: "weekday changed",
+    },
+  ];
+  const movedFeed = () =>
+    feed({
+      collections: collections("2026-11-05", bins.filter((b) => b.bin !== "Black Rubbish Bin (140L)")),
+      fetchedAt: "2026-11-01T05:17:00+00:00",
+      today: "2026-11-02",
+      changes,
+    });
+
+  it("carries the warning and the moved collection together, in date order", () => {
+    const summaries = eventsOf(movedFeed()).map((e) => field(e, "SUMMARY"));
+    expect(summaries[0]).toBe("SUMMARY:Bin days change next week\\, now Thursdays");
+    expect(summaries[1]).toBe("SUMMARY:Bins: recycling + food");
+    expect(eventsOf(movedFeed()).map((e) => field(e, "DTSTART"))[1]).toBe("DTSTART;VALUE=DATE:20261105");
+  });
+
+  it("gives the warning an alarm, and the moved collection its usual evening-before one", () => {
+    expect(eventsOf(movedFeed())[0]).toContain("TRIGGER:PT9H");
+    expect(eventsOf(movedFeed())[1]).toContain("TRIGGER:-PT6H");
+  });
+
+  it("shows no warning for an expected holiday shift", () => {
+    const quiet = feed({ changes: changes.map((c) => ({ ...c, kind: "expected_shift" })) });
+    expect(unfolded(quiet)).not.toContain("Bin days change");
+  });
+
+  it("never puts the address in the warning", () => {
+    expect(movedFeed()).not.toContain("100120000855");
+  });
+});
+
+describe("unconfirmed data", () => {
+  const notice = (text: string) => unfolded(text).includes("Couldn't confirm this week's collection\\, check the council site");
+
+  it("says nothing when the last check succeeded recently", () => {
+    expect(notice(feed({ consecutiveFailures: 0 }))).toBe(false);
+  });
+
+  it("keeps the last good dates but says so when the last check failed", () => {
+    const text = feed({ consecutiveFailures: 1 });
+    expect(notice(text)).toBe(true);
+    expect(text).toContain("SUMMARY:Bins: rubbish + recycling + food");
+  });
+
+  it("flags dates when a weekly check is overdue", () => {
+    expect(notice(feed({ fetchedAt: "2026-10-17T05:17:00+00:00" }))).toBe(true); // 9 days before 26 October: a cycle was missed
+    expect(notice(feed({ fetchedAt: "2026-10-18T05:17:00+00:00" }))).toBe(false); // 8 days: still within a cycle and a day
+  });
+
+  it("shows only the notice, no dates, once the last good fetch is more than two weeks old", () => {
+    const text = feed({ fetchedAt: "2026-10-11T05:17:00+00:00", consecutiveFailures: 3 });
+    expect(notice(text)).toBe(true);
+    expect(text).not.toContain("Bins:");
+  });
+
+  it("says it couldn't confirm, not 'getting your dates', when the first fetches have failed", () => {
+    const text = feed({ fetchedAt: null, collections: [], consecutiveFailures: 2 });
+    expect(notice(text)).toBe(true);
+    expect(text).not.toContain("getting your collection dates");
+  });
+
+  it("keeps the same UID for the notice, so it moves along instead of piling up", () => {
+    const first = eventsOf(feed({ consecutiveFailures: 1, today: "2026-10-27" })).find((e) => unfolded(e).includes("Couldn't confirm"));
+    const next = eventsOf(feed({ consecutiveFailures: 1, today: "2026-10-28" })).find((e) => unfolded(e).includes("Couldn't confirm"));
+    expect(field(first as string, "UID")).toBe(field(next as string, "UID"));
+  });
+});
+
+describe("feedFor with change history", () => {
+  it("reads the recorded changes and failures for the address", () => {
+    const store = memoryTables();
+    store.subscriptions.push({ token: TOKEN, id: "abcd1234", uprn: "100120000855", ons_code: "E06000022", garden: false, created_at: "x" });
+    store.results.set("100120000855", {
+      uprn: "100120000855",
+      fetched_at: "2026-11-01T05:17:00+00:00",
+      last_attempt: "2026-11-01T05:17:00+00:00",
+      last_error: null,
+      consecutive_failures: 1,
+      collections: collections("2026-11-05", bins.filter((b) => b.bin !== "Black Rubbish Bin (140L)")) as never,
+    });
+    store.changes.push({
+      at: "2026-11-01T05:17:00+00:00",
+      uprn: "100120000855",
+      ons_code: "E06000022",
+      bin_name: "Food Recycling Collection Bin",
+      kind: "round_change",
+      before: "2026-11-06",
+      after: "2026-11-05",
+      note: "x",
+    });
+    store.changes.push({ ...store.changes[0], uprn: "999", after: "2026-11-04" }); // someone else's change
+    const text = unfolded(feedFor(TOKEN, { tables: store.tables, now: NOW, today: "2026-11-02" }) as string);
+    expect(text).toContain("Bin days change next week\\, now Thursdays");
+    expect(text).toContain("Couldn't confirm this week's collection");
+    expect(text.match(/Bin days change/g)).toHaveLength(2); // the summary and its alarm, once
+  });
+});

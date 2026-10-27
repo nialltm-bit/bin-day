@@ -55,6 +55,8 @@ export const CHANGE_KINDS = ["expected_shift", "round_change"] as const;
 
 export interface Tables {
   addChanges(rows: ChangeRow[]): void;
+  /** The most recent changes recorded for an address, newest last. */
+  recentChanges(uprn: string): ChangeRow[];
   addresses(): AddressRow[];
   addAddress(row: AddressRow): void;
   getResult(uprn: string): ResultRow | null;

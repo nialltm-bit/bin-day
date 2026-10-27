@@ -22,12 +22,25 @@ tell a real address from an invented one, and someone could use up the 5,000 tot
 happens, raise the limit or put a bot check (such as Cloudflare Turnstile) in front of the sign-up page; Apps Script
 cannot limit by IP address.
 
+## Turning on reminders in Google Calendar
+
+Google ignores the reminder inside the feed, so each Google user turns on notifications for the subscribed calendar
+once (the sign-up page will show these steps):
+
+1. On a computer, open Google Calendar and its settings, then find the "Bin Day" calendar in the left-hand list
+   under "Settings for other calendars".
+2. Under **All-day event notifications**, add one, for example **1 day before at 6:00pm**.
+3. On a phone, make sure the Google Calendar app's notifications are on, and that the Bin Day calendar is ticked
+   in the app's calendar list.
+
+Apple Calendar and Outlook honour the reminder in the feed and need no setting.
+
 ## What is in the feed
 
 - One **all-day event per collection day**, with same-day bins merged: "Bins: rubbish + recycling + food". The
   description lists the council's own bin names, for example "Put out: Black bin, Blue bag (cardboard), Green box,
   Food caddy."
-- Each event has a **reminder (VALARM) for 6pm the day before**, for calendars that honour it. Apple Calendar does.
+- Each collection event has a **reminder (VALARM) for 6pm the day before**, for calendars that honour it. Apple Calendar does.
   Google Calendar ignores reminders in subscribed feeds, so Google users turn on notifications for the calendar
   themselves. Don't rely on the alarm.
 - **Garden waste** bins appear only for people who said they have one.
@@ -57,11 +70,37 @@ replaced by the confirmed one) keeps its UID and the event moves, and a week's e
 duplicated. A collection that moves into a different week is a new event and the old one goes. The calendar's
 timestamp is the fetch time, so the feed only changes when the stored dates are refreshed.
 
-## When the data is old
+## Warning about changes (FRE-288)
 
-If the last good fetch is more than 14 days old (two missed weekly fetches) the feed shows no dates, only one all-day
-event: "Couldn't confirm this week's collection, check the council site". This is a small first step of FRE-288,
-so people are never shown stale dates. The warning event for round changes is still FRE-288.
+When the fetcher records a **round change** for an address (see `changes.md`), the feed carries an all-day warning
+event, for example **"Bin days change next week, now Thursdays"**, with the details in the description: "Food caddy:
+Thursday 5 November instead of Friday 6 November."
+
+- It is dated about a week before the change, and never before the change was found.
+- The wording follows the change: "this week" or "next week" as appropriate, and ", now Thursdays" only when every
+  changed bin moved to the same new weekday. A fortnight that flipped (same weekday) just says the bin days change
+  and lists the new dates.
+- It has an alarm like the other events, at 9am on its own day. (The usual evening-before alarm would often already be
+  in the past: the warning is dated the day the change was found.)
+- It stays in the feed until a week after the changed date, and is never shown for a change found more than four
+  weeks ago.
+- **Expected holiday shifts never produce a warning.** The collection event just moves, keeping its UID.
+- Garden waste changes are only shown to people with a garden bin.
+- The moved collection events show the new day, with the usual evening-before alarm.
+- No email is sent and no email address is stored.
+
+## When the dates are unconfirmed
+
+The feed always says when it can't vouch for a date:
+
+| Situation | What the feed shows |
+|---|---|
+| The last check succeeded and is no more than 8 days old | Normal. |
+| The last check failed, or the last good one is 9 to 14 days old | The last good dates **and** one all-day event today: "Couldn't confirm this week's collection, check the council site". |
+| The last good fetch is more than 14 days old | No dates at all, only that event. |
+| The address has never been fetched | "Bin Day is getting your collection dates, check back tomorrow", or the event above if the first attempts have failed. |
+
+The "couldn't confirm" event keeps one UID, so it moves along each day instead of piling up.
 
 ## Trying it
 
