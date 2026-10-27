@@ -18,10 +18,15 @@ Mail data (PAF), and Royal Mail enforces it: getAddress.io, one of the options i
 after losing a High Court case about its use of PAF. The UPRN on its own, though, is open data. That shapes the
 recommendation: **store only the UPRN, never the address text**, and choose how to pay for the lookup.
 
-- **Free, for a small beta:** let people type their UPRN, with a link to a finder (FindMyAddress), and ask B&NES
-  whether it will share its own address lookup. Cost £0, but not something to hand to the public.
+- **Free, for a small beta:** use the Ideal Postcodes free trial (50 credits, one month, no card), so testers get the
+  proper experience of typing a postcode and picking their address, and ask B&NES whether it will share its own
+  address lookup. Cost £0 for the first 50 or so sign-ups, then £9 for the next 200.
 - **Paid, for a public launch:** about **£30 to £45 per 1,000 completed signups**. The best fit I found is
   **Ideal Postcodes** (prepaid credit packs, UPRN included).
+
+**People will not know what a UPRN is, and should never see one.** They type a postcode and pick their address; the
+UPRN stays behind the scenes. Typing a UPRN is only a last-resort fallback for the few whose address is not listed,
+with a link to a finder and plain wording ("your Unique Property Reference Number"). It is not a way to run a beta.
 
 ## What I compared
 
@@ -33,7 +38,7 @@ recommendation: **store only the UPRN, never the address text**, and choose how 
 | **OS Open UPRN** | UPRN only | Free | Free | Open Government Licence | Identifiers and coordinates, **no addresses**. Useful, but cannot make an address list. |
 | **EPC open data** | UPRN on ~92% of records (2021 figure) | Free | Free | OGL, **except address and postcode fields, which are under restrictive Royal Mail terms** | Ruled out: the restricted fields are the ones we would show. Also only covers homes with an energy certificate. |
 | **The council's own lookup** (B&NES) | Probably, via its collection-day finder | Free | n/a | Unknown | **Worth asking.** I could not find a documented public API. Third-party sites (binmap, WhenBin) offer postcode-then-address lookups for B&NES. |
-| **Type your own UPRN** | Yes | Free | n/a | None needed | Fine for a beta only. |
+| **Type your own UPRN** | Yes | Free | n/a | None needed | Last-resort fallback only. Nobody knows their UPRN, so it is not usable as the main route. |
 
 ## Licence: what we can store
 
@@ -78,9 +83,12 @@ Notes:
 
 ## Recommendation
 
-1. **Now, to keep moving at no cost:** build the lookup page for B&NES with a **type-your-UPRN** step and a link to
-   FindMyAddress, and **ask B&NES** whether it can share the address lookup that its own collection-day finder uses.
-   If it can, that is free and authoritative for the one council we support.
+1. **Now, to keep moving at no cost:** build the lookup page (postcode, then pick your address) on the **Ideal
+   Postcodes free trial** (50 credits, one month, no card; confirm with them that trial credits work on a live site),
+   and **ask B&NES** whether it can share the address lookup that its own collection-day finder uses. If it can,
+   that is free and authoritative for the one council we support. For the first few testers you can also look
+   up their UPRNs yourself, by hand.
+   Add a "my address isn't listed" fallback where they can enter their UPRN, explained in plain words.
 2. **Before opening to the public:** use **Ideal Postcodes**, behind a small interface in FRE-265 so the provider can be
    swapped. The cost is about £0.03 to £0.045 per signup, spend is capped by prepaid credits, UPRNs are included and
    typing-time searches are free. Only lookups that complete are charged. OS Places is the alternative and about the
