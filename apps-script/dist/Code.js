@@ -497,6 +497,7 @@
   var CHANGE_KINDS = ["expected_shift", "round_change"];
   var DEFAULT_MAX_SUBSCRIPTIONS = 5e3;
   var DEFAULT_MAX_PER_ADDRESS = 20;
+  var DEFAULT_MAX_WAITLIST_COUNCILS = 500;
   var UPRN = /^[0-9]{1,12}$/;
   var ONS_CODE = /^[ENSW][0-9]{8}$/;
   var TIMESTAMP = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+(Z|[+-][0-9]{2}:[0-9]{2})$/;
@@ -588,10 +589,21 @@
       return { ok: true, token };
     });
   }
+  function joinWaitlist(request, deps) {
+    const { ons_code } = request;
+    if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
+    const withLock = deps.withLock ?? ((work) => work());
+    const { tables } = deps;
+    return withLock(() => {
+      tables.bumpWaitlist(ons_code, deps.nowIso?.() ?? (/* @__PURE__ */ new Date()).toISOString(), deps.maxWaitlistCouncils ?? DEFAULT_MAX_WAITLIST_COUNCILS);
+      return { ok: true };
+    });
+  }
   function handle(body, deps) {
     if (typeof body !== "object" || body === null) return fail("bad request");
     const request = body;
     if (request.action === "subscribe") return subscribe(request, deps);
+    if (request.action === "join_waitlist") return joinWaitlist(request, deps);
     if (deps.secret === void 0 || deps.secret === "") return fail("not configured");
     if (typeof request.secret !== "string" || !safeEqual(request.secret, deps.secret)) return fail("unauthorised");
     const withLock = deps.withLock ?? ((work) => work());
@@ -672,6 +684,7 @@
   var ADDRESS_HEADERS = ["uprn", "ons_code", "postcode", "house_number", "created_at"];
   var RESULT_HEADERS = ["uprn", "fetched_at", "last_attempt", "last_error", "consecutive_failures", "collections_json"];
   var SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at"];
+  var WAITLIST_HEADERS = ["ons_code", "count", "first_at", "last_at"];
   var RECENT_CHANGE_ROWS = 500;
   var CHANGE_HEADERS = ["at", "uprn", "ons_code", "bin_name", "kind", "before", "after", "note"];
   function table(name, headers, textColumns = [1]) {
@@ -779,6 +792,16 @@
       if (rowNumber === null) return null;
       const [, id, uprn, onsCode, garden, createdAt] = sheet.getRange(rowNumber, 1, 1, SUBSCRIPTION_HEADERS.length).getValues()[0];
       return { token, id: String(id), uprn: String(uprn), ons_code: String(onsCode), garden: garden === "yes", created_at: String(createdAt) };
+    },
+    bumpWaitlist(onsCode, at, maxCouncils) {
+      const sheet = table("waitlist", WAITLIST_HEADERS, [1, 3, 4]);
+      const rowNumber = findRow(sheet, onsCode);
+      if (rowNumber !== null) {
+        const count = Number(sheet.getRange(rowNumber, 2).getValue()) || 0;
+        sheet.getRange(rowNumber, 2, 1, 3).setValues([[count + 1, sheet.getRange(rowNumber, 3).getValue(), at]]);
+      } else if (sheet.getLastRow() - 1 < maxCouncils) {
+        sheet.appendRow([onsCode, 1, at, at]);
+      }
     }
   };
 

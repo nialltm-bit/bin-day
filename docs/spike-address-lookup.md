@@ -81,33 +81,25 @@ Notes:
   lookup must go through our own server code (the provider key can never be in the browser) and needs limits.
 - The 1k figure is tiny. At beta scale the trial credits cover testing, and one £9 pack covers the first 200 signups.
 
-## Recommendation
+## Recommendation (decided 2026-10-27)
 
-**Ask for a house number or name where the council allows it.** In upstream's `tests/input.json` (0.173.5), 351 councils
-are listed. 226 need a UPRN. 93 need only a postcode and a house number or name (about a quarter), and 9 need only a
-postcode. For those 93 the page asks for postcode and "house number or name", no list is shown, we store no address
-text, and nobody meets a UPRN. The registry's `inputs` field already says which kind each council is.
+The requirement is: free to run and free to use, no stored address data, nothing for the person to do beyond typing a
+postcode and a house number or name, and as many councils as possible.
 
-**This does not cover B&NES, our first council.** Its module takes only a UPRN, and upstream's own note for it says to
-use FindMyAddress to find one. So for UPRN councils:
+No free, live, nationwide service turns an address into a UPRN (see below), so:
 
-1. **Now, to keep moving at no cost:** build the lookup page (postcode, then pick your address) on the **Ideal
-   Postcodes free trial** (50 credits, one month, no card; confirm with them that trial credits work on a live site),
-   and **ask B&NES** whether it can share the address lookup that its own collection-day finder uses. If it can,
-   that is free and authoritative. For the first few testers you can also look up their UPRNs by hand.
-   The fallback for "my address isn't listed" is a link to GeoPlace's free **FindMyAddress**, with plain-words steps
-   for pasting the number back in. It is a website with no API, so it can't be the main flow.
-2. **Before opening to the public:** use **Ideal Postcodes** for UPRN councils, behind a small interface in FRE-265 so
-   the provider can be swapped. The cost is about £0.03 to £0.045 per signup, spend is capped by prepaid credits, UPRNs
-   are included and typing-time searches are free. Only lookups that complete are charged. OS Places is the
-   alternative and about the same cost, but it needs an OS Premium plan, bills afterwards, and charges for abandoned
-   searches.
-3. **Keep the data rule:** store the UPRN or house number, not the address text, and do not cache provider results until
-   the terms allow it.
+1. **Launch on councils that take a postcode and a house number.** In upstream's `tests/input.json` (0.173.5), 93 of
+   351 councils need no UPRN. The page asks for the house number or name, the council's own system does the matching,
+   and we store no address text and no lookup data. That is about a quarter of councils by count; I haven't measured
+   how many people it covers.
+2. **Everyone else sees an honest message** and can add their council to a count. See `docs/coverage.md`.
+3. **UPRN-only councils join when a free way to find the UPRN exists.** That includes B&NES, our first council: its
+   source needs a UPRN, so it is not offered to the public until then. Leads still open: ask the owners of uprn.uk and
+   whatsmyuprn.com for an API; ask a council for its address lookup; re-test InstaMaps with street names.
+4. **Keep the data rule:** store the house number or UPRN we are given, never address text from a provider.
 
-**Why not open data alone:** ONS publishes UPRN to postcode as open data, and OS Open UPRN is open, so we could list the
-UPRNs at a postcode for free. But the address text for each UPRN is Royal Mail or AddressBase data and is licensed, so
-we could show a list of numbers and no street names.
+Paid providers (Ideal Postcodes, OS Places) are ruled out for now because the project must not cost anything. If that
+changes, the cost table above is the starting point and the lookup would sit behind a small interface.
 
 ## Free options tried after the first draft
 

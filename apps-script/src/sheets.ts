@@ -3,6 +3,7 @@ import type { AddressRow, ChangeRow, CollectionRow, ResultRow, SubscriptionRow, 
 const ADDRESS_HEADERS = ["uprn", "ons_code", "postcode", "house_number", "created_at"];
 const RESULT_HEADERS = ["uprn", "fetched_at", "last_attempt", "last_error", "consecutive_failures", "collections_json"];
 const SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at"];
+const WAITLIST_HEADERS = ["ons_code", "count", "first_at", "last_at"];
 const RECENT_CHANGE_ROWS = 500;
 const CHANGE_HEADERS = ["at", "uprn", "ons_code", "bin_name", "kind", "before", "after", "note"];
 
@@ -133,5 +134,16 @@ export const sheetTables: Tables = {
     if (rowNumber === null) return null;
     const [, id, uprn, onsCode, garden, createdAt] = sheet.getRange(rowNumber, 1, 1, SUBSCRIPTION_HEADERS.length).getValues()[0];
     return { token, id: String(id), uprn: String(uprn), ons_code: String(onsCode), garden: garden === "yes", created_at: String(createdAt) };
+  },
+
+  bumpWaitlist(onsCode: string, at: string, maxCouncils: number): void {
+    const sheet = table("waitlist", WAITLIST_HEADERS, [1, 3, 4]);
+    const rowNumber = findRow(sheet, onsCode);
+    if (rowNumber !== null) {
+      const count = Number(sheet.getRange(rowNumber, 2).getValue()) || 0;
+      sheet.getRange(rowNumber, 2, 1, 3).setValues([[count + 1, sheet.getRange(rowNumber, 3).getValue(), at]]);
+    } else if (sheet.getLastRow() - 1 < maxCouncils) {
+      sheet.appendRow([onsCode, 1, at, at]);
+    }
   },
 };

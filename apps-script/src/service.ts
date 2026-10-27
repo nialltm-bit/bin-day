@@ -64,6 +64,11 @@ export interface Tables {
   countSubscriptions(uprn?: string): number;
   addSubscription(row: SubscriptionRow): void;
   findSubscription(token: string): SubscriptionRow | null;
+  /**
+   * Adds one to a council's count; all we keep is the code, a count and two times. Does nothing for a new council
+   * once `maxCouncils` different councils are already counted.
+   */
+  bumpWaitlist(onsCode: string, at: string, maxCouncils: number): void;
 }
 
 export interface Deps {
@@ -79,10 +84,14 @@ export interface Deps {
   /** The most subscriptions allowed in total, and for one address. */
   maxSubscriptions?: number;
   maxPerAddress?: number;
+  /** The most different councils the waitlist will hold counts for. */
+  maxWaitlistCouncils?: number;
 }
 
 export const DEFAULT_MAX_SUBSCRIPTIONS = 5000;
 export const DEFAULT_MAX_PER_ADDRESS = 20;
+// There are fewer than 400 councils in Great Britain and Northern Ireland, so this only stops junk codes piling up.
+export const DEFAULT_MAX_WAITLIST_COUNCILS = 500;
 
 export type Reply = { ok: true; [key: string]: unknown } | { ok: false; error: string };
 
@@ -194,11 +203,29 @@ function subscribe(request: Record<string, unknown>, deps: Deps): Reply {
   });
 }
 
+/**
+ * Public: counts one person's interest in a council we don't cover yet. Only the council code is kept, so there is
+ * nothing to leak and nothing to tell anyone later. The count shows which council to add next; it can't be proof
+ * of demand, because anyone can send it.
+ */
+function joinWaitlist(request: Record<string, unknown>, deps: Deps): Reply {
+  const { ons_code } = request;
+  if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
+  const withLock = deps.withLock ?? (<T>(work: () => T) => work());
+  const { tables } = deps;
+  return withLock(() => {
+    // The reply is the same either way, so the page can't be used to find out which councils are listed.
+    tables.bumpWaitlist(ons_code, deps.nowIso?.() ?? new Date().toISOString(), deps.maxWaitlistCouncils ?? DEFAULT_MAX_WAITLIST_COUNCILS);
+    return { ok: true } as Reply;
+  });
+}
+
 export function handle(body: unknown, deps: Deps): Reply {
   if (typeof body !== "object" || body === null) return fail("bad request");
   const request = body as Record<string, unknown>;
 
   if (request.action === "subscribe") return subscribe(request, deps);
+  if (request.action === "join_waitlist") return joinWaitlist(request, deps);
 
   if (deps.secret === undefined || deps.secret === "") return fail("not configured");
   if (typeof request.secret !== "string" || !safeEqual(request.secret, deps.secret)) return fail("unauthorised");

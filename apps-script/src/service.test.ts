@@ -338,3 +338,42 @@ describe("save_changes", () => {
     });
   });
 });
+
+describe("join_waitlist (public)", () => {
+  const join = (body: Record<string, unknown> = {}, d: Deps = { ...deps, nowIso: () => NOW }) =>
+    handle({ action: "join_waitlist", ons_code: "E06000001", ...body }, d);
+
+  it("needs no secret and counts one person for the council", () => {
+    expect(join()).toEqual({ ok: true });
+    expect(join()).toEqual({ ok: true });
+    expect(store.waitlist.get("E06000001")).toEqual({ count: 2, first_at: NOW, last_at: NOW });
+  });
+
+  it("keeps only the council: a postcode, email or anything else sent along is dropped", () => {
+    join({ postcode: "BA1 5AW", email: "a@b.co", house_number: "1", uprn: "100120000855" });
+    expect(JSON.stringify([...store.waitlist])).not.toMatch(/BA1|a@b|100120000855/);
+    expect(store.addresses).toEqual([]);
+    expect(store.subscriptions).toEqual([]);
+  });
+
+  it("answers the same for a council we support and one we don't, so it can't be used to list what we cover", () => {
+    expect(join({ ons_code: "E06000022" })).toEqual(join({ ons_code: "E06000001" }));
+  });
+
+  it("rejects codes that are not council codes", () => {
+    for (const bad of ["", "nope", "E0600000", "e06000001", "=E06000001", 7, null]) {
+      expect(join({ ons_code: bad }), String(bad)).toEqual({ ok: false, error: "bad ons_code" });
+    }
+    expect(store.waitlist.size).toBe(0);
+  });
+
+  it("stops adding new councils at the cap but keeps counting the ones it has", () => {
+    const capped = { ...deps, nowIso: () => NOW, maxWaitlistCouncils: 2 };
+    join({ ons_code: "E06000001" }, capped);
+    join({ ons_code: "E06000002" }, capped);
+    expect(join({ ons_code: "E06000003" }, capped)).toEqual({ ok: true });
+    join({ ons_code: "E06000001" }, capped);
+    expect([...store.waitlist.keys()]).toEqual(["E06000001", "E06000002"]);
+    expect(store.waitlist.get("E06000001")?.count).toBe(2);
+  });
+});
