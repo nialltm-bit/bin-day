@@ -74,6 +74,22 @@ so people are never shown stale dates. The warning event for round changes is st
 
 The test page is temporary. The real sign-up page is FRE-271.
 
+## Results
+
+Checked on 27 October 2026 with the B&NES test address (UPRN 100120000855), subscribed from Google Calendar on the web:
+
+- The subscription works, and the events appeared the same day.
+- It showed eight events: Fridays 30 October to 18 December. Nothing is shown from 21 December, because of the
+  8 week window and the Christmas period rule.
+- Titles alternate correctly: "Bins: rubbish + recycling + food" every other week, "Bins: recycling + food" in
+  between.
+- Every date after 30 October says "Expected date, confirmed nearer the time." and 30 October does not.
+- No duplicate events.
+
+Not checked: Apple Calendar and Outlook (not planned for now), and whether a reminder fires in Google. Google ignores
+alarms inside the feed. A person can add their own notification in Google Calendar's settings for the subscribed
+calendar (all-day event notifications, for example 1 day before at 6:00pm). That has not been confirmed yet.
+
 ## Limits
 
 - Calendar apps ask for the feed once or twice a day. Each request runs the script for under a second. Apps Script
