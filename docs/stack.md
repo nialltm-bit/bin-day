@@ -21,7 +21,7 @@ The council registry (`registry/councils.json`, checked by `fetcher/registry.py`
 
 ## Reminders without email
 
-Each event has a built-in alarm for the evening before, which Apple Calendar and Outlook honour. Google ignores alarms in subscribed feeds, so Google gets a timed evening event instead, plus a one-time guide to turning on notifications.
+Each event has a built-in alarm for the evening before, which Apple Calendar and Outlook honour. Google ignores alarms in subscribed feeds, so Google users turn on notifications for the subscribed calendar once, following a short guide. We do not add a second, timed evening event for everyone to work around Google.
 
 ## Risks
 

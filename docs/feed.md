@@ -22,6 +22,19 @@ tell a real address from an invented one, and someone could use up the 5,000 tot
 happens, raise the limit or put a bot check (such as Cloudflare Turnstile) in front of the sign-up page; Apps Script
 cannot limit by IP address.
 
+## Turning on reminders in Google Calendar
+
+Google ignores the reminder inside the feed, so each Google user turns on notifications for the subscribed calendar
+once (the sign-up page will show these steps):
+
+1. On a computer, open Google Calendar and its settings, then find the "Bin Day" calendar in the left-hand list
+   under "Settings for other calendars".
+2. Under **All-day event notifications**, add one, for example **1 day before at 6:00pm**.
+3. On a phone, make sure the Google Calendar app's notifications are on, and that the Bin Day calendar is ticked
+   in the app's calendar list.
+
+Apple Calendar and Outlook honour the reminder in the feed and need no setting.
+
 ## What is in the feed
 
 - One **all-day event per collection day**, with same-day bins merged: "Bins: rubbish + recycling + food". The

@@ -52,6 +52,8 @@ Tested on 26 October 2026 with a free Google account's script, deployed as a web
 
 **Go on Apps Script for the MVP.** The two structural risks are cleared: Google Calendar accepts an Apps Script URL as a subscription (despite the redirect), and the GitHub Pages site can call the script. Google Calendar is the client we most needed, since it is the one that ignores alarms and so shaped the evening-event design.
 
+**Update, 27 October 2026:** the timed evening event (B) was not built. Google users turn on notifications for the subscribed calendar themselves (see `feed.md`), and no second event is added for everyone.
+
 Left open, and not blocking the MVP:
 - Whether the 6pm "Bins out tonight" event (B) actually produces a notification in Google once the person has turned on notifications for the calendar. Check on 2 November, and record it here.
 - Apple Calendar and Outlook subscription and alarm behaviour.
