@@ -15,15 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Read the postcode lookup scripts on the B&NES site
+      - name: Read the address search settings and try one search
         run: |
           UA="Mozilla/5.0 (compatible; bin-day-spike; +https://github.com/nialltm-bit/bin-day)"
           W=https://www.bathnes.gov.uk/webforms
-          for f in waste/collectionday/modules/addressDetailsPC.js CommonFiles/modules/PostcodeLookup/PostcodeLookupCommon.js; do
-            echo "--- $f"
-            curl -sSL -m 30 -A "$UA" -w "status %{http_code}\n" -o f.js "$W/$f"
-            grep -n -i "url\|http\|api\|ajax\|get(\|fetch\|getJSON" f.js | cut -c1-200 | head -40
+          curl -sSL -m 30 -A "$UA" -o p.js $W/CommonFiles/modules/PostcodeLookup/PostcodeLookupCommon.js
+          echo "--- search code"; sed -n '60,130p' p.js | cut -c1-180
+          sleep 5
+          echo "--- settings"
+          for f in $W/CommonFiles/js/commonFunctions.js $W/waste/collectionday/js/collectionday.js; do
+            curl -sSL -m 30 -A "$UA" $f | grep -n -i "APIroot *=\|AddressesAPI *=\|BinsAPI *=\|searchType\|resultSize" | cut -c1-200 | head -12
             sleep 5
           done
-          echo "--- config"
-          curl -sSL -m 30 -A "$UA" $W/waste/collectionday/js/collectionday.js | grep -n -i "APIroot\|config" | cut -c1-200 | head
