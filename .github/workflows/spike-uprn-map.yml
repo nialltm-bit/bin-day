@@ -1,0 +1,31 @@
+name: Spike UPRN map data
+
+on:
+  push:
+    branches: [claude/nifty-faraday-obdwan]
+    paths:
+      - .github/workflows/spike-uprn-map.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  find:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Find the ONS UPRN Directory on the Open Geography Portal
+        run: |
+          set -u
+          curl -sSL -m 60 -G "https://www.arcgis.com/sharing/rest/search" \
+            --data-urlencode 'q=title:"ONS UPRN Directory" AND owner:ONSGeography_data' \
+            --data-urlencode 'sortField=modified' --data-urlencode 'sortOrder=desc' \
+            --data-urlencode 'num=8' --data-urlencode 'f=json' -o search.json
+          python3 - <<'PY'
+          import json
+          d = json.load(open("search.json"))
+          print("total", d.get("total"))
+          for r in d.get("results", []):
+              print(r["id"], "|", r["title"], "|", r.get("type"), "|", r.get("size"), "|", r.get("licenseInfo", "")[:80].replace("\n", " "))
+          PY
