@@ -75,10 +75,23 @@ a typed address into a UPRN for free. When one exists, it is plugged in by passi
 they show "We can't find addresses in X yet". Adding their registry entries now is possible but they would stay dark,
 and each one needs its bin names and frequencies checked first.
 
+## How an address with no UPRN is stored
+
+The store, fetcher and feed treat the address key as an opaque string. For a council that needs a UPRN the key is the
+UPRN. For a council that takes a postcode and a house number (Newcastle upon Tyne is the first) there is no UPRN, so
+`subscribe` in the Apps Script makes the key from what was typed (`addressKey` in `apps-script/src/service.ts`):
+`h-` + council code + postcode with no space + the house number or name in lower case with symbols turned into dashes,
+for example `h-E08000021-NE34XE-1`. The same house typed two ways gets the same key, so it is fetched once however many
+people subscribe. The key starts with a letter or digit and holds only letters, digits and dashes, so it can never be
+read as a formula in the Sheet. The Sheet column is still called `uprn`.
+
 ## Still open
 
-- **Our store is keyed by UPRN.** House-number councils have no UPRN, so the store, the feed and the fetcher need an
-  address key that can be a UPRN or a council plus postcode plus house number. This is not done yet and must be
-  decided before the lookup page (FRE-271).
-- **No house-number council is in the registry yet.** Until one is added, the page would ready no council at all.
+- **What a person types for the house.** Newcastle's source says "house number or full address". The test address uses a
+  full address ("1 Northumberland Avenue"). I also ran the plain number ("1"); see the pull request for the result.
+  Until a plain number is shown to work, the lookup page should not promise it.
+- **Garden waste.** Newcastle's module returned only General Waste and Recycling for the test address, so the garden
+  question has no effect for it yet.
+- **Other councils.** 28 more councils passed upstream's suite with a postcode and house number and no browser. Each
+  needs the same check: run the module, map its bin names, confirm frequencies if it is a `next_only` council.
 - FRE-274 still describes an email waitlist and should be reworded.
