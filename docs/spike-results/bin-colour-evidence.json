@@ -1,0 +1,244 @@
+{
+  "BuryCouncil": {
+    "pages_read": 12,
+    "bins": {
+      "green": {
+        "stream": "recycling",
+        "votes": {
+          "recycling": 5
+        },
+        "pages": [
+          "https://www.bury.gov.uk/waste-and-recycling/request-a-bin",
+          "https://www.bury.gov.uk/waste-and-recycling/bins-information",
+          "https://www.bury.gov.uk/waste-and-recycling/communal-bins-service"
+        ]
+      }
+    }
+  },
+  "EdinburghCityCouncil": {
+    "pages_read": 12,
+    "bins": {
+      "Green Bin": {
+        "stream": null,
+        "votes": {
+          "recycling": 1
+        },
+        "pages": [
+          "https://www.edinburgh.gov.uk/bins-recycling/communal-bin-review"
+        ]
+      }
+    }
+  },
+  "Hillingdon": {
+    "pages_read": 9,
+    "bins": {
+      "Household": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      }
+    }
+  },
+  "NorthWestLeicestershire": {
+    "pages_read": 10,
+    "bins": {
+      "Purple Bag": {
+        "stream": null,
+        "votes": {
+          "recycling": 1
+        },
+        "pages": [
+          "https://www.nwleics.gov.uk/pages/recyclingcontainers"
+        ]
+      },
+      "Red Box": {
+        "stream": null,
+        "votes": {
+          "recycling": 1
+        },
+        "pages": [
+          "https://www.nwleics.gov.uk/pages/recyclingcontainers"
+        ]
+      },
+      "Yellow Bag": {
+        "stream": null,
+        "votes": {
+          "recycling": 1
+        },
+        "pages": [
+          "https://www.nwleics.gov.uk/pages/recyclingcontainers"
+        ]
+      }
+    }
+  },
+  "RoyalBoroughofGreenwich": {
+    "pages_read": 0,
+    "bins": {
+      "Green Bin": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      }
+    }
+  },
+  "SeftonCouncil": {
+    "pages_read": 12,
+    "bins": {
+      "Green": {
+        "stream": null,
+        "votes": {
+          "garden": 2
+        },
+        "pages": [
+          "https://www.sefton.gov.uk/bins-and-recycling/bins-and-recycling/missed-collections/"
+        ]
+      }
+    }
+  },
+  "SouthCambridgeshireCouncil": {
+    "pages_read": 5,
+    "bins": {
+      "Organic": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      }
+    }
+  },
+  "WestLindseyDistrictCouncil": {
+    "pages_read": 12,
+    "bins": {
+      "Green": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      },
+      "Orange": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      },
+      "Purple": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      }
+    }
+  },
+  "CotswoldDistrictCouncil": {
+    "pages_read": 1,
+    "bins": {
+      "White Bag": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      }
+    }
+  },
+  "FifeCouncil": {
+    "pages_read": 0,
+    "bins": {
+      "Green": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      }
+    }
+  },
+  "HertsmereBoroughCouncil": {
+    "pages_read": 12,
+    "bins": {
+      "Green": {
+        "stream": null,
+        "votes": {
+          "garden": 9,
+          "food": 4
+        },
+        "pages": [
+          "https://www.hertsmere.gov.uk/environment-bins-and-recycling/bins-and-recycling/bin-collections/what-goes-in-my-bin/garden-waste",
+          "https://www.hertsmere.gov.uk/environment-bins-and-recycling/bins-and-recycling/bin-collections/collections-and-calendar",
+          "https://www.hertsmere.gov.uk/environment-bins-and-recycling/bins-and-recycling/food-waste",
+          "https://www.hertsmere.gov.uk/environment-bins-and-recycling/bins-and-recycling/a-z-of-recycling"
+        ]
+      }
+    }
+  },
+  "KnowsleyMBCouncil": {
+    "pages_read": 1,
+    "bins": {
+      "Maroon": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      }
+    }
+  },
+  "NorthNorfolkDistrictCouncil": {
+    "pages_read": 12,
+    "bins": {
+      "Green bin": {
+        "stream": "recycling",
+        "votes": {
+          "recycling": 3
+        },
+        "pages": [
+          "https://www.north-norfolk.gov.uk/tasks/environmental-services/battery-recycling-service/",
+          "https://www.north-norfolk.gov.uk/tasks/environmental-services/request-commercial-waste-collection/"
+        ]
+      }
+    }
+  },
+  "PeterboroughCityCouncil": {
+    "pages_read": 1,
+    "bins": {
+      "Empty Bin 240L Green": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      }
+    }
+  },
+  "SouthKestevenDistrictCouncil": {
+    "pages_read": 12,
+    "bins": {
+      "GREEN": {
+        "stream": "garden",
+        "votes": {
+          "garden": 3
+        },
+        "pages": [
+          "https://www.southkesteven.gov.uk/gardenwasteFAQs"
+        ]
+      },
+      "Purple Bin": {
+        "stream": null,
+        "votes": {
+          "food": 1
+        },
+        "pages": [
+          "https://www.southkesteven.gov.uk/recycling"
+        ]
+      }
+    }
+  },
+  "SwaleBoroughCouncil": {
+    "pages_read": 0,
+    "bins": {
+      "green bin": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      }
+    }
+  },
+  "WestLothianCouncil": {
+    "pages_read": 12,
+    "bins": {
+      "Green Bin": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      }
+    }
+  }
+}
