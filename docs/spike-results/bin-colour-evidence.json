@@ -40,34 +40,22 @@
     }
   },
   "NorthWestLeicestershire": {
-    "pages_read": 10,
+    "pages_read": 0,
     "bins": {
       "Purple Bag": {
         "stream": null,
-        "votes": {
-          "recycling": 1
-        },
-        "pages": [
-          "https://www.nwleics.gov.uk/pages/recyclingcontainers"
-        ]
+        "votes": {},
+        "pages": []
       },
       "Red Box": {
         "stream": null,
-        "votes": {
-          "recycling": 1
-        },
-        "pages": [
-          "https://www.nwleics.gov.uk/pages/recyclingcontainers"
-        ]
+        "votes": {},
+        "pages": []
       },
       "Yellow Bag": {
         "stream": null,
-        "votes": {
-          "recycling": 1
-        },
-        "pages": [
-          "https://www.nwleics.gov.uk/pages/recyclingcontainers"
-        ]
+        "votes": {},
+        "pages": []
       }
     }
   },
