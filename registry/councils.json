@@ -45,6 +45,39 @@
       },
       "last_verified": "2026-10-26",
       "notes": "Plain HTTP, needs only a UPRN. The API returns only the next collection date for each bin, so every_weeks says how often each bin is emptied. Frequencies are from the council's own pages and published calendar (checked 2026-10-26). The Monday A calendar for November 2025 to November 2026 (app.bathnes.gov.uk/WebForms/waste/attachments/) shows food bin, green box and blue bag collected every Monday, and the rubbish bin on alternate Mondays, so the same bins are emptied every 1 and 2 weeks. The council's pages say the same: rubbish every other week (https://www.bathnes.gov.uk/rubbish), food waste weekly (https://www.bathnes.gov.uk/food-waste), green recycling box weekly (https://www.bathnes.gov.uk/green-recycling-box), blue recycling bag weekly (https://www.bathnes.gov.uk/blue-recycling-bag). Garden waste is fortnightly on the same calendar, with a winter gap, but its bin name has not been seen yet, so it is not mapped. The frequencies were also confirmed by the project owner on 2026-10-26. Calendars exist per round (for example Monday A, Friday B). Only Monday A has been read so far; the other rounds are assumed to follow the same frequencies and should be checked against one more calendar."
+    },
+    {
+      "ons_code": "E08000021",
+      "name": "Newcastle upon Tyne",
+      "status": "supported",
+      "schedule": "full",
+      "source": {
+        "type": "ukbcd",
+        "module": "NewcastleCityCouncil",
+        "url": "https://new.newcastle.gov.uk/recycling-waste/check-your-bin-collection-day",
+        "skip_get_url": true
+      },
+      "inputs": [
+        "postcode",
+        "house_number"
+      ],
+      "needs_selenium": false,
+      "bin_types": {
+        "General Waste": {
+          "stream": "general",
+          "label": "General waste"
+        },
+        "Recycling": {
+          "stream": "recycling",
+          "label": "Recycling"
+        }
+      },
+      "test_address": {
+        "postcode": "NE3 4XE",
+        "house_number": "1 Northumberland Avenue"
+      },
+      "last_verified": "2026-10-28",
+      "notes": "Plain HTTP, no browser (it uses the ReCollect API, and upstream passes -s to skip fetching the page). Takes a postcode and a house number (no UPRN). On 2026-10-28 the module returned 8 entries: General Waste and Recycling, each every 14 days for about seven weeks, so this is a full schedule and no every_weeks is set. Passed upstream's integration suite (FRE-263). Only two bin names have been seen. Newcastle also runs a paid garden waste service, but this module did not return a garden bin for the test address, so garden waste is not mapped yet and the garden question has no effect here. Bin colours and the council's own naming have not been checked against its website, so only neutral labels are set."
     }
   ]
 }

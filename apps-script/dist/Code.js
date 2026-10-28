@@ -336,6 +336,39 @@
         },
         last_verified: "2026-10-26",
         notes: "Plain HTTP, needs only a UPRN. The API returns only the next collection date for each bin, so every_weeks says how often each bin is emptied. Frequencies are from the council's own pages and published calendar (checked 2026-10-26). The Monday A calendar for November 2025 to November 2026 (app.bathnes.gov.uk/WebForms/waste/attachments/) shows food bin, green box and blue bag collected every Monday, and the rubbish bin on alternate Mondays, so the same bins are emptied every 1 and 2 weeks. The council's pages say the same: rubbish every other week (https://www.bathnes.gov.uk/rubbish), food waste weekly (https://www.bathnes.gov.uk/food-waste), green recycling box weekly (https://www.bathnes.gov.uk/green-recycling-box), blue recycling bag weekly (https://www.bathnes.gov.uk/blue-recycling-bag). Garden waste is fortnightly on the same calendar, with a winter gap, but its bin name has not been seen yet, so it is not mapped. The frequencies were also confirmed by the project owner on 2026-10-26. Calendars exist per round (for example Monday A, Friday B). Only Monday A has been read so far; the other rounds are assumed to follow the same frequencies and should be checked against one more calendar."
+      },
+      {
+        ons_code: "E08000021",
+        name: "Newcastle upon Tyne",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "NewcastleCityCouncil",
+          url: "https://new.newcastle.gov.uk/recycling-waste/check-your-bin-collection-day",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        needs_selenium: false,
+        bin_types: {
+          "General Waste": {
+            stream: "general",
+            label: "General waste"
+          },
+          Recycling: {
+            stream: "recycling",
+            label: "Recycling"
+          }
+        },
+        test_address: {
+          postcode: "NE3 4XE",
+          house_number: "1 Northumberland Avenue"
+        },
+        last_verified: "2026-10-28",
+        notes: "Plain HTTP, no browser (it uses the ReCollect API, and upstream passes -s to skip fetching the page). Takes a postcode and a house number (no UPRN). On 2026-10-28 the module returned 8 entries: General Waste and Recycling, each every 14 days for about seven weeks, so this is a full schedule and no every_weeks is set. Passed upstream's integration suite (FRE-263). Only two bin names have been seen. Newcastle also runs a paid garden waste service, but this module did not return a garden bin for the test address, so garden waste is not mapped yet and the garden question has no effect here. Bin colours and the council's own naming have not been checked against its website, so only neutral labels are set."
       }
     ]
   };
@@ -499,12 +532,19 @@
   var DEFAULT_MAX_PER_ADDRESS = 20;
   var DEFAULT_MAX_WAITLIST_COUNCILS = 500;
   var UPRN = /^[0-9]{1,12}$/;
+  var ADDRESS_ID = /^(?:[0-9]{1,12}|h-[ENSW][0-9]{8}-[A-Z0-9]{5,7}-[a-z0-9-]{1,40})$/;
   var ONS_CODE = /^[ENSW][0-9]{8}$/;
   var TIMESTAMP = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+(Z|[+-][0-9]{2}:[0-9]{2})$/;
   var DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
   var MAX_TEXT = 500;
   var POSTCODE = /^[A-Za-z0-9][A-Za-z0-9 ]{1,9}$/;
   var HOUSE_NUMBER = /^[A-Za-z0-9][A-Za-z0-9 ,'./-]{0,99}$/;
+  function addressKey(onsCode, postcode, houseNumber) {
+    const compact = postcode.replace(/\s+/g, "").toUpperCase();
+    const house = houseNumber.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40).replace(/-+$/g, "");
+    const key = `h-${onsCode}-${compact}-${house}`;
+    return ADDRESS_ID.test(key) ? key : null;
+  }
   function fail(error) {
     return { ok: false, error };
   }
@@ -554,7 +594,6 @@
   }
   function subscribe(request, deps) {
     const { uprn, ons_code, postcode, house_number, garden } = request;
-    if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
     if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
     if (postcode !== void 0 && !(typeof postcode === "string" && POSTCODE.test(postcode))) return fail("bad postcode");
     if (house_number !== void 0 && !(typeof house_number === "string" && HOUSE_NUMBER.test(house_number))) return fail("bad house_number");
@@ -565,14 +604,23 @@
       if (input === "postcode" && typeof postcode !== "string") return fail("postcode needed");
       if (input === "house_number" && typeof house_number !== "string") return fail("house_number needed");
     }
+    let key;
+    if ((council.inputs ?? []).includes("uprn")) {
+      if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+      key = uprn;
+    } else {
+      const made = typeof postcode === "string" && typeof house_number === "string" ? addressKey(ons_code, postcode, house_number) : null;
+      if (made === null) return fail("bad address");
+      key = made;
+    }
     if (!deps.newToken || !deps.newId) return fail("not configured");
     const withLock = deps.withLock ?? ((work) => work());
     const { tables } = deps;
     return withLock(() => {
       if (tables.countSubscriptions() >= (deps.maxSubscriptions ?? DEFAULT_MAX_SUBSCRIPTIONS)) return fail("full");
-      if (tables.countSubscriptions(uprn) >= (deps.maxPerAddress ?? DEFAULT_MAX_PER_ADDRESS)) return fail("too many feeds for this address");
-      if (!tables.addresses().some((address) => address.uprn === uprn)) {
-        const row = { uprn, ons_code };
+      if (tables.countSubscriptions(key) >= (deps.maxPerAddress ?? DEFAULT_MAX_PER_ADDRESS)) return fail("too many feeds for this address");
+      if (!tables.addresses().some((address) => address.uprn === key)) {
+        const row = { uprn: key, ons_code };
         if (typeof postcode === "string") row.postcode = postcode;
         if (typeof house_number === "string") row.house_number = house_number;
         tables.addAddress(row);
@@ -581,7 +629,7 @@
       tables.addSubscription({
         token,
         id: deps.newId?.(),
-        uprn,
+        uprn: key,
         ons_code,
         garden: garden === true,
         created_at: deps.nowIso?.() ?? (/* @__PURE__ */ new Date()).toISOString()
@@ -618,7 +666,7 @@
       }
       case "add_address": {
         const { uprn, ons_code, postcode, house_number } = request;
-        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
         if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
         if (postcode !== void 0 && !(typeof postcode === "string" && POSTCODE.test(postcode))) return fail("bad postcode");
         if (house_number !== void 0 && !(typeof house_number === "string" && HOUSE_NUMBER.test(house_number))) return fail("bad house_number");
@@ -632,12 +680,12 @@
       }
       case "get_result": {
         const { uprn } = request;
-        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
         return { ok: true, result: tables.getResult(uprn) };
       }
       case "save_changes": {
         const { uprn, ons_code, now } = request;
-        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
         if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
         if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
         const rows2 = validChanges(request.changes, uprn, ons_code, now);
@@ -648,7 +696,7 @@
       case "save_success": {
         const { uprn, now } = request;
         const collections = validCollections(request.collections);
-        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
         if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
         if (collections === null) return fail("bad collections");
         withLock(
@@ -659,7 +707,7 @@
       case "save_failure": {
         const { uprn, now } = request;
         const error = text(request.error);
-        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
         if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
         if (error === null) return fail("bad error");
         withLock(() => {

@@ -36,14 +36,24 @@ describe("buildViews", () => {
     expect(buildViews(NAMES, REGISTRY, true).find((v) => v.code === "E2")?.availability).toBe("available");
   });
 
-  it("with the real registry, B&NES is on the way, not covered", () => {
-    expect(buildViews([{ code: "E06000022", name: "Bath and North East Somerset" }], REAL)[0].availability).toBe("soon");
+  it("with the real registry, B&NES is on the way and Newcastle is covered", () => {
+    const real = buildViews(
+      [
+        { code: "E06000022", name: "Bath and North East Somerset" },
+        { code: "E08000021", name: "Newcastle upon Tyne" },
+      ],
+      REAL,
+    );
+    expect(real.map((v) => [v.code, v.availability])).toEqual([
+      ["E06000022", "soon"],
+      ["E08000021", "available"],
+    ]);
   });
 });
 
 describe("summary and description", () => {
   it("says plainly when nothing is covered, and counts what is on the way", () => {
-    const views = buildViews([{ code: "E06000022", name: "Bath and North East Somerset" }, { code: "E06000001", name: "Hartlepool" }], REAL);
+    const views = buildViews([{ code: "E2", name: "Uprnton" }, { code: "E4", name: "Nowhere Yet" }], [REGISTRY[1], REGISTRY[3]]);
     expect(summary(views)).toBe("We can show bin days for 0 of 2 councils. 1 more is on the way.");
   });
 
