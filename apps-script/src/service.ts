@@ -3,7 +3,12 @@
  * (addresses and results). Pure logic, so it can be tested without Apps Script.
  */
 
+import { daysBetween } from "./dates";
 import { FEED_TOKEN, upcomingFor } from "./feed";
+
+/** A feed nobody has asked for in this many days is deleted, with its address if it was the last feed on it. */
+export const DEFAULT_FEED_LIFE_DAYS = 365;
+const MIN_FEED_LIFE_DAYS = 30;
 import { getCouncil } from "./registry";
 
 export const STREAMS = ["general", "recycling", "food", "garden"] as const;
@@ -39,6 +44,8 @@ export interface SubscriptionRow {
   ons_code: string;
   garden: boolean;
   created_at: string;
+  /** The last day (YYYY-MM-DD) the feed or its dates were asked for. Missing on older rows: the sign-up day counts. */
+  last_used?: string;
 }
 
 export interface ChangeRow {
@@ -65,6 +72,12 @@ export interface Tables {
   countSubscriptions(uprn?: string): number;
   addSubscription(row: SubscriptionRow): void;
   findSubscription(token: string): SubscriptionRow | null;
+  /** Every feed, for the yearly clear-out of unused ones. */
+  subscriptions(): SubscriptionRow[];
+  /** Records that the feed was used on this day (YYYY-MM-DD). Does nothing for an unknown token. */
+  touchSubscription(token: string, today: string): void;
+  /** True while an address row exists. A fetch that finishes after its address was deleted is dropped. */
+  hasAddress(uprn: string): boolean;
   /** Removes one feed and returns the row it had, or null if there was none. */
   deleteSubscription(token: string): SubscriptionRow | null;
   /** Removes everything kept for an address: its row, its fetched dates and its recorded changes. */
@@ -362,7 +375,9 @@ export function handle(body: unknown, deps: Deps): Reply {
       if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
       const rows = validChanges(request.changes, uprn, ons_code, now);
       if (rows === null) return fail("bad changes");
-      withLock(() => tables.addChanges(rows));
+      withLock(() => {
+        if (tables.hasAddress(uprn)) tables.addChanges(rows); // dropped if the address was deleted while the fetch ran
+      });
       return { ok: true };
     }
 
@@ -372,10 +387,33 @@ export function handle(body: unknown, deps: Deps): Reply {
       if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
       if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
       if (collections === null) return fail("bad collections");
-      withLock(() =>
-        tables.putResult({ uprn, fetched_at: now, last_attempt: now, last_error: null, consecutive_failures: 0, collections }),
-      );
+      withLock(() => {
+        // A fetch that finishes after its address was deleted must not write the address back in through its dates.
+        if (!tables.hasAddress(uprn)) return;
+        tables.putResult({ uprn, fetched_at: now, last_attempt: now, last_error: null, consecutive_failures: 0, collections });
+      });
       return { ok: true };
+    }
+
+    case "expire_feeds": {
+      const days = request.days === undefined ? DEFAULT_FEED_LIFE_DAYS : request.days;
+      if (typeof days !== "number" || !Number.isInteger(days) || days < MIN_FEED_LIFE_DAYS || days > 3650) return fail("bad days");
+      const today = deps.todayIso?.() ?? new Date().toISOString().slice(0, 10);
+      return withLock(() => {
+        let expired = 0;
+        let addresses = 0;
+        for (const feed of tables.subscriptions()) {
+          const lastUsed = feed.last_used ?? feed.created_at.slice(0, 10);
+          if (daysBetween(lastUsed, today) <= days) continue;
+          if (tables.deleteSubscription(feed.token) === null) continue;
+          expired += 1;
+          if (tables.countSubscriptions(feed.uprn) === 0) {
+            tables.deleteAddress(feed.uprn);
+            addresses += 1;
+          }
+        }
+        return { ok: true, expired, addresses_deleted: addresses } as Reply;
+      });
     }
 
     case "save_failure": {
@@ -385,6 +423,7 @@ export function handle(body: unknown, deps: Deps): Reply {
       if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
       if (error === null) return fail("bad error");
       withLock(() => {
+        if (!tables.hasAddress(uprn)) return;
         // Keep the last good collections and their fetched_at, so the feed can say it could not confirm.
         const previous = tables.getResult(uprn);
         tables.putResult({

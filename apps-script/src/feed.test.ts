@@ -374,3 +374,17 @@ describe("upcomingFor (what the page shows right after sign-up)", () => {
     expect(text).not.toContain(TOKEN);
   });
 });
+
+describe("using a calendar feed", () => {
+  it("records the day it was fetched", () => {
+    const store = memoryTables();
+    store.subscriptions.push({ token: TOKEN, id: "abcd1234", uprn: "100120000855", ons_code: "E06000022", garden: false, created_at: "2025-01-01T00:00:00+00:00" });
+    feedFor(TOKEN, { tables: store.tables, now: NOW, today: "2026-10-26" });
+    expect(store.subscriptions[0]?.last_used).toBe("2026-10-26");
+  });
+  it("records nothing for an unknown token", () => {
+    const store = memoryTables();
+    expect(feedFor(TOKEN, { tables: store.tables, now: NOW, today: "2026-10-26" })).toBeNull();
+    expect(store.subscriptions).toEqual([]);
+  });
+});

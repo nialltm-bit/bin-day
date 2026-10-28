@@ -74,6 +74,9 @@ jobs:
         env:
           FORCE: ${{ inputs.force && '--force' || '' }}
         run: python -m fetcher.run fetch --sheet --selenium-url http://localhost:4444 $FORCE
+      - name: Delete feeds nobody has used for a year, with their addresses
+        if: steps.config.outputs.configured == 'true' && always()
+        run: python -m fetcher.run expire --sheet --days 365
       - name: Save learned bin frequencies
         if: steps.config.outputs.configured == 'true' && always()
         run: |
