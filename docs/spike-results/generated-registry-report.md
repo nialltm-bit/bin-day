@@ -1,22 +1,36 @@
 # Generated registry report (2026-10-28)
 
-Added 2 councils. Left out 65.
+Added 0 councils. Left out 67.
 
 ## Added
 
-- BuryCouncil (E08000002)
-- NorthNorfolkDistrictCouncil (E07000147)
+
+## Re-checked against the current mapping rules
+
+- corrected: Colchester
+- corrected: Rochford
+- corrected: North Hertfordshire
+- corrected: St. Helens
+- corrected: Wirral
+- corrected: Ceredigion
+- taken out until its bin names can be settled: Mid Ulster
+- taken out until its bin names can be settled: East Ayrshire
+- taken out until its bin names can be settled: East Lothian
+- taken out until its bin names can be settled: Comhairle nan Eilean Siar
+- taken out until its bin names can be settled: Stirling
+- taken out until its bin names can be settled: Caerphilly County Borough
 
 ## Left out, and why
 
 - BassetlawDistrictCouncil: already in the registry (left unchanged)
 - BracknellForestCouncil: already in the registry (left unchanged)
 - BrentCouncil: already in the registry (left unchanged)
-- CaerphillyCountyBoroughCouncil: already in the registry (left unchanged)
-- CneSiarCouncil: already in the registry (left unchanged)
-- EastAyrshireCouncil: already in the registry (left unchanged)
+- BuryCouncil: already in the registry (left unchanged)
+- CaerphillyCountyBoroughCouncil: unrecognised bin name 'Food & Garden'
+- CneSiarCouncil: unrecognised bin name 'Organic Food & Garden Waste / Mixed Recycling (Blue Bin)'
+- EastAyrshireCouncil: unrecognised bin name 'Glass+Food'
 - EastHampshireDC: already in the registry (left unchanged)
-- EastLothianCouncil: already in the registry (left unchanged)
+- EastLothianCouncil: unrecognised bin name 'Food waste and recycling'
 - EdinburghCityCouncil: unrecognised bin name 'Green Bin'
 - FermanaghOmaghDistrictCouncil: already in the registry (left unchanged)
 - GraveshamBoroughCouncil: already in the registry (left unchanged)
@@ -58,18 +72,19 @@ Added 2 councils. Left out 65.
 - KnowsleyMBCouncil: unrecognised bin name 'Maroon'
 - MaidstoneBoroughCouncil: already in the registry (left unchanged)
 - MidSuffolkDistrictCouncil: already in the registry (left unchanged)
-- MidUlsterDistrictCouncil: already in the registry (left unchanged)
+- MidUlsterDistrictCouncil: unrecognised bin name 'Garden and food waste bin (Brown)'
 - NeathPortTalbotCouncil: already in the registry (left unchanged)
 - NorthHertfordshireDistrictCouncil: already in the registry (left unchanged)
+- NorthNorfolkDistrictCouncil: already in the registry (left unchanged)
 - PeterboroughCityCouncil: unrecognised bin name 'Empty Bin 240L Green'
 - SevenoaksDistrictCouncil: already in the registry (left unchanged)
 - SomersetCouncil: already in the registry (left unchanged)
 - SouthKestevenDistrictCouncil: unrecognised bin name 'Purple Bin'
 - StHelensBC: already in the registry (left unchanged)
-- StirlingCouncil: already in the registry (left unchanged)
+- StirlingCouncil: unrecognised bin name 'Food and Garden'
 - SwaleBoroughCouncil: unrecognised bin name 'green bin'
 - TestValleyBoroughCouncil: already in the registry (left unchanged)
-- WestLothianCouncil: unrecognised bin name 'Green Bin'
+- WestLothianCouncil: unrecognised bin name 'Brown Bin (Now for Garden and Food Waste)'
 - WestOxfordshireDistrictCouncil: already in the registry (left unchanged)
 - WinchesterCityCouncil: already in the registry (left unchanged)
 - WirralCouncil: already in the registry (left unchanged)
