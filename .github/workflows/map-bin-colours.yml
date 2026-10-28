@@ -26,6 +26,8 @@ jobs:
           python-version: "3.12"
       - run: curl -fsSL -o "$RUNNER_TEMP/input.json" https://raw.githubusercontent.com/robbrad/UKBinCollectionData/0.173.5/uk_bin_collection/tests/input.json
       - name: Read the council sites
+        env:
+          PYTHONPATH: .
         run: python scripts/map_bin_colours.py "$RUNNER_TEMP/input.json" docs/spike-results/batch-probe.json docs/spike-results/bin-colour-evidence.json
       - name: Commit the evidence
         run: |
