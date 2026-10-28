@@ -29,8 +29,8 @@ cookies and no browser storage (checked in `web/src`: nothing uses `localStorage
 ## Visit counting (GoatCounter)
 
 `web/src/analytics.ts` adds GoatCounter's script (`gc.zgo.at/count.js`) to the home page and the privacy page when the
-repository variable `GOATCOUNTER_URL` is set to `https://YOURCODE.goatcounter.com/count`; with no variable there is no
-counting. It is skipped for browsers sending Do Not Track, and only a `*.goatcounter.com/count` address is accepted. It
+build is given an address: the deploy workflow uses `https://binday.goatcounter.com/count` unless the repository variable
+`GOATCOUNTER_URL` says otherwise (a single space there turns counting off); local builds have none, so no counting. It is skipped for browsers sending Do Not Track, and only a `*.goatcounter.com/count` address is accepted. It
 counts page, referrer, browser, screen size and country, not people. Basis: legitimate interests (knowing whether the
 site is used). The policy names GoatCounter and links its privacy policy. Check GoatCounter's own statements (no
 cookies, no stored IP addresses) still hold when you review the policy before launch. Nothing about an address, a
