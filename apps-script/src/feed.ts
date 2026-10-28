@@ -46,8 +46,14 @@ function groupByDate(collections: FeedCollection[]): Map<string, FeedCollection[
   return groups;
 }
 
+/** "rubbish + recycling": the streams collected that day, always in the same order. */
+function streamsLabel(group: FeedCollection[]): string {
+  return STREAM_ORDER.filter((stream) => group.some((c) => c.stream === stream))
+    .map((s) => STREAM_NAME[s])
+    .join(" + ");
+}
+
 function eventFor(id: string, date: string, ordinal: number, group: FeedCollection[]): FeedEvent {
-  const streams = STREAM_ORDER.filter((stream) => group.some((c) => c.stream === stream));
   // Same order as the summary: rubbish, recycling, food, garden.
   const ordered = [...group].sort((a, b) => STREAM_ORDER.indexOf(a.stream) - STREAM_ORDER.indexOf(b.stream) || a.bin_name.localeCompare(b.bin_name));
   const labels = [...new Set(ordered.map((c) => c.label))];
@@ -57,7 +63,7 @@ function eventFor(id: string, date: string, ordinal: number, group: FeedCollecti
   return {
     // Keyed on the week, not the date, so a date that moves within its week updates the event instead of duplicating it.
     uid: `${id}-${isoWeek(date)}-${ordinal}@bin-day`,
-    summary: `Bins: ${streams.map((s) => STREAM_NAME[s]).join(" + ")}`,
+    summary: `Bins: ${streamsLabel(group)}`,
     description: lines.join("\n"),
     start: { kind: "date", date },
     alarm: ALARM_EVENING_BEFORE,
@@ -121,4 +127,38 @@ export function feedFor(token: string, deps: { tables: Tables; now: Date; today:
     consecutiveFailures: result?.consecutive_failures ?? 0,
     changes: deps.tables.recentChanges(subscription.uprn),
   });
+}
+
+export const UPCOMING_DAYS = 6;
+
+export interface Upcoming {
+  /** `pending`: nothing fetched yet. `failed`: the fetch failed or the dates are too old to trust. `ready`: dates below. */
+  status: "pending" | "failed" | "ready";
+  /** The next few collection days, merged by day, the same dates the calendar feed shows. */
+  collections: { date: string; label: string; projected: boolean }[];
+}
+
+/** What the lookup page shows straight after sign-up, for a feed token. Null if the token is malformed or unknown. */
+export function upcomingFor(token: string, deps: { tables: Tables; today: string }): Upcoming | null {
+  if (!FEED_TOKEN.test(token)) return null;
+  const subscription = deps.tables.findSubscription(token);
+  if (!subscription) return null;
+  const council = getCouncil(subscription.ons_code);
+  if (!council) return null;
+  const result = deps.tables.getResult(subscription.uprn);
+  if (!result || result.fetched_at === null) {
+    return { status: (result?.consecutive_failures ?? 0) > 0 ? "failed" : "pending", collections: [] };
+  }
+  if (daysBetween(result.fetched_at.slice(0, 10), deps.today) > STALE_DAYS) return { status: "failed", collections: [] };
+  const wanted = projectCollections({
+    collections: result.collections,
+    council,
+    today: deps.today,
+    holidays: bankHolidaysFor(subscription.ons_code),
+  }).filter((collection) => subscription.garden || collection.stream !== "garden");
+  const days = [...groupByDate(wanted)]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .slice(0, UPCOMING_DAYS)
+    .map(([date, group]) => ({ date, label: streamsLabel(group), projected: group.some((c) => !c.confirmed) }));
+  return { status: "ready", collections: days };
 }

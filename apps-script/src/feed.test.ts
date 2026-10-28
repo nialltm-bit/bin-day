@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SETTING_UP_SUMMARY, UNCONFIRMED_SUMMARY, buildFeed, feedFor } from "./feed";
+import { SETTING_UP_SUMMARY, UNCONFIRMED_SUMMARY, UPCOMING_DAYS, buildFeed, feedFor, upcomingFor } from "./feed";
 import { type Council, bankHolidaysFor, getCouncil } from "./registry";
 import { memoryTables } from "./test-tables";
 
@@ -298,5 +298,79 @@ describe("feedFor with change history", () => {
     expect(text).toContain("Bin days change next week\\, now Thursdays");
     expect(text).toContain("Couldn't confirm this week's collection");
     expect(text.match(/Bin days change/g)).toHaveLength(2); // the summary and its alarm, once
+  });
+});
+
+describe("upcomingFor (what the page shows right after sign-up)", () => {
+  function seeded(garden = false) {
+    const store = memoryTables();
+    store.subscriptions.push({ token: TOKEN, id: "abcd1234", uprn: "100120000855", ons_code: "E06000022", garden, created_at: "x" });
+    store.results.set("100120000855", {
+      uprn: "100120000855",
+      fetched_at: FETCHED,
+      last_attempt: FETCHED,
+      last_error: null,
+      consecutive_failures: 0,
+      collections: [...collections("2026-10-30"), { date: "2026-10-30", bin_name: GARDEN_BIN, stream: "garden" }] as never,
+    });
+    return store;
+  }
+  const upcoming = (store: ReturnType<typeof memoryTables>, today = "2026-10-26") => upcomingFor(TOKEN, { tables: store.tables, today });
+
+  it("shows the next collection days merged by day, in the same words as the calendar", () => {
+    const result = upcoming(seeded());
+    expect(result?.status).toBe("ready");
+    expect(result?.collections[0]).toEqual({ date: "2026-10-30", label: "rubbish + recycling + food", projected: false });
+  });
+
+  it("shows the same dates the calendar feed shows", () => {
+    const store = seeded();
+    const days = upcoming(store)?.collections.map((c) => c.date) ?? [];
+    const text = unfolded(feedFor(TOKEN, { tables: store.tables, now: NOW, today: "2026-10-26" }) as string);
+    for (const day of days) expect(text).toContain(`DTSTART;VALUE=DATE:${day.replaceAll("-", "")}`);
+    expect(days.length).toBeLessThanOrEqual(UPCOMING_DAYS);
+  });
+
+  it("leaves garden waste out unless the person has a garden bin", () => {
+    // Slough maps a garden bin; B&NES doesn't yet.
+    const slough = (garden: boolean) => {
+      const store = memoryTables();
+      store.subscriptions.push({ token: TOKEN, id: "abcd1234", uprn: "h-E06000039-SL11AA-1", ons_code: "E06000039", garden, created_at: "x" });
+      store.results.set("h-E06000039-SL11AA-1", {
+        uprn: "h-E06000039-SL11AA-1",
+        fetched_at: FETCHED,
+        last_attempt: FETCHED,
+        last_error: null,
+        consecutive_failures: 0,
+        collections: [{ date: "2026-10-30", bin_name: "Garden", stream: "garden" }] as never,
+      });
+      return upcoming(store);
+    };
+    expect(slough(false)?.collections).toEqual([]);
+    expect(slough(true)?.collections[0]).toMatchObject({ date: "2026-10-30", label: "garden" });
+  });
+
+  it("is pending until a fetch has happened, and failed once attempts have failed", () => {
+    const store = seeded();
+    store.results.clear();
+    expect(upcoming(store)).toEqual({ status: "pending", collections: [] });
+    store.results.set("100120000855", { uprn: "100120000855", fetched_at: null, last_attempt: FETCHED, last_error: "x", consecutive_failures: 1, collections: [] });
+    expect(upcoming(store)).toEqual({ status: "failed", collections: [] });
+  });
+
+  it("will not show dates that are too old to trust", () => {
+    expect(upcoming(seeded(), "2026-12-30")).toEqual({ status: "failed", collections: [] });
+  });
+
+  it("returns null for an unknown or malformed token", () => {
+    const store = seeded();
+    expect(upcomingFor("b".repeat(64), { tables: store.tables, today: "2026-10-26" })).toBeNull();
+    for (const bad of ["", "poc", "A".repeat(64), "a".repeat(63)]) expect(upcomingFor(bad, { tables: store.tables, today: "2026-10-26" })).toBeNull();
+  });
+
+  it("never includes the UPRN, the postcode or the token", () => {
+    const text = JSON.stringify(upcoming(seeded()));
+    expect(text).not.toContain("100120000855");
+    expect(text).not.toContain(TOKEN);
   });
 });

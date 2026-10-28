@@ -3,6 +3,7 @@
  * (addresses and results). Pure logic, so it can be tested without Apps Script.
  */
 
+import { upcomingFor } from "./feed";
 import { getCouncil } from "./registry";
 
 export const STREAMS = ["general", "recycling", "food", "garden"] as const;
@@ -86,6 +87,13 @@ export interface Deps {
   maxPerAddress?: number;
   /** The most different councils the waitlist will hold counts for. */
   maxWaitlistCouncils?: number;
+  /** Today in Europe/London, YYYY-MM-DD. */
+  todayIso?: () => string;
+  /**
+   * Asks for a fetch to run now, because a sign-up just added an address nobody has fetched yet. It must not carry the
+   * address (the workflow it starts is public) and must never throw: a sign-up works whether or not this does.
+   */
+  requestFetch?: () => void;
 }
 
 export const DEFAULT_MAX_SUBSCRIPTIONS = 5000;
@@ -218,7 +226,8 @@ function subscribe(request: Record<string, unknown>, deps: Deps): Reply {
 
   const withLock = deps.withLock ?? (<T>(work: () => T) => work());
   const { tables } = deps;
-  return withLock(() => {
+  let added = false;
+  const reply = withLock(() => {
     if (tables.countSubscriptions() >= (deps.maxSubscriptions ?? DEFAULT_MAX_SUBSCRIPTIONS)) return fail("full");
     if (tables.countSubscriptions(key) >= (deps.maxPerAddress ?? DEFAULT_MAX_PER_ADDRESS)) return fail("too many feeds for this address");
     if (!tables.addresses().some((address) => address.uprn === key)) {
@@ -226,6 +235,7 @@ function subscribe(request: Record<string, unknown>, deps: Deps): Reply {
       if (typeof postcode === "string") row.postcode = postcode;
       if (typeof house_number === "string") row.house_number = house_number;
       tables.addAddress(row);
+      added = true;
     }
     const token = deps.newToken?.() as string;
     tables.addSubscription({
@@ -238,6 +248,27 @@ function subscribe(request: Record<string, unknown>, deps: Deps): Reply {
     });
     return { ok: true, token } as Reply;
   });
+  // A new address has no dates yet, so ask for a fetch now instead of waiting for the next daily run.
+  if (added && reply.ok) {
+    try {
+      deps.requestFetch?.();
+    } catch {
+      // The sign-up already worked; the daily run will pick the address up.
+    }
+  }
+  return reply;
+}
+
+/**
+ * Public: the dates for a feed token, for the lookup page to show straight after sign-up. The token is the secret, the
+ * same as for the calendar feed, and the answer is the same dates the feed shows.
+ */
+function upcoming(request: Record<string, unknown>, deps: Deps): Reply {
+  const { token } = request;
+  if (typeof token !== "string") return fail("bad token");
+  const today = deps.todayIso?.() ?? new Date().toISOString().slice(0, 10);
+  const found = upcomingFor(token, { tables: deps.tables, today });
+  return found === null ? fail("not found") : { ok: true, ...found };
 }
 
 /**
@@ -263,6 +294,7 @@ export function handle(body: unknown, deps: Deps): Reply {
 
   if (request.action === "subscribe") return subscribe(request, deps);
   if (request.action === "join_waitlist") return joinWaitlist(request, deps);
+  if (request.action === "upcoming") return upcoming(request, deps);
 
   if (deps.secret === undefined || deps.secret === "") return fail("not configured");
   if (typeof request.secret !== "string" || !safeEqual(request.secret, deps.secret)) return fail("unauthorised");

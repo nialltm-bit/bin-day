@@ -29,14 +29,14 @@ export function subscribeBody(outcome: Ready, house: string, garden: boolean): R
   return { action: "subscribe", ons_code: outcome.ons_code, postcode: outcome.postcode, house_number: house, garden };
 }
 
-export type Reply = { ok: true; token?: string } | { ok: false; error: string };
+export type Reply = { ok: true; token?: string; data: Record<string, unknown> } | { ok: false; error: string };
 
 /** Posts to the script. Plain text, so the browser sends no pre-flight request the script can't answer. */
 export async function post(scriptUrl: string, body: Record<string, unknown>, fetchFn: typeof fetch = fetch): Promise<Reply> {
   try {
     const response = await fetchFn(scriptUrl, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) });
     const reply = (await response.json()) as { ok?: unknown; token?: unknown; error?: unknown };
-    if (reply.ok === true) return { ok: true, token: typeof reply.token === "string" ? reply.token : undefined };
+    if (reply.ok === true) return { ok: true, token: typeof reply.token === "string" ? reply.token : undefined, data: reply as Record<string, unknown> };
     return { ok: false, error: typeof reply.error === "string" ? reply.error : "unknown" };
   } catch {
     return { ok: false, error: "network" };
@@ -86,4 +86,72 @@ export function calendarLinks(scriptUrl: string, token: string): CalendarLinks |
     apple: feed.webcal,
     outlook: `https://outlook.live.com/calendar/0/addfromweb?url=${encodeURIComponent(feed.https)}&name=${encodeURIComponent("Bin Day")}`,
   };
+}
+
+export interface UpcomingDay {
+  date: string;
+  label: string;
+  projected: boolean;
+}
+
+export type UpcomingState =
+  | { status: "ready"; days: UpcomingDay[] }
+  | { status: "failed" }
+  /** Still waiting when we stopped asking. The calendar fills in on the next daily run. */
+  | { status: "slow" };
+
+function readDays(value: unknown): UpcomingDay[] | null {
+  if (!Array.isArray(value)) return null;
+  const days: UpcomingDay[] = [];
+  for (const item of value) {
+    const day = item as Partial<UpcomingDay> | null;
+    if (!day || typeof day.date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(day.date) || typeof day.label !== "string") return null;
+    days.push({ date: day.date, label: day.label, projected: day.projected === true });
+  }
+  return days;
+}
+
+export interface PollOptions {
+  fetch?: typeof fetch;
+  /** Waits between asks. Replaceable so tests don't wait. */
+  sleep?: (ms: number) => Promise<void>;
+  intervalMs?: number;
+  /** How many times to ask before giving up. */
+  attempts?: number;
+  /** Called with the number of the ask that is about to be made, from 1. */
+  onAsk?: (n: number) => void;
+}
+
+/**
+ * Asks the script for the dates until they are ready, the fetch has failed, or we have asked enough. A fetch started at
+ * sign-up usually finishes in a minute or two. Three network failures in a row stop it, so it can't spin.
+ */
+export async function pollUpcoming(scriptUrl: string, token: string, options: PollOptions = {}): Promise<UpcomingState> {
+  const sleep = options.sleep ?? ((ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)));
+  const interval = options.intervalMs ?? 5000;
+  const attempts = options.attempts ?? 36;
+  let networkFailures = 0;
+  for (let n = 1; n <= attempts; n++) {
+    options.onAsk?.(n);
+    const reply = await post(scriptUrl, { action: "upcoming", token }, options.fetch);
+    if (reply.ok) {
+      networkFailures = 0;
+      const status = reply.data.status;
+      if (status === "failed") return { status: "failed" };
+      const days = readDays(reply.data.collections);
+      if (status === "ready" && days) return { status: "ready", days };
+    } else if (reply.error === "network" && ++networkFailures >= 3) {
+      return { status: "slow" };
+    } else if (reply.error === "not found") {
+      return { status: "failed" };
+    }
+    if (n < attempts) await sleep(interval);
+  }
+  return { status: "slow" };
+}
+
+/** "Thu 29 Oct" from 2026-10-29. The date is read as a plain calendar day, never shifted by the viewer's time zone. */
+export function formatDay(isoDate: string): string {
+  const [y, m, d] = isoDate.split("-").map(Number);
+  return new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" }).format(new Date(Date.UTC(y, m - 1, d, 12)));
 }

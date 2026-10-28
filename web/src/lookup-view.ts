@@ -1,7 +1,7 @@
 /** The "Find your bin days" form: postcode, then (where we can help) the house, garden waste, and the button. */
 import { type CouncilEntry, type Outcome, lookup, messageFor } from "./coverage";
 import { el } from "./dom";
-import { type Ask, type Ready, calendarLinks, checkHouse, explain, post, subscribeBody } from "./signup";
+import { type Ask, type Ready, calendarLinks, checkHouse, explain, formatDay, pollUpcoming, post, subscribeBody, type UpcomingState } from "./signup";
 
 export interface LookupOptions {
   registry: CouncilEntry[];
@@ -9,6 +9,8 @@ export interface LookupOptions {
   scriptUrl?: string;
   fetch?: typeof fetch;
   canFindUprn?: boolean;
+  /** Replaceable so tests don't wait between asks for the dates. */
+  sleep?: (ms: number) => Promise<void>;
 }
 
 export function mountLookup(root: HTMLElement, options: LookupOptions): void {
@@ -149,19 +151,48 @@ export function mountLookup(root: HTMLElement, options: LookupOptions): void {
       result.replaceChildren(el("p", { class: "error", role: "alert" }, explain("unknown")));
       return;
     }
-    result.replaceChildren(done(links, outcome.name));
+    const dates = el("div", { class: "dates", "aria-live": "polite" }, el("p", { class: "note" }, `Getting your bin days from ${outcome.name}…`));
+    result.replaceChildren(done(links, outcome.name, dates));
     result.scrollIntoView?.({ block: "nearest" });
+    const state = await pollUpcoming(options.scriptUrl, reply.token, { fetch: fetchFn, sleep: options.sleep });
+    // The person may have started again while we waited; only write into the page they are still looking at.
+    if (dates.isConnected) dates.replaceChildren(...showDates(state, outcome.name));
   }
 }
 
-function done(links: ReturnType<typeof calendarLinks> & object, council: string): HTMLElement {
+function showDates(state: UpcomingState, council: string): HTMLElement[] {
+  if (state.status === "ready" && state.days.length > 0) {
+    const projected = state.days.some((day) => day.projected);
+    return [
+      el("h4", {}, "Your next collections"),
+      el("ul", { class: "days" }, ...state.days.map((day) => el("li", {}, el("strong", {}, formatDay(day.date)), `: ${day.label}${day.projected ? " (expected)" : ""}`))),
+      ...(projected ? [el("p", { class: "note" }, "Dates marked expected are worked out from the pattern and confirmed nearer the time.")] : []),
+    ];
+  }
+  if (state.status === "ready") {
+    return [el("p", {}, `${council} has no collections listed for you in the next few weeks. Your calendar will fill in if that changes.`)];
+  }
+  if (state.status === "failed") {
+    return [
+      el(
+        "p",
+        { class: "error", role: "alert" },
+        `We couldn't get bin days for that address from ${council}. Check what you typed (and your postcode), then try again. The link below won't show any dates.`,
+      ),
+    ];
+  }
+  return [el("p", {}, "This is taking longer than usual. You don't need to wait: your calendar will fill in within a day.")];
+}
+
+function done(links: ReturnType<typeof calendarLinks> & object, council: string, dates: HTMLElement): HTMLElement {
   const copy = el("input", { type: "text", readonly: "", value: links.https, "aria-label": "Your private calendar link", class: "copy" });
   copy.addEventListener("focus", () => copy.select());
   return el(
     "section",
     { class: "done" },
     el("h3", {}, "Your calendar link is ready"),
-    el("p", {}, `We fetch ${council}'s bin days overnight, so your calendar fills in within a day. After that it updates itself when collections move.`),
+    dates,
+    el("p", {}, `${council}'s bin days are checked every week, and your calendar updates itself when collections move.`),
     el(
       "p",
       { class: "buttons" },
