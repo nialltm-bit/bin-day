@@ -1,7 +1,7 @@
 name: Generate registry entries
 
 # Adds every council that probed cleanly (see batch-probe.yml) to registry/councils.json, and writes a report of what it
-# left out and why. Existing entries are never changed.
+# left out and why. Existing entries are never changed. Runs on the saved probe results.
 on:
   workflow_dispatch:
   push:
