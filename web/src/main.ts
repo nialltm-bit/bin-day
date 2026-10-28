@@ -1,9 +1,12 @@
 import "./style.css";
+import { addGoatCounter } from "./analytics";
 import councilData from "../../registry/councils.json";
 import type { CouncilEntry } from "./coverage";
 import { mountCoverage } from "./coverage-view";
 import { mountLookup } from "./lookup-view";
 import { statusMessage } from "./status";
+
+addGoatCounter(import.meta.env.VITE_GOATCOUNTER_URL);
 
 const status = document.getElementById("status");
 if (status) {

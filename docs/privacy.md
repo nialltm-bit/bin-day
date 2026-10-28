@@ -24,7 +24,18 @@ which they would expect, and which they can delete themselves.
 
 Not kept: name, email, phone, IP address (the script cannot read visitors' IP addresses), device identifiers. No
 cookies and no browser storage (checked in `web/src`: nothing uses `localStorage`, `sessionStorage` or
-`document.cookie`).
+`document.cookie`; the GoatCounter script below sets none either, by its own documentation).
+
+## Visit counting (GoatCounter)
+
+`web/src/analytics.ts` adds GoatCounter's script (`gc.zgo.at/count.js`) to the home page and the privacy page when the
+build is given an address: the deploy workflow uses `https://binday.goatcounter.com/count` unless the repository variable
+`GOATCOUNTER_URL` says otherwise (a single space there turns counting off); local builds have none, so no counting. It is skipped for browsers sending Do Not Track, and only a `*.goatcounter.com/count` address is accepted. It
+counts page, referrer, browser, screen size and country, not people. Basis: legitimate interests (knowing whether the
+site is used). The policy names GoatCounter and links its privacy policy. Check GoatCounter's own statements (no
+cookies, no stored IP addresses) still hold when you review the policy before launch. Nothing about an address, a
+postcode or a feed is sent to GoatCounter, and no page address carries the feed token today, so it can't leak through the
+referrer; do not add the feed link to any page URL.
 
 The feed token is 64 hex characters (256 bits) made from two random UUIDs, so it can't be guessed. The Sheet is
 private, and Actions logs never contain addresses, UPRNs, postcodes or tokens (see `store.md`, "Logs are public").
