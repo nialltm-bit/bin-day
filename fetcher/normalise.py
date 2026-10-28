@@ -34,10 +34,14 @@ def normalise(council: dict, response: object) -> list[Collection]:
             raise FetchError(f"bad date {item['collectionDate']!r} for {name!r}") from err
         stream = stream_for(council, name) or streams.stream_for(name)
         if stream is None:
+            if streams.is_ignored(name):
+                continue  # a marker or an occasional extra collection (batteries, textiles) that we don't remind about
             unmapped.add(name)
             continue
         collections.append(Collection(date=date, bin_name=name, stream=stream))
     if unmapped:
         raise UnmappedBinError("unmapped bin names: " + ", ".join(sorted(unmapped)))
+    if not collections:
+        raise FetchError("response has no collections we remind about")
     unique = {(c.date, c.bin_name): c for c in collections}  # a module that lists the same bin twice on a day gives one
     return sorted(unique.values(), key=lambda c: (c.date, c.stream, c.bin_name))

@@ -98,7 +98,8 @@ def run_one(council: dict, selenium_url: str | None, today: date) -> dict:
         # Only the kind of failure, never the text: upstream's error text can carry the request.
         kind = getattr(err, "kind", type(err).__name__)
         # A bin name the registry can't map is the council's own wording, not an address, so it is worth showing.
-        detail = f": {err}" if isinstance(err, UnmappedBinError) else ""
+        own_words = isinstance(err, UnmappedBinError) or type(err) is FetchError  # our own messages, never upstream's text
+        detail = f": {err}" if own_words else ""
         return {**result, "ok": False, "error": kind + detail, "bins": [], "flags": [f"did not fetch ({kind}{detail})"]}
     return {**result, "ok": True, **check_council(council, collections, today)}
 

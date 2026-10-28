@@ -19,6 +19,11 @@ STREAM_WORDS = (
 IGNORED_WORDS = ("transition", "batter", "textile", "electrical", "ahp", "hygiene")
 
 
+def is_ignored(bin_name: str) -> bool:
+    """True for a bin we deliberately don't remind about: a schedule marker or an occasional extra collection."""
+    return any(word in bin_name.lower() for word in IGNORED_WORDS)
+
+
 NON_RECYCLABLE = re.compile(r"non[\s-]?recycl", re.I)
 JOINER = re.compile(r"\s*(?:\+|&|/|,|\band\b)\s*", re.I)
 
