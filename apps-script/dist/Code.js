@@ -490,6 +490,47 @@
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 14 dates over 91 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: same house. No colours are set."
       },
       {
+        ons_code: "E07000071",
+        name: "Colchester",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "ColchesterCityCouncil",
+          url: "https://www.colchester.gov.uk/your-recycling-calendar"
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Food waste": {
+            stream: "food",
+            label: "Food waste"
+          },
+          Glass: {
+            stream: "recycling",
+            label: "Glass"
+          },
+          "Mixed recycling (paper/card/plastics/tins/cans)": {
+            stream: "recycling",
+            label: "Mixed recycling (paper/card/plastics/tins/cans)"
+          },
+          "Non-recyclable rubbish": {
+            stream: "recycling",
+            label: "Non-recyclable rubbish"
+          }
+        },
+        test_address: {
+          postcode: "CO2 8UN",
+          house_number: "29"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned a full schedule of 4 dates over 21 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
         ons_code: "E07000075",
         name: "Rochford",
         status: "supported",
@@ -608,6 +649,245 @@
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 4 dates over 42 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: error ValueError. No colours are set."
       },
       {
+        ons_code: "E07000200",
+        name: "Babergh",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "BaberghDistrictCouncil",
+          url: "https://www.babergh.gov.uk",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Food Waste Collection": {
+            stream: "food",
+            label: "Food Waste Collection"
+          },
+          "Garden Waste Collection (Brown Bin)": {
+            stream: "garden",
+            label: "Garden Waste Collection (Brown Bin)"
+          },
+          "Paper And Card Collection": {
+            stream: "recycling",
+            label: "Paper And Card Collection"
+          },
+          "Recycling Collection": {
+            stream: "recycling",
+            label: "Recycling Collection"
+          },
+          "Refuse Collection (General Rubbish)": {
+            stream: "general",
+            label: "Refuse Collection (General Rubbish)"
+          }
+        },
+        test_address: {
+          postcode: "CO6 4RA",
+          house_number: "Little Changes"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned a full schedule of 4 dates over 21 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E07000203",
+        name: "Mid Suffolk",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "MidSuffolkDistrictCouncil",
+          url: "https://www.midsuffolk.gov.uk/check-your-collection-day",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Food Waste Collection": {
+            stream: "food",
+            label: "Food Waste Collection"
+          },
+          "Garden Waste Collection (Brown Bin)": {
+            stream: "garden",
+            label: "Garden Waste Collection (Brown Bin)"
+          },
+          "Paper And Card Collection": {
+            stream: "recycling",
+            label: "Paper And Card Collection"
+          },
+          "Recycling Collection": {
+            stream: "recycling",
+            label: "Recycling Collection"
+          },
+          "Refuse Collection (General Rubbish)": {
+            stream: "general",
+            label: "Refuse Collection (General Rubbish)"
+          }
+        },
+        test_address: {
+          postcode: "IP23 8EF",
+          house_number: "91"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned a full schedule of 4 dates over 21 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E07000214",
+        name: "Surrey Heath",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "SurreyHeathBoroughCouncil",
+          url: "https://asjwsw-wrpsurreyheathmunicipal-live.whitespacews.com/",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          "Food waste": {
+            stream: "food",
+            label: "Food waste"
+          },
+          Recycling: {
+            stream: "recycling",
+            label: "Recycling"
+          },
+          Rubbish: {
+            stream: "general",
+            label: "Rubbish"
+          }
+        },
+        test_address: {
+          postcode: "GU20 6PN",
+          house_number: "36"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 5 dates over 28 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E08000013",
+        name: "St. Helens",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "StHelensBC",
+          url: "https://www.sthelens.gov.uk/",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "General non-recyclable waste": {
+            stream: "recycling",
+            label: "General non-recyclable waste"
+          },
+          Recycling: {
+            stream: "recycling",
+            label: "Recycling"
+          }
+        },
+        test_address: {
+          postcode: "L34 2GA",
+          house_number: "15"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned a full schedule of 17 dates over 112 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E08000015",
+        name: "Wirral",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "WirralCouncil",
+          url: "https://www.wirral.gov.uk"
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          "Green non-recyclable": {
+            stream: "recycling",
+            label: "Green non-recyclable"
+          },
+          "Grey food waste": {
+            stream: "food",
+            label: "Grey food waste"
+          },
+          "Grey recycling": {
+            stream: "recycling",
+            label: "Grey recycling"
+          },
+          "Small grey": {
+            stream: "general",
+            label: "Small grey"
+          }
+        },
+        test_address: {
+          postcode: "CH43 1SX",
+          house_number: "1"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 27 dates over 182 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E08000017",
+        name: "Doncaster",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "DoncasterCouncil",
+          url: "https://doncaster-wasterecycling.oncreate.app/w/webpage/bin-query",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          Recycling: {
+            stream: "recycling",
+            label: "Recycling"
+          },
+          Refuse: {
+            stream: "general",
+            label: "Refuse"
+          }
+        },
+        test_address: {
+          postcode: "DN6 9EU",
+          house_number: "The Laurels Nursing Home"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned a full schedule of 8 dates over 98 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
         ons_code: "E08000021",
         name: "Newcastle upon Tyne",
         status: "supported",
@@ -688,6 +968,90 @@
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 9 dates over 56 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
       },
       {
+        ons_code: "E09000012",
+        name: "Hackney",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "HackneyCouncil",
+          url: "https://www.hackney.gov.uk",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          "Food Caddy (Small)": {
+            stream: "food",
+            label: "Food Caddy (Small)"
+          },
+          "Recycling Sack": {
+            stream: "recycling",
+            label: "Recycling Sack"
+          },
+          "Wheeled Bin (180ltr)": {
+            stream: "general",
+            label: "Wheeled Bin (180ltr)"
+          }
+        },
+        test_address: {
+          postcode: "N16 9AS",
+          house_number: "101"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 108 dates over 770 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "S12000008",
+        name: "East Ayrshire",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "EastAyrshireCouncil",
+          url: "https://www.east-ayrshire.gov.uk",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "first_line",
+        needs_selenium: false,
+        bin_types: {
+          "Garden Waste": {
+            stream: "garden",
+            label: "Garden Waste"
+          },
+          "Glass+Food": {
+            stream: "food",
+            label: "Glass+Food"
+          },
+          "Paper/Card+Food": {
+            stream: "food",
+            label: "Paper/Card+Food"
+          },
+          "Plastic/Cans+Food": {
+            stream: "food",
+            label: "Plastic/Cans+Food"
+          },
+          "Trolley+Food": {
+            stream: "food",
+            label: "Trolley+Food"
+          }
+        },
+        test_address: {
+          postcode: "KA1 3RB",
+          house_number: "57 Whatriggs Road"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 3 dates over 31 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: error ValueError. No colours are set."
+      },
+      {
         ons_code: "S12000010",
         name: "East Lothian",
         status: "supported",
@@ -758,6 +1122,52 @@
         },
         last_verified: "2026-10-28",
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 45 dates over 63 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "S12000030",
+        name: "Stirling",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "StirlingCouncil",
+          url: "https://www.stirling.gov.uk/bins-and-recycling/bin-collection-dates-search/",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "first_line",
+        needs_selenium: false,
+        bin_types: {
+          "Food and Garden": {
+            stream: "food",
+            label: "Food and Garden"
+          },
+          Glass: {
+            stream: "recycling",
+            label: "Glass"
+          },
+          "Non-recyclable Waste": {
+            stream: "recycling",
+            label: "Non-recyclable Waste"
+          },
+          "Paper & Cardboard": {
+            stream: "recycling",
+            label: "Paper & Cardboard"
+          },
+          "Plastic, cans and cartons": {
+            stream: "recycling",
+            label: "Plastic, cans and cartons"
+          }
+        },
+        test_address: {
+          postcode: "FK9 4QA",
+          house_number: "5, SUNNYLAW ROAD, BRIDGE OF ALLAN, STIRLING, FK9 4QA"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 35 dates over 58 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: error ValueError. No colours are set."
       },
       {
         ons_code: "W06000018",

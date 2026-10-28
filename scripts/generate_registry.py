@@ -21,8 +21,13 @@ STREAM_WORDS = (
     ("food", ("food",)),
     ("garden", ("garden", "brown", "green waste")),
     ("recycling", ("recycl", "paper", "card", "glass", "plastic", "mixed", "dry", "blue")),
-    ("general", ("general", "refuse", "rubbish", "residual", "landfill", "black", "grey", "waste")),
+    ("general", ("general", "refuse", "rubbish", "residual", "landfill", "black", "grey", "waste", "domestic", "wheeled bin")),
 )
+
+# Not a household bin we remind about (a schedule marker or an occasional extra collection): left out of bin_types, which
+# the fetcher already treats as "not mapped". Colour-only names such as "Green" stay unmapped on purpose: green is the
+# garden bin at some councils and the glass or recycling bin at others, and guessing would put the wrong reminder out.
+IGNORED_WORDS = ("transition", "batter", "textile", "electrical", "ahp", "hygiene")
 
 
 def stream_for(bin_name: str) -> str | None:
@@ -48,10 +53,14 @@ def build_entry(row: dict, upstream: dict, code: str, today: str) -> tuple[dict 
     """A registry entry for one probed council, or (None, reason) if it can't be built completely."""
     bin_types = {}
     for name in row["bins"]:
+        if any(word in name.lower() for word in IGNORED_WORDS):
+            continue
         stream = stream_for(name)
         if stream is None:
             return None, f"unrecognised bin name {name!r}"
         bin_types[name] = {"stream": stream, "label": name}
+    if not bin_types:
+        return None, "no bin we can map"
     source = {"type": "ukbcd", "module": row["module"], "url": upstream["url"]}
     if upstream.get("skip_get_url") is True:
         source["skip_get_url"] = True
