@@ -2338,6 +2338,11 @@
   var DAY = /^\d{4}-\d{2}-\d{2}$/;
   var STREAMS2 = ["general", "recycling", "food", "garden"];
   var CHANGE_KINDS = ["expected_shift", "round_change"];
+  var MAX_MESSAGE_CHARS = 2e3;
+  var MIN_MESSAGE_CHARS = 5;
+  var MAX_REPLY_TO_CHARS = 200;
+  var MAX_MESSAGES = 500;
+  var MESSAGE_LIFE_DAYS = 365;
   var DEFAULT_MAX_SUBSCRIPTIONS = 5e3;
   var DEFAULT_MAX_PER_ADDRESS = 20;
   var DEFAULT_MAX_WAITLIST_COUNCILS = 500;
@@ -2481,6 +2486,34 @@
       return { ok: true };
     });
   }
+  function cleanText(value) {
+    if (typeof value !== "string") return null;
+    return value.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, "").replace(/\r\n?/g, "\n").trim();
+  }
+  function contact(request, deps) {
+    var _a;
+    if (typeof request.website === "string" && request.website.trim() !== "") return { ok: true };
+    const message = cleanText(request.message);
+    if (message === null || message.length < MIN_MESSAGE_CHARS) return fail("message too short");
+    if (message.length > MAX_MESSAGE_CHARS) return fail("message too long");
+    let replyTo;
+    if (request.reply_to !== void 0 && request.reply_to !== "") {
+      const cleaned = cleanText(request.reply_to);
+      if (cleaned === null || cleaned.length > MAX_REPLY_TO_CHARS || cleaned.includes("\n")) return fail("bad reply_to");
+      if (cleaned !== "") replyTo = cleaned;
+    }
+    const withLock = (_a = deps.withLock) != null ? _a : ((work) => work());
+    const { tables } = deps;
+    return withLock(() => {
+      var _a2, _b;
+      if (tables.countMessages() >= MAX_MESSAGES) return fail("full");
+      if (deps.contactAllowed && !deps.contactAllowed()) return fail("busy");
+      const row = { at: (_b = (_a2 = deps.nowIso) == null ? void 0 : _a2.call(deps)) != null ? _b : (/* @__PURE__ */ new Date()).toISOString(), message };
+      if (replyTo !== void 0) row.reply_to = replyTo;
+      tables.addMessage(row);
+      return { ok: true };
+    });
+  }
   function unsubscribe(request, deps) {
     var _a;
     const { token } = request;
@@ -2502,6 +2535,7 @@
     if (request.action === "join_waitlist") return joinWaitlist(request, deps);
     if (request.action === "upcoming") return upcoming(request, deps);
     if (request.action === "unsubscribe") return unsubscribe(request, deps);
+    if (request.action === "contact") return contact(request, deps);
     if (deps.secret === void 0 || deps.secret === "") return fail("not configured");
     if (typeof request.secret !== "string" || !safeEqual(request.secret, deps.secret)) return fail("unauthorised");
     const withLock = (_a = deps.withLock) != null ? _a : ((work) => work());
@@ -2578,7 +2612,8 @@
               addresses += 1;
             }
           }
-          return { ok: true, expired, addresses_deleted: addresses };
+          const messages = tables.deleteMessagesBefore(addDays(today, -MESSAGE_LIFE_DAYS));
+          return { ok: true, expired, addresses_deleted: addresses, messages_deleted: messages };
         });
       }
       case "save_failure": {
@@ -2611,6 +2646,7 @@
   var ADDRESS_HEADERS = ["uprn", "ons_code", "postcode", "house_number", "created_at"];
   var RESULT_HEADERS = ["uprn", "fetched_at", "last_attempt", "last_error", "consecutive_failures", "collections_json"];
   var SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at", "last_used"];
+  var MESSAGE_HEADERS = ["at", "message", "reply_to"];
   var WAITLIST_HEADERS = ["ons_code", "count", "first_at", "last_at"];
   var RECENT_CHANGE_ROWS = 500;
   var CHANGE_HEADERS = ["at", "uprn", "ons_code", "bin_name", "kind", "before", "after", "note"];
@@ -2772,6 +2808,28 @@
       const cell = sheet.getRange(rowNumber, SUBSCRIPTION_HEADERS.length);
       if (cellText(cell.getValue()) !== today) cell.setValue(today);
     },
+    addMessage(row) {
+      var _a;
+      const sheet = table("messages", MESSAGE_HEADERS, [1, 2, 3]);
+      sheet.appendRow([row.at, row.message, (_a = row.reply_to) != null ? _a : ""]);
+    },
+    countMessages() {
+      return Math.max(0, table("messages", MESSAGE_HEADERS, [1, 2, 3]).getLastRow() - 1);
+    },
+    deleteMessagesBefore(day) {
+      const sheet = table("messages", MESSAGE_HEADERS, [1, 2, 3]);
+      const last = sheet.getLastRow();
+      if (last < 2) return 0;
+      const sent = sheet.getRange(2, 1, last - 1, 1).getValues();
+      let removed = 0;
+      for (let i = sent.length - 1; i >= 0; i--) {
+        if (cellText(sent[i][0], true).slice(0, 10) < day) {
+          sheet.deleteRow(i + 2);
+          removed += 1;
+        }
+      }
+      return removed;
+    },
     hasAddress(uprn) {
       return findRow(table("addresses", ADDRESS_HEADERS), uprn) !== null;
     },
@@ -2881,6 +2939,15 @@
     }
   }
   var MAX_FETCH_REQUESTS_PER_HOUR = 20;
+  var MAX_CONTACT_MESSAGES_PER_HOUR = 20;
+  function contactAllowed() {
+    const properties = PropertiesService.getScriptProperties();
+    const key = `contact_messages_${Utilities.formatDate(/* @__PURE__ */ new Date(), "UTC", "yyyyMMddHH")}`;
+    const used = Number(properties.getProperty(key)) || 0;
+    if (used >= MAX_CONTACT_MESSAGES_PER_HOUR) return false;
+    properties.setProperty(key, String(used + 1));
+    return true;
+  }
   function dispatchFetch() {
     const properties = PropertiesService.getScriptProperties();
     const token = properties.getProperty("GITHUB_TOKEN");
@@ -2935,6 +3002,7 @@
           nowIso: () => (/* @__PURE__ */ new Date()).toISOString(),
           todayIso: () => Utilities.formatDate(/* @__PURE__ */ new Date(), "Europe/London", "yyyy-MM-dd"),
           requestFetch,
+          contactAllowed,
           maxSubscriptions: max > 0 ? max : void 0
         })
       );

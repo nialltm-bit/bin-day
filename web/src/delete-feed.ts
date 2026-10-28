@@ -45,7 +45,7 @@ export function mountDeleteFeed(root: HTMLElement, options: DeleteOptions): void
   const form = el("form", { novalidate: "" }, el("label", { for: "feed-link" }, "Your calendar link"), el("div", { class: "row" }, link, button));
   root.replaceChildren(form, message);
   if (!options.scriptUrl) {
-    message.replaceChildren(el("p", { class: "note" }, "Deleting from this page isn't switched on yet. Please ask us using the contact details at the bottom of this page."));
+    message.replaceChildren(el("p", { class: "note" }, "Deleting from this page isn't switched on yet. Please use the contact form at the bottom of this page."));
     button.disabled = true;
     return;
   }

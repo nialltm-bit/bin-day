@@ -1,8 +1,9 @@
-import type { AddressRow, ChangeRow, CollectionRow, ResultRow, SubscriptionRow, Tables } from "./service";
+import type { AddressRow, ChangeRow, CollectionRow, MessageRow, ResultRow, SubscriptionRow, Tables } from "./service";
 
 const ADDRESS_HEADERS = ["uprn", "ons_code", "postcode", "house_number", "created_at"];
 const RESULT_HEADERS = ["uprn", "fetched_at", "last_attempt", "last_error", "consecutive_failures", "collections_json"];
 const SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at", "last_used"];
+const MESSAGE_HEADERS = ["at", "message", "reply_to"];
 const WAITLIST_HEADERS = ["ons_code", "count", "first_at", "last_at"];
 const RECENT_CHANGE_ROWS = 500;
 const CHANGE_HEADERS = ["at", "uprn", "ons_code", "bin_name", "kind", "before", "after", "note"];
@@ -188,6 +189,31 @@ export const sheetTables: Tables = {
     if (rowNumber === null) return;
     const cell = sheet.getRange(rowNumber, SUBSCRIPTION_HEADERS.length);
     if (cellText(cell.getValue()) !== today) cell.setValue(today); // at most one write a day, however often a calendar app asks
+  },
+
+  addMessage(row: MessageRow): void {
+    // Text columns, so a message that starts with "=" is kept as words and never run as a formula.
+    const sheet = table("messages", MESSAGE_HEADERS, [1, 2, 3]);
+    sheet.appendRow([row.at, row.message, row.reply_to ?? ""]);
+  },
+
+  countMessages(): number {
+    return Math.max(0, table("messages", MESSAGE_HEADERS, [1, 2, 3]).getLastRow() - 1);
+  },
+
+  deleteMessagesBefore(day: string): number {
+    const sheet = table("messages", MESSAGE_HEADERS, [1, 2, 3]);
+    const last = sheet.getLastRow();
+    if (last < 2) return 0;
+    const sent = sheet.getRange(2, 1, last - 1, 1).getValues();
+    let removed = 0;
+    for (let i = sent.length - 1; i >= 0; i--) {
+      if (cellText(sent[i][0], true).slice(0, 10) < day) {
+        sheet.deleteRow(i + 2);
+        removed += 1;
+      }
+    }
+    return removed;
   },
 
   hasAddress(uprn: string): boolean {

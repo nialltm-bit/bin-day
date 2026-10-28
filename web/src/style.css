@@ -180,3 +180,30 @@ footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line);
 #lookup details.guide summary { cursor: pointer; font-weight: 600; padding: 0.5rem 0; }
 #lookup details.guide ol { padding-left: 1.25rem; margin: 0.25rem 0 0.5rem; }
 #lookup details.guide li { margin: 0.4rem 0; }
+
+#contact-form form { display: grid; gap: 0.5rem; }
+#contact-form textarea,
+#contact-form input[type="text"] {
+  box-sizing: border-box;
+  width: 100%;
+  font: inherit;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+}
+#contact-form button {
+  justify-self: start;
+  font: inherit;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--text);
+  border-radius: 8px;
+  background: var(--text);
+  color: var(--bg);
+  cursor: pointer;
+}
+#contact-form button:disabled { opacity: 0.6; cursor: default; }
+#contact-form .trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+#contact-form .error { color: #b3261e; }
+@media (prefers-color-scheme: dark) { #contact-form .error { color: #f2b8b5; } }

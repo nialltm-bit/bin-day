@@ -145,8 +145,8 @@ def test_payloads_are_json_serialisable():
 
 
 def test_expire_feeds_asks_the_script_and_reports_the_counts():
-    service = FakeService({"expire_feeds": {"ok": True, "expired": 3, "addresses_deleted": 2}})
-    assert store_with(service).expire_feeds(365) == (3, 2)
+    service = FakeService({"expire_feeds": {"ok": True, "expired": 3, "addresses_deleted": 2, "messages_deleted": 4}})
+    assert store_with(service).expire_feeds(365) == (3, 2, 4)
     assert service.requests[0][1] == {"secret": SECRET, "action": "expire_feeds", "days": 365}
 
 
@@ -154,7 +154,7 @@ def test_the_expire_command_prints_only_counts(monkeypatch, capsys):
     service = FakeService({"expire_feeds": {"ok": True, "expired": 1, "addresses_deleted": 1}})
     monkeypatch.setattr(SheetStore, "from_env", classmethod(lambda cls: store_with(service)))
     assert main(["expire", "--sheet"]) == 0
-    assert json.loads(capsys.readouterr().out) == {"expired_feeds": 1, "addresses_deleted": 1, "days": 365}
+    assert json.loads(capsys.readouterr().out) == {"expired_feeds": 1, "addresses_deleted": 1, "messages_deleted": 0, "days": 365}
 
 
 def test_the_expire_command_waits_politely_for_an_older_script(monkeypatch, capsys):

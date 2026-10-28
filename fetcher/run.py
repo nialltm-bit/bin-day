@@ -157,13 +157,13 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     if args.command == "expire":
         try:
-            feeds, addresses = store.expire_feeds(args.days)
+            feeds, addresses, messages = store.expire_feeds(args.days)
         except StoreError as err:
             if "unknown action" in str(err):  # an older script: nothing to expire with until it is redeployed
                 print(json.dumps({"expire": "not available until the script is redeployed"}))
                 return 0
             raise
-        print(json.dumps({"expired_feeds": feeds, "addresses_deleted": addresses, "days": args.days}))
+        print(json.dumps({"expired_feeds": feeds, "addresses_deleted": addresses, "messages_deleted": messages, "days": args.days}))
         return 0
     if args.command == "add":
         store.add_address(Address(uprn=args.uprn, ons_code=args.ons, postcode=args.postcode, house_number=args.house_number))
