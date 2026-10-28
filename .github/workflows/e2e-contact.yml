@@ -1,0 +1,51 @@
+name: End-to-end contact form test
+
+# Checks the contact form on the live site: the privacy page has it, a valid message is accepted, a message that is too short
+# or too long or has a bad reply-to is refused with the right reason, and a bot-style submission is answered as success.
+# It sends ONE real message, labelled as a test, which then sits in the Sheet's messages tab: delete that row. The bot-style
+# message ("TRAP TEST") must NOT appear in the Sheet; if it does, the trap field isn't working. The script address is read
+# from the deployed page and is masked in this public log.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Send test messages
+        run: |
+          set -u
+          BASE="https://${GITHUB_REPOSITORY_OWNER}.github.io/bin-day"
+          fail() { echo "FAIL: $1"; exit 1; }
+          curl -sSL -m 30 -o privacy.html "$BASE/privacy.html" || fail "privacy page not reachable"
+          grep -q 'id="contact-form"' privacy.html && echo "privacy page has the contact form" || fail "privacy page has no contact form"
+          curl -sSL -m 30 -o index.html "$BASE/"
+          JS=$(grep -o 'assets/main-[^"]*\.js' index.html | head -1)
+          curl -sSL -m 30 -o main.js "$BASE/$JS"
+          SCRIPT=$(grep -o 'https://script.google.com/macros/s/[A-Za-z0-9_-]*/exec' main.js | head -1)
+          [ -n "$SCRIPT" ] || fail "no script address built into the page"
+          echo "::add-mask::$SCRIPT"
+
+          call() { curl -sSL -m 90 -H 'Content-Type: text/plain;charset=utf-8' -d "$1" "$SCRIPT"; }
+          field() { jq -r --arg k "$1" '(.[$k] // "") | tostring' 2>/dev/null || echo "<not json>"; }
+          expect() { # name, reply, field, wanted
+            got=$(printf '%s' "$2" | field "$3")
+            [ "$got" = "$4" ] && echo "ok: $1" || fail "$1: wanted $3=$4, got '$got' (has the new Code.js been deployed?)"
+          }
+
+          LONG=$(head -c 2100 /dev/zero | tr '\0' 'x')
+          R=$(call '{"action":"contact","message":"Automated test of the contact form. Please delete this row.","reply_to":"test@example.invalid","website":""}')
+          expect "a valid message is accepted" "$R" ok true
+          R=$(call '{"action":"contact","message":"hi"}')
+          expect "a message that is too short is refused" "$R" error "message too short"
+          R=$(call "{\"action\":\"contact\",\"message\":\"$LONG\"}")
+          expect "a message that is too long is refused" "$R" error "message too long"
+          R=$(call '{"action":"contact","message":"Automated test, bad reply-to.","reply_to":"a\nb"}')
+          expect "a reply-to with a line break is refused" "$R" error "bad reply_to"
+          R=$(call '{"action":"contact","message":"TRAP TEST: this must not appear in the Sheet","website":"http://spam.example"}')
+          expect "a trap-field submission is answered as success" "$R" ok true
+          echo "done. In the Sheet, messages tab: delete the one 'Automated test' row, and check no 'TRAP TEST' row exists."
