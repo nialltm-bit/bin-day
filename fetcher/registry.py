@@ -15,6 +15,8 @@ SOURCE_TYPES = ("ukbcd", "api", "ical")
 SCHEDULES = ("next_only", "full")  # what a fetch returns: only the next date per bin, or a full schedule
 EVERY_WEEKS = (1, 2, 3, 4)
 INPUTS = ("uprn", "postcode", "house_number")
+# What a person types for house_number: just a number or name, or the whole first line of the address ("12 High Street").
+HOUSE_INPUTS = ("number_or_name", "first_line")
 STREAMS = ("general", "recycling", "food", "garden")
 
 ONS_CODE = re.compile(r"^[ENSW][0-9]{8}$")
@@ -28,6 +30,7 @@ COUNCIL_KEYS = {
     "schedule",
     "source",
     "inputs",
+    "house_input",
     "needs_selenium",
     "bin_types",
     "test_address",
@@ -114,6 +117,11 @@ def _check_council(index: int, council: object, seen: set[str], problems: list[s
     inputs = council.get("inputs", [])
     if not isinstance(inputs, list) or any(i not in INPUTS for i in inputs) or len(set(inputs)) != len(inputs):
         problems.append(f"{where}: inputs must be a list of unique values from {', '.join(INPUTS)}")
+    if "house_input" in council:
+        if council["house_input"] not in HOUSE_INPUTS:
+            problems.append(f"{where}: house_input must be one of {', '.join(HOUSE_INPUTS)}")
+        elif isinstance(inputs, list) and "house_number" not in inputs:
+            problems.append(f"{where}: house_input only applies to councils that take a house_number")
     if "test_address" in council:
         test_address = council["test_address"]
         if not isinstance(test_address, dict) or any(k not in INPUTS for k in test_address):

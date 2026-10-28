@@ -17,10 +17,11 @@ export interface Council {
   status: "supported" | "unsupported" | "broken";
   schedule?: "next_only" | "full";
   inputs?: string[];
+  house_input?: "number_or_name" | "first_line";
   bin_types?: Record<string, BinType>;
 }
 
-const councils = (councilData as { councils: Council[] }).councils;
+const councils = (councilData as unknown as { councils: Council[] }).councils;
 
 export function getCouncil(onsCode: string): Council | undefined {
   return councils.find((council) => council.ons_code === onsCode);

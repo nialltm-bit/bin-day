@@ -1,0 +1,28 @@
+name: Spike InstaMaps address to UPRN
+
+on:
+  push:
+    branches: [claude/nifty-faraday-obdwan]
+    paths:
+      - .github/workflows/spike-instamaps.yml
+      - scripts/spike_instamaps.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  match:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch the upstream test addresses
+        run: curl -sSL -m 60 -o input.json https://raw.githubusercontent.com/robbrad/UKBinCollectionData/0.173.5/uk_bin_collection/tests/input.json
+      - name: Compare InstaMaps UPRNs with the known ones
+        env:
+          INSTAMAPS_API_KEY: ${{ secrets.INSTAMAPS_API_KEY }}
+        run: python scripts/spike_instamaps.py input.json out

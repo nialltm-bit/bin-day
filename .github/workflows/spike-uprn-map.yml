@@ -1,0 +1,36 @@
+name: Spike UPRN map data
+
+on:
+  push:
+    branches: [claude/nifty-faraday-obdwan]
+    paths:
+      - .github/workflows/spike-uprn-map.yml
+      - scripts/spike_uprn_map.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ITEM: 4198f5e0d6654d8a9661d0c15d4f912b
+      LAD: E06000022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyproj
+      - name: Download the ONS UPRN Directory
+        run: curl -sSL -m 900 -o onsud.zip "https://www.arcgis.com/sharing/rest/content/items/$ITEM/data"
+      - name: Cut out one council
+        run: python scripts/spike_uprn_map.py onsud.zip "$LAD" out
+      - name: Keep the result for a day, for inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: homes
+          path: out/homes.json
+          retention-days: 1

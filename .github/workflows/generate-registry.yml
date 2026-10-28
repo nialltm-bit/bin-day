@@ -1,0 +1,41 @@
+name: Generate registry entries
+
+# Adds every council that probed cleanly (see batch-probe.yml) to registry/councils.json, and writes a report of what it
+# left out and why. Existing entries are never changed.
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/nifty-faraday-obdwan]
+    paths:
+      - .github/workflows/generate-registry.yml
+      - scripts/generate_registry.py
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: curl -fsSL -o "$RUNNER_TEMP/input.json" https://raw.githubusercontent.com/robbrad/UKBinCollectionData/0.173.5/uk_bin_collection/tests/input.json
+      - name: Generate
+        env:
+          PYTHONPATH: .
+        run: python scripts/generate_registry.py "$RUNNER_TEMP/input.json" docs/spike-results/batch-probe.json registry/councils.json docs/spike-results/generated-registry-report.md
+      - name: Check it
+        run: python -m fetcher.registry
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add registry/councils.json docs/spike-results/generated-registry-report.md
+          git commit -m "Generate registry entries for councils that probed cleanly [skip ci]" || exit 0
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"

@@ -338,3 +338,124 @@ describe("save_changes", () => {
     });
   });
 });
+
+describe("join_waitlist (public)", () => {
+  const join = (body: Record<string, unknown> = {}, d: Deps = { ...deps, nowIso: () => NOW }) =>
+    handle({ action: "join_waitlist", ons_code: "E06000001", ...body }, d);
+
+  it("needs no secret and counts one person for the council", () => {
+    expect(join()).toEqual({ ok: true });
+    expect(join()).toEqual({ ok: true });
+    expect(store.waitlist.get("E06000001")).toEqual({ count: 2, first_at: NOW, last_at: NOW });
+  });
+
+  it("keeps only the council: a postcode, email or anything else sent along is dropped", () => {
+    join({ postcode: "BA1 5AW", email: "a@b.co", house_number: "1", uprn: "100120000855" });
+    expect(JSON.stringify([...store.waitlist])).not.toMatch(/BA1|a@b|100120000855/);
+    expect(store.addresses).toEqual([]);
+    expect(store.subscriptions).toEqual([]);
+  });
+
+  it("answers the same for a council we support and one we don't, so it can't be used to list what we cover", () => {
+    expect(join({ ons_code: "E06000022" })).toEqual(join({ ons_code: "E06000001" }));
+  });
+
+  it("rejects codes that are not council codes", () => {
+    for (const bad of ["", "nope", "E0600000", "e06000001", "=E06000001", 7, null]) {
+      expect(join({ ons_code: bad }), String(bad)).toEqual({ ok: false, error: "bad ons_code" });
+    }
+    expect(store.waitlist.size).toBe(0);
+  });
+
+  it("stops adding new councils at the cap but keeps counting the ones it has", () => {
+    const capped = { ...deps, nowIso: () => NOW, maxWaitlistCouncils: 2 };
+    join({ ons_code: "E06000001" }, capped);
+    join({ ons_code: "E06000002" }, capped);
+    expect(join({ ons_code: "E06000003" }, capped)).toEqual({ ok: true });
+    join({ ons_code: "E06000001" }, capped);
+    expect([...store.waitlist.keys()]).toEqual(["E06000001", "E06000002"]);
+    expect(store.waitlist.get("E06000001")?.count).toBe(2);
+  });
+});
+
+describe("councils that take a postcode and house number (no UPRN)", () => {
+  const NEWCASTLE = "E08000021";
+  const publicDeps = (): Deps => ({ ...deps, newToken: () => "t".repeat(64), newId: () => "idid", nowIso: () => NOW });
+  const subscribe = (body: Record<string, unknown> = {}, d: Deps = publicDeps()) =>
+    handle({ action: "subscribe", ons_code: NEWCASTLE, postcode: "NE1 1AA", house_number: "12 High Street", ...body }, d);
+
+  it("subscribes with no UPRN, and stores the address under a key made from what was typed", () => {
+    expect(subscribe()).toEqual({ ok: true, token: "t".repeat(64) });
+    expect(store.addresses).toEqual([{ uprn: "h-E08000021-NE11AA-12-high-street", ons_code: NEWCASTLE, postcode: "NE1 1AA", house_number: "12 High Street" }]);
+    expect(store.subscriptions[0].uprn).toBe("h-E08000021-NE11AA-12-high-street");
+  });
+
+  it("gives the same key however the address is typed, so it is fetched once", () => {
+    subscribe();
+    subscribe({ postcode: "ne11aa", house_number: "12  HIGH street " });
+    subscribe({ postcode: "NE1  1AA" });
+    expect(store.addresses).toHaveLength(1);
+    expect(store.subscriptions).toHaveLength(3);
+  });
+
+  it("keeps different houses apart, including names and flats", () => {
+    subscribe({ house_number: "12 High Street" });
+    subscribe({ house_number: "12A High Street" });
+    subscribe({ house_number: "Flat 3, Rose House" });
+    expect(store.addresses.map((a) => a.uprn)).toEqual([
+      "h-E08000021-NE11AA-12-high-street",
+      "h-E08000021-NE11AA-12a-high-street",
+      "h-E08000021-NE11AA-flat-3-rose-house",
+    ]);
+  });
+
+  it("ignores a UPRN sent along, because the council doesn't use one", () => {
+    subscribe({ uprn: "100120000855" });
+    expect(store.addresses[0].uprn).toBe("h-E08000021-NE11AA-12-high-street");
+  });
+
+  it("needs both a postcode and a house number", () => {
+    expect(handle({ action: "subscribe", ons_code: NEWCASTLE, house_number: "12" }, publicDeps())).toEqual({ ok: false, error: "postcode needed" });
+    expect(handle({ action: "subscribe", ons_code: NEWCASTLE, postcode: "NE1 1AA" }, publicDeps())).toEqual({ ok: false, error: "house_number needed" });
+  });
+
+  it("refuses a bare number, because this council's system needs the first line of the address", () => {
+    for (const bare of ["12", "12A", "Rose", "12,"]) {
+      expect(subscribe({ house_number: bare }), bare).toEqual({ ok: false, error: "first line needed" });
+    }
+    expect(store.addresses).toEqual([]);
+  });
+
+  it("refuses a postcode too short to be one, and a house number that starts with a symbol", () => {
+    expect(subscribe({ postcode: "AB1" })).toEqual({ ok: false, error: "bad address" });
+    expect(subscribe({ postcode: "." })).toEqual({ ok: false, error: "bad postcode" });
+    expect(subscribe({ house_number: "..." })).toEqual({ ok: false, error: "bad house_number" });
+    expect(store.addresses).toEqual([]);
+  });
+
+  it("makes keys that are safe in a Sheet and the same size whatever is typed", () => {
+    expect(subscribe({ house_number: `12 ${"x".repeat(90)}` }).ok).toBe(true);
+    for (const row of store.addresses) {
+      expect(row.uprn).toMatch(/^h-[A-Za-z0-9-]+$/);
+      expect(row.uprn.length).toBeLessThan(80);
+    }
+  });
+
+  it("lets the fetcher list, save and read results under that key", () => {
+    subscribe();
+    const key = "h-E08000021-NE11AA-12-high-street";
+    expect(call({ action: "addresses" })).toMatchObject({ ok: true, addresses: [{ uprn: key, postcode: "NE1 1AA", house_number: "12 High Street" }] });
+    expect(call({ action: "save_success", uprn: key, now: NOW, collections: COLLECTIONS })).toEqual({ ok: true });
+    expect(call({ action: "get_result", uprn: key })).toMatchObject({ ok: true, result: { uprn: key, consecutive_failures: 0 } });
+  });
+
+  it("still rejects ids that are neither a UPRN nor one of these keys", () => {
+    for (const bad of ["h-E08000021-NE11AA-", "=1+1", "h-e08000021-NE11AA-12", "12 3", "h-E08000021-NE11AA-UPPER"]) {
+      expect(call({ action: "get_result", uprn: bad }), bad).toEqual({ ok: false, error: "bad uprn" });
+    }
+  });
+
+  it("leaves a UPRN council needing a UPRN", () => {
+    expect(handle({ action: "subscribe", ons_code: "E06000022" }, publicDeps())).toEqual({ ok: false, error: "bad uprn" });
+  });
+});

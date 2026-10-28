@@ -64,6 +64,11 @@ export interface Tables {
   countSubscriptions(uprn?: string): number;
   addSubscription(row: SubscriptionRow): void;
   findSubscription(token: string): SubscriptionRow | null;
+  /**
+   * Adds one to a council's count; all we keep is the code, a count and two times. Does nothing for a new council
+   * once `maxCouncils` different councils are already counted.
+   */
+  bumpWaitlist(onsCode: string, at: string, maxCouncils: number): void;
 }
 
 export interface Deps {
@@ -79,14 +84,24 @@ export interface Deps {
   /** The most subscriptions allowed in total, and for one address. */
   maxSubscriptions?: number;
   maxPerAddress?: number;
+  /** The most different councils the waitlist will hold counts for. */
+  maxWaitlistCouncils?: number;
 }
 
 export const DEFAULT_MAX_SUBSCRIPTIONS = 5000;
 export const DEFAULT_MAX_PER_ADDRESS = 20;
+// There are fewer than 400 councils in Great Britain and Northern Ireland, so this only stops junk codes piling up.
+export const DEFAULT_MAX_WAITLIST_COUNCILS = 500;
 
 export type Reply = { ok: true; [key: string]: unknown } | { ok: false; error: string };
 
 const UPRN = /^[0-9]{1,12}$/;
+/**
+ * What the store keys an address by. A council that needs a UPRN uses the UPRN. A council that takes a postcode and a
+ * house number has no UPRN, so it uses a key made from those (see addressKey). Both start with a digit or a letter,
+ * so a key can never be read as a formula in the Sheet.
+ */
+const ADDRESS_ID = /^(?:[0-9]{1,12}|h-[ENSW][0-9]{8}-[A-Z0-9]{5,7}-[a-z0-9-]{1,40})$/;
 const ONS_CODE = /^[ENSW][0-9]{8}$/;
 const TIMESTAMP = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+(Z|[+-][0-9]{2}:[0-9]{2})$/;
 const DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
@@ -95,6 +110,23 @@ const MAX_TEXT = 500;
 // only plain characters are allowed, and never a leading symbol.
 const POSTCODE = /^[A-Za-z0-9][A-Za-z0-9 ]{1,9}$/;
 const HOUSE_NUMBER = /^[A-Za-z0-9][A-Za-z0-9 ,'./-]{0,99}$/;
+
+/**
+ * The store key for an address with no UPRN: the council, the postcode with no space, and the house number or name in
+ * lower case with anything that isn't a letter or digit turned into one dash. The same address typed two ways ("12 ",
+ * "12") gets the same key, so it is fetched once however many people subscribe. Null if there is nothing usable.
+ */
+export function addressKey(onsCode: string, postcode: string, houseNumber: string): string | null {
+  const compact = postcode.replace(/\s+/g, "").toUpperCase();
+  const house = houseNumber
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 40)
+    .replace(/-+$/g, "");
+  const key = `h-${onsCode}-${compact}-${house}`;
+  return ADDRESS_ID.test(key) ? key : null;
+}
 
 function fail(error: string): Reply {
   return { ok: false, error };
@@ -156,7 +188,6 @@ function validCollections(value: unknown): CollectionRow[] | null {
  */
 function subscribe(request: Record<string, unknown>, deps: Deps): Reply {
   const { uprn, ons_code, postcode, house_number, garden } = request;
-  if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
   if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
   if (postcode !== undefined && !(typeof postcode === "string" && POSTCODE.test(postcode))) return fail("bad postcode");
   if (house_number !== undefined && !(typeof house_number === "string" && HOUSE_NUMBER.test(house_number))) return fail("bad house_number");
@@ -168,15 +199,30 @@ function subscribe(request: Record<string, unknown>, deps: Deps): Reply {
     if (input === "postcode" && typeof postcode !== "string") return fail("postcode needed");
     if (input === "house_number" && typeof house_number !== "string") return fail("house_number needed");
   }
+  // A council that matches on the whole first line of the address can't use a bare number: it would find nothing, or
+  // the wrong house. So the first line needs at least a number or name and a street.
+  if (council.house_input === "first_line" && typeof house_number === "string" && house_number.trim().split(/[\s,]+/).filter(Boolean).length < 2) {
+    return fail("first line needed");
+  }
+  // The key this address is stored under: its UPRN where the council needs one, otherwise one made from what was typed.
+  let key: string;
+  if ((council.inputs ?? []).includes("uprn")) {
+    if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+    key = uprn;
+  } else {
+    const made = typeof postcode === "string" && typeof house_number === "string" ? addressKey(ons_code, postcode, house_number) : null;
+    if (made === null) return fail("bad address");
+    key = made;
+  }
   if (!deps.newToken || !deps.newId) return fail("not configured");
 
   const withLock = deps.withLock ?? (<T>(work: () => T) => work());
   const { tables } = deps;
   return withLock(() => {
     if (tables.countSubscriptions() >= (deps.maxSubscriptions ?? DEFAULT_MAX_SUBSCRIPTIONS)) return fail("full");
-    if (tables.countSubscriptions(uprn) >= (deps.maxPerAddress ?? DEFAULT_MAX_PER_ADDRESS)) return fail("too many feeds for this address");
-    if (!tables.addresses().some((address) => address.uprn === uprn)) {
-      const row: AddressRow = { uprn, ons_code };
+    if (tables.countSubscriptions(key) >= (deps.maxPerAddress ?? DEFAULT_MAX_PER_ADDRESS)) return fail("too many feeds for this address");
+    if (!tables.addresses().some((address) => address.uprn === key)) {
+      const row: AddressRow = { uprn: key, ons_code };
       if (typeof postcode === "string") row.postcode = postcode;
       if (typeof house_number === "string") row.house_number = house_number;
       tables.addAddress(row);
@@ -185,7 +231,7 @@ function subscribe(request: Record<string, unknown>, deps: Deps): Reply {
     tables.addSubscription({
       token,
       id: deps.newId?.() as string,
-      uprn,
+      uprn: key,
       ons_code,
       garden: garden === true,
       created_at: deps.nowIso?.() ?? new Date().toISOString(),
@@ -194,11 +240,29 @@ function subscribe(request: Record<string, unknown>, deps: Deps): Reply {
   });
 }
 
+/**
+ * Public: counts one person's interest in a council we don't cover yet. Only the council code is kept, so there is
+ * nothing to leak and nothing to tell anyone later. The count shows which council to add next; it can't be proof
+ * of demand, because anyone can send it.
+ */
+function joinWaitlist(request: Record<string, unknown>, deps: Deps): Reply {
+  const { ons_code } = request;
+  if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
+  const withLock = deps.withLock ?? (<T>(work: () => T) => work());
+  const { tables } = deps;
+  return withLock(() => {
+    // The reply is the same either way, so the page can't be used to find out which councils are listed.
+    tables.bumpWaitlist(ons_code, deps.nowIso?.() ?? new Date().toISOString(), deps.maxWaitlistCouncils ?? DEFAULT_MAX_WAITLIST_COUNCILS);
+    return { ok: true } as Reply;
+  });
+}
+
 export function handle(body: unknown, deps: Deps): Reply {
   if (typeof body !== "object" || body === null) return fail("bad request");
   const request = body as Record<string, unknown>;
 
   if (request.action === "subscribe") return subscribe(request, deps);
+  if (request.action === "join_waitlist") return joinWaitlist(request, deps);
 
   if (deps.secret === undefined || deps.secret === "") return fail("not configured");
   if (typeof request.secret !== "string" || !safeEqual(request.secret, deps.secret)) return fail("unauthorised");
@@ -217,7 +281,7 @@ export function handle(body: unknown, deps: Deps): Reply {
 
     case "add_address": {
       const { uprn, ons_code, postcode, house_number } = request;
-      if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+      if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
       if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
       if (postcode !== undefined && !(typeof postcode === "string" && POSTCODE.test(postcode))) return fail("bad postcode");
       if (house_number !== undefined && !(typeof house_number === "string" && HOUSE_NUMBER.test(house_number))) return fail("bad house_number");
@@ -232,13 +296,13 @@ export function handle(body: unknown, deps: Deps): Reply {
 
     case "get_result": {
       const { uprn } = request;
-      if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+      if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
       return { ok: true, result: tables.getResult(uprn) };
     }
 
     case "save_changes": {
       const { uprn, ons_code, now } = request;
-      if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+      if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
       if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
       if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
       const rows = validChanges(request.changes, uprn, ons_code, now);
@@ -250,7 +314,7 @@ export function handle(body: unknown, deps: Deps): Reply {
     case "save_success": {
       const { uprn, now } = request;
       const collections = validCollections(request.collections);
-      if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+      if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
       if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
       if (collections === null) return fail("bad collections");
       withLock(() =>
@@ -262,7 +326,7 @@ export function handle(body: unknown, deps: Deps): Reply {
     case "save_failure": {
       const { uprn, now } = request;
       const error = text(request.error);
-      if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+      if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
       if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
       if (error === null) return fail("bad error");
       withLock(() => {

@@ -292,6 +292,44 @@
   var councils_default = {
     councils: [
       {
+        ons_code: "E06000003",
+        name: "Redcar and Cleveland",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "RedcarandClevelandCouncil",
+          url: "https://www.redcar-cleveland.gov.uk",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          FOOD: {
+            stream: "food",
+            label: "FOOD"
+          },
+          RECYCLING: {
+            stream: "recycling",
+            label: "RECYCLING"
+          },
+          REFUSE: {
+            stream: "general",
+            label: "REFUSE"
+          }
+        },
+        test_address: {
+          postcode: "TS10 2RE",
+          house_number: "11"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 5 dates over 28 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
         ons_code: "E06000022",
         name: "Bath and North East Somerset",
         status: "supported",
@@ -336,6 +374,428 @@
         },
         last_verified: "2026-10-26",
         notes: "Plain HTTP, needs only a UPRN. The API returns only the next collection date for each bin, so every_weeks says how often each bin is emptied. Frequencies are from the council's own pages and published calendar (checked 2026-10-26). The Monday A calendar for November 2025 to November 2026 (app.bathnes.gov.uk/WebForms/waste/attachments/) shows food bin, green box and blue bag collected every Monday, and the rubbish bin on alternate Mondays, so the same bins are emptied every 1 and 2 weeks. The council's pages say the same: rubbish every other week (https://www.bathnes.gov.uk/rubbish), food waste weekly (https://www.bathnes.gov.uk/food-waste), green recycling box weekly (https://www.bathnes.gov.uk/green-recycling-box), blue recycling bag weekly (https://www.bathnes.gov.uk/blue-recycling-bag). Garden waste is fortnightly on the same calendar, with a winter gap, but its bin name has not been seen yet, so it is not mapped. The frequencies were also confirmed by the project owner on 2026-10-26. Calendars exist per round (for example Monday A, Friday B). Only Monday A has been read so far; the other rounds are assumed to follow the same frequencies and should be checked against one more calendar."
+      },
+      {
+        ons_code: "E06000036",
+        name: "Bracknell Forest",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "BracknellForestCouncil",
+          url: "https://selfservice.mybfc.bracknell-forest.gov.uk/w/webpage/waste-collection-days",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          Food: {
+            stream: "food",
+            label: "Food"
+          },
+          "General waste": {
+            stream: "general",
+            label: "General waste"
+          },
+          Recycling: {
+            stream: "recycling",
+            label: "Recycling"
+          }
+        },
+        test_address: {
+          postcode: "GU47 9BS",
+          house_number: "57"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 3 dates over 42 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E06000039",
+        name: "Slough",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "SloughBoroughCouncil",
+          url: "https://waste.slough.gov.uk/PublicDashboard",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          Garden: {
+            stream: "garden",
+            label: "Garden"
+          },
+          Recycling: {
+            stream: "recycling",
+            label: "Recycling"
+          },
+          Waste: {
+            stream: "general",
+            label: "Waste"
+          }
+        },
+        test_address: {
+          postcode: "SL2 2EW",
+          house_number: "149"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 7 dates over 84 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E07000037",
+        name: "High Peak",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "HighPeakCouncil",
+          url: "https://bins.highpeak.gov.uk/PublicDashboard",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          Food: {
+            stream: "food",
+            label: "Food"
+          },
+          Recycling: {
+            stream: "recycling",
+            label: "Recycling"
+          },
+          Rubbish: {
+            stream: "general",
+            label: "Rubbish"
+          }
+        },
+        test_address: {
+          postcode: "SK13 8BX",
+          house_number: "9 Ellison Street, Glossop"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 14 dates over 91 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: same house. No colours are set."
+      },
+      {
+        ons_code: "E07000075",
+        name: "Rochford",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "RochfordCouncil",
+          url: "https://www.rochford.gov.uk/bins-and-collections",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          "Garden Waste (Green Bin)": {
+            stream: "garden",
+            label: "Garden Waste (Green Bin)"
+          },
+          "Non-recyclables (Purple Lid)": {
+            stream: "recycling",
+            label: "Non-recyclables (Purple Lid)"
+          },
+          "Recyclables (Black Bin)": {
+            stream: "recycling",
+            label: "Recyclables (Black Bin)"
+          }
+        },
+        test_address: {
+          postcode: "SS4 1AS",
+          house_number: "88"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 11 dates over 112 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E07000109",
+        name: "Gravesham",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "GraveshamBoroughCouncil",
+          url: "https://my.gravesham.gov.uk",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          "FOOD BIN": {
+            stream: "food",
+            label: "FOOD BIN"
+          },
+          "GARDEN 240L": {
+            stream: "garden",
+            label: "GARDEN 240L"
+          },
+          "RECYCLING 240L": {
+            stream: "recycling",
+            label: "RECYCLING 240L"
+          },
+          "REFUSE 180L": {
+            stream: "general",
+            label: "REFUSE 180L"
+          }
+        },
+        test_address: {
+          postcode: "DA13 9DF",
+          house_number: "2"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 8 dates over 21 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E07000171",
+        name: "Bassetlaw",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "BassetlawDistrictCouncil",
+          url: "https://www.bassetlaw.gov.uk",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "first_line",
+        needs_selenium: false,
+        bin_types: {
+          "Black Glass Recycling Bin": {
+            stream: "recycling",
+            label: "Black Glass Recycling Bin"
+          },
+          "Blue Recycling Bin": {
+            stream: "recycling",
+            label: "Blue Recycling Bin"
+          },
+          "Green Household Waste Bin": {
+            stream: "general",
+            label: "Green Household Waste Bin"
+          }
+        },
+        test_address: {
+          postcode: "DN22 6JD",
+          house_number: "2 Albert Road"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 4 dates over 42 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: error ValueError. No colours are set."
+      },
+      {
+        ons_code: "E08000021",
+        name: "Newcastle upon Tyne",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "NewcastleCityCouncil",
+          url: "https://new.newcastle.gov.uk/recycling-waste/check-your-bin-collection-day",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "first_line",
+        needs_selenium: false,
+        bin_types: {
+          "General Waste": {
+            stream: "general",
+            label: "General waste"
+          },
+          Recycling: {
+            stream: "recycling",
+            label: "Recycling"
+          }
+        },
+        test_address: {
+          postcode: "NE3 4XE",
+          house_number: "1 Northumberland Avenue"
+        },
+        last_verified: "2026-10-28",
+        notes: `Plain HTTP, no browser (it uses the ReCollect API, and upstream passes -s to skip fetching the page). Takes a postcode and a house number (no UPRN). On 2026-10-28 the module returned 8 entries: General Waste and Recycling, each every 14 days for about seven weeks, so this is a full schedule and no every_weeks is set. Passed upstream's integration suite (FRE-263). Only two bin names have been seen. Newcastle also runs a paid garden waste service, but this module did not return a garden bin for the test address, so garden waste is not mapped yet and the garden question has no effect here. Bin colours and the council's own naming have not been checked against its website, so only neutral labels are set. On 2026-10-28 a bare house number ("1") found no address for the test postcode, while the first line of the address (house number and street) worked, so house_input is first_line. The module ignores the postcode when it is given a text address, and when a postcode search finds addresses but none starts with the text it falls back to the first one listed, so a typo can return another house's dates. See docs/coverage.md.`
+      },
+      {
+        ons_code: "E09000005",
+        name: "Brent",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "BrentCouncil",
+          url: "https://recyclingservices.brent.gov.uk/waste",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          "Food waste collection": {
+            stream: "food",
+            label: "Food waste collection"
+          },
+          "Garden waste collection": {
+            stream: "garden",
+            label: "Garden waste collection"
+          },
+          "Paper and cardboard (blue sacks) collection": {
+            stream: "recycling",
+            label: "Paper and cardboard (blue sacks) collection"
+          },
+          "Recycling collection": {
+            stream: "recycling",
+            label: "Recycling collection"
+          },
+          "Rubbish collection": {
+            stream: "general",
+            label: "Rubbish collection"
+          }
+        },
+        test_address: {
+          postcode: "HA3 0QU",
+          house_number: "25"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 9 dates over 56 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "S12000010",
+        name: "East Lothian",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "EastLothianCouncil",
+          url: "https://eastlothian.gov.uk",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          "Food waste and recycling": {
+            stream: "food",
+            label: "Food waste and recycling"
+          },
+          "Non recyclable waste": {
+            stream: "recycling",
+            label: "Non recyclable waste"
+          }
+        },
+        test_address: {
+          postcode: "EH21 6QA",
+          house_number: "Flat 1"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 31 dates over 210 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "S12000013",
+        name: "Comhairle nan Eilean Siar",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "CneSiarCouncil",
+          url: "https://www.cne-siar.gov.uk",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          "Glass (Green Bin)": {
+            stream: "recycling",
+            label: "Glass (Green Bin)"
+          },
+          "Non-Recyclable Waste (Grey Bin)": {
+            stream: "recycling",
+            label: "Non-Recyclable Waste (Grey Bin)"
+          },
+          "Organic Food & Garden Waste / Mixed Recycling (Blue Bin)": {
+            stream: "food",
+            label: "Organic Food & Garden Waste / Mixed Recycling (Blue Bin)"
+          }
+        },
+        test_address: {
+          postcode: "HS1 2BJ",
+          house_number: "1"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 45 dates over 63 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "W06000018",
+        name: "Caerphilly County Borough",
+        status: "supported",
+        schedule: "full",
+        source: {
+          type: "ukbcd",
+          module: "CaerphillyCountyBoroughCouncil",
+          url: "https://www.caerphilly.gov.uk",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          "Food & Garden": {
+            stream: "food",
+            label: "Food & Garden"
+          },
+          Recycling: {
+            stream: "recycling",
+            label: "Recycling"
+          },
+          Refuse: {
+            stream: "general",
+            label: "Refuse"
+          }
+        },
+        test_address: {
+          postcode: "CF83 1EP",
+          house_number: "1"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 8 dates over 49 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
       }
     ]
   };
@@ -497,13 +957,21 @@
   var CHANGE_KINDS = ["expected_shift", "round_change"];
   var DEFAULT_MAX_SUBSCRIPTIONS = 5e3;
   var DEFAULT_MAX_PER_ADDRESS = 20;
+  var DEFAULT_MAX_WAITLIST_COUNCILS = 500;
   var UPRN = /^[0-9]{1,12}$/;
+  var ADDRESS_ID = /^(?:[0-9]{1,12}|h-[ENSW][0-9]{8}-[A-Z0-9]{5,7}-[a-z0-9-]{1,40})$/;
   var ONS_CODE = /^[ENSW][0-9]{8}$/;
   var TIMESTAMP = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+(Z|[+-][0-9]{2}:[0-9]{2})$/;
   var DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
   var MAX_TEXT = 500;
   var POSTCODE = /^[A-Za-z0-9][A-Za-z0-9 ]{1,9}$/;
   var HOUSE_NUMBER = /^[A-Za-z0-9][A-Za-z0-9 ,'./-]{0,99}$/;
+  function addressKey(onsCode, postcode, houseNumber) {
+    const compact = postcode.replace(/\s+/g, "").toUpperCase();
+    const house = houseNumber.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40).replace(/-+$/g, "");
+    const key = `h-${onsCode}-${compact}-${house}`;
+    return ADDRESS_ID.test(key) ? key : null;
+  }
   function fail(error) {
     return { ok: false, error };
   }
@@ -553,7 +1021,6 @@
   }
   function subscribe(request, deps) {
     const { uprn, ons_code, postcode, house_number, garden } = request;
-    if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
     if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
     if (postcode !== void 0 && !(typeof postcode === "string" && POSTCODE.test(postcode))) return fail("bad postcode");
     if (house_number !== void 0 && !(typeof house_number === "string" && HOUSE_NUMBER.test(house_number))) return fail("bad house_number");
@@ -564,14 +1031,26 @@
       if (input === "postcode" && typeof postcode !== "string") return fail("postcode needed");
       if (input === "house_number" && typeof house_number !== "string") return fail("house_number needed");
     }
+    if (council.house_input === "first_line" && typeof house_number === "string" && house_number.trim().split(/[\s,]+/).filter(Boolean).length < 2) {
+      return fail("first line needed");
+    }
+    let key;
+    if ((council.inputs ?? []).includes("uprn")) {
+      if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+      key = uprn;
+    } else {
+      const made = typeof postcode === "string" && typeof house_number === "string" ? addressKey(ons_code, postcode, house_number) : null;
+      if (made === null) return fail("bad address");
+      key = made;
+    }
     if (!deps.newToken || !deps.newId) return fail("not configured");
     const withLock = deps.withLock ?? ((work) => work());
     const { tables } = deps;
     return withLock(() => {
       if (tables.countSubscriptions() >= (deps.maxSubscriptions ?? DEFAULT_MAX_SUBSCRIPTIONS)) return fail("full");
-      if (tables.countSubscriptions(uprn) >= (deps.maxPerAddress ?? DEFAULT_MAX_PER_ADDRESS)) return fail("too many feeds for this address");
-      if (!tables.addresses().some((address) => address.uprn === uprn)) {
-        const row = { uprn, ons_code };
+      if (tables.countSubscriptions(key) >= (deps.maxPerAddress ?? DEFAULT_MAX_PER_ADDRESS)) return fail("too many feeds for this address");
+      if (!tables.addresses().some((address) => address.uprn === key)) {
+        const row = { uprn: key, ons_code };
         if (typeof postcode === "string") row.postcode = postcode;
         if (typeof house_number === "string") row.house_number = house_number;
         tables.addAddress(row);
@@ -580,7 +1059,7 @@
       tables.addSubscription({
         token,
         id: deps.newId?.(),
-        uprn,
+        uprn: key,
         ons_code,
         garden: garden === true,
         created_at: deps.nowIso?.() ?? (/* @__PURE__ */ new Date()).toISOString()
@@ -588,10 +1067,21 @@
       return { ok: true, token };
     });
   }
+  function joinWaitlist(request, deps) {
+    const { ons_code } = request;
+    if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
+    const withLock = deps.withLock ?? ((work) => work());
+    const { tables } = deps;
+    return withLock(() => {
+      tables.bumpWaitlist(ons_code, deps.nowIso?.() ?? (/* @__PURE__ */ new Date()).toISOString(), deps.maxWaitlistCouncils ?? DEFAULT_MAX_WAITLIST_COUNCILS);
+      return { ok: true };
+    });
+  }
   function handle(body, deps) {
     if (typeof body !== "object" || body === null) return fail("bad request");
     const request = body;
     if (request.action === "subscribe") return subscribe(request, deps);
+    if (request.action === "join_waitlist") return joinWaitlist(request, deps);
     if (deps.secret === void 0 || deps.secret === "") return fail("not configured");
     if (typeof request.secret !== "string" || !safeEqual(request.secret, deps.secret)) return fail("unauthorised");
     const withLock = deps.withLock ?? ((work) => work());
@@ -606,7 +1096,7 @@
       }
       case "add_address": {
         const { uprn, ons_code, postcode, house_number } = request;
-        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
         if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
         if (postcode !== void 0 && !(typeof postcode === "string" && POSTCODE.test(postcode))) return fail("bad postcode");
         if (house_number !== void 0 && !(typeof house_number === "string" && HOUSE_NUMBER.test(house_number))) return fail("bad house_number");
@@ -620,12 +1110,12 @@
       }
       case "get_result": {
         const { uprn } = request;
-        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
         return { ok: true, result: tables.getResult(uprn) };
       }
       case "save_changes": {
         const { uprn, ons_code, now } = request;
-        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
         if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
         if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
         const rows2 = validChanges(request.changes, uprn, ons_code, now);
@@ -636,7 +1126,7 @@
       case "save_success": {
         const { uprn, now } = request;
         const collections = validCollections(request.collections);
-        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
         if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
         if (collections === null) return fail("bad collections");
         withLock(
@@ -647,7 +1137,7 @@
       case "save_failure": {
         const { uprn, now } = request;
         const error = text(request.error);
-        if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
+        if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
         if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
         if (error === null) return fail("bad error");
         withLock(() => {
@@ -672,6 +1162,7 @@
   var ADDRESS_HEADERS = ["uprn", "ons_code", "postcode", "house_number", "created_at"];
   var RESULT_HEADERS = ["uprn", "fetched_at", "last_attempt", "last_error", "consecutive_failures", "collections_json"];
   var SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at"];
+  var WAITLIST_HEADERS = ["ons_code", "count", "first_at", "last_at"];
   var RECENT_CHANGE_ROWS = 500;
   var CHANGE_HEADERS = ["at", "uprn", "ons_code", "bin_name", "kind", "before", "after", "note"];
   function table(name, headers, textColumns = [1]) {
@@ -779,6 +1270,16 @@
       if (rowNumber === null) return null;
       const [, id, uprn, onsCode, garden, createdAt] = sheet.getRange(rowNumber, 1, 1, SUBSCRIPTION_HEADERS.length).getValues()[0];
       return { token, id: String(id), uprn: String(uprn), ons_code: String(onsCode), garden: garden === "yes", created_at: String(createdAt) };
+    },
+    bumpWaitlist(onsCode, at, maxCouncils) {
+      const sheet = table("waitlist", WAITLIST_HEADERS, [1, 3, 4]);
+      const rowNumber = findRow(sheet, onsCode);
+      if (rowNumber !== null) {
+        const count = Number(sheet.getRange(rowNumber, 2).getValue()) || 0;
+        sheet.getRange(rowNumber, 2, 1, 3).setValues([[count + 1, sheet.getRange(rowNumber, 3).getValue(), at]]);
+      } else if (sheet.getLastRow() - 1 < maxCouncils) {
+        sheet.appendRow([onsCode, 1, at, at]);
+      }
     }
   };
 

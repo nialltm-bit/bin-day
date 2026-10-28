@@ -8,7 +8,7 @@ Enter your postcode, pick your address, say whether you have a garden waste bin,
 
 ## How it will work
 
-1. **Postcode to address.** A postcode lookup returns the addresses at that postcode, each with its UPRN (Unique Property Reference Number). UPRN is the identifier most council bin systems are keyed on.
+1. **Postcode and house number.** There is no free, live way to list the addresses at a postcode (see [docs/spike-address-lookup.md](docs/spike-address-lookup.md)), so the page asks for a postcode and a house number or name. The council's own system does the matching, for the councils that accept that. Councils that need a UPRN join when there is a free way to find it.
 2. **Address to council.** We work out which council collects bins at that address.
 3. **Council to collection dates.** Each council has its own system, so each needs its own integration. We build on [UKBinCollectionData](https://github.com/robbrad/UKBinCollectionData), an open-source project with scrapers for hundreds of UK councils.
 4. **Dates to calendar.** Each user gets a private calendar subscription URL for Google, Apple or Outlook. Same-day collections are merged into one event, such as "Bins: recycling + food". Each event carries its own reminder for the evening before, so no email is needed.
@@ -16,10 +16,11 @@ Enter your postcode, pick your address, say whether you have a garden waste bin,
 
 ## Decisions so far
 
-- **Nationwide, launched council by council.** People in councils we don't cover yet can join a waitlist. The waitlist tells us which council to build next.
+- **Nationwide, launched council by council.** People in councils we don't cover yet can add their council to a count. The count tells us which council to build next.
 - **Web first.** A native app comes later, if the data shows push notifications or a home screen widget are worth it.
 - **Calendar subscription, not one-off events.** Changes flow through without the user doing anything.
 - **Night-before reminders live in the calendar.** Each event has an alarm for Apple Calendar and Outlook. Google ignores alarms in subscribed feeds, so Google users turn on notifications for the subscribed calendar once, and setup includes a short guide to doing that. We don't add a second event for everyone to work around Google.
+- **Where we can't help, we say so.** If a council isn't covered, or we can't yet find addresses in it, the page says so plainly, links to the official find-your-council page and lets the person add their council to a count. See [docs/coverage.md](docs/coverage.md).
 - **No email in v1.** We send no email and store no email addresses. A person picks an address and gets a feed URL, and we store only the address identifier and a random feed token. The waitlist records the council only, so we can't tell people when it is added.
 - **Optional email sign-up, off at launch.** An opt-in for occasional updates about Bin Day and other things we build is built behind a single feature flag that is off by default. With the flag off, nothing is shown or collected. Switching it on reverses the decision above and needs the email consent work in FRE-285 first.
 - **One page, no accounts.** Postcode, address, garden waste yes or no, and a button. Results show the next collections and the subscribe buttons. Moving house means looking up again.

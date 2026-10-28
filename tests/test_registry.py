@@ -7,7 +7,9 @@ from fetcher import registry
 
 
 def valid_entry():
-    return json.loads(json.dumps(json.loads(registry.REGISTRY_PATH.read_text())["councils"][0]))
+    """B&NES, a next_only council with frequencies, picked by code so the order of the registry doesn't matter."""
+    councils = json.loads(registry.REGISTRY_PATH.read_text())["councils"]
+    return copy.deepcopy(next(c for c in councils if c["ons_code"] == "E06000022"))
 
 
 def problems_for(*entries):
@@ -86,6 +88,8 @@ def test_load_raises_on_an_invalid_file(tmp_path):
         (lambda e: e["bin_types"]["Green Recycling Box"].update(every_weeks=True), "every_weeks must be one of 1, 2, 3, 4"),
         (lambda e: e["bin_types"]["Green Recycling Box"].update(every_weeks=1.5), "every_weeks must be one of 1, 2, 3, 4"),
         (lambda e: e.update(typo_field=1), "unknown key 'typo_field'"),
+        (lambda e: e.update(house_input="street"), "house_input must be one of"),
+        (lambda e: e.update(house_input="first_line"), "house_input only applies to councils that take a house_number"),
         (lambda e: e.update(last_verified="yesterday"), "last_verified must be a date"),
         (lambda e: e.update(min_interval_seconds=0), "min_interval_seconds must be a positive number"),
         (lambda e: e.update(min_interval_seconds="10"), "min_interval_seconds must be a positive number"),
@@ -147,3 +151,11 @@ def test_bathnes_is_next_only_with_each_bins_frequency():
 
 def test_every_weeks_for_an_unknown_bin_is_none():
     assert registry.every_weeks(registry.load()["E06000022"], "Mystery Bin") is None
+
+
+def test_newcastle_needs_the_first_line_of_the_address():
+    councils = registry.load()
+    assert councils["E08000021"]["inputs"] == ["postcode", "house_number"]
+    assert councils["E08000021"]["house_input"] == "first_line"
+    assert councils["E08000021"]["schedule"] == "full"
+    assert councils["E08000021"]["needs_selenium"] is False

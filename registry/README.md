@@ -15,6 +15,7 @@
 | `source.url` | The collection URL (for `ukbcd`, the URL argument the module is given). Must be https. |
 | `source.skip_get_url` | For `ukbcd`: pass `-s`, as in upstream's `tests/input.json`. |
 | `inputs` | What the source needs: any of `uprn`, `postcode`, `house_number`. |
+| `house_input` | Optional, only for councils that take a `house_number`. `number_or_name` (the default) means a house number or name is enough. `first_line` means the module needs the whole first line of the address ("12 High Street"), because a bare number finds nothing. The page asks for what this says. |
 | `needs_selenium` | `true` if the module drives a browser. Only `ukbcd` sources can. |
 | `bin_types` | Maps each of the council's own bin names to a waste `stream` (`general`, `recycling`, `food`, `garden`) with an optional `label` and `colour` to show people, and `every_weeks` (1, 2, 3 or 4): how often the council empties that bin. `every_weeks` is required for `next_only` councils, so the feed and refresh can work out later dates, and must not be set for `full` ones. |
 | `test_address` | A known-good address (every required input) for health checks. |
