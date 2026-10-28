@@ -9,6 +9,7 @@ import { FEED_TOKEN, upcomingFor } from "./feed";
 /** A feed nobody has asked for in this many days is deleted, with its address if it was the last feed on it. */
 export const DEFAULT_FEED_LIFE_DAYS = 365;
 const MIN_FEED_LIFE_DAYS = 30;
+const DAY = /^\d{4}-\d{2}-\d{2}$/;
 import { getCouncil } from "./registry";
 
 export const STREAMS = ["general", "recycling", "food", "garden"] as const;
@@ -403,8 +404,9 @@ export function handle(body: unknown, deps: Deps): Reply {
         let expired = 0;
         let addresses = 0;
         for (const feed of tables.subscriptions()) {
-          const lastUsed = feed.last_used ?? feed.created_at.slice(0, 10);
-          if (daysBetween(lastUsed, today) <= days) continue;
+          const lastUsed = (feed.last_used ?? feed.created_at).slice(0, 10);
+          // Only a clearly old, well-formed date expires a feed. A day that can't be read is never a reason to delete.
+          if (!DAY.test(lastUsed) || !(daysBetween(lastUsed, today) > days)) continue;
           if (tables.deleteSubscription(feed.token) === null) continue;
           expired += 1;
           if (tables.countSubscriptions(feed.uprn) === 0) {

@@ -26,16 +26,29 @@ function subscriptionsTable(): GoogleAppsScript.Spreadsheet.Sheet {
   const last = SUBSCRIPTION_HEADERS.length;
   if (sheet.getRange(1, last).getValue() === "") {
     sheet.getRange(1, last).setValue("last_used");
-    sheet.getRange(1, last, sheet.getMaxRows(), 1).setNumberFormat("@");
+  }
+  // Keep both dates as text, so Sheets doesn't turn them into dates. Done once, not on every read; rows already stored as
+  // dates are read back as text by cellText.
+  const properties = PropertiesService.getScriptProperties();
+  if (properties.getProperty("subscription_dates_are_text") !== "yes") {
+    for (const column of [6, last]) sheet.getRange(1, column, sheet.getMaxRows(), 1).setNumberFormat("@");
+    properties.setProperty("subscription_dates_are_text", "yes");
   }
   return sheet;
 }
 
 function subscriptionFrom(values: unknown[]): SubscriptionRow {
   const [token, id, uprn, onsCode, garden, createdAt, lastUsed] = values;
-  const row: SubscriptionRow = { token: String(token), id: String(id), uprn: String(uprn), ons_code: String(onsCode), garden: garden === "yes", created_at: String(createdAt) };
+  const row: SubscriptionRow = {
+    token: String(token),
+    id: String(id),
+    uprn: String(uprn),
+    ons_code: String(onsCode),
+    garden: garden === "yes",
+    created_at: cellText(createdAt, true),
+  };
   const used = optional(lastUsed);
-  if (used) row.last_used = used;
+  if (used) row.last_used = cellText(lastUsed);
   return row;
 }
 
@@ -50,6 +63,17 @@ function findRow(sheet: GoogleAppsScript.Spreadsheet.Sheet, uprn: string): numbe
   const column = sheet.getRange(2, 1, last - 1, 1).getValues();
   const index = column.findIndex((row) => String(row[0]) === uprn);
   return index === -1 ? null : index + 2;
+}
+
+/**
+ * A cell as text. Sheets turns something that looks like a date into a date, and reading it back gives a Date, so a date
+ * is written out in the same form the script stores: YYYY-MM-DD, or a full timestamp when `withTime` is set.
+ */
+function cellText(value: unknown, withTime = false): string {
+  if (value instanceof Date) {
+    return Utilities.formatDate(value, "UTC", withTime ? "yyyy-MM-dd'T'HH:mm:ss'+00:00'" : "yyyy-MM-dd");
+  }
+  return String(value);
 }
 
 function optional(value: unknown): string | undefined {
@@ -163,7 +187,7 @@ export const sheetTables: Tables = {
     const rowNumber = findRow(sheet, token);
     if (rowNumber === null) return;
     const cell = sheet.getRange(rowNumber, SUBSCRIPTION_HEADERS.length);
-    if (String(cell.getValue()) !== today) cell.setValue(today); // at most one write a day, however often a calendar app asks
+    if (cellText(cell.getValue()) !== today) cell.setValue(today); // at most one write a day, however often a calendar app asks
   },
 
   hasAddress(uprn: string): boolean {
