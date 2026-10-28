@@ -7,10 +7,6 @@ name: End-to-end contact form test
 # from the deployed page and is masked in this public log.
 on:
   workflow_dispatch:
-  push:
-    branches: [claude/nifty-faraday-obdwan]
-    paths:
-      - .github/workflows/e2e-contact.yml
 
 permissions:
   contents: read
