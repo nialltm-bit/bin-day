@@ -95,7 +95,7 @@ No free, live, nationwide service turns an address into a UPRN (see below), so:
 2. **Everyone else sees an honest message** and can add their council to a count. See `docs/coverage.md`.
 3. **UPRN-only councils join when a free way to find the UPRN exists.** That includes B&NES, our first council: its
    source needs a UPRN, so it is not offered to the public until then. Leads still open: ask the owners of uprn.uk and
-   whatsmyuprn.com for an API; ask a council for its address lookup; re-test InstaMaps with street names.
+   whatsmyuprn.com for an API; ask a council for its address lookup; (InstaMaps has been tried twice and does not work for this.)
 4. **Keep the data rule:** store the house number or UPRN we are given, never address text from a provider.
 
 Paid providers (Ideal Postcodes, OS Places) are ruled out for now because the project must not cost anything. If that
@@ -109,7 +109,10 @@ All tested on 2026-10-27. None gives a free, live, nationwide way to turn an add
 - **ONS UPRN Directory + OS Open UPRN:** open and national, but it has no address text, and serving it means hosting a dataset. Not tried to completion.
 - **Geoapify:** free to 3,000 lookups a day, but it is built on OpenStreetMap, and it returns no UPRN. UK coverage not measured.
 - **Property Passport UK:** no public API today.
-- **InstaMaps** (`geocode_batch`, free to 2,500 lookups a day): of 24 real addresses from UKBinCollectionData's test inputs (postcode, house number and known UPRN), it placed all 24 but returned a UPRN for only 1, and that one did not match. Not usable for UPRNs as it stands. The test sent "house number, postcode" only, with no street name.
+- **InstaMaps** (`geocode_batch`, free to 2,500 lookups a day), tested twice on 24 real addresses from UKBinCollectionData's test inputs (postcode, house number and known UPRN):
+  - "house number, postcode": all 24 placed, but 23 only at the postcode's centre (precision "postcode", UPRN none). 18 were read as business names. One address got a house-level point and a UPRN 1 m away, and it was not the known UPRN. Exact matches: 0 of 24.
+  - Adding the street: InstaMaps named a street for only that one row, so the street retry covered 1 address and its UPRN was wrong again (also 1 m). Streets for the other 23 would have to come from somewhere else, or from the person, which breaks "just a postcode and a number".
+  - Verdict: it can't turn a house number and postcode into a UPRN. Not tested with full street addresses for all rows, and the one house-level result may be down to the test file's UPRN rather than InstaMaps.
 
 ## Before spending any money, check
 
