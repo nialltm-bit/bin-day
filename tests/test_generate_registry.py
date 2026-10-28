@@ -32,6 +32,8 @@ def test_bin_names_map_to_streams_by_keyword():
         "Black Rubbish Bin": "general",
         "General Waste": "general",
         "Residual waste": "general",
+        "Wheeled Bin (180ltr)": "general",
+        "Domestic": "general",
     }
     for name, stream in cases.items():
         assert generate.stream_for(name) == stream, name
@@ -42,6 +44,25 @@ def test_an_unrecognised_bin_name_is_not_guessed():
     entry, reason = generate.build_entry({**ROW, "bins": ["General Waste", "Nappies"]}, UPSTREAM, "E06000001", "2026-10-28")
     assert entry is None
     assert "Nappies" in reason
+
+
+def test_an_ambiguous_colour_is_left_out_not_guessed():
+    entry, reason = generate.build_entry({**ROW, "bins": ["General Waste", "Green Bin"]}, UPSTREAM, "E06000001", "2026-10-28")
+    assert entry is None
+    assert "Green Bin" in reason
+
+
+def test_extra_collections_and_markers_are_left_out_of_the_entry():
+    bins = ["General Waste", "Transition Week", "Batteries/small electricals/textiles", "AHP"]
+    entry, reason = generate.build_entry({**ROW, "bins": bins}, UPSTREAM, "E06000001", "2026-10-28")
+    assert reason is None
+    assert list(entry["bin_types"]) == ["General Waste"]
+    assert registry.validate({"councils": [entry]}) == []
+
+
+def test_a_council_with_no_mappable_bin_is_left_out():
+    entry, reason = generate.build_entry({**ROW, "bins": ["AHP"]}, UPSTREAM, "E06000001", "2026-10-28")
+    assert entry is None
 
 
 def test_a_built_entry_is_valid_and_maps_every_bin():
