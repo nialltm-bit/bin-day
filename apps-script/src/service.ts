@@ -3,7 +3,7 @@
  * (addresses and results). Pure logic, so it can be tested without Apps Script.
  */
 
-import { upcomingFor } from "./feed";
+import { FEED_TOKEN, upcomingFor } from "./feed";
 import { getCouncil } from "./registry";
 
 export const STREAMS = ["general", "recycling", "food", "garden"] as const;
@@ -65,6 +65,10 @@ export interface Tables {
   countSubscriptions(uprn?: string): number;
   addSubscription(row: SubscriptionRow): void;
   findSubscription(token: string): SubscriptionRow | null;
+  /** Removes one feed and returns the row it had, or null if there was none. */
+  deleteSubscription(token: string): SubscriptionRow | null;
+  /** Removes everything kept for an address: its row, its fetched dates and its recorded changes. */
+  deleteAddress(uprn: string): void;
   /**
    * Adds one to a council's count; all we keep is the code, a count and two times. Does nothing for a new council
    * once `maxCouncils` different councils are already counted.
@@ -288,6 +292,24 @@ function joinWaitlist(request: Record<string, unknown>, deps: Deps): Reply {
   });
 }
 
+/**
+ * Public: deletes a feed for the person who holds its token (the token is the secret, the same as for the calendar feed
+ * and the date lookup). The feed stops working at once. When it was the last feed for its address, the address, its
+ * fetched dates and its recorded changes are deleted too, so nothing about the address is kept.
+ */
+function unsubscribe(request: Record<string, unknown>, deps: Deps): Reply {
+  const { token } = request;
+  if (typeof token !== "string" || !FEED_TOKEN.test(token)) return fail("bad token");
+  const withLock = deps.withLock ?? (<T>(work: () => T) => work());
+  const { tables } = deps;
+  return withLock(() => {
+    const removed = tables.deleteSubscription(token);
+    if (removed === null) return fail("not found");
+    if (tables.countSubscriptions(removed.uprn) === 0) tables.deleteAddress(removed.uprn);
+    return { ok: true } as Reply;
+  });
+}
+
 export function handle(body: unknown, deps: Deps): Reply {
   if (typeof body !== "object" || body === null) return fail("bad request");
   const request = body as Record<string, unknown>;
@@ -295,6 +317,7 @@ export function handle(body: unknown, deps: Deps): Reply {
   if (request.action === "subscribe") return subscribe(request, deps);
   if (request.action === "join_waitlist") return joinWaitlist(request, deps);
   if (request.action === "upcoming") return upcoming(request, deps);
+  if (request.action === "unsubscribe") return unsubscribe(request, deps);
 
   if (deps.secret === undefined || deps.secret === "") return fail("not configured");
   if (typeof request.secret !== "string" || !safeEqual(request.secret, deps.secret)) return fail("unauthorised");

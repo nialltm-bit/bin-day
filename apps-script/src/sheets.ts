@@ -136,6 +136,28 @@ export const sheetTables: Tables = {
     return { token, id: String(id), uprn: String(uprn), ons_code: String(onsCode), garden: garden === "yes", created_at: String(createdAt) };
   },
 
+  deleteSubscription(token: string): SubscriptionRow | null {
+    const found = sheetTables.findSubscription(token);
+    if (found === null) return null;
+    const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
+    const rowNumber = findRow(sheet, token);
+    if (rowNumber !== null) sheet.deleteRow(rowNumber);
+    return found;
+  },
+
+  deleteAddress(uprn: string): void {
+    // From the bottom up, so deleting a row doesn't move the ones still to check.
+    const removeMatching = (sheet: GoogleAppsScript.Spreadsheet.Sheet, column: number) => {
+      const last = sheet.getLastRow();
+      if (last < 2) return;
+      const values = sheet.getRange(2, column, last - 1, 1).getValues();
+      for (let i = values.length - 1; i >= 0; i--) if (String(values[i][0]) === uprn) sheet.deleteRow(i + 2);
+    };
+    removeMatching(table("addresses", ADDRESS_HEADERS), 1);
+    removeMatching(table("results", RESULT_HEADERS), 1);
+    removeMatching(table("changes", CHANGE_HEADERS, [1, 2, 3, 4, 5, 6, 7, 8]), 2);
+  },
+
   bumpWaitlist(onsCode: string, at: string, maxCouncils: number): void {
     const sheet = table("waitlist", WAITLIST_HEADERS, [1, 3, 4]);
     const rowNumber = findRow(sheet, onsCode);

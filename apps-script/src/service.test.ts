@@ -523,3 +523,54 @@ describe("upcoming (public)", () => {
     expect(handle({ action: "upcoming", token: 5 }, d)).toEqual({ ok: false, error: "bad token" });
   });
 });
+
+describe("unsubscribe (public)", () => {
+  const TOKEN_A = "a".repeat(63) + "1";
+  const TOKEN_B = "b".repeat(64);
+  const publicDeps = (token: string): Deps => ({ secret: SECRET, tables: store.tables, newToken: () => token, newId: () => "00000001", nowIso: () => NOW });
+  const signUp = (token: string, extra: Record<string, unknown> = {}) =>
+    handle({ action: "subscribe", uprn: "100120000855", ons_code: "E06000022", ...extra }, publicDeps(token));
+  const unsubscribe = (token: unknown) => handle({ action: "unsubscribe", token }, deps);
+
+  it("needs no secret, and removes the feed, the address, its dates and its recorded changes", () => {
+    signUp(TOKEN_A);
+    store.tables.putResult({ uprn: "100120000855", fetched_at: NOW, last_attempt: NOW, last_error: null, consecutive_failures: 0, collections: COLLECTIONS });
+    store.tables.addChanges([{ at: NOW, uprn: "100120000855", ons_code: "E06000022", bin_name: "x", kind: "round_change", before: null, after: null, note: "n" }]);
+    expect(unsubscribe(TOKEN_A)).toEqual({ ok: true });
+    expect(store.subscriptions).toEqual([]);
+    expect(store.addresses).toEqual([]);
+    expect(store.results.size).toBe(0);
+    expect(store.changes).toEqual([]);
+  });
+
+  it("keeps the address for the other feeds on it until the last one is deleted", () => {
+    signUp(TOKEN_A);
+    signUp(TOKEN_B);
+    expect(unsubscribe(TOKEN_A)).toEqual({ ok: true });
+    expect(store.subscriptions.map((s) => s.token)).toEqual([TOKEN_B]);
+    expect(store.addresses).toHaveLength(1);
+    expect(unsubscribe(TOKEN_B)).toEqual({ ok: true });
+    expect(store.addresses).toEqual([]);
+  });
+
+  it("stops the feed and the date lookup working once the token is deleted", () => {
+    signUp(TOKEN_A);
+    unsubscribe(TOKEN_A);
+    expect(handle({ action: "upcoming", token: TOKEN_A }, deps)).toEqual({ ok: false, error: "not found" });
+  });
+
+  it("deletes the postcode and house number kept for a council with no UPRN", () => {
+    signUp(TOKEN_A, { uprn: undefined, ons_code: "E08000021", postcode: "NE3 4XE", house_number: "1 Northumberland Avenue" });
+    expect(store.addresses[0]?.postcode).toBe("NE3 4XE");
+    unsubscribe(TOKEN_A);
+    expect(store.addresses).toEqual([]);
+  });
+
+  it("says no to a token that is unknown, malformed or missing, without touching anything", () => {
+    signUp(TOKEN_A);
+    expect(unsubscribe(TOKEN_B)).toEqual({ ok: false, error: "not found" });
+    expect(unsubscribe("short")).toEqual({ ok: false, error: "bad token" });
+    expect(unsubscribe(undefined)).toEqual({ ok: false, error: "bad token" });
+    expect(store.subscriptions).toHaveLength(1);
+  });
+});

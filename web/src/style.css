@@ -147,3 +147,29 @@ path.c-none, .swatch.c-none { fill: var(--none); background: var(--none); }
 .london h3 { margin: 0 0 0.25rem; font-size: 1rem; }
 .london .map { max-height: 60vh; }
 .map .london-box { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 3; vector-effect: non-scaling-stroke; }
+
+footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+
+#delete-feed .row { display: flex; gap: 0.5rem; }
+#delete-feed .row input {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  font: inherit;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+}
+#delete-feed button {
+  font: inherit;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--text);
+  border-radius: 8px;
+  background: var(--text);
+  color: var(--bg);
+  cursor: pointer;
+}
+#delete-feed button:disabled { opacity: 0.6; cursor: default; }
+.note { color: var(--muted); }
