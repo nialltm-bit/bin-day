@@ -7,6 +7,7 @@ Usage: build_council_shapes.py <output json>
 """
 import json
 import math
+import os
 import sys
 import urllib.parse
 import urllib.request
@@ -100,6 +101,7 @@ def main(out_path):
     shapes = build(features)
     shapes["source"] = item["title"]
     text = json.dumps(shapes, separators=(",", ":"))
+    os.makedirs(os.path.dirname(out_path) or ".", exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as out:
         out.write(text)
     codes = {c["code"] for c in shapes["councils"]}
