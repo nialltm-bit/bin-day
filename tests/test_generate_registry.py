@@ -66,3 +66,8 @@ def test_a_bare_number_that_finds_another_house_or_nothing_means_the_first_line_
 def test_skip_get_url_is_copied_from_upstream():
     entry, _ = generate.build_entry(ROW, {**UPSTREAM, "skip_get_url": True}, "E06000001", "2026-10-28")
     assert entry["source"]["skip_get_url"] is True
+
+
+def test_an_entry_the_registry_would_reject_is_left_out_not_fatal():
+    entry, _ = generate.build_entry(ROW, {**UPSTREAM, "url": "http://example.gov.uk/bins"}, "E06000001", "2026-10-28")
+    assert any("https" in problem for problem in registry.validate({"councils": [entry]}))

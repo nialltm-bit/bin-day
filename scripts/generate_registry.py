@@ -112,12 +112,16 @@ def main(input_path, probe_path, registry_path, report_path):
         if entry is None:
             skipped.append((module, reason))
             continue
+        problems = registry.validate({"councils": [entry]})
+        if problems:
+            skipped.append((module, "; ".join(p.split(": ", 1)[-1] for p in problems)))
+            continue
         data["councils"].append(entry)
         existing.add(code)
         added.append((module, code))
     data["councils"].sort(key=lambda c: c["ons_code"])
     problems = registry.validate(data)
-    if problems:
+    if problems:  # every entry was checked on its own, so this is a clash between them, such as a duplicate code
         sys.exit("generated registry is invalid:\n" + "\n".join(problems))
     json.dump(data, open(registry_path, "w"), indent=2, ensure_ascii=False)
     open(registry_path, "a").write("\n")
