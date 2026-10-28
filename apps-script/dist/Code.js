@@ -1086,6 +1086,44 @@
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
       },
       {
+        ons_code: "E07000147",
+        name: "North Norfolk",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "NorthNorfolkDistrictCouncil",
+          url: "https://www.north-norfolk.gov.uk/",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Brown bin": {
+            stream: "garden",
+            label: "Brown bin"
+          },
+          "Green bin": {
+            stream: "recycling",
+            label: "Green bin"
+          },
+          "Grey bin": {
+            stream: "general",
+            label: "Grey bin"
+          }
+        },
+        test_address: {
+          postcode: "NR25 6BH",
+          house_number: "1 Morston Mews"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword, except 'Green bin', which were read from the council's website (see docs/spike-results/bin-colour-evidence.json), and are not checked by a person. A bare house number: same house. No colours are set."
+      },
+      {
         ons_code: "E07000171",
         name: "Bassetlaw",
         status: "supported",
@@ -1416,6 +1454,48 @@
         },
         last_verified: "2026-10-28",
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E08000002",
+        name: "Bury",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "BuryCouncil",
+          url: "https://www.bury.gov.uk/waste-and-recycling/bin-collection-days-and-alerts",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          blue: {
+            stream: "recycling",
+            label: "blue"
+          },
+          brown: {
+            stream: "garden",
+            label: "brown"
+          },
+          green: {
+            stream: "recycling",
+            label: "green"
+          },
+          grey: {
+            stream: "general",
+            label: "grey"
+          }
+        },
+        test_address: {
+          postcode: "M26 3XY",
+          house_number: "3"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword, except 'green', which were read from the council's website (see docs/spike-results/bin-colour-evidence.json), and are not checked by a person. A bare house number: not applicable. No colours are set."
       },
       {
         ons_code: "E08000013",

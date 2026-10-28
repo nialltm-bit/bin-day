@@ -5,8 +5,8 @@ schedule without a browser, it builds a registry entry: the module and inputs fr
 streams by keyword, the schedule from what the probe saw, and whether a bare house number finds the same house.
 A council that needs a browser is added with needs_selenium set, and the fetch workflows run a Chrome service for it.
 A council it can't map completely (an unrecognised bin name, no council code, a postcode that belongs to another
-council) is left out and listed in the report, so a person only looks at exceptions. Existing registry entries are never
-changed.
+council) is left out and listed in the report, so a person only looks at exceptions. Entries written by hand are never
+changed; entries this script generated are re-checked each run against the current bin-name rules (see repair).
 
 Usage: generate_registry.py <upstream input.json> <batch-probe.json> <registry councils.json> <report.md> [bin-colour-evidence.json]
 
@@ -14,6 +14,7 @@ The optional evidence file (scripts/map_bin_colours.py) says what a colour-only 
 own website; a name it maps with enough evidence is used, and the entry's notes say so.
 """
 import json
+import re
 import sys
 import urllib.request
 from datetime import date
@@ -34,13 +35,43 @@ STREAM_WORDS = (
 IGNORED_WORDS = ("transition", "batter", "textile", "electrical", "ahp", "hygiene")
 
 
+NON_RECYCLABLE = re.compile(r"non[\s-]?recycl", re.I)
+JOINER = re.compile(r"\s*(?:\+|&|/|,|\band\b)\s*", re.I)
+
+
+def _parts(bin_name: str) -> list[str]:
+    """The name split at "+", "&", "/", "," and "and" that sit outside brackets: "Glass+Food" is two collections."""
+    outside, depth = [], 0
+    for char in bin_name:
+        depth += char == "("
+        depth -= char == ")" and depth > 0
+        outside.append("\0" if depth and char in "+&/," else char)
+    return [p.replace("\0", "/") for p in JOINER.split("".join(outside)) if p.strip()]
+
+
+def streams_in(bin_name: str) -> set[str]:
+    """Every stream the council's own bin name says, one per part: "Food and Garden" says two, "Colour only" says none.
+
+    "Non-recyclable" is general waste, so it is checked before the recycling words it contains. Within one part the first
+    stream wins, which is how "Food Recycling" is food.
+    """
+    found = set()
+    for part in _parts(bin_name):
+        lowered = part.lower()
+        if NON_RECYCLABLE.search(lowered):
+            found.add("general")
+            continue
+        for stream, words in STREAM_WORDS:
+            if any(word in lowered for word in words):
+                found.add(stream)
+                break
+    return found
+
+
 def stream_for(bin_name: str) -> str | None:
-    """The first stream whose keyword the council's own bin name contains, or None if none does."""
-    lowered = bin_name.lower()
-    for stream, words in STREAM_WORDS:
-        if any(word in lowered for word in words):
-            return stream
-    return None
+    """The stream the council's own bin name says, or None if it says none or says more than one (never a guess)."""
+    found = streams_in(bin_name)
+    return next(iter(found)) if len(found) == 1 else None
 
 
 def council_for_postcode(postcode: str) -> str | None:
@@ -61,7 +92,7 @@ def build_entry(row: dict, upstream: dict, code: str, today: str, evidence: dict
         if any(word in name.lower() for word in IGNORED_WORDS):
             continue
         stream = stream_for(name)
-        if stream is None:
+        if stream is None and not streams_in(name):  # a name that says several streams is never settled by a website
             stream = ((evidence or {}).get(row["module"], {}).get("bins", {}).get(name) or {}).get("stream")
             if stream is not None:
                 from_site.append(name)
@@ -110,11 +141,49 @@ def build_entry(row: dict, upstream: dict, code: str, today: str, evidence: dict
     return entry, None
 
 
+GENERATED = "Generated from upstream's test inputs"
+
+
+def repair(data: dict, evidence: dict | None) -> tuple[list[str], list[str]]:
+    """Re-checks the generated entries against the current mapping rules, because the rules get better.
+
+    A bin whose stream now comes out differently is corrected. A council with a bin the rules can no longer settle is taken
+    out of the registry, as if it had not been generated, and comes back when a rule or the evidence settles it. Entries
+    that were not generated (written by hand) are never touched. Returns the names corrected and the names removed.
+    """
+    corrected, removed, keep = [], [], []
+    for council in data["councils"]:
+        if not council.get("notes", "").startswith(GENERATED):
+            keep.append(council)
+            continue
+        module = council["source"].get("module")
+        seen_on_site = ((evidence or {}).get(module) or {}).get("bins", {})
+        changed, drop = False, False
+        for name, bin_type in council["bin_types"].items():
+            stream = stream_for(name)
+            if stream is None and not streams_in(name):
+                stream = (seen_on_site.get(name) or {}).get("stream")
+            if stream is None:
+                drop = True
+            elif stream != bin_type["stream"]:
+                bin_type["stream"] = stream
+                changed = True
+        if drop:
+            removed.append(council["name"])
+        else:
+            keep.append(council)
+            if changed:
+                corrected.append(council["name"])
+    data["councils"] = keep
+    return corrected, removed
+
+
 def main(input_path, probe_path, registry_path, report_path, evidence_path=None):
     evidence = json.load(open(evidence_path)) if evidence_path and Path(evidence_path).exists() else None
     upstream = json.load(open(input_path))
     probe = json.load(open(probe_path))["results"]
     data = json.load(open(registry_path))
+    corrected, removed = repair(data, evidence)
     existing = {c["ons_code"] for c in data["councils"]}
     today = date.today().isoformat()
     added, skipped = [], []
@@ -154,9 +223,13 @@ def main(input_path, probe_path, registry_path, report_path, evidence_path=None)
     open(registry_path, "a").write("\n")
     lines = [f"# Generated registry report ({today})", "", f"Added {len(added)} councils. Left out {len(skipped)}.", "", "## Added", ""]
     lines += [f"- {m} ({c})" for m, c in added]
+    if corrected or removed:
+        lines += ["", "## Re-checked against the current mapping rules", ""]
+        lines += [f"- corrected: {name}" for name in corrected]
+        lines += [f"- taken out until its bin names can be settled: {name}" for name in removed]
     lines += ["", "## Left out, and why", ""] + [f"- {m}: {why}" for m, why in skipped]
     open(report_path, "w").write("\n".join(lines) + "\n")
-    print(f"added {len(added)}, left out {len(skipped)}")
+    print(f"added {len(added)}, left out {len(skipped)}, corrected {len(corrected)}, taken out {len(removed)}")
     for module, why in skipped:
         print(f"  left out {module}: {why}")
 

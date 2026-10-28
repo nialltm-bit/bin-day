@@ -139,7 +139,7 @@ def main(input_path: str, probe_path: str, output_path: str) -> None:
         names = [
             n
             for n in row["bins"]
-            if generate.stream_for(n) is None and not any(w in n.lower() for w in generate.IGNORED_WORDS)
+            if not generate.streams_in(n) and not any(w in n.lower() for w in generate.IGNORED_WORDS)
         ]
         if not names:
             continue
