@@ -31,7 +31,8 @@ jobs:
           echo "script address found on the deployed page"
 
           BODY='{"action":"subscribe","ons_code":"E08000021","postcode":"NE3 4XE","house_number":"1 Northumberland Avenue","garden":false}'
-          REPLY=$(curl -sSL -m 60 -X POST -H 'Content-Type: text/plain;charset=utf-8' -d "$BODY" "$SCRIPT")
+          REPLY=$(curl -sSL -m 90 -H 'Content-Type: text/plain;charset=utf-8' -d "$BODY" "$SCRIPT")
+          case "$REPLY" in "{"*) ;; *) echo "not a JSON reply, starts: $(printf '%s' "$REPLY" | tr -d '\n' | cut -c1-120)"; exit 1;; esac
           TOKEN=$(printf '%s' "$REPLY" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("token","")) if d.get("ok") else print("")')
           if [ -z "$TOKEN" ]; then
             echo "sign-up failed: $(printf '%s' "$REPLY" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("error","unexpected reply"))' 2>/dev/null || echo 'unreadable reply')"
@@ -42,7 +43,7 @@ jobs:
 
           status=pending
           for i in $(seq 1 60); do
-            UP=$(curl -sSL -m 60 -X POST -H 'Content-Type: text/plain;charset=utf-8' -d "{\"action\":\"upcoming\",\"token\":\"$TOKEN\"}" "$SCRIPT")
+            UP=$(curl -sSL -m 90 -H 'Content-Type: text/plain;charset=utf-8' -d "{\"action\":\"upcoming\",\"token\":\"$TOKEN\"}" "$SCRIPT")
             status=$(printf '%s' "$UP" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("status","?"))' 2>/dev/null || echo '?')
             echo "poll $i: $status"
             [ "$status" = ready ] || [ "$status" = failed ] && break
