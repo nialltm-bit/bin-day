@@ -252,38 +252,12 @@
         "house_number": "44"
       },
       "url": "https://enviroservices.brighton-hove.gov.uk/link/collections",
-      "ok": true,
-      "bins": [
-        {
-          "name": "Food waste",
-          "stream": "food",
-          "next": [
-            "2026-10-29"
-          ]
-        },
-        {
-          "name": "Garden Waste",
-          "stream": "garden",
-          "next": [
-            "2026-11-06"
-          ]
-        },
-        {
-          "name": "Recycling",
-          "stream": "recycling",
-          "next": [
-            "2026-11-02"
-          ]
-        },
-        {
-          "name": "Refuse",
-          "stream": "general",
-          "next": [
-            "2026-10-29"
-          ]
-        }
-      ],
-      "flags": []
+      "ok": false,
+      "error": "FetchError",
+      "bins": [],
+      "flags": [
+        "did not fetch (FetchError)"
+      ]
     },
     {
       "ons_code": "E06000066",
@@ -678,9 +652,9 @@
           "stream": "food",
           "next": [
             "2026-11-02",
-            "2026-11-02",
             "2026-11-09",
-            "2026-11-09"
+            "2026-11-16",
+            "2026-11-23"
           ]
         },
         {
@@ -708,9 +682,7 @@
           ]
         }
       ],
-      "flags": [
-        "FOOD BIN: gaps of [0] days between collections"
-      ]
+      "flags": []
     },
     {
       "ons_code": "E07000110",
@@ -765,12 +737,31 @@
         "house_number": "60 Hever Road"
       },
       "url": "https://sevenoaks-dc-host01.oncreate.app/w/webpage/waste-collection-day",
-      "ok": false,
-      "error": "TimeoutException",
-      "bins": [],
-      "flags": [
-        "did not fetch (TimeoutException)"
-      ]
+      "ok": true,
+      "bins": [
+        {
+          "name": "Food",
+          "stream": "food",
+          "next": [
+            "2026-11-03"
+          ]
+        },
+        {
+          "name": "General waste",
+          "stream": "general",
+          "next": [
+            "2026-11-03"
+          ]
+        },
+        {
+          "name": "Recycling",
+          "stream": "recycling",
+          "next": [
+            "2026-11-10"
+          ]
+        }
+      ],
+      "flags": []
     },
     {
       "ons_code": "E07000144",
@@ -1138,10 +1129,10 @@
       },
       "url": "https://asjwsw-wrpsurreyheathmunicipal-live.whitespacews.com/",
       "ok": false,
-      "error": "UnmappedBinError",
+      "error": "UnmappedBinError: unmapped bin names: Batteries/small electricals/textiles",
       "bins": [],
       "flags": [
-        "did not fetch (UnmappedBinError)"
+        "did not fetch (UnmappedBinError: unmapped bin names: Batteries/small electricals/textiles)"
       ]
     },
     {
@@ -1569,14 +1560,14 @@
           "name": "blue bin",
           "stream": "recycling",
           "next": [
-            "2026-11-10"
+            "2027-10-27"
           ]
         },
         {
           "name": "brown bin",
           "stream": "garden",
           "next": [
-            "2026-11-03"
+            "2027-10-27"
           ]
         }
       ],
@@ -1756,10 +1747,10 @@
       },
       "url": "https://www.npt.gov.uk",
       "ok": false,
-      "error": "UnmappedBinError",
+      "error": "UnmappedBinError: unmapped bin names: Batteries (Battery Bag)",
       "bins": [],
       "flags": [
-        "did not fetch (UnmappedBinError)"
+        "did not fetch (UnmappedBinError: unmapped bin names: Batteries (Battery Bag))"
       ]
     }
   ]

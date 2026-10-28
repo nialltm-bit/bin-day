@@ -4,7 +4,7 @@ Every covered council, run once with its public test address. This catches counc
 can't be right (a bin on two weekdays, odd gaps, no general or recycling bin). It cannot say the dates are true.
 
 - Councils checked: 43. Fetched: 40. Did not fetch: 3.
-- Fetched but flagged: 3.
+- Fetched but flagged: 2.
 
 ## To check by hand
 
@@ -42,16 +42,15 @@ Address: HU17 8LG, 14. Council site: https://www.eastriding.gov.uk
 | Brown Bin (Garden Waste) | garden | 2026-10-28 |
 | Green Bin (General Waste) | general | 2026-11-06 |
 
-### Brighton and Hove
+### Somerset
 
-Address: BN1 8NE, 44. Council site: https://enviroservices.brighton-hove.gov.uk/link/collections
+Address: TA6 4AA, 5. Council site: https://www.somerset.gov.uk/
 
 | Bin (council's name) | We call it | Next dates |
 |---|---|---|
-| Food waste | food | 2026-10-29 |
-| Garden Waste | garden | 2026-11-06 |
-| Recycling | recycling | 2026-11-02 |
-| Refuse | general | 2026-10-29 |
+| Food Recycling | food | 2026-10-28 |
+| Recycling Collection | recycling | 2026-10-28 |
+| Rubbish Collection | general | 2026-10-28 |
 
 ### Ceredigion
 
@@ -84,6 +83,13 @@ Address: EN4 8TB, 26A. Council site: https://www.barnet.gov.uk/recycling-and-was
 | General Waste | general | 2026-11-02, 2026-11-09 |
 | Recycling Bin | recycling | 2026-11-02, 2026-11-09 |
 
+### Brighton and Hove
+
+Address: BN1 8NE, 44. Council site: https://enviroservices.brighton-hove.gov.uk/link/collections
+
+
+- Flag: did not fetch (FetchError)
+
 ### East Hampshire
 
 Address: GU31 4AG, 15 College Street. Council site: https://www.easthants.gov.uk
@@ -106,42 +112,28 @@ Address: SO51 0BY, 2. Council site: https://testvalley.gov.uk/wasteandrecycling/
 - Flag: no general waste bin
 - Flag: no recycling bin
 
-### Gravesham
-
-Address: DA13 9DF, 2. Council site: https://my.gravesham.gov.uk
-
-| Bin (council's name) | We call it | Next dates |
-|---|---|---|
-| FOOD BIN | food | 2026-11-02, 2026-11-02, 2026-11-09, 2026-11-09 |
-| GARDEN 240L | garden | 2026-11-09, 2026-11-23 |
-| RECYCLING 240L | recycling | 2026-11-02, 2026-11-16 |
-| REFUSE 180L | general | 2026-11-09, 2026-11-23 |
-
-- Flag: FOOD BIN: gaps of [0] days between collections
-
-### Sevenoaks
-
-Address: TN15 6EB, 60 Hever Road. Council site: https://sevenoaks-dc-host01.oncreate.app/w/webpage/waste-collection-day
-
-
-- Flag: did not fetch (TimeoutException)
-
 ### Surrey Heath
 
 Address: GU20 6PN, 36. Council site: https://asjwsw-wrpsurreyheathmunicipal-live.whitespacews.com/
 
 
-- Flag: did not fetch (UnmappedBinError)
+- Flag: did not fetch (UnmappedBinError: unmapped bin names: Batteries/small electricals/textiles)
+
+### Neath Port Talbot
+
+Address: SA13 3BA, 2. Council site: https://www.npt.gov.uk
+
+
+- Flag: did not fetch (UnmappedBinError: unmapped bin names: Batteries (Battery Bag))
 
 ## Did not fetch
 
-- Sevenoaks: TimeoutException
-- Surrey Heath: UnmappedBinError
-- Neath Port Talbot: UnmappedBinError
+- Brighton and Hove: FetchError
+- Surrey Heath: UnmappedBinError: unmapped bin names: Batteries/small electricals/textiles
+- Neath Port Talbot: UnmappedBinError: unmapped bin names: Batteries (Battery Bag)
 
 ## Fetched but flagged
 
 - East Hampshire: no general waste bin
 - Test Valley: no general waste bin; no recycling bin
-- Gravesham: FOOD BIN: gaps of [0] days between collections
 
