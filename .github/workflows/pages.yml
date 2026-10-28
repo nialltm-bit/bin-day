@@ -3,7 +3,8 @@ name: Deploy site
 on:
   push:
     branches: [main]
-    paths: [web/**, .github/workflows/pages.yml]
+    # registry/** because the homepage's list and map are built from the council registry
+    paths: [web/**, registry/**, .github/workflows/pages.yml]
   workflow_dispatch:
 
 permissions:

@@ -20,6 +20,16 @@ Nothing is stored in the browser. Editing the postcode clears everything below i
 - **UPRN councils** show "can't find addresses yet" until a free UPRN finder exists.
 - **The wrong-house risk** in some council sources is described in `docs/coverage.md`. The page can't see which address the source matched.
 
+## The council list comes from GitHub, so adding councils needs no redeploy
+
+The script used to carry a copy of the council registry inside it, so every batch of new councils meant pasting in a new `Code.js` and deploying a new version. Now it loads `registry/councils.json` and `registry/bank-holidays.json` from the `main` branch on GitHub (`raw.githubusercontent.com`) and keeps them in its cache: about ten minutes for the councils and an hour for bank holidays. A council added to `main` is known to the script within about ten minutes.
+
+- **Checked before it is used.** Only the small part of each council the script reads is kept, and every entry is checked. An entry that fails is left out (that council then simply isn't supported, which is a safe way to fail), and a file with no usable council is refused.
+- **Falls back safely.** If GitHub can't be reached, or the file doesn't pass, the script uses the copy bundled into it. That copy is only as new as the last time you pasted in the script, so it is a safety net, not the plan.
+- **The repository** is `nialltm-bit/bin-day`, or whatever the `GITHUB_REPO` script property says. Nothing else needs setting; the script already has permission to make outside requests.
+- **The homepage** (the list and the map) is built from the registry when the site is built, so the site is redeployed whenever `registry/**` changes on `main`.
+- Code changes still need a new script version. Council changes don't.
+
 ## Fetching at sign-up
 
 A new address has no dates until the fetcher runs, and the daily run is at 05:17 UTC. So when a sign-up adds an address nobody has fetched, the script asks GitHub to run the "Fetch (scheduled)" workflow now. It takes a minute or two. Meanwhile the page asks the script for the dates every 5 seconds (the `upcoming` action, which takes the feed token and returns the same dates the calendar shows) and shows them when they arrive.

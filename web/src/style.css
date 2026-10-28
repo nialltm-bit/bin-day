@@ -69,10 +69,9 @@ input[type="search"] {
 }
 
 .results { margin-top: 1rem; }
-.group h3 { margin: 1rem 0 0.25rem; font-size: 1rem; }
-.results ul { margin: 0; padding-left: 1.25rem; columns: 2 14rem; }
+.results details { margin-top: 0.75rem; }
+.results ul { margin: 0.5rem 0 0; padding-left: 1.25rem; columns: 2 14rem; }
 .results li { break-inside: avoid; padding: 0.1rem 0; }
-.results details { margin-top: 1rem; }
 .results summary { cursor: pointer; font-weight: 600; }
 .note, .credit { color: var(--muted); font-size: 0.875rem; }
 
@@ -139,3 +138,12 @@ path.c-none, .swatch.c-none { fill: var(--none); background: var(--none); }
 #lookup .dates h4 { margin: 0 0 0.25rem; font-size: 1rem; }
 #lookup ul.days { list-style: none; margin: 0; padding: 0; }
 #lookup ul.days li { padding: 0.15rem 0; }
+
+.maps { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+@media (min-width: 640px) {
+  .maps { grid-template-columns: 1.3fr 1fr; align-items: start; }
+}
+.london { border: 1px solid var(--line); border-radius: 8px; padding: 0.5rem 0.75rem 0.75rem; }
+.london h3 { margin: 0 0 0.25rem; font-size: 1rem; }
+.london .map { max-height: 60vh; }
+.map .london-box { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 3; vector-effect: non-scaling-stroke; }
