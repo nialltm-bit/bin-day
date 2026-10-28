@@ -18,11 +18,6 @@ on:
         description: "House number, or the first line of the address where the council needs it. Public test addresses only"
         default: "57"
 
-  push:
-    branches: [claude/nifty-faraday-obdwan]
-    paths:
-      - .github/workflows/e2e-delete.yml
-
 permissions:
   contents: read
 
