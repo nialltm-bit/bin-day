@@ -1,5 +1,6 @@
 /** The "Find your bin days" form: postcode, then (where we can help) the house, garden waste, and the button. */
 import { type CouncilEntry, type Outcome, lookup, messageFor } from "./coverage";
+import { calendarSection, detectDevice } from "./calendar-guide";
 import { el } from "./dom";
 import { type Ask, type Ready, calendarLinks, checkHouse, explain, formatDay, pollUpcoming, post, subscribeBody, type UpcomingState } from "./signup";
 
@@ -193,20 +194,8 @@ function done(links: ReturnType<typeof calendarLinks> & object, council: string,
     el("h3", {}, "Your calendar link is ready"),
     dates,
     el("p", {}, `${council}'s bin days are checked every week, and your calendar updates itself when collections move.`),
-    el(
-      "p",
-      { class: "buttons" },
-      el("a", { class: "button", href: links.google, rel: "noopener" }, "Add to Google Calendar"),
-      el("a", { class: "button", href: links.apple }, "Add to Apple Calendar"),
-      el("a", { class: "button", href: links.outlook, rel: "noopener" }, "Add to Outlook"),
-    ),
-    el("p", {}, "Or copy the link into any calendar app that can subscribe to a calendar by link:"),
+    calendarSection(links, detectDevice(navigator.userAgent)),
     copy,
     el("p", { class: "note" }, "This link is private to you. Anyone who has it can see your bin days, so don't post it."),
-    el(
-      "p",
-      { class: "note" },
-      "Google Calendar ignores reminders on subscribed calendars. To get a reminder, turn on notifications for this calendar in Google Calendar's settings.",
-    ),
   );
 }
