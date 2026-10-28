@@ -50,3 +50,10 @@ value has been seen twice and nothing else has, it is recorded as `weeks` and us
 it is locked: a later disagreement only adds to `conflicts` (and the fetch log shows `learned_conflict`), and change
 detection treats the moved date as a round change. Gaps that touch a bank holiday week, or aren't whole weeks, are ignored.
 It holds only council codes, the council's own bin names and counts: no addresses.
+
+## Bin names the registry hasn't met
+
+If a council returns a bin name that isn't in `bin_types` (a seasonal garden bin that wasn't on offer when the council was probed,
+say), the fetcher settles it with the same keyword rules the generator used (`fetcher/streams.py`) when they point to exactly
+one stream. A name with no keyword, or with keywords for two streams ("Food and Garden"), still fails the fetch, so nothing is
+guessed. Add such a name to `bin_types` to make it permanent.
