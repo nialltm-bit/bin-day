@@ -37,17 +37,10 @@ describe("buildViews", () => {
   });
 
   it("with the real registry, B&NES is on the way and Newcastle is covered", () => {
-    const real = buildViews(
-      [
-        { code: "E06000022", name: "Bath and North East Somerset" },
-        { code: "E08000021", name: "Newcastle upon Tyne" },
-      ],
-      REAL,
-    );
-    expect(real.map((v) => [v.code, v.availability])).toEqual([
-      ["E06000022", "soon"],
-      ["E08000021", "available"],
-    ]);
+    const real = buildViews([], REAL);
+    const state = (code: string) => real.find((v) => v.code === code)?.availability;
+    expect(state("E06000022")).toBe("soon");
+    expect(state("E08000021")).toBe("available");
   });
 });
 
