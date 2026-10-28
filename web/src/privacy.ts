@@ -1,5 +1,8 @@
 import "./style.css";
+import { addGoatCounter } from "./analytics";
 import { mountDeleteFeed } from "./delete-feed";
+
+addGoatCounter(import.meta.env.VITE_GOATCOUNTER_URL);
 
 const root = document.getElementById("delete-feed");
 if (root) {

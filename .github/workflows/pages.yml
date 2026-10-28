@@ -33,6 +33,8 @@ jobs:
         env:
           # The script's public web app address, set once as a repository variable (Settings, Variables).
           VITE_SCRIPT_URL: ${{ vars.BIN_DAY_SCRIPT_URL }}
+          # Your GoatCounter count address, https://YOURCODE.goatcounter.com/count, as a repository variable. Empty means no counting.
+          VITE_GOATCOUNTER_URL: ${{ vars.GOATCOUNTER_URL }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web/dist
