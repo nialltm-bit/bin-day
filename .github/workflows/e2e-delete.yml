@@ -1,0 +1,101 @@
+name: End-to-end delete test
+
+# Checks "delete my calendar feed" on the live site with a public test address (upstream's Bracknell Forest one unless told
+# otherwise). It signs up, waits for the dates, deletes the feed with the same request the privacy page sends, checks the
+# feed and the date lookup are gone, then signs up the same address again: if the first answer is "pending" the address and
+# its dates really were deleted (a surviving address would answer "ready" at once). It then waits for that fetch and
+# deletes again, so nothing is left in the Sheet. The script address is read from the deployed page and tokens are masked.
+on:
+  workflow_dispatch:
+    inputs:
+      ons:
+        description: ONS code of the council (default Bracknell Forest)
+        default: E06000036
+      postcode:
+        description: "Postcode. Public test addresses only (upstream's test address for the council): inputs and this log are public"
+        default: GU47 9BS
+      house_number:
+        description: "House number, or the first line of the address where the council needs it. Public test addresses only"
+        default: "57"
+      page_only:
+        description: Only check the deployed pages (privacy page, script address, visit counting), without signing anyone up
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Sign up, delete, check, sign up again, delete again
+        env:
+          ONS: ${{ inputs.ons || 'E06000036' }}
+          POSTCODE: ${{ inputs.postcode || 'GU47 9BS' }}
+          HOUSE: ${{ inputs.house_number || '57' }}
+          PAGE_ONLY: ${{ inputs.page_only && 'yes' || 'no' }}
+        run: |
+          set -u
+          BASE="https://${GITHUB_REPOSITORY_OWNER}.github.io/bin-day"
+          fail() { echo "FAIL: $1"; exit 1; }
+
+          curl -sSL -m 30 -o privacy.html "$BASE/privacy.html" || fail "privacy page not reachable"
+          grep -q "Delete your calendar feed" privacy.html && echo "privacy page is live with the delete section" || fail "privacy page has no delete section"
+          PJS=$(grep -o 'assets/privacy-[^"]*\.js' privacy.html | head -1)
+          curl -sSL -m 30 -o privacy.js "$BASE/$PJS"
+          curl -sSL -m 30 -o index.html "$BASE/"
+          JS=$(grep -o 'assets/main-[^"]*\.js' index.html | head -1)
+          curl -sSL -m 30 -o main.js "$BASE/$JS"
+          SCRIPT=$(grep -o 'https://script.google.com/macros/s/[A-Za-z0-9_-]*/exec' main.js | head -1)
+          [ -n "$SCRIPT" ] || fail "no script address built into the page"
+          echo "::add-mask::$SCRIPT"
+          # The pages share code in other files (modulepreload links), so read every script either page names.
+          for f in $(cat index.html privacy.html | grep -o 'assets/[A-Za-z0-9._-]*\.js' | sort -u); do curl -sSL -m 30 -o "asset-$(basename "$f")" "$BASE/$f"; done
+          COUNTING=$(cat asset-*.js main.js privacy.js | grep -c 'gc.zgo.at' || true)
+          [ "$COUNTING" -gt 0 ] && echo "visit counting script is in the deployed page code" || fail "visit counting script is not in the deployed page code"
+          grep -q 'binday.goatcounter.com' asset-*.js main.js privacy.js && echo "pointed at the binday GoatCounter site" || fail "not pointed at binday.goatcounter.com"
+          [ "$PAGE_ONLY" = yes ] && { echo "page checks passed"; exit 0; }
+
+          call() { curl -sSL -m 90 -H 'Content-Type: text/plain;charset=utf-8' -d "$1" "$SCRIPT"; }
+          field() { jq -r --arg k "$1" '(.[$k] // "") | tostring' 2>/dev/null || echo "<not json>"; }
+
+          BODY=$(python3 -c 'import json,os; print(json.dumps({"action":"subscribe","ons_code":os.environ["ONS"],"postcode":os.environ["POSTCODE"],"house_number":os.environ["HOUSE"],"garden":False}))')
+
+          signup() {
+            REPLY=$(call "$BODY")
+            TOKEN=$(printf '%s' "$REPLY" | field token)
+            [ -n "$TOKEN" ] && [ "$TOKEN" != "<not json>" ] || fail "sign-up refused: $(printf '%s' "$REPLY" | field error)"
+            echo "::add-mask::$TOKEN"
+          }
+          poll() {
+            status=pending
+            for i in $(seq 1 60); do
+              UP=$(call "{\"action\":\"upcoming\",\"token\":\"$TOKEN\"}")
+              status=$(printf '%s' "$UP" | field status)
+              [ "$i" = 1 ] && FIRST="$status"
+              [ "$status" = ready ] || [ "$status" = failed ] && break
+              sleep 10
+            done
+          }
+          remove() {
+            R=$(call "{\"action\":\"unsubscribe\",\"token\":\"$TOKEN\"}")
+            [ "$(printf '%s' "$R" | field ok)" = true ] || fail "delete refused: $(printf '%s' "$R" | field error) (has the new Code.js been deployed?)"
+          }
+          gone() {
+            UP=$(call "{\"action\":\"upcoming\",\"token\":\"$TOKEN\"}")
+            [ "$(printf '%s' "$UP" | field error)" = "not found" ] || fail "the date lookup still answers after deleting"
+            FEED=$(curl -sSL -m 60 "$SCRIPT?feed=$TOKEN")
+            case "$FEED" in *BEGIN:VCALENDAR*) fail "the calendar feed still works after deleting";; esac
+          }
+
+          echo "1. sign up"; signup; poll; echo "   first answer: $FIRST, then: $status"
+          [ "$status" = ready ] || fail "the first sign-up did not get dates"
+          echo "2. delete the feed"; remove; echo "   delete accepted"
+          echo "3. the feed and the date lookup are gone"; gone; echo "   both answer not found"
+          echo "4. sign up the same address again"; signup; poll; echo "   first answer: $FIRST, then: $status"
+          [ "$FIRST" = pending ] || fail "the address answered $FIRST at once, so its dates survived the deletion"
+          echo "   pending first: the address and its dates were really deleted"
+          [ "$status" = ready ] || fail "the second sign-up did not get dates"
+          echo "5. delete again so nothing is left"; remove; gone; echo "   done, nothing left"
