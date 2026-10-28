@@ -7,7 +7,9 @@ from fetcher import registry
 
 
 def valid_entry():
-    return json.loads(json.dumps(json.loads(registry.REGISTRY_PATH.read_text())["councils"][0]))
+    """B&NES, a next_only council with frequencies, picked by code so the order of the registry doesn't matter."""
+    councils = json.loads(registry.REGISTRY_PATH.read_text())["councils"]
+    return copy.deepcopy(next(c for c in councils if c["ons_code"] == "E06000022"))
 
 
 def problems_for(*entries):
