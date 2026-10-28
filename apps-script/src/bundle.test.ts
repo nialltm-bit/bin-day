@@ -59,6 +59,10 @@ function load(properties: Record<string, string> = {}, fetched: Fetched = {}, fi
 }
 
 describe("the built script", () => {
+  it("uses no syntax the Apps Script editor rejects (it fails the whole file on a ??= it can't parse)", () => {
+    expect(code).not.toMatch(/\?\?=|\|\|=|&&=/);
+  });
+
   it("declares its entry points as plain top-level functions, which is what the editor's Run list shows", () => {
     const declared = [...code.matchAll(/^function (\w+)\(/gm)].map((m) => m[1]);
     expect(declared).toEqual(["doGet", "doPost", "testFetchRequest"]);

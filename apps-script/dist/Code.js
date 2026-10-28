@@ -25,7 +25,8 @@
     return text2.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
   }
   function utf8Length(char) {
-    const code = char.codePointAt(0) ?? 0;
+    var _a;
+    const code = (_a = char.codePointAt(0)) != null ? _a : 0;
     if (code < 128) return 1;
     if (code < 2048) return 2;
     if (code < 65536) return 3;
@@ -182,18 +183,19 @@
     return holidays.some((holiday) => holiday >= start && holiday <= end) || overlapsChristmas(start, end);
   }
   function projectCollections(input) {
+    var _a, _b, _c;
     const { collections, council, today, holidays } = input;
-    const binTypes = council.bin_types ?? {};
+    const binTypes = (_a = council.bin_types) != null ? _a : {};
     const horizon = addDays(today, HORIZON_DAYS);
     const result = [];
     const byBin = /* @__PURE__ */ new Map();
     for (const collection of collections) {
       if (!binTypes[collection.bin_name]) continue;
-      byBin.set(collection.bin_name, [...byBin.get(collection.bin_name) ?? [], collection.date]);
+      byBin.set(collection.bin_name, [...(_b = byBin.get(collection.bin_name)) != null ? _b : [], collection.date]);
     }
     for (const [binName, dates] of byBin) {
       const binType = binTypes[binName];
-      const label = binType.label ?? binName;
+      const label = (_c = binType.label) != null ? _c : binName;
       const confirmed = new Set(dates.filter((date) => date >= today));
       for (const date of confirmed) {
         result.push({ date, bin_name: binName, stream: binType.stream, label, confirmed: true });
@@ -2030,15 +2032,17 @@
     learned = data;
   }
   function parseLearnedFrequencies(raw) {
-    const bins = raw?.bins;
+    var _a;
+    const bins = raw == null ? void 0 : raw.bins;
     if (typeof bins !== "object" || bins === null || Array.isArray(bins)) return null;
     const result = {};
     for (const [code, perBin] of Object.entries(bins)) {
       if (!ONS_CODE.test(code) || typeof perBin !== "object" || perBin === null) continue;
       for (const [name, entry] of Object.entries(perBin)) {
-        const weeks = entry?.weeks;
+        const weeks = entry == null ? void 0 : entry.weeks;
         if (name.length > 200 || typeof weeks !== "number" || !Number.isInteger(weeks) || weeks < 1 || weeks > 4) continue;
-        (result[code] ??= {})[name] = weeks;
+        result[code] = (_a = result[code]) != null ? _a : {};
+        result[code][name] = weeks;
       }
     }
     return result;
@@ -2065,7 +2069,7 @@
     return slim;
   }
   function slimCouncils(raw) {
-    const list = raw?.councils;
+    const list = raw == null ? void 0 : raw.councils;
     if (!Array.isArray(list) || list.length > MAX_COUNCILS) return null;
     const slim = [];
     for (const item of list) {
@@ -2096,7 +2100,7 @@
     bankHolidays = data;
   }
   function parseBankHolidays(raw) {
-    const regions = raw?.regions;
+    const regions = raw == null ? void 0 : raw.regions;
     if (typeof regions !== "object" || regions === null) return null;
     const clean = {};
     for (const [name, value] of Object.entries(regions)) {
@@ -2109,7 +2113,7 @@
   }
   function bankHolidaysFor(onsCode) {
     const region = bankHolidays.regions[regionFor(onsCode)];
-    return region?.verified ? region.dates : void 0;
+    return (region == null ? void 0 : region.verified) ? region.dates : void 0;
   }
 
   // src/warnings.ts
@@ -2136,19 +2140,23 @@
     return `from ${longDate(firstChange)}`;
   }
   function changeWarnings(input) {
+    var _a, _b, _c;
     const { id, council, garden, changes, today } = input;
-    const binTypes = council.bin_types ?? {};
+    const binTypes = (_a = council.bin_types) != null ? _a : {};
     const byDay = /* @__PURE__ */ new Map();
     for (const change of changes) {
       if (change.kind !== "round_change") continue;
-      if (!garden && binTypes[change.bin_name]?.stream === "garden") continue;
+      if (!garden && ((_b = binTypes[change.bin_name]) == null ? void 0 : _b.stream) === "garden") continue;
       const found = change.at.slice(0, 10);
       if (daysBetween(found, today) > WARNING_LOOKBACK_DAYS) continue;
-      byDay.set(found, [...byDay.get(found) ?? [], change]);
+      byDay.set(found, [...(_c = byDay.get(found)) != null ? _c : [], change]);
     }
     const events = [];
     for (const [found, group] of [...byDay].sort(([a], [b]) => a.localeCompare(b))) {
-      const targets = group.map((c) => c.after ?? c.before);
+      const targets = group.map((c) => {
+        var _a2;
+        return (_a2 = c.after) != null ? _a2 : c.before;
+      });
       const first = [...targets].sort()[0];
       if (daysBetween(first, today) > WARNING_LEAD_DAYS) continue;
       const date = [addDays(first, -WARNING_LEAD_DAYS), found].sort().at(-1);
@@ -2158,7 +2166,10 @@
       events.push({
         uid: `${id}-change-${found}@bin-day`,
         summary: `Bin days change ${when(date, first)}${now}`,
-        description: group.map((c) => describe(c, binTypes[c.bin_name]?.label ?? c.bin_name)).join("\n"),
+        description: group.map((c) => {
+          var _a2, _b2;
+          return describe(c, (_b2 = (_a2 = binTypes[c.bin_name]) == null ? void 0 : _a2.label) != null ? _b2 : c.bin_name);
+        }).join("\n"),
         start: { kind: "date", date },
         alarm: WARNING_ALARM
       });
@@ -2178,9 +2189,10 @@
     return { uid: `${id}-${kind}@bin-day`, summary, start: { kind: "date", date: today } };
   }
   function groupByDate(collections) {
+    var _a;
     const groups = /* @__PURE__ */ new Map();
     for (const collection of collections) {
-      groups.set(collection.date, [...groups.get(collection.date) ?? [], collection]);
+      groups.set(collection.date, [...(_a = groups.get(collection.date)) != null ? _a : [], collection]);
     }
     return groups;
   }
@@ -2203,9 +2215,10 @@
     };
   }
   function buildFeed(input) {
+    var _a, _b, _c;
     const { subscription, council, collections, fetchedAt, now, today, holidays } = input;
     const id = subscription.id;
-    const failures = input.consecutiveFailures ?? 0;
+    const failures = (_a = input.consecutiveFailures) != null ? _a : 0;
     const unconfirmedNotice = noticeEvent(id, "unconfirmed", UNCONFIRMED_SUMMARY, today);
     if (fetchedAt === null) {
       const notice = failures > 0 ? unconfirmedNotice : noticeEvent(id, "setup", SETTING_UP_SUMMARY, today);
@@ -2222,17 +2235,18 @@
     const ordinalsByWeek = /* @__PURE__ */ new Map();
     for (const [date, group] of [...groupByDate(wanted)].sort(([a], [b]) => a.localeCompare(b))) {
       const week = isoWeek(date);
-      const ordinal = (ordinalsByWeek.get(week) ?? 0) + 1;
+      const ordinal = ((_b = ordinalsByWeek.get(week)) != null ? _b : 0) + 1;
       ordinalsByWeek.set(week, ordinal);
       events.push(eventFor(id, date, ordinal, group));
     }
-    events.push(...changeWarnings({ id, council, garden: subscription.garden, changes: input.changes ?? [], today }));
+    events.push(...changeWarnings({ id, council, garden: subscription.garden, changes: (_c = input.changes) != null ? _c : [], today }));
     if (failures > 0 || age > UNCONFIRMED_DAYS) events.push(unconfirmedNotice);
     events.sort((a, b) => a.start.date.localeCompare(b.start.date));
     return buildCalendar("Bin Day", events, new Date(fetchedAt));
   }
   var FEED_TOKEN = /^[0-9a-f]{64}$/;
   function feedFor(token, deps) {
+    var _a, _b, _c;
     if (!FEED_TOKEN.test(token)) return null;
     const subscription = deps.tables.findSubscription(token);
     if (!subscription) return null;
@@ -2242,17 +2256,18 @@
     return buildFeed({
       subscription: { id: subscription.id, garden: subscription.garden },
       council,
-      collections: result?.collections ?? [],
-      fetchedAt: result?.fetched_at ?? null,
+      collections: (_a = result == null ? void 0 : result.collections) != null ? _a : [],
+      fetchedAt: (_b = result == null ? void 0 : result.fetched_at) != null ? _b : null,
       now: deps.now,
       today: deps.today,
       holidays: bankHolidaysFor(subscription.ons_code),
-      consecutiveFailures: result?.consecutive_failures ?? 0,
+      consecutiveFailures: (_c = result == null ? void 0 : result.consecutive_failures) != null ? _c : 0,
       changes: deps.tables.recentChanges(subscription.uprn)
     });
   }
   var UPCOMING_DAYS = 6;
   function upcomingFor(token, deps) {
+    var _a;
     if (!FEED_TOKEN.test(token)) return null;
     const subscription = deps.tables.findSubscription(token);
     if (!subscription) return null;
@@ -2260,7 +2275,7 @@
     if (!council) return null;
     const result = deps.tables.getResult(subscription.uprn);
     if (!result || result.fetched_at === null) {
-      return { status: (result?.consecutive_failures ?? 0) > 0 ? "failed" : "pending", collections: [] };
+      return { status: ((_a = result == null ? void 0 : result.consecutive_failures) != null ? _a : 0) > 0 ? "failed" : "pending", collections: [] };
     }
     if (daysBetween(result.fetched_at.slice(0, 10), deps.today) > STALE_DAYS) return { status: "failed", collections: [] };
     const wanted = projectCollections({
@@ -2383,14 +2398,15 @@
     return rows2;
   }
   function subscribe(request, deps) {
+    var _a, _b, _c, _d;
     const { uprn, ons_code, postcode, house_number, garden } = request;
     if (typeof ons_code !== "string" || !ONS_CODE2.test(ons_code)) return fail("bad ons_code");
     if (postcode !== void 0 && !(typeof postcode === "string" && POSTCODE.test(postcode))) return fail("bad postcode");
     if (house_number !== void 0 && !(typeof house_number === "string" && HOUSE_NUMBER.test(house_number))) return fail("bad house_number");
     if (garden !== void 0 && typeof garden !== "boolean") return fail("bad garden");
     const council = getCouncil(ons_code);
-    if (council?.status !== "supported") return fail("council not supported yet");
-    for (const input of council.inputs ?? []) {
+    if ((council == null ? void 0 : council.status) !== "supported") return fail("council not supported yet");
+    for (const input of (_a = council.inputs) != null ? _a : []) {
       if (input === "postcode" && typeof postcode !== "string") return fail("postcode needed");
       if (input === "house_number" && typeof house_number !== "string") return fail("house_number needed");
     }
@@ -2398,7 +2414,7 @@
       return fail("first line needed");
     }
     let key;
-    if ((council.inputs ?? []).includes("uprn")) {
+    if (((_b = council.inputs) != null ? _b : []).includes("uprn")) {
       if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
       key = uprn;
     } else {
@@ -2407,12 +2423,13 @@
       key = made;
     }
     if (!deps.newToken || !deps.newId) return fail("not configured");
-    const withLock = deps.withLock ?? ((work) => work());
+    const withLock = (_c = deps.withLock) != null ? _c : ((work) => work());
     const { tables } = deps;
     let added = false;
     const reply = withLock(() => {
-      if (tables.countSubscriptions() >= (deps.maxSubscriptions ?? DEFAULT_MAX_SUBSCRIPTIONS)) return fail("full");
-      if (tables.countSubscriptions(key) >= (deps.maxPerAddress ?? DEFAULT_MAX_PER_ADDRESS)) return fail("too many feeds for this address");
+      var _a2, _b2, _c2, _d2, _e, _f;
+      if (tables.countSubscriptions() >= ((_a2 = deps.maxSubscriptions) != null ? _a2 : DEFAULT_MAX_SUBSCRIPTIONS)) return fail("full");
+      if (tables.countSubscriptions(key) >= ((_b2 = deps.maxPerAddress) != null ? _b2 : DEFAULT_MAX_PER_ADDRESS)) return fail("too many feeds for this address");
       if (!tables.addresses().some((address) => address.uprn === key)) {
         const row = { uprn: key, ons_code };
         if (typeof postcode === "string") row.postcode = postcode;
@@ -2420,43 +2437,47 @@
         tables.addAddress(row);
         added = true;
       }
-      const token = deps.newToken?.();
+      const token = (_c2 = deps.newToken) == null ? void 0 : _c2.call(deps);
       tables.addSubscription({
         token,
-        id: deps.newId?.(),
+        id: (_d2 = deps.newId) == null ? void 0 : _d2.call(deps),
         uprn: key,
         ons_code,
         garden: garden === true,
-        created_at: deps.nowIso?.() ?? (/* @__PURE__ */ new Date()).toISOString()
+        created_at: (_f = (_e = deps.nowIso) == null ? void 0 : _e.call(deps)) != null ? _f : (/* @__PURE__ */ new Date()).toISOString()
       });
       return { ok: true, token };
     });
     if (added && reply.ok) {
       try {
-        deps.requestFetch?.();
+        (_d = deps.requestFetch) == null ? void 0 : _d.call(deps);
       } catch {
       }
     }
     return reply;
   }
   function upcoming(request, deps) {
+    var _a, _b;
     const { token } = request;
     if (typeof token !== "string") return fail("bad token");
-    const today = deps.todayIso?.() ?? (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+    const today = (_b = (_a = deps.todayIso) == null ? void 0 : _a.call(deps)) != null ? _b : (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
     const found = upcomingFor(token, { tables: deps.tables, today });
     return found === null ? fail("not found") : { ok: true, ...found };
   }
   function joinWaitlist(request, deps) {
+    var _a;
     const { ons_code } = request;
     if (typeof ons_code !== "string" || !ONS_CODE2.test(ons_code)) return fail("bad ons_code");
-    const withLock = deps.withLock ?? ((work) => work());
+    const withLock = (_a = deps.withLock) != null ? _a : ((work) => work());
     const { tables } = deps;
     return withLock(() => {
-      tables.bumpWaitlist(ons_code, deps.nowIso?.() ?? (/* @__PURE__ */ new Date()).toISOString(), deps.maxWaitlistCouncils ?? DEFAULT_MAX_WAITLIST_COUNCILS);
+      var _a2, _b, _c;
+      tables.bumpWaitlist(ons_code, (_b = (_a2 = deps.nowIso) == null ? void 0 : _a2.call(deps)) != null ? _b : (/* @__PURE__ */ new Date()).toISOString(), (_c = deps.maxWaitlistCouncils) != null ? _c : DEFAULT_MAX_WAITLIST_COUNCILS);
       return { ok: true };
     });
   }
   function handle(body, deps) {
+    var _a;
     if (typeof body !== "object" || body === null) return fail("bad request");
     const request = body;
     if (request.action === "subscribe") return subscribe(request, deps);
@@ -2464,14 +2485,17 @@
     if (request.action === "upcoming") return upcoming(request, deps);
     if (deps.secret === void 0 || deps.secret === "") return fail("not configured");
     if (typeof request.secret !== "string" || !safeEqual(request.secret, deps.secret)) return fail("unauthorised");
-    const withLock = deps.withLock ?? ((work) => work());
+    const withLock = (_a = deps.withLock) != null ? _a : ((work) => work());
     const { tables } = deps;
     switch (request.action) {
       case "addresses": {
-        const addresses = tables.addresses().map((address) => ({
-          ...address,
-          last_attempt: tables.getResult(address.uprn)?.last_attempt ?? null
-        }));
+        const addresses = tables.addresses().map((address) => {
+          var _a2, _b;
+          return {
+            ...address,
+            last_attempt: (_b = (_a2 = tables.getResult(address.uprn)) == null ? void 0 : _a2.last_attempt) != null ? _b : null
+          };
+        });
         return { ok: true, addresses };
       }
       case "add_address": {
@@ -2521,14 +2545,15 @@
         if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
         if (error === null) return fail("bad error");
         withLock(() => {
+          var _a2, _b, _c;
           const previous = tables.getResult(uprn);
           tables.putResult({
             uprn,
-            fetched_at: previous?.fetched_at ?? null,
+            fetched_at: (_a2 = previous == null ? void 0 : previous.fetched_at) != null ? _a2 : null,
             last_attempt: now,
             last_error: error,
-            consecutive_failures: (previous?.consecutive_failures ?? 0) + 1,
-            collections: previous?.collections ?? []
+            consecutive_failures: ((_b = previous == null ? void 0 : previous.consecutive_failures) != null ? _b : 0) + 1,
+            collections: (_c = previous == null ? void 0 : previous.collections) != null ? _c : []
           });
         });
         return { ok: true };
@@ -2576,20 +2601,26 @@
       const last = sheet.getLastRow();
       if (last < 2) return [];
       const first = Math.max(2, last - RECENT_CHANGE_ROWS + 1);
-      return sheet.getRange(first, 1, last - first + 1, CHANGE_HEADERS.length).getValues().filter((row) => String(row[1]) === uprn).map((row) => ({
-        at: String(row[0]),
-        uprn,
-        ons_code: String(row[2]),
-        bin_name: String(row[3]),
-        kind: String(row[4]),
-        before: optional(row[5]) ?? null,
-        after: optional(row[6]) ?? null,
-        note: String(row[7])
-      }));
+      return sheet.getRange(first, 1, last - first + 1, CHANGE_HEADERS.length).getValues().filter((row) => String(row[1]) === uprn).map((row) => {
+        var _a, _b;
+        return {
+          at: String(row[0]),
+          uprn,
+          ons_code: String(row[2]),
+          bin_name: String(row[3]),
+          kind: String(row[4]),
+          before: (_a = optional(row[5])) != null ? _a : null,
+          after: (_b = optional(row[6])) != null ? _b : null,
+          note: String(row[7])
+        };
+      });
     },
     addChanges(rows2) {
       const sheet = table("changes", CHANGE_HEADERS, [1, 2, 3, 4, 5, 6, 7, 8]);
-      const values = rows2.map((r) => [r.at, r.uprn, r.ons_code, r.bin_name, r.kind, r.before ?? "", r.after ?? "", r.note]);
+      const values = rows2.map((r) => {
+        var _a, _b;
+        return [r.at, r.uprn, r.ons_code, r.bin_name, r.kind, (_a = r.before) != null ? _a : "", (_b = r.after) != null ? _b : "", r.note];
+      });
       if (values.length > 0) sheet.getRange(sheet.getLastRow() + 1, 1, values.length, CHANGE_HEADERS.length).setValues(values);
     },
     addresses() {
@@ -2603,34 +2634,37 @@
       });
     },
     addAddress(row) {
+      var _a, _b;
       const sheet = table("addresses", ADDRESS_HEADERS);
-      sheet.appendRow([row.uprn, row.ons_code, row.postcode ?? "", row.house_number ?? "", (/* @__PURE__ */ new Date()).toISOString()]);
+      sheet.appendRow([row.uprn, row.ons_code, (_a = row.postcode) != null ? _a : "", (_b = row.house_number) != null ? _b : "", (/* @__PURE__ */ new Date()).toISOString()]);
     },
     getResult(uprn) {
+      var _a, _b;
       const sheet = table("results", RESULT_HEADERS);
       const rowNumber = findRow(sheet, uprn);
       if (rowNumber === null) return null;
       const [, fetchedAt, lastAttempt, lastError, failures, json2] = sheet.getRange(rowNumber, 1, 1, RESULT_HEADERS.length).getValues()[0];
       return {
         uprn,
-        fetched_at: optional(fetchedAt) ?? null,
+        fetched_at: (_a = optional(fetchedAt)) != null ? _a : null,
         last_attempt: String(lastAttempt),
-        last_error: optional(lastError) ?? null,
+        last_error: (_b = optional(lastError)) != null ? _b : null,
         consecutive_failures: Number(failures) || 0,
         collections: json2 ? JSON.parse(String(json2)) : []
       };
     },
     putResult(row) {
+      var _a, _b, _c;
       const sheet = table("results", RESULT_HEADERS);
       const values = [
         row.uprn,
-        row.fetched_at ?? "",
+        (_a = row.fetched_at) != null ? _a : "",
         row.last_attempt,
-        row.last_error ?? "",
+        (_b = row.last_error) != null ? _b : "",
         row.consecutive_failures,
         JSON.stringify(row.collections)
       ];
-      const rowNumber = findRow(sheet, row.uprn) ?? sheet.getLastRow() + 1;
+      const rowNumber = (_c = findRow(sheet, row.uprn)) != null ? _c : sheet.getLastRow() + 1;
       sheet.getRange(rowNumber, 1, 1, values.length).setValues([values]);
     },
     countSubscriptions(uprn) {
@@ -2705,13 +2739,14 @@
     return ContentService.createTextOutput(JSON.stringify(body)).setMimeType(ContentService.MimeType.JSON);
   }
   function doGet(e) {
-    if (e?.parameter?.feed === "poc") {
+    var _a, _b;
+    if (((_a = e == null ? void 0 : e.parameter) == null ? void 0 : _a.feed) === "poc") {
       const now = /* @__PURE__ */ new Date();
       const today = Utilities.formatDate(now, "Europe/London", "yyyy-MM-dd");
       const calendar = buildCalendar("Bin Day PoC", pocEvents(today), now);
       return ContentService.createTextOutput(calendar).setMimeType(ContentService.MimeType.ICAL);
     }
-    const token = e?.parameter?.feed;
+    const token = (_b = e == null ? void 0 : e.parameter) == null ? void 0 : _b.feed;
     if (token && token !== "poc") {
       refreshData();
       const now = /* @__PURE__ */ new Date();
@@ -2769,16 +2804,17 @@
     console.log(code === null ? "Not set up: add the GITHUB_TOKEN and GITHUB_REPO script properties." : `GitHub answered HTTP ${code} (204 means the fetch was requested).`);
   }
   function doPost(e) {
+    var _a, _b, _c;
     let body;
     try {
-      body = JSON.parse(e?.postData?.contents ?? "null");
+      body = JSON.parse((_b = (_a = e == null ? void 0 : e.postData) == null ? void 0 : _a.contents) != null ? _b : "null");
     } catch {
       return json({ ok: false, error: "body is not JSON" });
     }
     if (typeof body === "object" && body !== null && "action" in body) {
       refreshData();
       const properties = PropertiesService.getScriptProperties();
-      const secret = properties.getProperty("FETCHER_SECRET") ?? void 0;
+      const secret = (_c = properties.getProperty("FETCHER_SECRET")) != null ? _c : void 0;
       const max = Number(properties.getProperty("MAX_SUBSCRIPTIONS"));
       return json(
         handle(body, {
