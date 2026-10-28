@@ -19,7 +19,8 @@ def main(input_path, module):
             args.append(f"{flag}={entry[key]}")
     if entry.get("skip_get_url") is True:
         args.append("-s")
-    print("inputs used:", [k for k in ("uprn", "postcode", "house_number") if entry.get(k)], "| web_driver listed:", bool(entry.get("web_driver")))
+    used = [k for k in ("uprn", "postcode", "house_number") if entry.get(k)]
+    print("inputs used:", used, "| web_driver listed:", bool(entry.get("web_driver")))
     app = UKBinCollectionApp()
     app.set_args(args)
     data = json.loads(app.run())
