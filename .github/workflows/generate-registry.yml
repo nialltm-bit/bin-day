@@ -26,6 +26,8 @@ jobs:
           python-version: "3.12"
       - run: curl -fsSL -o "$RUNNER_TEMP/input.json" https://raw.githubusercontent.com/robbrad/UKBinCollectionData/0.173.5/uk_bin_collection/tests/input.json
       - name: Generate
+        env:
+          PYTHONPATH: .
         run: python scripts/generate_registry.py "$RUNNER_TEMP/input.json" docs/spike-results/batch-probe.json registry/councils.json docs/spike-results/generated-registry-report.md
       - name: Check it
         run: python -m fetcher.registry
