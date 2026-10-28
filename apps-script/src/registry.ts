@@ -60,7 +60,8 @@ export function parseLearnedFrequencies(raw: unknown): LearnedFrequencies | null
     for (const [name, entry] of Object.entries(perBin)) {
       const weeks = (entry as { weeks?: unknown } | null)?.weeks;
       if (name.length > 200 || typeof weeks !== "number" || !Number.isInteger(weeks) || weeks < 1 || weeks > 4) continue;
-      (result[code] ??= {})[name] = weeks;
+      result[code] = result[code] ?? {};
+      result[code][name] = weeks;
     }
   }
   return result;

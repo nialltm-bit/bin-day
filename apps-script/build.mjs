@@ -9,7 +9,7 @@ await build({
   outfile: "dist/Code.js",
   bundle: true,
   format: "iife",
-  target: "es2022",
+  target: "es2019",
   legalComments: "none",
   // Apps Script finds doGet and doPost by name and its editor lists only functions declared at the top level of the
   // file, so these plain declarations hand over to the bundled functions.
