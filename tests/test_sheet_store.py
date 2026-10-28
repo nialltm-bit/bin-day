@@ -142,3 +142,23 @@ def test_payloads_are_json_serialisable():
     service = FakeService()
     store_with(service).save_success("1", "2026-10-26T12:00:00+00:00", [Collection("2026-10-30", "Food", "food")])
     json.dumps(service.requests[0][1])
+
+
+def test_expire_feeds_asks_the_script_and_reports_the_counts():
+    service = FakeService({"expire_feeds": {"ok": True, "expired": 3, "addresses_deleted": 2}})
+    assert store_with(service).expire_feeds(365) == (3, 2)
+    assert service.requests[0][1] == {"secret": SECRET, "action": "expire_feeds", "days": 365}
+
+
+def test_the_expire_command_prints_only_counts(monkeypatch, capsys):
+    service = FakeService({"expire_feeds": {"ok": True, "expired": 1, "addresses_deleted": 1}})
+    monkeypatch.setattr(SheetStore, "from_env", classmethod(lambda cls: store_with(service)))
+    assert main(["expire", "--sheet"]) == 0
+    assert json.loads(capsys.readouterr().out) == {"expired_feeds": 1, "addresses_deleted": 1, "days": 365}
+
+
+def test_the_expire_command_waits_politely_for_an_older_script(monkeypatch, capsys):
+    service = FakeService({"expire_feeds": {"ok": False, "error": "unknown action"}})
+    monkeypatch.setattr(SheetStore, "from_env", classmethod(lambda cls: store_with(service)))
+    assert main(["expire", "--sheet"]) == 0
+    assert "redeployed" in capsys.readouterr().out

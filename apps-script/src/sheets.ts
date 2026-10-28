@@ -2,7 +2,7 @@ import type { AddressRow, ChangeRow, CollectionRow, ResultRow, SubscriptionRow, 
 
 const ADDRESS_HEADERS = ["uprn", "ons_code", "postcode", "house_number", "created_at"];
 const RESULT_HEADERS = ["uprn", "fetched_at", "last_attempt", "last_error", "consecutive_failures", "collections_json"];
-const SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at"];
+const SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at", "last_used"];
 const WAITLIST_HEADERS = ["ons_code", "count", "first_at", "last_at"];
 const RECENT_CHANGE_ROWS = 500;
 const CHANGE_HEADERS = ["at", "uprn", "ons_code", "bin_name", "kind", "before", "after", "note"];
@@ -18,6 +18,25 @@ function table(name: string, headers: string[], textColumns: number[] = [1]): Go
     for (const column of textColumns) sheet.getRange(1, column, sheet.getMaxRows(), 1).setNumberFormat("@");
   }
   return sheet;
+}
+
+/** The subscriptions tab. A tab made before `last_used` existed gets the new heading the first time it is used. */
+function subscriptionsTable(): GoogleAppsScript.Spreadsheet.Sheet {
+  const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3, 7]);
+  const last = SUBSCRIPTION_HEADERS.length;
+  if (sheet.getRange(1, last).getValue() === "") {
+    sheet.getRange(1, last).setValue("last_used");
+    sheet.getRange(1, last, sheet.getMaxRows(), 1).setNumberFormat("@");
+  }
+  return sheet;
+}
+
+function subscriptionFrom(values: unknown[]): SubscriptionRow {
+  const [token, id, uprn, onsCode, garden, createdAt, lastUsed] = values;
+  const row: SubscriptionRow = { token: String(token), id: String(id), uprn: String(uprn), ons_code: String(onsCode), garden: garden === "yes", created_at: String(createdAt) };
+  const used = optional(lastUsed);
+  if (used) row.last_used = used;
+  return row;
 }
 
 function rows(sheet: GoogleAppsScript.Spreadsheet.Sheet): unknown[][] {
@@ -113,7 +132,7 @@ export const sheetTables: Tables = {
   },
 
   countSubscriptions(uprn?: string): number {
-    const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
+    const sheet = subscriptionsTable();
     const last = sheet.getLastRow();
     if (last < 2) return 0;
     if (uprn === undefined) return last - 1;
@@ -124,22 +143,37 @@ export const sheetTables: Tables = {
   },
 
   addSubscription(row: SubscriptionRow): void {
-    const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
-    sheet.appendRow([row.token, row.id, row.uprn, row.ons_code, row.garden ? "yes" : "no", row.created_at]);
+    const sheet = subscriptionsTable();
+    sheet.appendRow([row.token, row.id, row.uprn, row.ons_code, row.garden ? "yes" : "no", row.created_at, row.last_used ?? row.created_at.slice(0, 10)]);
   },
 
   findSubscription(token: string): SubscriptionRow | null {
-    const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
+    const sheet = subscriptionsTable();
     const rowNumber = findRow(sheet, token);
     if (rowNumber === null) return null;
-    const [, id, uprn, onsCode, garden, createdAt] = sheet.getRange(rowNumber, 1, 1, SUBSCRIPTION_HEADERS.length).getValues()[0];
-    return { token, id: String(id), uprn: String(uprn), ons_code: String(onsCode), garden: garden === "yes", created_at: String(createdAt) };
+    return subscriptionFrom(sheet.getRange(rowNumber, 1, 1, SUBSCRIPTION_HEADERS.length).getValues()[0]);
+  },
+
+  subscriptions(): SubscriptionRow[] {
+    return rows(subscriptionsTable()).map(subscriptionFrom);
+  },
+
+  touchSubscription(token: string, today: string): void {
+    const sheet = subscriptionsTable();
+    const rowNumber = findRow(sheet, token);
+    if (rowNumber === null) return;
+    const cell = sheet.getRange(rowNumber, SUBSCRIPTION_HEADERS.length);
+    if (String(cell.getValue()) !== today) cell.setValue(today); // at most one write a day, however often a calendar app asks
+  },
+
+  hasAddress(uprn: string): boolean {
+    return findRow(table("addresses", ADDRESS_HEADERS), uprn) !== null;
   },
 
   deleteSubscription(token: string): SubscriptionRow | null {
     const found = sheetTables.findSubscription(token);
     if (found === null) return null;
-    const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
+    const sheet = subscriptionsTable();
     const rowNumber = findRow(sheet, token);
     if (rowNumber !== null) sheet.deleteRow(rowNumber);
     return found;

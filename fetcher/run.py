@@ -145,12 +145,26 @@ def main(argv: list[str] | None = None) -> int:
     fetch.add_argument("--uprn", help="only this address")
     fetch.add_argument("--learned", type=Path, default=learning.LEARNED_PATH, help="where learned bin frequencies are kept")
 
+    expire = commands.add_parser("expire", help="delete feeds nobody has used for a long time, with their addresses")
+    expire.add_argument("--sheet", action="store_true", required=True)
+    expire.add_argument("--days", type=int, default=365)
+
     args = parser.parse_args(argv)
     try:
         store = SheetStore.from_env() if args.sheet else FileStore(args.store)
     except StoreError as err:
         print(err, file=sys.stderr)
         return 2
+    if args.command == "expire":
+        try:
+            feeds, addresses = store.expire_feeds(args.days)
+        except StoreError as err:
+            if "unknown action" in str(err):  # an older script: nothing to expire with until it is redeployed
+                print(json.dumps({"expire": "not available until the script is redeployed"}))
+                return 0
+            raise
+        print(json.dumps({"expired_feeds": feeds, "addresses_deleted": addresses, "days": args.days}))
+        return 0
     if args.command == "add":
         store.add_address(Address(uprn=args.uprn, ons_code=args.ons, postcode=args.postcode, house_number=args.house_number))
         return 0

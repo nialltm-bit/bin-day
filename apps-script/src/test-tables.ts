@@ -17,6 +17,12 @@ export function memoryTables() {
     countSubscriptions: (uprn) => subscriptions.filter((s) => uprn === undefined || s.uprn === uprn).length,
     addSubscription: (row) => void subscriptions.push({ ...row }),
     findSubscription: (token) => subscriptions.find((s) => s.token === token) ?? null,
+    subscriptions: () => subscriptions.map((s) => ({ ...s })),
+    touchSubscription: (token, today) => {
+      const row = subscriptions.find((s) => s.token === token);
+      if (row) row.last_used = today;
+    },
+    hasAddress: (uprn) => addresses.some((a) => a.uprn === uprn),
     deleteSubscription: (token) => {
       const index = subscriptions.findIndex((s) => s.token === token);
       return index === -1 ? null : (subscriptions.splice(index, 1)[0] as SubscriptionRow);

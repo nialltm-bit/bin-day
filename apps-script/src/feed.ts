@@ -115,6 +115,7 @@ export function feedFor(token: string, deps: { tables: Tables; now: Date; today:
   if (!subscription) return null;
   const council = getCouncil(subscription.ons_code);
   if (!council) return null;
+  deps.tables.touchSubscription(token, deps.today);
   const result = deps.tables.getResult(subscription.uprn);
   return buildFeed({
     subscription: { id: subscription.id, garden: subscription.garden },
@@ -145,6 +146,7 @@ export function upcomingFor(token: string, deps: { tables: Tables; today: string
   if (!subscription) return null;
   const council = getCouncil(subscription.ons_code);
   if (!council) return null;
+  deps.tables.touchSubscription(token, deps.today);
   const result = deps.tables.getResult(subscription.uprn);
   if (!result || result.fetched_at === null) {
     return { status: (result?.consecutive_failures ?? 0) > 0 ? "failed" : "pending", collections: [] };

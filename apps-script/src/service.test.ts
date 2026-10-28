@@ -86,6 +86,11 @@ describe("add_address and addresses", () => {
 });
 
 describe("save_success", () => {
+  beforeEach(() => {
+    // A fetch only saves for an address that exists.
+    for (const uprn of ["1", "100120000855"]) store.tables.addAddress({ uprn, ons_code: "E06000022" });
+  });
+
   it("stores collections with a fetched-at timestamp", () => {
     expect(call({ action: "save_success", uprn: "1", now: NOW, collections: COLLECTIONS })).toEqual({ ok: true });
     expect(store.results.get("1")).toEqual({
@@ -127,6 +132,11 @@ describe("save_success", () => {
 });
 
 describe("save_failure", () => {
+  beforeEach(() => {
+    // A fetch only saves for an address that exists.
+    for (const uprn of ["1", "100120000855"]) store.tables.addAddress({ uprn, ons_code: "E06000022" });
+  });
+
   it("keeps the last good collections and counts failures", () => {
     call({ action: "save_success", uprn: "1", now: NOW, collections: COLLECTIONS });
     const later = "2026-11-02T22:11:12+00:00";
@@ -276,6 +286,11 @@ describe("subscribe (public)", () => {
 });
 
 describe("get_result", () => {
+  beforeEach(() => {
+    // A fetch only saves for an address that exists.
+    for (const uprn of ["1", "100120000855"]) store.tables.addAddress({ uprn, ons_code: "E06000022" });
+  });
+
   it("gives the stored result so the fetcher can compare against it", () => {
     call({ action: "save_success", uprn: "1", now: NOW, collections: COLLECTIONS });
     const reply = call({ action: "get_result", uprn: "1" });
@@ -293,6 +308,11 @@ describe("get_result", () => {
 });
 
 describe("save_changes", () => {
+  beforeEach(() => {
+    // A fetch only saves for an address that exists.
+    for (const uprn of ["1", "100120000855"]) store.tables.addAddress({ uprn, ons_code: "E06000022" });
+  });
+
   const change = { bin_name: "Food Recycling Collection Bin", kind: "round_change", before: "2026-11-06", after: "2026-11-09", note: "weekday changed" };
   const save = (changes: unknown, extra: Record<string, unknown> = {}) =>
     call({ action: "save_changes", uprn: "1", ons_code: "E06000022", now: NOW, changes, ...extra });
@@ -572,5 +592,89 @@ describe("unsubscribe (public)", () => {
     expect(unsubscribe("short")).toEqual({ ok: false, error: "bad token" });
     expect(unsubscribe(undefined)).toEqual({ ok: false, error: "bad token" });
     expect(store.subscriptions).toHaveLength(1);
+  });
+});
+
+describe("a fetch that finishes after its address was deleted", () => {
+  const TOKEN = "c".repeat(64);
+  const signUp = () =>
+    handle({ action: "subscribe", uprn: "100120000855", ons_code: "E06000022" }, { secret: SECRET, tables: store.tables, newToken: () => TOKEN, newId: () => "00000001", nowIso: () => NOW });
+
+  it("writes nothing back: not its dates, not a failure, not recorded changes", () => {
+    signUp();
+    handle({ action: "unsubscribe", token: TOKEN }, deps);
+    expect(call({ action: "save_success", uprn: "100120000855", now: NOW, collections: COLLECTIONS })).toEqual({ ok: true });
+    expect(call({ action: "save_failure", uprn: "100120000855", now: NOW, error: "boom" })).toEqual({ ok: true });
+    expect(call({ action: "save_changes", uprn: "100120000855", ons_code: "E06000022", now: NOW, changes: [{ bin_name: "x", kind: "round_change", before: null, after: null, note: "n" }] })).toEqual({ ok: true });
+    expect(store.results.size).toBe(0);
+    expect(store.changes).toEqual([]);
+  });
+
+  it("still saves for an address that exists", () => {
+    signUp();
+    call({ action: "save_success", uprn: "100120000855", now: NOW, collections: COLLECTIONS });
+    expect(store.results.get("100120000855")?.collections).toHaveLength(2);
+  });
+});
+
+describe("expire_feeds", () => {
+  const today = "2026-10-28";
+  const withToday: Deps = { secret: SECRET, tables: undefined as never, todayIso: () => today };
+  const run = (extra: Record<string, unknown> = {}) => handle({ secret: SECRET, action: "expire_feeds", ...extra }, { ...withToday, tables: store.tables });
+  const feed = (token: string, uprn: string, lastUsed: string | undefined, created = "2024-01-01T10:00:00+00:00") => {
+    store.tables.addSubscription({ token, id: token.slice(0, 8), uprn, ons_code: "E06000022", garden: false, created_at: created, ...(lastUsed ? { last_used: lastUsed } : {}) });
+    if (!store.addresses.some((a) => a.uprn === uprn)) store.tables.addAddress({ uprn, ons_code: "E06000022" });
+    store.tables.putResult({ uprn, fetched_at: NOW, last_attempt: NOW, last_error: null, consecutive_failures: 0, collections: COLLECTIONS });
+  };
+
+  it("needs the secret", () => {
+    expect(handle({ action: "expire_feeds" }, { ...withToday, tables: store.tables })).toEqual({ ok: false, error: "unauthorised" });
+  });
+
+  it("deletes a feed unused for more than a year, with its address, dates and changes", () => {
+    feed("a".repeat(64), "100000000001", "2025-10-01");
+    expect(run()).toEqual({ ok: true, expired: 1, addresses_deleted: 1 });
+    expect(store.subscriptions).toEqual([]);
+    expect(store.addresses).toEqual([]);
+    expect(store.results.size).toBe(0);
+  });
+
+  it("keeps a feed used within the year, on the last day of it", () => {
+    feed("b".repeat(64), "100000000002", "2025-10-28");
+    feed("c".repeat(64), "100000000003", "2026-10-27");
+    expect(run()).toEqual({ ok: true, expired: 0, addresses_deleted: 0 });
+    expect(store.subscriptions).toHaveLength(2);
+  });
+
+  it("counts the sign-up day for a feed with no last-used day yet", () => {
+    feed("d".repeat(64), "100000000004", undefined, "2025-11-20T10:00:00+00:00");
+    feed("e".repeat(64), "100000000005", undefined, "2025-09-01T10:00:00+00:00");
+    expect(run()).toEqual({ ok: true, expired: 1, addresses_deleted: 1 });
+    expect(store.subscriptions.map((s) => s.token)).toEqual(["d".repeat(64)]);
+  });
+
+  it("keeps an address while a used feed still points at it", () => {
+    feed("f".repeat(64), "100000000006", "2025-01-01");
+    store.tables.addSubscription({ token: "9".repeat(64), id: "99999999", uprn: "100000000006", ons_code: "E06000022", garden: false, created_at: NOW, last_used: "2026-10-01" });
+    expect(run()).toEqual({ ok: true, expired: 1, addresses_deleted: 0 });
+    expect(store.addresses).toHaveLength(1);
+    expect(store.results.size).toBe(1);
+  });
+
+  it("takes a shorter or longer life, within limits", () => {
+    feed("a".repeat(64), "100000000007", "2026-06-01");
+    expect(run({ days: 365 })).toEqual({ ok: true, expired: 0, addresses_deleted: 0 });
+    expect(run({ days: 100 })).toEqual({ ok: true, expired: 1, addresses_deleted: 1 });
+    expect(run({ days: 5 })).toEqual({ ok: false, error: "bad days" });
+    expect(run({ days: "365" })).toEqual({ ok: false, error: "bad days" });
+  });
+});
+
+describe("using a feed", () => {
+  it("is recorded when the date lookup is asked for, once a day", () => {
+    const token = "a".repeat(64);
+    store.tables.addSubscription({ token, id: "00000001", uprn: "100120000855", ons_code: "E06000022", garden: false, created_at: NOW });
+    handle({ action: "upcoming", token }, { ...deps, todayIso: () => "2026-11-02" });
+    expect(store.subscriptions[0]?.last_used).toBe("2026-11-02");
   });
 });

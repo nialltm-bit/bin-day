@@ -102,6 +102,11 @@ class SheetStore:
             raise
         return list(result["collections"]) if result else []
 
+    def expire_feeds(self, days: int) -> tuple[int, int]:
+        """Deletes feeds nobody has used for `days` days, and the addresses left with no feed. Returns how many of each."""
+        reply = self._call("expire_feeds", days=days)
+        return int(reply.get("expired", 0)), int(reply.get("addresses_deleted", 0))
+
     def save_changes(self, uprn: str, ons_code: str, now: str, changes: list[Change]) -> None:
         rows = [{**asdict(change), "note": change.note[:300]} for change in changes]
         self._call("save_changes", uprn=uprn, ons_code=ons_code, now=now, changes=rows)

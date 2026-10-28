@@ -17,7 +17,7 @@ which they would expect, and which they can delete themselves.
 | Data | Where | Why | Kept until |
 |---|---|---|---|
 | Postcode and house number or first line (councils with no UPRN), or a UPRN (councils that need one; none live yet) | `addresses` tab | To ask the council for the dates, weekly | The last feed on the address is deleted |
-| Council code, garden waste yes/no, feed token, short id, sign-up time | `subscriptions` tab | To build the calendar and keep the link private | The feed is deleted |
+| Council code, garden waste yes/no, feed token, short id, sign-up time, last day used | `subscriptions` tab | To build the calendar and keep the link private; to find feeds nobody uses | The feed is deleted, or unused for 12 months |
 | Fetched dates, last attempt, last error text | `results` tab | To build the calendar; to say when a check failed | The address is deleted |
 | Recorded changes (moved collections) | `changes` tab | To warn about round changes | The address is deleted |
 | Council code and a count, no person | `waitlist` tab | To choose which council to add next | Not personal data |
@@ -53,6 +53,8 @@ private, and Actions logs never contain addresses, UPRNs, postcodes or tokens (s
   subscription is left for the address it deletes the address row, the result row and the change rows. The feed and
   the date lookup answer "not found" straight away. The privacy page has the control.
 - **Revoke**: deleting a feed revokes it. To get a new link, look up again.
+- **Deleted while a fetch runs**: a fetch that finishes after its address was deleted writes nothing back (the script
+  checks the address still exists before saving dates, failures or changes).
 - A person who has lost their link can't delete by themselves, because the token is the only proof of ownership.
   They can ask through the contact route; we would need to find the row by address, which the policy tells them not
   to post publicly. This is a gap; a private contact route would close it.
@@ -66,8 +68,11 @@ If a UPRN finder is added later, check its licence terms for storing UPRNs befor
 
 ## Open items
 
-- **Retention**: nothing deletes unused feeds yet. The policy says so plainly. Suggested follow-up: record the last
-  time each feed is fetched, and delete feeds not fetched for 12 months.
+- **Retention (built)**: each feed records the last day it was fetched or its dates were asked for (`last_used`, at
+  most one write a day). The scheduled fetch calls `expire_feeds` daily (`python -m fetcher.run expire --sheet`), which
+  deletes feeds unused for more than 365 days, and an address, its dates and its changes when it was the last feed on
+  it. A feed with no `last_used` yet (made before this existed) counts its sign-up day. Only the counts are logged.
+  A calendar app that still subscribes fetches the link regularly, so a live subscription never expires.
 - **Contact route**: see above.
 - **Legal name**: the policy says "FreshTech" only.
 - **Email**: no email is collected. The optional update sign-up in FRE-271 is off. The items under "Before the email

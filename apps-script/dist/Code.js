@@ -2252,6 +2252,7 @@
     if (!subscription) return null;
     const council = getCouncil(subscription.ons_code);
     if (!council) return null;
+    deps.tables.touchSubscription(token, deps.today);
     const result = deps.tables.getResult(subscription.uprn);
     return buildFeed({
       subscription: { id: subscription.id, garden: subscription.garden },
@@ -2273,6 +2274,7 @@
     if (!subscription) return null;
     const council = getCouncil(subscription.ons_code);
     if (!council) return null;
+    deps.tables.touchSubscription(token, deps.today);
     const result = deps.tables.getResult(subscription.uprn);
     if (!result || result.fetched_at === null) {
       return { status: ((_a = result == null ? void 0 : result.consecutive_failures) != null ? _a : 0) > 0 ? "failed" : "pending", collections: [] };
@@ -2331,6 +2333,8 @@
   }
 
   // src/service.ts
+  var DEFAULT_FEED_LIFE_DAYS = 365;
+  var MIN_FEED_LIFE_DAYS = 30;
   var STREAMS2 = ["general", "recycling", "food", "garden"];
   var CHANGE_KINDS = ["expected_shift", "round_change"];
   var DEFAULT_MAX_SUBSCRIPTIONS = 5e3;
@@ -2490,7 +2494,7 @@
     });
   }
   function handle(body, deps) {
-    var _a;
+    var _a, _b, _c;
     if (typeof body !== "object" || body === null) return fail("bad request");
     const request = body;
     if (request.action === "subscribe") return subscribe(request, deps);
@@ -2504,10 +2508,10 @@
     switch (request.action) {
       case "addresses": {
         const addresses = tables.addresses().map((address) => {
-          var _a2, _b;
+          var _a2, _b2;
           return {
             ...address,
-            last_attempt: (_b = (_a2 = tables.getResult(address.uprn)) == null ? void 0 : _a2.last_attempt) != null ? _b : null
+            last_attempt: (_b2 = (_a2 = tables.getResult(address.uprn)) == null ? void 0 : _a2.last_attempt) != null ? _b2 : null
           };
         });
         return { ok: true, addresses };
@@ -2538,7 +2542,9 @@
         if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
         const rows2 = validChanges(request.changes, uprn, ons_code, now);
         if (rows2 === null) return fail("bad changes");
-        withLock(() => tables.addChanges(rows2));
+        withLock(() => {
+          if (tables.hasAddress(uprn)) tables.addChanges(rows2);
+        });
         return { ok: true };
       }
       case "save_success": {
@@ -2547,10 +2553,32 @@
         if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
         if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
         if (collections === null) return fail("bad collections");
-        withLock(
-          () => tables.putResult({ uprn, fetched_at: now, last_attempt: now, last_error: null, consecutive_failures: 0, collections })
-        );
+        withLock(() => {
+          if (!tables.hasAddress(uprn)) return;
+          tables.putResult({ uprn, fetched_at: now, last_attempt: now, last_error: null, consecutive_failures: 0, collections });
+        });
         return { ok: true };
+      }
+      case "expire_feeds": {
+        const days = request.days === void 0 ? DEFAULT_FEED_LIFE_DAYS : request.days;
+        if (typeof days !== "number" || !Number.isInteger(days) || days < MIN_FEED_LIFE_DAYS || days > 3650) return fail("bad days");
+        const today = (_c = (_b = deps.todayIso) == null ? void 0 : _b.call(deps)) != null ? _c : (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+        return withLock(() => {
+          var _a2;
+          let expired = 0;
+          let addresses = 0;
+          for (const feed of tables.subscriptions()) {
+            const lastUsed = (_a2 = feed.last_used) != null ? _a2 : feed.created_at.slice(0, 10);
+            if (daysBetween(lastUsed, today) <= days) continue;
+            if (tables.deleteSubscription(feed.token) === null) continue;
+            expired += 1;
+            if (tables.countSubscriptions(feed.uprn) === 0) {
+              tables.deleteAddress(feed.uprn);
+              addresses += 1;
+            }
+          }
+          return { ok: true, expired, addresses_deleted: addresses };
+        });
       }
       case "save_failure": {
         const { uprn, now } = request;
@@ -2559,15 +2587,16 @@
         if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
         if (error === null) return fail("bad error");
         withLock(() => {
-          var _a2, _b, _c;
+          var _a2, _b2, _c2;
+          if (!tables.hasAddress(uprn)) return;
           const previous = tables.getResult(uprn);
           tables.putResult({
             uprn,
             fetched_at: (_a2 = previous == null ? void 0 : previous.fetched_at) != null ? _a2 : null,
             last_attempt: now,
             last_error: error,
-            consecutive_failures: ((_b = previous == null ? void 0 : previous.consecutive_failures) != null ? _b : 0) + 1,
-            collections: (_c = previous == null ? void 0 : previous.collections) != null ? _c : []
+            consecutive_failures: ((_b2 = previous == null ? void 0 : previous.consecutive_failures) != null ? _b2 : 0) + 1,
+            collections: (_c2 = previous == null ? void 0 : previous.collections) != null ? _c2 : []
           });
         });
         return { ok: true };
@@ -2580,7 +2609,7 @@
   // src/sheets.ts
   var ADDRESS_HEADERS = ["uprn", "ons_code", "postcode", "house_number", "created_at"];
   var RESULT_HEADERS = ["uprn", "fetched_at", "last_attempt", "last_error", "consecutive_failures", "collections_json"];
-  var SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at"];
+  var SUBSCRIPTION_HEADERS = ["token", "id", "uprn", "ons_code", "garden", "created_at", "last_used"];
   var WAITLIST_HEADERS = ["ons_code", "count", "first_at", "last_at"];
   var RECENT_CHANGE_ROWS = 500;
   var CHANGE_HEADERS = ["at", "uprn", "ons_code", "bin_name", "kind", "before", "after", "note"];
@@ -2594,6 +2623,22 @@
       for (const column of textColumns) sheet.getRange(1, column, sheet.getMaxRows(), 1).setNumberFormat("@");
     }
     return sheet;
+  }
+  function subscriptionsTable() {
+    const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3, 7]);
+    const last = SUBSCRIPTION_HEADERS.length;
+    if (sheet.getRange(1, last).getValue() === "") {
+      sheet.getRange(1, last).setValue("last_used");
+      sheet.getRange(1, last, sheet.getMaxRows(), 1).setNumberFormat("@");
+    }
+    return sheet;
+  }
+  function subscriptionFrom(values) {
+    const [token, id, uprn, onsCode, garden, createdAt, lastUsed] = values;
+    const row = { token: String(token), id: String(id), uprn: String(uprn), ons_code: String(onsCode), garden: garden === "yes", created_at: String(createdAt) };
+    const used = optional(lastUsed);
+    if (used) row.last_used = used;
+    return row;
   }
   function rows(sheet) {
     const last = sheet.getLastRow();
@@ -2682,27 +2727,40 @@
       sheet.getRange(rowNumber, 1, 1, values.length).setValues([values]);
     },
     countSubscriptions(uprn) {
-      const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
+      const sheet = subscriptionsTable();
       const last = sheet.getLastRow();
       if (last < 2) return 0;
       if (uprn === void 0) return last - 1;
       return sheet.getRange(2, 3, last - 1, 1).getValues().filter((row) => String(row[0]) === uprn).length;
     },
     addSubscription(row) {
-      const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
-      sheet.appendRow([row.token, row.id, row.uprn, row.ons_code, row.garden ? "yes" : "no", row.created_at]);
+      var _a;
+      const sheet = subscriptionsTable();
+      sheet.appendRow([row.token, row.id, row.uprn, row.ons_code, row.garden ? "yes" : "no", row.created_at, (_a = row.last_used) != null ? _a : row.created_at.slice(0, 10)]);
     },
     findSubscription(token) {
-      const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
+      const sheet = subscriptionsTable();
       const rowNumber = findRow(sheet, token);
       if (rowNumber === null) return null;
-      const [, id, uprn, onsCode, garden, createdAt] = sheet.getRange(rowNumber, 1, 1, SUBSCRIPTION_HEADERS.length).getValues()[0];
-      return { token, id: String(id), uprn: String(uprn), ons_code: String(onsCode), garden: garden === "yes", created_at: String(createdAt) };
+      return subscriptionFrom(sheet.getRange(rowNumber, 1, 1, SUBSCRIPTION_HEADERS.length).getValues()[0]);
+    },
+    subscriptions() {
+      return rows(subscriptionsTable()).map(subscriptionFrom);
+    },
+    touchSubscription(token, today) {
+      const sheet = subscriptionsTable();
+      const rowNumber = findRow(sheet, token);
+      if (rowNumber === null) return;
+      const cell = sheet.getRange(rowNumber, SUBSCRIPTION_HEADERS.length);
+      if (String(cell.getValue()) !== today) cell.setValue(today);
+    },
+    hasAddress(uprn) {
+      return findRow(table("addresses", ADDRESS_HEADERS), uprn) !== null;
     },
     deleteSubscription(token) {
       const found = sheetTables.findSubscription(token);
       if (found === null) return null;
-      const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
+      const sheet = subscriptionsTable();
       const rowNumber = findRow(sheet, token);
       if (rowNumber !== null) sheet.deleteRow(rowNumber);
       return found;
