@@ -1,0 +1,362 @@
+ons_code,name,nation,population,modules,module,has_upstream_module,input_class,needs_uprn,selenium_in_source,platform,platform_confidence,upstream_test,probed,probe_ok,in_registry,our_status
+E06000001,Hartlepool,England,,HartlepoolBoroughCouncil,HartlepoolBoroughCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E06000002,Middlesbrough,England,,MiddlesbroughCouncil,MiddlesbroughCouncil,True,house_number,False,False,ReCollect,high,passed,False,False,False,never_probed
+E06000003,Redcar and Cleveland,England,,RedcarandClevelandCouncil,RedcarandClevelandCouncil,True,postcode+house_number,False,False,ReCollect,high,passed,True,True,True,supported
+E06000004,Stockton-on-Tees,England,,StocktonOnTeesCouncil,StocktonOnTeesCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
+E06000005,Darlington,England,,DarlingtonBoroughCouncil,DarlingtonBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000006,Halton,England,,HaltonBoroughCouncil,HaltonBoroughCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
+E06000007,Warrington,England,,WarringtonBoroughCouncil,WarringtonBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E06000008,Blackburn with Darwen,England,,BlackburnCouncil,BlackburnCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000009,Blackpool,England,,BlackpoolCouncil,BlackpoolCouncil,True,uprn+postcode+house_number,True,False,Bartec,high,passed,False,False,False,never_probed
+E06000010,"Kingston upon Hull, City of",England,,HullCityCouncil,HullCityCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000011,East Riding of Yorkshire,England,,EastRidingCouncil,EastRidingCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,True,supported
+E06000012,North East Lincolnshire,England,,NorthEastLincs,NorthEastLincs,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000013,North Lincolnshire,England,,NorthLincolnshireCouncil,NorthLincolnshireCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000014,York,England,,YorkCouncil,YorkCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000015,Derby,England,,DerbyCityCouncil,DerbyCityCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000016,Leicester,England,,LeicesterCityCouncil,LeicesterCityCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000017,Rutland,England,,,,False,,,,,,,False,False,False,no_upstream_module
+E06000018,Nottingham,England,,NottinghamCityCouncil,NottinghamCityCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000019,"Herefordshire, County of",England,,HerefordshireCouncil,HerefordshireCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000020,Telford and Wrekin,England,,TelfordAndWrekinCouncil,TelfordAndWrekinCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000021,Stoke-on-Trent,England,,StokeOnTrentCityCouncil,StokeOnTrentCityCouncil,True,uprn_in_url,True,False,Bartec,high,passed,False,False,False,never_probed
+E06000022,Bath and North East Somerset,England,,BathAndNorthEastSomersetCouncil,BathAndNorthEastSomersetCouncil,True,uprn,True,False,Bartec,high,passed,False,False,True,supported
+E06000023,"Bristol, City of",England,,BristolCityCouncil,BristolCityCouncil,True,uprn,True,False,Power Apps portal (Dynamics),high,passed,False,False,False,never_probed
+E06000024,North Somerset,England,,NorthSomersetCouncil,NorthSomersetCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E06000025,South Gloucestershire,England,,SouthGloucestershireCouncil,SouthGloucestershireCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000026,Plymouth,England,,PlymouthCouncil,PlymouthCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E06000027,Torbay,England,,TorbayCouncil,TorbayCouncil,True,uprn+postcode,True,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
+E06000030,Swindon,England,,SwindonBoroughCouncil,SwindonBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000031,Peterborough,England,,PeterboroughCityCouncil,PeterboroughCityCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,False,left_out: unrecognised bin name 'Empty Bin 240L Green'
+E06000032,Luton,England,,LutonBoroughCouncil,LutonBoroughCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E06000033,Southend-on-Sea,England,,SouthendOnSeaCityCouncil,SouthendOnSeaCityCouncil,True,uprn,True,False,Cloud9 Technologies,high,passed,False,False,False,never_probed
+E06000034,Thurrock,England,,ThurrockCouncil,ThurrockCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E06000035,Medway,England,,MedwayCouncil,MedwayCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000036,Bracknell Forest,England,,BracknellForestCouncil,BracknellForestCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,True,supported
+E06000037,West Berkshire,England,,WestBerkshireCouncil,WestBerkshireCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
+E06000038,Reading,England,,ReadingBoroughCouncil,ReadingBoroughCouncil,True,uprn_in_url,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000039,Slough,England,,SloughBoroughCouncil,SloughBoroughCouncil,True,postcode+house_number,False,False,PublicDashboard (shared upstream base class),high,passed,True,True,True,supported
+E06000040,Windsor and Maidenhead,England,,WindsorAndMaidenheadCouncil,WindsorAndMaidenheadCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000041,Wokingham,England,,WokinghamBoroughCouncil,WokinghamBoroughCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,True,supported
+E06000042,Milton Keynes,England,,MiltonKeynesCityCouncil,MiltonKeynesCityCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E06000043,Brighton and Hove,England,,BrightonandHoveCityCouncil,BrightonandHoveCityCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E06000044,Portsmouth,England,,PortsmouthCityCouncil,PortsmouthCityCouncil,True,uprn+postcode,True,False,PublicDashboard (shared upstream base class),high,passed,False,False,False,never_probed
+E06000045,Southampton,England,,SouthamptonCityCouncil,SouthamptonCityCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000046,Isle of Wight,England,,IsleOfWightCouncil GooglePublicCalendarCouncil,IsleOfWightCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,False,False,left_out: probe failed (ConnectionError)
+E06000047,County Durham,England,,DurhamCouncil,DurhamCouncil,True,uprn,True,False,Bartec,high,passed,False,False,False,never_probed
+E06000049,Cheshire East,England,,CheshireEastCouncil,CheshireEastCouncil,True,uprn,True,False,Bartec,high,passed,False,False,False,never_probed
+E06000050,Cheshire West and Chester,England,,CheshireWestAndChesterCouncil,CheshireWestAndChesterCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E06000051,Shropshire,England,,ShropshireCouncil,ShropshireCouncil,True,url_property_ref,False,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000052,Cornwall,England,,CornwallCouncil,CornwallCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000053,Isles of Scilly,England,,,,False,,,,,,,False,False,False,no_upstream_module
+E06000054,Wiltshire,England,,WiltshireCouncil,WiltshireCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000055,Bedford,England,,BedfordBoroughCouncil,BedfordBoroughCouncil,True,uprn,True,False,Bartec,high,passed,False,False,False,never_probed
+E06000056,Central Bedfordshire,England,,BedfordshireCouncil,BedfordshireCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000057,Northumberland,England,,NorthumberlandCouncil,NorthumberlandCouncil,True,uprn+postcode,True,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
+E06000058,"Bournemouth, Christchurch and Poole",England,,BCPCouncil,BCPCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000059,Dorset,England,,DorsetCouncil,DorsetCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000060,Buckinghamshire,England,,BuckinghamshireCouncil,BuckinghamshireCouncil,True,uprn,True,False,iTouchVision,high,passed,False,False,False,never_probed
+E06000061,North Northamptonshire,England,,NorthNorthamptonshireCouncil,NorthNorthamptonshireCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000062,West Northamptonshire,England,,WestNorthamptonshireCouncil,WestNorthamptonshireCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000063,Cumberland,England,,CumberlandCouncil,CumberlandCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000064,Westmorland and Furness,England,,WestMorlandAndFurness,WestMorlandAndFurness,True,uprn+postcode+house_number,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000065,North Yorkshire,England,,NorthYorkshire,NorthYorkshire,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E06000066,Somerset,England,,SomersetCouncil,SomersetCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E07000008,Cambridge,England,,CambridgeCityCouncil,CambridgeCityCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000009,East Cambridgeshire,England,,EastCambridgeshireCouncil,EastCambridgeshireCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000010,Fenland,England,,FenlandDistrictCouncil,FenlandDistrictCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000011,Huntingdonshire,England,,HuntingdonDistrictCouncil,HuntingdonDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000012,South Cambridgeshire,England,,SouthCambridgeshireCouncil,SouthCambridgeshireCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,False,left_out: unrecognised bin name 'Organic'
+E07000032,Amber Valley,England,,AmberValleyBoroughCouncil,AmberValleyBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000033,Bolsover,England,,BolsoverCouncil,BolsoverCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000034,Chesterfield,England,,ChesterfieldBoroughCouncil,ChesterfieldBoroughCouncil,True,uprn,True,False,Salesforce Experience Cloud,high,passed,False,False,False,never_probed
+E07000035,Derbyshire Dales,England,,DerbyshireDalesDistrictCouncil,DerbyshireDalesDistrictCouncil,True,uprn+postcode,True,False,RenderForm.aspx form engine,high,passed,False,False,False,never_probed
+E07000036,Erewash,England,,ErewashBoroughCouncil,ErewashBoroughCouncil,True,uprn,True,False,Whitespace,high,passed,False,False,False,never_probed
+E07000037,High Peak,England,,HighPeakCouncil,HighPeakCouncil,True,postcode+house_number,False,False,PublicDashboard (shared upstream base class),high,passed,True,True,True,supported
+E07000038,North East Derbyshire,England,,NorthEastDerbyshireDistrictCouncil,NorthEastDerbyshireDistrictCouncil,True,house_number,False,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
+E07000039,South Derbyshire,England,,SouthDerbyshireDistrictCouncil,SouthDerbyshireDistrictCouncil,True,uprn+postcode+house_number,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000040,East Devon,England,,EastDevonDC,EastDevonDC,True,uprn+postcode+house_number,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000041,Exeter,England,,ExeterCityCouncil,ExeterCityCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000042,Mid Devon,England,,MidDevonCouncil,MidDevonCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000043,North Devon,England,,NorthDevonCountyCouncil,NorthDevonCountyCouncil,True,uprn+postcode+house_number,True,True,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000044,South Hams,England,,SouthHamsDistrictCouncil,SouthHamsDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000045,Teignbridge,England,,TeignbridgeCouncil,TeignbridgeCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000046,Torridge,England,,TorridgeDistrictCouncil,TorridgeDistrictCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000047,West Devon,England,,WestDevonBoroughCouncil,WestDevonBoroughCouncil,True,uprn+postcode+house_number,True,True,FCC Environment portal,high,failed,False,False,False,never_probed
+E07000061,Eastbourne,England,,EastbourneBoroughCouncil,EastbourneBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000062,Hastings,England,,HastingsBoroughCouncil,HastingsBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000063,Lewes,England,,LewesDistrictCouncil,LewesDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000064,Rother,England,,RotherDistrictCouncil,RotherDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000065,Wealden,England,,WealdenDistrictCouncil,WealdenDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000066,Basildon,England,,BasildonCouncil,BasildonCouncil,True,uprn,True,True,Power Apps portal (Dynamics),high,passed,False,False,False,never_probed
+E07000067,Braintree,England,,BraintreeDistrictCouncil,BraintreeDistrictCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000068,Brentwood,England,,GooglePublicCalendarCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
+E07000069,Castle Point,England,,CastlepointDistrictCouncil,CastlepointDistrictCouncil,True,other_id,False,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000070,Chelmsford,England,,ChelmsfordCityCouncil,ChelmsfordCityCouncil,True,postcode+house_number,False,True,Google Calendar (public iCal),high,passed,True,False,False,left_out: probe failed (ValueError)
+E07000071,Colchester,England,,ColchesterCityCouncil,ColchesterCityCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E07000072,Epping Forest,England,,EppingForestDistrictCouncil,EppingForestDistrictCouncil,True,postcode,False,False,ArcGIS/Esri,high,passed,False,False,False,never_probed
+E07000073,Harlow,England,,HarlowCouncil,HarlowCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000074,Maldon,England,,MaldonDistrictCouncil,MaldonDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000075,Rochford,England,,RochfordCouncil,RochfordCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,True,supported
+E07000076,Tendring,England,,TendringDistrictCouncil,TendringDistrictCouncil,True,uprn+postcode,True,True,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000077,Uttlesford,England,,UttlesfordDistrictCouncil,UttlesfordDistrictCouncil,True,uprn+postcode+house_number,True,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
+E07000078,Cheltenham,England,,CheltenhamBoroughCouncil,CheltenhamBoroughCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000079,Cotswold,England,,CotswoldDistrictCouncil,CotswoldDistrictCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,False,left_out: unrecognised bin name 'White Bag'
+E07000080,Forest of Dean,England,,ForestOfDeanDistrictCouncil,ForestOfDeanDistrictCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E07000081,Gloucester,England,,GloucesterCityCouncil,GloucesterCityCouncil,True,uprn+postcode+house_number,True,True,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000082,Stroud,England,,StroudDistrictCouncil,StroudDistrictCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000083,Tewkesbury,England,,TewkesburyBoroughCouncil,TewkesburyBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000084,Basingstoke and Deane,England,,BasingstokeCouncil,BasingstokeCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000085,East Hampshire,England,,EastHampshireDC GooglePublicCalendarCouncil,EastHampshireDC,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,True,supported
+E07000086,Eastleigh,England,,EastleighBoroughCouncil,EastleighBoroughCouncil,True,uprn,True,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
+E07000087,Fareham,England,,FarehamBoroughCouncil,FarehamBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000088,Gosport,England,,GosportBoroughCouncil,GosportBoroughCouncil,True,postcode,False,False,Supatrak,high,passed,False,False,False,never_probed
+E07000089,Hart,England,,HartDistrictCouncil,HartDistrictCouncil,True,uprn,True,False,Whitespace,high,passed,False,False,False,never_probed
+E07000090,Havant,England,,GooglePublicCalendarCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
+E07000091,New Forest,England,,NewForestCouncil,NewForestCouncil,True,uprn+postcode,True,True,Civica UFS,high,passed,False,False,False,never_probed
+E07000092,Rushmoor,England,,RushmoorCouncil,RushmoorCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000093,Test Valley,England,,TestValleyBoroughCouncil,TestValleyBoroughCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E07000094,Winchester,England,,WinchesterCityCouncil,WinchesterCityCouncil,True,postcode+house_number,False,True,iTouchVision,high,passed,True,True,True,supported
+E07000095,Broxbourne,England,,BroxbourneCouncil,BroxbourneCouncil,True,uprn+postcode,True,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
+E07000096,Dacorum,England,,DacorumBoroughCouncil,DacorumBoroughCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
+E07000098,Hertsmere,England,,HertsmereBoroughCouncil,HertsmereBoroughCouncil,True,postcode+house_number,False,True,OnMats,high,passed,True,True,False,left_out: unrecognised bin name 'Green'
+E07000099,North Hertfordshire,England,,NorthHertfordshireDistrictCouncil,NorthHertfordshireDistrictCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E07000102,Three Rivers,England,,ThreeRiversDistrictCouncil,ThreeRiversDistrictCouncil,True,uprn+postcode,True,True,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000103,Watford,England,,WatfordBoroughCouncil,WatfordBoroughCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000105,Ashford,England,,AshfordBoroughCouncil,AshfordBoroughCouncil,True,uprn+postcode,True,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
+E07000106,Canterbury,England,,CanterburyCityCouncil,CanterburyCityCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000107,Dartford,England,,DartfordBoroughCouncil,DartfordBoroughCouncil,True,uprn,True,False,Civica UFS,high,failed,False,False,False,never_probed
+E07000108,Dover,England,,DoverDistrictCouncil,DoverDistrictCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000109,Gravesham,England,,GraveshamBoroughCouncil,GraveshamBoroughCouncil,True,postcode+house_number,False,False,Granicus/Firmstep AchieveForms,high,passed,True,True,True,supported
+E07000110,Maidstone,England,,MaidstoneBoroughCouncil,MaidstoneBoroughCouncil,True,postcode+house_number,False,True,Granicus/Firmstep AchieveForms,high,passed,True,True,True,supported
+E07000111,Sevenoaks,England,,SevenoaksDistrictCouncil,SevenoaksDistrictCouncil,True,postcode+house_number,False,True,Oncreate,high,passed,True,True,True,supported
+E07000112,Folkestone and Hythe,England,,FolkestoneandHytheDistrictCouncil,FolkestoneandHytheDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000113,Swale,England,,SwaleBoroughCouncil,SwaleBoroughCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,False,left_out: unrecognised bin name 'green bin'
+E07000114,Thanet,England,,ThanetDistrictCouncil,ThanetDistrictCouncil,True,uprn,True,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
+E07000115,Tonbridge and Malling,England,,TonbridgeAndMallingBC,TonbridgeAndMallingBC,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000116,Tunbridge Wells,England,,TunbridgeWellsCouncil,TunbridgeWellsCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000117,Burnley,England,,BurnleyBoroughCouncil,BurnleyBoroughCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000118,Chorley,England,,ChorleyCouncil,ChorleyCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000119,Fylde,England,,,,False,,,,,,,False,False,False,no_upstream_module
+E07000120,Hyndburn,England,,HyndburnBoroughCouncil,HyndburnBoroughCouncil,True,uprn+postcode,True,True,iTouchVision,high,passed,False,False,False,never_probed
+E07000121,Lancaster,England,,LancasterCityCouncil,LancasterCityCouncil,True,postcode+house_number,False,False,Whitespace,high,failed,False,False,False,never_probed
+E07000122,Pendle,England,,GooglePublicCalendarCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
+E07000123,Preston,England,,PrestonCityCouncil,PrestonCityCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
+E07000124,Ribble Valley,England,,GooglePublicCalendarCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
+E07000125,Rossendale,England,,GooglePublicCalendarCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
+E07000126,South Ribble,England,,SouthRibbleCouncil,SouthRibbleCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000127,West Lancashire,England,,WestLancashireBoroughCouncil,WestLancashireBoroughCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000128,Wyre,England,,WyreCouncil,WyreCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000129,Blaby,England,,BlabyDistrictCouncil,BlabyDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000130,Charnwood,England,,CharnwoodBoroughCouncil,CharnwoodBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000131,Harborough,England,,HarboroughDistrictCouncil,HarboroughDistrictCouncil,True,uprn,True,False,FCC Environment portal,high,passed,False,False,False,never_probed
+E07000132,Hinckley and Bosworth,England,,HinckleyandBosworthBoroughCouncil,HinckleyandBosworthBoroughCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,False,False,left_out: probe failed (ReadTimeout)
+E07000133,Melton,England,,MeltonBoroughCouncil,MeltonBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000134,North West Leicestershire,England,,NorthWestLeicestershire,NorthWestLeicestershire,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,False,left_out: unrecognised bin name 'Purple Bag'
+E07000135,Oadby and Wigston,England,,OadbyAndWigstonBoroughCouncil,OadbyAndWigstonBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000136,Boston,England,,BostonBoroughCouncil,BostonBoroughCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
+E07000137,East Lindsey,England,,EastLindseyDistrictCouncil,EastLindseyDistrictCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
+E07000138,Lincoln,England,,LincolnCouncil,LincolnCouncil,True,uprn+postcode+house_number,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000139,North Kesteven,England,,NorthKestevenDistrictCouncil,NorthKestevenDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000140,South Holland,England,,SouthHollandDistrictCouncil,SouthHollandDistrictCouncil,True,uprn+postcode+house_number,True,False,Council CMS apiserver/ajaxlibrary API,high,failed,False,False,False,never_probed
+E07000141,South Kesteven,England,,SouthKestevenDistrictCouncil,SouthKestevenDistrictCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,False,left_out: unrecognised bin name 'Purple Bin'
+E07000142,West Lindsey,England,,WestLindseyDistrictCouncil,WestLindseyDistrictCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,False,left_out: unrecognised bin name 'Green'
+E07000143,Breckland,England,,BrecklandCouncil,BrecklandCouncil,True,uprn,True,False,Whitespace,high,failed,False,False,False,never_probed
+E07000144,Broadland,England,,BroadlandDistrictCouncil,BroadlandDistrictCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E07000145,Great Yarmouth,England,,GreatYarmouthBoroughCouncil,GreatYarmouthBoroughCouncil,True,uprn+postcode,True,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
+E07000146,King's Lynn and West Norfolk,England,,KingsLynnandWestNorfolkBC,KingsLynnandWestNorfolkBC,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000147,North Norfolk,England,,NorthNorfolkDistrictCouncil,NorthNorfolkDistrictCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E07000148,Norwich,England,,NorwichCityCouncil,NorwichCityCouncil,True,postcode+house_number,False,False,Whitespace,high,failed,False,False,False,never_probed
+E07000149,South Norfolk,England,,SouthNorfolkCouncil,SouthNorfolkCouncil,True,uprn,True,False,WSCollExternal SOAP (Azure),high,passed,False,False,False,never_probed
+E07000170,Ashfield,England,,AshfieldDistrictCouncil,AshfieldDistrictCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
+E07000171,Bassetlaw,England,,BassetlawDistrictCouncil GooglePublicCalendarCouncil,BassetlawDistrictCouncil,True,postcode+house_number,False,False,ReCollect,high,passed,True,True,True,supported
+E07000172,Broxtowe,England,,BroxtoweBoroughCouncil,BroxtoweBoroughCouncil,True,uprn+postcode+house_number,True,True,RenderForm.aspx form engine,high,passed,False,False,False,never_probed
+E07000173,Gedling,England,,GedlingBoroughCouncil,GedlingBoroughCouncil,True,house_number,False,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000174,Mansfield,England,,MansfieldDistrictCouncil,MansfieldDistrictCouncil,True,uprn,True,False,Whitespace,high,passed,False,False,False,never_probed
+E07000175,Newark and Sherwood,England,,NewarkAndSherwoodDC,NewarkAndSherwoodDC,True,other_id,False,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000176,Rushcliffe,England,,RushcliffeBoroughCouncil,RushcliffeBoroughCouncil,True,uprn+postcode,True,True,RenderForm.aspx form engine,high,passed,False,False,False,never_probed
+E07000177,Cherwell,England,,CherwellDistrictCouncil,CherwellDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000178,Oxford,England,,OxfordCityCouncil,OxfordCityCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000179,South Oxfordshire,England,,SouthOxfordshireCouncil,SouthOxfordshireCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000180,Vale of White Horse,England,,ValeofWhiteHorseCouncil,ValeofWhiteHorseCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000181,West Oxfordshire,England,,WestOxfordshireDistrictCouncil,WestOxfordshireDistrictCouncil,True,postcode+house_number,False,True,Salesforce Experience Cloud,high,passed,True,True,True,supported
+E07000192,Cannock Chase,England,,CannockChaseDistrictCouncil,CannockChaseDistrictCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000193,East Staffordshire,England,,EastStaffordshireBoroughCouncil,EastStaffordshireBoroughCouncil,True,url_property_ref,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
+E07000194,Lichfield,England,,LichfieldDistrictCouncil,LichfieldDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000195,Newcastle-under-Lyme,England,,NewcastleUnderLymeCouncil,NewcastleUnderLymeCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000196,South Staffordshire,England,,SouthStaffordshireDistrictCouncil,SouthStaffordshireDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000197,Stafford,England,,StaffordBoroughCouncil,StaffordBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000198,Staffordshire Moorlands,England,,StaffordshireMoorlandsDistrictCouncil,StaffordshireMoorlandsDistrictCouncil,True,uprn+postcode,True,False,PublicDashboard (shared upstream base class),high,passed,False,False,False,never_probed
+E07000199,Tamworth,England,,TamworthBoroughCouncil,TamworthBoroughCouncil,True,other_id,False,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000200,Babergh,England,,BaberghDistrictCouncil,BaberghDistrictCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E07000202,Ipswich,England,,IpswichBoroughCouncil,IpswichBoroughCouncil,True,house_number,False,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000203,Mid Suffolk,England,,MidSuffolkDistrictCouncil,MidSuffolkDistrictCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E07000207,Elmbridge,England,,ElmbridgeBoroughCouncil,ElmbridgeBoroughCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000208,Epsom and Ewell,England,,EpsomandEwellBoroughCouncil,EpsomandEwellBoroughCouncil,True,uprn+postcode,True,True,iTouchVision,high,passed,False,False,False,never_probed
+E07000209,Guildford,England,,GuildfordCouncil,GuildfordCouncil,True,postcode+house_number,False,True,Salesforce Experience Cloud,high,passed,True,True,True,supported
+E07000210,Mole Valley,England,,MoleValleyDistrictCouncil,MoleValleyDistrictCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000211,Reigate and Banstead,England,,ReigateAndBansteadBoroughCouncil,ReigateAndBansteadBoroughCouncil,True,uprn,True,True,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000212,Runnymede,England,,RunnymedeBoroughCouncil,RunnymedeBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000213,Spelthorne,England,,SpelthorneBoroughCouncil,SpelthorneBoroughCouncil,True,postcode+house_number,False,False,Granicus/Firmstep AchieveForms,high,passed,True,True,True,supported
+E07000214,Surrey Heath,England,,SurreyHeathBoroughCouncil,SurreyHeathBoroughCouncil,True,postcode+house_number,False,False,Whitespace,high,passed,True,True,True,supported
+E07000215,Tandridge,England,,TandridgeDistrictCouncil,TandridgeDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000216,Waverley,England,,WaverleyBoroughCouncil,WaverleyBoroughCouncil,True,postcode+house_number,False,False,Whitespace,high,failed,False,False,False,never_probed
+E07000217,Woking,England,,WokingBoroughCouncil,WokingBoroughCouncil,True,postcode+house_number,False,False,Whitespace,high,failed,False,False,False,never_probed
+E07000218,North Warwickshire,England,,GooglePublicCalendarCouncil NorthWarwickshireBoroughCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
+E07000219,Nuneaton and Bedworth,England,,NuneatonBedworthBoroughCouncil,NuneatonBedworthBoroughCouncil,True,house_number,False,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000220,Rugby,England,,RugbyBoroughCouncil,RugbyBoroughCouncil,True,uprn+postcode,True,False,Cloud9 Technologies,high,passed,False,False,False,never_probed
+E07000221,Stratford-on-Avon,England,,StratfordUponAvonCouncil,StratfordUponAvonCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000222,Warwick,England,,WarwickDistrictCouncil,WarwickDistrictCouncil,True,uprn_in_url,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000223,Adur,England,,AdurAndWorthingCouncils,AdurAndWorthingCouncils,True,uprn_in_url,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000224,Arun,England,,ArunCouncil,ArunCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E07000225,Chichester,England,,ChichesterDistrictCouncil,ChichesterDistrictCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
+E07000226,Crawley,England,,CrawleyBoroughCouncil,CrawleyBoroughCouncil,True,uprn+usrn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000227,Horsham,England,,HorshamDistrictCouncil,HorshamDistrictCouncil,True,uprn+postcode+house_number,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000228,Mid Sussex,England,,MidSussexDistrictCouncil,MidSussexDistrictCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000229,Worthing,England,,AdurAndWorthingCouncils,AdurAndWorthingCouncils,True,uprn_in_url,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000234,Bromsgrove,England,,BromsgroveDistrictCouncil,BromsgroveDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000235,Malvern Hills,England,,MalvernHillsDC,MalvernHillsDC,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000236,Redditch,England,,RedditchBoroughCouncil,RedditchBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000237,Worcester,England,,WorcesterCityCouncil,WorcesterCityCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000238,Wychavon,England,,WychavonDistrictCouncil,WychavonDistrictCouncil,True,uprn+postcode,True,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
+E07000239,Wyre Forest,England,,WyreForestDistrictCouncil,WyreForestDistrictCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,False,left_out: source.url must be an https URL
+E07000240,St Albans,England,,StAlbansCityAndDistrictCouncil,StAlbansCityAndDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000241,Welwyn Hatfield,England,,WelhatCouncil,WelhatCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000242,East Hertfordshire,England,,EastHertsCouncil,EastHertsCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,failed,False,False,False,never_probed
+E07000243,Stevenage,England,,StevenageBoroughCouncil,StevenageBoroughCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000244,East Suffolk,England,,EastSuffolkCouncil,EastSuffolkCouncil,True,uprn+postcode,True,True,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E07000245,West Suffolk,England,,WestSuffolkCouncil,WestSuffolkCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E08000001,Bolton,England,,BoltonCouncil,BoltonCouncil,True,uprn,True,False,Verint (empro),high,passed,False,False,False,never_probed
+E08000002,Bury,England,,BuryCouncil,BuryCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,True,supported
+E08000003,Manchester,England,,ManchesterCityCouncil,ManchesterCityCouncil,True,uprn,True,False,Verint (empro),high,passed,False,False,False,never_probed
+E08000004,Oldham,England,,OldhamCouncil,OldhamCouncil,True,uprn_in_url,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E08000005,Rochdale,England,,RochdaleCouncil,RochdaleCouncil,True,uprn+postcode,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E08000006,Salford,England,,SalfordCityCouncil,SalfordCityCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E08000007,Stockport,England,,StockportBoroughCouncil,StockportBoroughCouncil,True,uprn_in_url,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E08000008,Tameside,England,,TamesideMBCouncil,TamesideMBCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E08000009,Trafford,England,,GooglePublicCalendarCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
+E08000010,Wigan,England,,WiganBoroughCouncil,WiganBoroughCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E08000011,Knowsley,England,,KnowsleyMBCouncil,KnowsleyMBCouncil,True,postcode+house_number,False,True,Mendix,medium,passed,True,True,False,left_out: unrecognised bin name 'Maroon'
+E08000012,Liverpool,England,,LiverpoolCityCouncil,LiverpoolCityCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E08000013,St. Helens,England,,StHelensBC,StHelensBC,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E08000014,Sefton,England,,SeftonCouncil,SeftonCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,False,left_out: unrecognised bin name 'Green'
+E08000015,Wirral,England,,WirralCouncil,WirralCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,True,supported
+E08000017,Doncaster,England,,DoncasterCouncil,DoncasterCouncil,True,postcode+house_number,False,True,Oncreate,high,passed,True,True,True,supported
+E08000018,Rotherham,England,,RotherhamCouncil,RotherhamCouncil,True,postcode,False,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E08000021,Newcastle upon Tyne,England,,NewcastleCityCouncil,NewcastleCityCouncil,True,postcode+house_number,False,False,ReCollect,high,passed,True,True,True,supported
+E08000022,North Tyneside,England,,NorthTynesideCouncil,NorthTynesideCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E08000023,South Tyneside,England,,SouthTynesideCouncil,SouthTynesideCouncil,True,postcode+house_number,False,False,Council CMS apiserver/ajaxlibrary API,high,failed,False,False,False,never_probed
+E08000024,Sunderland,England,,SunderlandCityCouncil,SunderlandCityCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E08000025,Birmingham,England,,BirminghamCityCouncil,BirminghamCityCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E08000026,Coventry,England,,CoventryCityCouncil,CoventryCityCouncil,True,url_property_ref,False,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E08000027,Dudley,England,,DudleyCouncil,DudleyCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E08000028,Sandwell,England,,SandwellBoroughCouncil,SandwellBoroughCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E08000029,Solihull,England,,SolihullCouncil,SolihullCouncil,True,uprn_in_url,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E08000030,Walsall,England,,WalsallCouncil,WalsallCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E08000031,Wolverhampton,England,,WolverhamptonCityCouncil,WolverhamptonCityCouncil,True,uprn+postcode+house_number,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E08000032,Bradford,England,,BradfordMDC,BradfordMDC,True,uprn,True,False,Civica UFS,high,passed,False,False,False,never_probed
+E08000033,Calderdale,England,,CalderdaleCouncil,CalderdaleCouncil,True,uprn+postcode+house_number,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E08000034,Kirklees,England,,KirkleesCouncil,KirkleesCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E08000035,Leeds,England,,LeedsCityCouncil,LeedsCityCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E08000036,Wakefield,England,,WakefieldCityCouncil,WakefieldCityCouncil,True,url_property_ref,False,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
+E08000037,Gateshead,England,,GatesheadCouncil,GatesheadCouncil,True,postcode+house_number,False,True,Council CMS apiserver/ajaxlibrary API,high,failed,False,False,False,never_probed
+E08000038,Barnsley,England,,BarnsleyMBCouncil,BarnsleyMBCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E08000039,Sheffield,England,,SheffieldCityCouncil,SheffieldCityCouncil,True,uprn+postcode+house_number,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E09000001,City of London,England,,,,False,,,,,,,False,False,False,no_upstream_module
+E09000002,Barking and Dagenham,England,,BarkingDagenham,BarkingDagenham,True,postcode+house_number,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
+E09000003,Barnet,England,,BarnetCouncil,BarnetCouncil,True,postcode+house_number,False,True,Jadu,medium,passed,True,True,True,supported
+E09000004,Bexley,England,,BexleyCouncil,BexleyCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E09000005,Brent,England,,BrentCouncil,BrentCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,True,supported
+E09000006,Bromley,England,,BromleyBoroughCouncil,BromleyBoroughCouncil,True,url_property_ref,False,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E09000007,Camden,England,,LondonBoroughCamdenCouncil,LondonBoroughCamdenCouncil,True,uprn+postcode+house_number,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E09000008,Croydon,England,,CroydonCouncil,CroydonCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E09000009,Ealing,England,,LondonBoroughEaling,LondonBoroughEaling,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E09000010,Enfield,England,,EnfieldCouncil,EnfieldCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E09000011,Greenwich,England,,RoyalBoroughofGreenwich,RoyalBoroughofGreenwich,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,False,left_out: unrecognised bin name 'Green Bin'
+E09000012,Hackney,England,,HackneyCouncil,HackneyCouncil,True,postcode+house_number,False,False,iEG4,high,passed,True,True,True,supported
+E09000013,Hammersmith and Fulham,England,,LondonBoroughHammersmithandFulham,LondonBoroughHammersmithandFulham,True,postcode,False,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E09000014,Haringey,England,,HaringeyCouncil,HaringeyCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E09000015,Harrow,England,,LondonBoroughHarrow,LondonBoroughHarrow,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E09000016,Havering,England,,LondonBoroughHavering,LondonBoroughHavering,True,uprn,True,False,Whitespace,high,passed,False,False,False,never_probed
+E09000017,Hillingdon,England,,Hillingdon,Hillingdon,True,postcode+house_number,False,False,Jadu,medium,passed,True,True,False,left_out: unrecognised bin name 'Household'
+E09000018,Hounslow,England,,LondonBoroughHounslow,LondonBoroughHounslow,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E09000019,Islington,England,,IslingtonCouncil,IslingtonCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E09000020,Kensington and Chelsea,England,,,,False,,,,,,,False,False,False,no_upstream_module
+E09000021,Kingston upon Thames,England,,KingstonUponThamesCouncil,KingstonUponThamesCouncil,True,url_property_ref,False,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E09000022,Lambeth,England,,LondonBoroughLambeth,LondonBoroughLambeth,True,uprn,True,False,Whitespace,high,passed,False,False,False,never_probed
+E09000023,Lewisham,England,,LondonBoroughLewisham,LondonBoroughLewisham,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E09000024,Merton,England,,MertonCouncil,MertonCouncil,True,uprn+postcode+house_number,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E09000025,Newham,England,,NewhamCouncil,NewhamCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E09000026,Redbridge,England,,LondonBoroughRedbridge,LondonBoroughRedbridge,True,uprn+postcode,True,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
+E09000027,Richmond upon Thames,England,,LondonBoroughOfRichmondUponThames,LondonBoroughOfRichmondUponThames,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E09000028,Southwark,England,,SouthwarkCouncil,SouthwarkCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E09000029,Sutton,England,,LondonBoroughSutton,LondonBoroughSutton,True,uprn+postcode+house_number,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E09000030,Tower Hamlets,England,,TowerHamletsCouncil,TowerHamletsCouncil,True,uprn+postcode,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E09000031,Waltham Forest,England,,WalthamForest,WalthamForest,True,uprn+postcode+house_number,True,True,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+E09000032,Wandsworth,England,,WandsworthCouncil,WandsworthCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E09000033,Westminster,England,,WestminsterCityCouncil,WestminsterCityCouncil,True,usrn,False,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+N09000001,Antrim and Newtownabbey,Northern Ireland,,AntrimAndNewtonabbeyCouncil,AntrimAndNewtonabbeyCouncil,True,url_property_ref,False,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+N09000002,"Armagh City, Banbridge and Craigavon",Northern Ireland,,ArmaghBanbridgeCraigavonCouncil,ArmaghBanbridgeCraigavonCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+N09000003,Belfast,Northern Ireland,,BelfastCityCouncil,BelfastCityCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+N09000004,Causeway Coast and Glens,Northern Ireland,,GooglePublicCalendarCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
+N09000005,Derry City and Strabane,Northern Ireland,,GooglePublicCalendarCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
+N09000006,Fermanagh and Omagh,Northern Ireland,,FermanaghOmaghDistrictCouncil,FermanaghOmaghDistrictCouncil,True,postcode+house_number,False,False,Isl Fusion,high,passed,True,True,True,supported
+N09000007,Lisburn and Castlereagh,Northern Ireland,,LisburnCastlereaghCityCouncil,LisburnCastlereaghCityCouncil,True,postcode+house_number,False,False,Isl Fusion,high,passed,True,True,True,supported
+N09000008,Mid and East Antrim,Northern Ireland,,MidAndEastAntrimBoroughCouncil,MidAndEastAntrimBoroughCouncil,True,postcode+house_number,False,False,Whitespace,high,failed,False,False,False,never_probed
+N09000009,Mid Ulster,Northern Ireland,,MidUlsterDistrictCouncil,MidUlsterDistrictCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,False,left_out: unrecognised bin name 'Garden and food waste bin (Brown)'
+N09000010,"Newry, Mourne and Down",Northern Ireland,,GooglePublicCalendarCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
+N09000011,Ards and North Down,Northern Ireland,,ArdsAndNorthDownCouncil,ArdsAndNorthDownCouncil,True,uprn,True,False,WSCollExternal SOAP (Azure),high,passed,False,False,False,never_probed
+S12000005,Clackmannanshire,Scotland,,ClackmannanshireCouncil GooglePublicCalendarCouncil,ClackmannanshireCouncil,True,postcode,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
+S12000006,Dumfries and Galloway,Scotland,,DumfriesandGallowayCouncil,DumfriesandGallowayCouncil,True,uprn+postcode+house_number,True,False,Google Calendar (public iCal),high,failed,False,False,False,never_probed
+S12000008,East Ayrshire,Scotland,,EastAyrshireCouncil,EastAyrshireCouncil,True,postcode+house_number,False,False,ReCollect,high,passed,True,True,False,left_out: unrecognised bin name 'Glass+Food'
+S12000010,East Lothian,Scotland,,EastLothianCouncil,EastLothianCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,False,left_out: unrecognised bin name 'Food waste and recycling'
+S12000011,East Renfrewshire,Scotland,,EastRenfrewshireCouncil,EastRenfrewshireCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
+S12000013,Na h-Eileanan Siar,Scotland,,CneSiarCouncil,CneSiarCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,False,left_out: unrecognised bin name 'Organic Food & Garden Waste / Mixed Recycling (Blue Bin)'
+S12000014,Falkirk,Scotland,,FalkirkCouncil,FalkirkCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+S12000017,Highland,Scotland,,HighlandCouncil,HighlandCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+S12000018,Inverclyde,Scotland,,InverclydeCouncil,InverclydeCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+S12000019,Midlothian,Scotland,,MidlothianCouncil,MidlothianCouncil,True,postcode+house_number,False,True,Granicus/Firmstep AchieveForms,high,failed,False,False,False,never_probed
+S12000020,Moray,Scotland,,MorayCouncil,MorayCouncil,True,other_id,False,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+S12000021,North Ayrshire,Scotland,,NorthAyrshireCouncil,NorthAyrshireCouncil,True,uprn,True,False,ArcGIS/Esri,high,passed,False,False,False,never_probed
+S12000023,Orkney Islands,Scotland,,OrkneyIslandsCouncil,OrkneyIslandsCouncil,True,house_number,False,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+S12000026,Scottish Borders,Scotland,,ScottishBordersCouncil,ScottishBordersCouncil,True,uprn+postcode+house_number,True,False,Bartec,high,passed,False,False,False,never_probed
+S12000027,Shetland Islands,Scotland,,ShetlandIslandsCouncil,ShetlandIslandsCouncil,True,postcode,False,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+S12000028,South Ayrshire,Scotland,,SouthAyrshireCouncil,SouthAyrshireCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+S12000029,South Lanarkshire,Scotland,,SouthLanarkshireCouncil,SouthLanarkshireCouncil,True,postcode,False,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+S12000030,Stirling,Scotland,,StirlingCouncil,StirlingCouncil,True,postcode+house_number,False,False,ReCollect,high,passed,True,True,False,left_out: unrecognised bin name 'Food and Garden'
+S12000033,Aberdeen City,Scotland,,AberdeenCityCouncil,AberdeenCityCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+S12000034,Aberdeenshire,Scotland,,AberdeenshireCouncil,AberdeenshireCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+S12000035,Argyll and Bute,Scotland,,ArgyllandButeCouncil,ArgyllandButeCouncil,True,uprn+postcode,True,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
+S12000036,City of Edinburgh,Scotland,,EdinburghCityCouncil,EdinburghCityCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,False,left_out: unrecognised bin name 'Green Bin'
+S12000038,Renfrewshire,Scotland,,RenfrewshireCouncil,RenfrewshireCouncil,True,uprn,True,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
+S12000039,West Dunbartonshire,Scotland,,WestDunbartonshireCouncil,WestDunbartonshireCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+S12000040,West Lothian,Scotland,,WestLothianCouncil,WestLothianCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,False,left_out: unrecognised bin name 'Brown Bin (Now for Garden and Food Waste)'
+S12000041,Angus,Scotland,,AngusCouncil,AngusCouncil,True,uprn+postcode,True,True,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+S12000042,Dundee City,Scotland,,DundeeCityCouncil,DundeeCityCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+S12000045,East Dunbartonshire,Scotland,,EastDunbartonshireCouncil GooglePublicCalendarCouncil,EastDunbartonshireCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+S12000047,Fife,Scotland,,FifeCouncil,FifeCouncil,True,postcode+house_number,False,True,Verint (empro),high,passed,True,True,False,left_out: unrecognised bin name 'Green'
+S12000048,Perth and Kinross,Scotland,,PerthAndKinrossCouncil,PerthAndKinrossCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+S12000049,Glasgow City,Scotland,,GlasgowCityCouncil,GlasgowCityCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+S12000050,North Lanarkshire,Scotland,,NorthLanarkshireCouncil,NorthLanarkshireCouncil,True,url_property_ref,False,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+W06000001,Isle of Anglesey,Wales,,IsleOfAngleseyCouncil,IsleOfAngleseyCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+W06000002,Gwynedd,Wales,,GwyneddCouncil,GwyneddCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+W06000003,Conwy,Wales,,ConwyCountyBorough,ConwyCountyBorough,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+W06000004,Denbighshire,Wales,,DenbighshireCouncil,DenbighshireCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+W06000005,Flintshire,Wales,,FlintshireCountyCouncil,FlintshireCountyCouncil,True,uprn,True,False,FCC Environment portal,high,passed,False,False,False,never_probed
+W06000006,Wrexham,Wales,,WrexhamCountyBoroughCouncil,WrexhamCountyBoroughCouncil,True,uprn+postcode+house_number,True,True,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
+W06000008,Ceredigion,Wales,,CeredigionCountyCouncil,CeredigionCountyCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+W06000009,Pembrokeshire,Wales,,PembrokeshireCountyCouncil,PembrokeshireCountyCouncil,True,uprn_in_url,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+W06000010,Carmarthenshire,Wales,,CarmarthenshireCountyCouncil,CarmarthenshireCountyCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+W06000011,Swansea,Wales,,SwanseaCouncil,SwanseaCouncil,True,postcode+house_number,False,True,Council CMS apiserver/ajaxlibrary API,high,failed,False,False,False,never_probed
+W06000012,Neath Port Talbot,Wales,,NeathPortTalbotCouncil,NeathPortTalbotCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+W06000013,Bridgend,Wales,,BridgendCountyBoroughCouncil,BridgendCountyBoroughCouncil,True,postcode,False,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+W06000014,Vale of Glamorgan,Wales,,ValeofGlamorganCouncil,ValeofGlamorganCouncil,True,uprn+postcode+house_number,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+W06000015,Cardiff,Wales,,CardiffCouncil,CardiffCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+W06000016,Rhondda Cynon Taf,Wales,,RhonddaCynonTaffCouncil,RhonddaCynonTaffCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+W06000018,Caerphilly,Wales,,CaerphillyCountyBoroughCouncil,CaerphillyCountyBoroughCouncil,True,postcode+house_number,False,False,ReCollect,high,passed,True,True,False,left_out: unrecognised bin name 'Food & Garden'
+W06000019,Blaenau Gwent,Wales,,BlaenauGwentCountyBoroughCouncil,BlaenauGwentCountyBoroughCouncil,True,uprn+postcode,True,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
+W06000020,Torfaen,Wales,,GooglePublicCalendarCouncil TorfaenCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
+W06000021,Monmouthshire,Wales,,MonmouthshireCountyCouncil,MonmouthshireCountyCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+W06000022,Newport,Wales,,NewportCityCouncil,NewportCityCouncil,True,uprn,True,False,iTouchVision,high,passed,False,False,False,never_probed
+W06000023,Powys,Wales,,PowysCouncil,PowysCouncil,True,postcode+house_number,False,True,Council CMS apiserver/ajaxlibrary API,high,failed,False,False,False,never_probed
+W06000024,Merthyr Tydfil,Wales,,MerthyrTydfilCountyBoroughCouncil,MerthyrTydfilCountyBoroughCouncil,True,postcode,False,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
