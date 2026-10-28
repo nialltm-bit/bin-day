@@ -17,6 +17,10 @@ on:
       house_number:
         description: "House number, or the first line of the address where the council needs it. Public test addresses only"
         default: "57"
+      page_only:
+        description: Only check the deployed pages (privacy page, script address, visit counting), without signing anyone up
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -31,6 +35,7 @@ jobs:
           ONS: ${{ inputs.ons || 'E06000036' }}
           POSTCODE: ${{ inputs.postcode || 'GU47 9BS' }}
           HOUSE: ${{ inputs.house_number || '57' }}
+          PAGE_ONLY: ${{ inputs.page_only && 'yes' || 'no' }}
         run: |
           set -u
           BASE="https://${GITHUB_REPOSITORY_OWNER}.github.io/bin-day"
@@ -46,7 +51,12 @@ jobs:
           SCRIPT=$(grep -o 'https://script.google.com/macros/s/[A-Za-z0-9_-]*/exec' main.js | head -1)
           [ -n "$SCRIPT" ] || fail "no script address built into the page"
           echo "::add-mask::$SCRIPT"
-          echo "visit counting script in the page code: $(cat main.js privacy.js *.js 2>/dev/null | grep -c 'gc.zgo.at')"
+          # The pages share code in other files (modulepreload links), so read every script either page names.
+          for f in $(cat index.html privacy.html | grep -o 'assets/[A-Za-z0-9._-]*\.js' | sort -u); do curl -sSL -m 30 -o "asset-$(basename "$f")" "$BASE/$f"; done
+          COUNTING=$(cat asset-*.js main.js privacy.js | grep -c 'gc.zgo.at' || true)
+          [ "$COUNTING" -gt 0 ] && echo "visit counting script is in the deployed page code" || fail "visit counting script is not in the deployed page code"
+          grep -q 'binday.goatcounter.com' asset-*.js main.js privacy.js && echo "pointed at the binday GoatCounter site" || fail "not pointed at binday.goatcounter.com"
+          [ "$PAGE_ONLY" = yes ] && { echo "page checks passed"; exit 0; }
 
           call() { curl -sSL -m 90 -H 'Content-Type: text/plain;charset=utf-8' -d "$1" "$SCRIPT"; }
           field() { jq -r --arg k "$1" '(.[$k] // "") | tostring' 2>/dev/null || echo "<not json>"; }
