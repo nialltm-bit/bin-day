@@ -633,7 +633,7 @@ describe("expire_feeds", () => {
 
   it("deletes a feed unused for more than a year, with its address, dates and changes", () => {
     feed("a".repeat(64), "100000000001", "2025-10-01");
-    expect(run()).toEqual({ ok: true, expired: 1, addresses_deleted: 1 });
+    expect(run()).toEqual({ ok: true, expired: 1, addresses_deleted: 1, messages_deleted: 0 });
     expect(store.subscriptions).toEqual([]);
     expect(store.addresses).toEqual([]);
     expect(store.results.size).toBe(0);
@@ -642,29 +642,29 @@ describe("expire_feeds", () => {
   it("keeps a feed used within the year, on the last day of it", () => {
     feed("b".repeat(64), "100000000002", "2025-10-28");
     feed("c".repeat(64), "100000000003", "2026-10-27");
-    expect(run()).toEqual({ ok: true, expired: 0, addresses_deleted: 0 });
+    expect(run()).toEqual({ ok: true, expired: 0, addresses_deleted: 0, messages_deleted: 0 });
     expect(store.subscriptions).toHaveLength(2);
   });
 
   it("counts the sign-up day for a feed with no last-used day yet", () => {
     feed("d".repeat(64), "100000000004", undefined, "2025-11-20T10:00:00+00:00");
     feed("e".repeat(64), "100000000005", undefined, "2025-09-01T10:00:00+00:00");
-    expect(run()).toEqual({ ok: true, expired: 1, addresses_deleted: 1 });
+    expect(run()).toEqual({ ok: true, expired: 1, addresses_deleted: 1, messages_deleted: 0 });
     expect(store.subscriptions.map((s) => s.token)).toEqual(["d".repeat(64)]);
   });
 
   it("keeps an address while a used feed still points at it", () => {
     feed("f".repeat(64), "100000000006", "2025-01-01");
     store.tables.addSubscription({ token: "9".repeat(64), id: "99999999", uprn: "100000000006", ons_code: "E06000022", garden: false, created_at: NOW, last_used: "2026-10-01" });
-    expect(run()).toEqual({ ok: true, expired: 1, addresses_deleted: 0 });
+    expect(run()).toEqual({ ok: true, expired: 1, addresses_deleted: 0, messages_deleted: 0 });
     expect(store.addresses).toHaveLength(1);
     expect(store.results.size).toBe(1);
   });
 
   it("takes a shorter or longer life, within limits", () => {
     feed("a".repeat(64), "100000000007", "2026-06-01");
-    expect(run({ days: 365 })).toEqual({ ok: true, expired: 0, addresses_deleted: 0 });
-    expect(run({ days: 100 })).toEqual({ ok: true, expired: 1, addresses_deleted: 1 });
+    expect(run({ days: 365 })).toEqual({ ok: true, expired: 0, addresses_deleted: 0, messages_deleted: 0 });
+    expect(run({ days: 100 })).toEqual({ ok: true, expired: 1, addresses_deleted: 1, messages_deleted: 0 });
     expect(run({ days: 5 })).toEqual({ ok: false, error: "bad days" });
     expect(run({ days: "365" })).toEqual({ ok: false, error: "bad days" });
   });
@@ -689,7 +689,7 @@ describe("expire_feeds never deletes on a date it can't read", () => {
       store.tables.addSubscription({ token, id: "0000000" + i, uprn: "10000000000" + i, ons_code: "E06000022", garden: false, created_at: bad, last_used: bad });
       store.tables.addAddress({ uprn: "10000000000" + i, ons_code: "E06000022" });
     }
-    expect(run()).toEqual({ ok: true, expired: 0, addresses_deleted: 0 });
+    expect(run()).toEqual({ ok: true, expired: 0, addresses_deleted: 0, messages_deleted: 0 });
     expect(store.subscriptions).toHaveLength(4);
     expect(store.addresses).toHaveLength(4);
   });
@@ -697,6 +697,59 @@ describe("expire_feeds never deletes on a date it can't read", () => {
   it("keeps a feed made today, with or without a last-used day", () => {
     store.tables.addSubscription({ token: "a".repeat(64), id: "00000001", uprn: "100000000001", ons_code: "E06000022", garden: false, created_at: "2026-10-28T22:10:00+00:00" });
     store.tables.addSubscription({ token: "b".repeat(64), id: "00000002", uprn: "100000000002", ons_code: "E06000022", garden: false, created_at: "2026-10-28T22:10:00+00:00", last_used: "2026-10-28" });
-    expect(run()).toEqual({ ok: true, expired: 0, addresses_deleted: 0 });
+    expect(run()).toEqual({ ok: true, expired: 0, addresses_deleted: 0, messages_deleted: 0 });
+  });
+});
+
+describe("contact (public)", () => {
+  const send = (body: Record<string, unknown> = {}, d: Deps = { secret: SECRET, tables: store.tables, nowIso: () => NOW }) =>
+    handle({ action: "contact", message: "Please delete my feed, I lost the link.", ...body }, d);
+
+  it("needs no secret, and keeps the message and how to reply for the owner to read", () => {
+    expect(send({ reply_to: "someone@example.com" })).toEqual({ ok: true });
+    expect(store.messages).toEqual([{ at: NOW, message: "Please delete my feed, I lost the link.", reply_to: "someone@example.com" }]);
+  });
+
+  it("keeps a message with no way to reply", () => {
+    expect(send()).toEqual({ ok: true });
+    expect(store.messages).toEqual([{ at: NOW, message: "Please delete my feed, I lost the link." }]);
+    expect(send({ reply_to: "  " })).toEqual({ ok: true });
+    expect(store.messages[1]).not.toHaveProperty("reply_to");
+  });
+
+  it("trims, drops control characters and keeps line breaks", () => {
+    send({ message: "  hello\u0000 there\r\nsecond line\u0007  " });
+    expect(store.messages[0]?.message).toBe("hello there\nsecond line");
+  });
+
+  it("refuses a message that is missing, too short or too long, and a bad reply-to", () => {
+    expect(send({ message: undefined })).toEqual({ ok: false, error: "message too short" });
+    expect(send({ message: "hi" })).toEqual({ ok: false, error: "message too short" });
+    expect(send({ message: "x".repeat(2001) })).toEqual({ ok: false, error: "message too long" });
+    expect(send({ reply_to: "a\nb" })).toEqual({ ok: false, error: "bad reply_to" });
+    expect(send({ reply_to: "x".repeat(201) })).toEqual({ ok: false, error: "bad reply_to" });
+    expect(send({ reply_to: 5 })).toEqual({ ok: false, error: "bad reply_to" });
+    expect(store.messages).toEqual([]);
+  });
+
+  it("answers a filled-in trap field as if it worked, and keeps nothing", () => {
+    expect(send({ website: "http://spam.example" })).toEqual({ ok: true });
+    expect(store.messages).toEqual([]);
+  });
+
+  it("stops at the hourly cap and when the Sheet holds too many", () => {
+    expect(send({}, { secret: SECRET, tables: store.tables, contactAllowed: () => false })).toEqual({ ok: false, error: "busy" });
+    for (let i = 0; i < 500; i++) store.tables.addMessage({ at: NOW, message: "filler" });
+    expect(send()).toEqual({ ok: false, error: "full" });
+  });
+});
+
+describe("expire_feeds also deletes old contact messages", () => {
+  it("deletes messages older than a year and keeps newer ones", () => {
+    store.tables.addMessage({ at: "2025-10-27T10:00:00+00:00", message: "old" });
+    store.tables.addMessage({ at: "2025-10-29T10:00:00+00:00", message: "newer" });
+    const reply = handle({ secret: SECRET, action: "expire_feeds" }, { secret: SECRET, tables: store.tables, todayIso: () => "2026-10-28" });
+    expect(reply).toEqual({ ok: true, expired: 0, addresses_deleted: 0, messages_deleted: 1 });
+    expect(store.messages.map((m) => m.message)).toEqual(["newer"]);
   });
 });

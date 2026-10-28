@@ -92,6 +92,17 @@ function withScriptLock<T>(work: () => T): T {
 }
 
 const MAX_FETCH_REQUESTS_PER_HOUR = 20;
+const MAX_CONTACT_MESSAGES_PER_HOUR = 20;
+
+/** True and counts it while fewer than the hourly limit of contact-form messages have been accepted this hour. */
+function contactAllowed(): boolean {
+  const properties = PropertiesService.getScriptProperties();
+  const key = `contact_messages_${Utilities.formatDate(new Date(), "UTC", "yyyyMMddHH")}`;
+  const used = Number(properties.getProperty(key)) || 0;
+  if (used >= MAX_CONTACT_MESSAGES_PER_HOUR) return false;
+  properties.setProperty(key, String(used + 1));
+  return true;
+}
 
 /**
  * Asks GitHub to run the "Fetch (scheduled)" workflow, and returns GitHub's status code (204 means it was accepted), or
@@ -166,6 +177,7 @@ function doPost(e: GoogleAppsScript.Events.DoPost): GoogleAppsScript.Content.Tex
         nowIso: () => new Date().toISOString(),
         todayIso: () => Utilities.formatDate(new Date(), "Europe/London", "yyyy-MM-dd"),
         requestFetch,
+        contactAllowed,
         maxSubscriptions: max > 0 ? max : undefined,
       }),
     );

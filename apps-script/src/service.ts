@@ -3,7 +3,7 @@
  * (addresses and results). Pure logic, so it can be tested without Apps Script.
  */
 
-import { daysBetween } from "./dates";
+import { addDays, daysBetween } from "./dates";
 import { FEED_TOKEN, upcomingFor } from "./feed";
 
 /** A feed nobody has asked for in this many days is deleted, with its address if it was the last feed on it. */
@@ -60,6 +60,14 @@ export interface ChangeRow {
   note: string;
 }
 
+export interface MessageRow {
+  /** When it was sent, an ISO timestamp. */
+  at: string;
+  message: string;
+  /** How to reply, if the person gave one. */
+  reply_to?: string;
+}
+
 export const CHANGE_KINDS = ["expected_shift", "round_change"] as const;
 
 export interface Tables {
@@ -73,6 +81,11 @@ export interface Tables {
   countSubscriptions(uprn?: string): number;
   addSubscription(row: SubscriptionRow): void;
   findSubscription(token: string): SubscriptionRow | null;
+  /** Contact-form messages. */
+  addMessage(row: MessageRow): void;
+  countMessages(): number;
+  /** Deletes messages sent before this day (YYYY-MM-DD) and returns how many went. */
+  deleteMessagesBefore(day: string): number;
   /** Every feed, for the yearly clear-out of unused ones. */
   subscriptions(): SubscriptionRow[];
   /** Records that the feed was used on this day (YYYY-MM-DD). Does nothing for an unknown token. */
@@ -112,7 +125,17 @@ export interface Deps {
    * address (the workflow it starts is public) and must never throw: a sign-up works whether or not this does.
    */
   requestFetch?: () => void;
+  /** Says whether another contact-form message may be accepted now (an hourly cap that keeps the form from being flooded). */
+  contactAllowed?: () => boolean;
 }
+
+/** The longest message and reply-to the contact form takes, and the most messages kept at once. */
+export const MAX_MESSAGE_CHARS = 2000;
+const MIN_MESSAGE_CHARS = 5;
+const MAX_REPLY_TO_CHARS = 200;
+const MAX_MESSAGES = 500;
+/** Contact-form messages are deleted after this many days. */
+export const MESSAGE_LIFE_DAYS = 365;
 
 export const DEFAULT_MAX_SUBSCRIPTIONS = 5000;
 export const DEFAULT_MAX_PER_ADDRESS = 20;
@@ -306,6 +329,41 @@ function joinWaitlist(request: Record<string, unknown>, deps: Deps): Reply {
   });
 }
 
+/** Text from the form with control characters (other than line breaks and tabs) removed and the ends trimmed. */
+function cleanText(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  // eslint-disable-next-line no-control-regex
+  return value.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, "").replace(/\r\n?/g, "\n").trim();
+}
+
+/**
+ * Public: the contact form. The message goes into a private tab of the Sheet for the owner to read; no email address of
+ * the owner is shown and nothing is sent anywhere. A hidden "website" field that only a program fills in is a trap: a
+ * filled one is answered as if it worked and kept nowhere. Capped in size, in how many are kept, and per hour.
+ */
+function contact(request: Record<string, unknown>, deps: Deps): Reply {
+  if (typeof request.website === "string" && request.website.trim() !== "") return { ok: true };
+  const message = cleanText(request.message);
+  if (message === null || message.length < MIN_MESSAGE_CHARS) return fail("message too short");
+  if (message.length > MAX_MESSAGE_CHARS) return fail("message too long");
+  let replyTo: string | undefined;
+  if (request.reply_to !== undefined && request.reply_to !== "") {
+    const cleaned = cleanText(request.reply_to);
+    if (cleaned === null || cleaned.length > MAX_REPLY_TO_CHARS || cleaned.includes("\n")) return fail("bad reply_to");
+    if (cleaned !== "") replyTo = cleaned;
+  }
+  const withLock = deps.withLock ?? (<T>(work: () => T) => work());
+  const { tables } = deps;
+  return withLock(() => {
+    if (tables.countMessages() >= MAX_MESSAGES) return fail("full");
+    if (deps.contactAllowed && !deps.contactAllowed()) return fail("busy");
+    const row: MessageRow = { at: deps.nowIso?.() ?? new Date().toISOString(), message };
+    if (replyTo !== undefined) row.reply_to = replyTo;
+    tables.addMessage(row);
+    return { ok: true } as Reply;
+  });
+}
+
 /**
  * Public: deletes a feed for the person who holds its token (the token is the secret, the same as for the calendar feed
  * and the date lookup). The feed stops working at once. When it was the last feed for its address, the address, its
@@ -332,6 +390,7 @@ export function handle(body: unknown, deps: Deps): Reply {
   if (request.action === "join_waitlist") return joinWaitlist(request, deps);
   if (request.action === "upcoming") return upcoming(request, deps);
   if (request.action === "unsubscribe") return unsubscribe(request, deps);
+  if (request.action === "contact") return contact(request, deps);
 
   if (deps.secret === undefined || deps.secret === "") return fail("not configured");
   if (typeof request.secret !== "string" || !safeEqual(request.secret, deps.secret)) return fail("unauthorised");
@@ -414,7 +473,8 @@ export function handle(body: unknown, deps: Deps): Reply {
             addresses += 1;
           }
         }
-        return { ok: true, expired, addresses_deleted: addresses } as Reply;
+        const messages = tables.deleteMessagesBefore(addDays(today, -MESSAGE_LIFE_DAYS));
+        return { ok: true, expired, addresses_deleted: addresses, messages_deleted: messages } as Reply;
       });
     }
 

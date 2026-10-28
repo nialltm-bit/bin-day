@@ -3,10 +3,9 @@
 The public policy is `web/privacy.html` (live at `/privacy.html`). This page is the working record behind it: what is
 kept, where, why, and what is still open. It is not legal advice; have the policy reviewed before launch.
 
-Controller named in the policy: FreshTech. Contact route: GitHub issues (public, so the policy asks people to leave
-personal details out). Both were chosen by the owner on 28 October 2026. Still open: a legal entity name or company
-number if there is one, and a private contact route (a GitHub issue can't carry a rights request that needs
-identifying someone).
+Controller named in the policy: FreshTech (chosen by the owner on 28 October 2026). Contact route: the contact form on the
+privacy page, which keeps messages in a private tab of the Sheet (below); no email address and no GitHub page is shown.
+Still open: a legal entity name or company number if there is one.
 
 ## What is kept, where, and the basis for it
 
@@ -20,6 +19,7 @@ which they would expect, and which they can delete themselves.
 | Council code, garden waste yes/no, feed token, short id, sign-up time, last day used | `subscriptions` tab | To build the calendar and keep the link private; to find feeds nobody uses | The feed is deleted, or unused for 12 months |
 | Fetched dates, last attempt, last error text | `results` tab | To build the calendar; to say when a check failed | The address is deleted |
 | Recorded changes (moved collections) | `changes` tab | To warn about round changes | The address is deleted |
+| A contact-form message and, if given, how to reply | `messages` tab | To answer questions and rights requests | Deleted after 12 months by the daily clear-out |
 | Council code and a count, no person | `waitlist` tab | To choose which council to add next | Not personal data |
 
 Not kept: name, email, phone, IP address (the script cannot read visitors' IP addresses), device identifiers. No
@@ -56,8 +56,7 @@ private, and Actions logs never contain addresses, UPRNs, postcodes or tokens (s
 - **Deleted while a fetch runs**: a fetch that finishes after its address was deleted writes nothing back (the script
   checks the address still exists before saving dates, failures or changes).
 - A person who has lost their link can't delete by themselves, because the token is the only proof of ownership.
-  They can ask through the contact route; we would need to find the row by address, which the policy tells them not
-  to post publicly. This is a gap; a private contact route would close it.
+  They can ask through the contact form, giving their postcode and house number so the owner can find the row.
 
 ## Address lookup provider and UPRNs
 
@@ -73,7 +72,12 @@ If a UPRN finder is added later, check its licence terms for storing UPRNs befor
   deletes feeds unused for more than 365 days, and an address, its dates and its changes when it was the last feed on
   it. A feed with no `last_used` yet (made before this existed) counts its sign-up day. Only the counts are logged.
   A calendar app that still subscribes fetches the link regularly, so a live subscription never expires.
-- **Contact route**: see above.
+- **Contact form (built)**: public `contact` action; the message goes to the `messages` tab (text columns, so nothing is
+  run as a formula). Limits: 5 to 2000 characters, an optional reply-to of up to 200 characters, 500 messages kept at
+  once, 20 accepted an hour, and a hidden trap field a program fills in (answered as success, kept nowhere). Nothing is
+  emailed to the owner (that would need extra Google permissions); the owner reads the tab. A rights request is handled
+  by hand: find the row by what the person wrote, delete it, and reply to the address they gave. A person who lost their
+  calendar link can ask for deletion by giving their postcode and house number in the message (the policy says so).
 - **Legal name**: the policy says "FreshTech" only.
 - **Email**: no email is collected. The optional update sign-up in FRE-271 is off. The items under "Before the email
   sign-up is switched on" in FRE-285 stay undone until that is switched on.

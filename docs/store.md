@@ -13,6 +13,7 @@ reached through the Apps Script web app in `apps-script/`. Nothing in the Sheet 
 - `changes` tab, one row per change the fetcher found: `at`, `uprn`, `ons_code`, `bin_name`, `kind`
   (`expected_shift` or `round_change`), `before` (the date we expected), `after` (the date we got), `note`. See
   `changes.md`.
+- `messages` tab, one row per contact-form message: `at`, `message`, `reply_to`. Deleted after a year by `expire_feeds`.
 - `subscriptions` tab, one row per feed: `token` (the secret in the person's feed URL), `id`, `uprn`, `ons_code`,
   `garden`, `created_at`, `last_used` (the last day the feed or its dates were asked for; feeds unused for a year are
   deleted by `expire_feeds`). Treat it like the secret itself. See `feed.md`.
@@ -31,7 +32,7 @@ One endpoint, `POST` to the web app's `/exec` URL with a plain-text JSON body. E
 | `save_success` | `uprn`, `now`, `collections: [{date, bin_name, stream}]` | `{"ok":true}` |
 | `save_failure` | `uprn`, `now`, `error` | `{"ok":true}` |
 | `get_result` | `uprn` | `{"ok":true,"result":{...}}`, or `"result":null` if there is none yet |
-| `expire_feeds` | `days?` (default 365, at least 30) | `{"ok":true,"expired":N,"addresses_deleted":M}`: deletes feeds unused for more than `days`, and an address with its dates and changes when its last feed goes |
+| `expire_feeds` | `days?` (default 365, at least 30) | `{"ok":true,"expired":N,"addresses_deleted":M}`: deletes feeds unused for more than `days`, and an address with its dates and changes when its last feed goes; also deletes contact messages older than a year (`messages_deleted`) |
 | `save_changes` | `uprn`, `ons_code`, `now`, `changes: [{bin_name, kind, before, after, note}]` | `{"ok":true}` |
 
 Errors are `{"ok":false,"error":"..."}` with a short generic message. A request with the wrong secret learns

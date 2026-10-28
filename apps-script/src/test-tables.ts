@@ -1,11 +1,12 @@
 /** In-memory tables for tests. */
-import type { AddressRow, ChangeRow, ResultRow, SubscriptionRow, Tables } from "./service";
+import type { AddressRow, ChangeRow, MessageRow, ResultRow, SubscriptionRow, Tables } from "./service";
 
 export function memoryTables() {
   const addresses: AddressRow[] = [];
   const results = new Map<string, ResultRow>();
   const subscriptions: SubscriptionRow[] = [];
   const changes: ChangeRow[] = [];
+  const messages: MessageRow[] = [];
   const waitlist = new Map<string, { count: number; first_at: string; last_at: string }>();
   const tables: Tables = {
     addChanges: (rows) => void changes.push(...rows),
@@ -17,6 +18,18 @@ export function memoryTables() {
     countSubscriptions: (uprn) => subscriptions.filter((s) => uprn === undefined || s.uprn === uprn).length,
     addSubscription: (row) => void subscriptions.push({ ...row }),
     findSubscription: (token) => subscriptions.find((s) => s.token === token) ?? null,
+    addMessage: (row) => void messages.push({ ...row }),
+    countMessages: () => messages.length,
+    deleteMessagesBefore: (day) => {
+      let removed = 0;
+      for (let i = messages.length - 1; i >= 0; i--) {
+        if (messages[i].at.slice(0, 10) < day) {
+          messages.splice(i, 1);
+          removed += 1;
+        }
+      }
+      return removed;
+    },
     subscriptions: () => subscriptions.map((s) => ({ ...s })),
     touchSubscription: (token, today) => {
       const row = subscriptions.find((s) => s.token === token);
@@ -43,5 +56,5 @@ export function memoryTables() {
       }
     },
   };
-  return { tables, addresses, results, subscriptions, changes, waitlist };
+  return { tables, addresses, results, subscriptions, changes, waitlist, messages };
 }
