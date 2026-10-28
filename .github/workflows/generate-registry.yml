@@ -4,6 +4,11 @@ name: Generate registry entries
 # left out and why. Existing entries are never changed.
 on:
   workflow_dispatch:
+  push:
+    branches: [claude/nifty-faraday-obdwan]
+    paths:
+      - .github/workflows/generate-registry.yml
+      - scripts/generate_registry.py
 
 permissions:
   contents: write
