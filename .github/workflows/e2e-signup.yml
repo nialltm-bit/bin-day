@@ -1,14 +1,20 @@
 name: End-to-end sign-up test
 
-# Signs up upstream's public Newcastle test address through the live script (the same call the website makes), waits for
+# Signs up a public test address (upstream's Newcastle one unless told otherwise) through the live script (the same call the website makes), waits for
 # the fetch the sign-up asks for, and checks the dates and the calendar feed. The script address is read from the deployed
 # page and the feed token is masked, so neither appears in this public log. Only the public test address is used.
 on:
   workflow_dispatch:
-  push:
-    branches: [claude/nifty-faraday-obdwan]
-    paths:
-      - .github/workflows/e2e-signup.yml
+    inputs:
+      ons:
+        description: ONS code of the council (default Newcastle)
+        default: E08000021
+      postcode:
+        description: "Postcode. Public test addresses only (upstream's test address for the council): inputs and this log are public"
+        default: NE3 4XE
+      house_number:
+        description: "House number, or the first line of the address where the council needs it. Public test addresses only"
+        default: 1 Northumberland Avenue
 
 permissions:
   contents: read
@@ -19,6 +25,10 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Sign up, wait for the dates, read the feed
+        env:
+          ONS: ${{ inputs.ons || 'E08000021' }}
+          POSTCODE: ${{ inputs.postcode || 'NE3 4XE' }}
+          HOUSE: ${{ inputs.house_number || '1 Northumberland Avenue' }}
         run: |
           set -u
           BASE="https://${GITHUB_REPOSITORY_OWNER}.github.io/bin-day"
@@ -30,7 +40,7 @@ jobs:
           echo "::add-mask::$SCRIPT"
           echo "script address found on the deployed page"
 
-          BODY='{"action":"subscribe","ons_code":"E08000021","postcode":"NE3 4XE","house_number":"1 Northumberland Avenue","garden":false}'
+          BODY=$(python3 -c 'import json,os; print(json.dumps({"action":"subscribe","ons_code":os.environ["ONS"],"postcode":os.environ["POSTCODE"],"house_number":os.environ["HOUSE"],"garden":False}))')
           REPLY=$(curl -sSL -m 90 -H 'Content-Type: text/plain;charset=utf-8' -d "$BODY" "$SCRIPT")
           case "$REPLY" in "{"*) ;; *) echo "not a JSON reply, starts: $(printf '%s' "$REPLY" | tr -d '\n' | cut -c1-120)"; exit 1;; esac
           TOKEN=$(printf '%s' "$REPLY" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("token","")) if d.get("ok") else print("")')
@@ -46,6 +56,7 @@ jobs:
             UP=$(curl -sSL -m 90 -H 'Content-Type: text/plain;charset=utf-8' -d "{\"action\":\"upcoming\",\"token\":\"$TOKEN\"}" "$SCRIPT")
             status=$(printf '%s' "$UP" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("status","?"))' 2>/dev/null || echo '?')
             echo "poll $i: $status"
+            [ "$i" = 1 ] && echo "(a first poll of pending means the address was new, so the sign-up asked for a fresh fetch; ready means it was already stored)"
             [ "$status" = ready ] || [ "$status" = failed ] && break
             sleep 10
           done
