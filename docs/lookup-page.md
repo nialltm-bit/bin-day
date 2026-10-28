@@ -35,7 +35,7 @@ A new address has no dates until the fetcher runs, and the daily run is at 05:17
 
 1. On GitHub, create a **fine-grained personal access token** (Settings, Developer settings, Personal access tokens, Fine-grained tokens). Resource owner: you. Repository access: **only `bin-day`**. Repository permissions: **Actions: Read and write**, nothing else. Choose an expiry and note it down: when the token expires, sign-ups stop asking for a fetch (the daily run still works) until you replace it.
 2. In the Apps Script project, open Project Settings, Script properties, and add `GITHUB_TOKEN` (the token) and `GITHUB_REPO` (`nialltm-bit/bin-day`). Never put the token anywhere else.
-3. Paste in the latest `apps-script/dist/Code.js`, choose **`testFetchRequest`** in the editor's function list and press **Run**. The first run asks you to allow the script to connect to an external service; allow it. The log should say `GitHub answered HTTP 204`. Then deploy a new version of the web app.
+3. Paste in the latest `apps-script/dist/Code.js`, choose **`testFetchRequest`** in the function list next to the Run button (after you save, the list shows `doGet`, `doPost` and `testFetchRequest`) and press **Run**. The first run asks you to allow the script to connect to an external service; allow it. The log should say `GitHub answered HTTP 204`. Then deploy a new version of the web app.
 
 Any other number in the log means: 401 or 403, the token or its permission is wrong; 404, the repository name is wrong or the token can't see it.
 

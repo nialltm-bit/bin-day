@@ -11,5 +11,15 @@ await build({
   format: "iife",
   target: "es2022",
   legalComments: "none",
+  // Apps Script finds doGet and doPost by name and its editor lists only functions declared at the top level of the
+  // file, so these plain declarations hand over to the bundled functions.
+  footer: {
+    js: [
+      "function doGet(e) { return globalThis.__binDay.doGet(e); }",
+      "function doPost(e) { return globalThis.__binDay.doPost(e); }",
+      "function testFetchRequest() { return globalThis.__binDay.testFetchRequest(); }",
+      "",
+    ].join("\n"),
+  },
 });
 copyFileSync("appsscript.json", "dist/appsscript.json");

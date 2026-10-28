@@ -1417,5 +1417,9 @@
     }
     return json({ ok: true, received: body });
   }
-  Object.assign(globalThis, { doGet, doPost, testFetchRequest });
+  Object.assign(globalThis, { __binDay: { doGet, doPost, testFetchRequest } });
 })();
+function doGet(e) { return globalThis.__binDay.doGet(e); }
+function doPost(e) { return globalThis.__binDay.doPost(e); }
+function testFetchRequest() { return globalThis.__binDay.testFetchRequest(); }
+
