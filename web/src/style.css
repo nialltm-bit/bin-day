@@ -1,0 +1,97 @@
+:root {
+  --text: #1c2024;
+  --muted: #5b646d;
+  --line: #d3d8dd;
+  --bg: #ffffff;
+  --available: #14775a;
+  --soon-bg: #fff3cf;
+  --soon-fg: #d49a00;
+  --broken: #d9822b;
+  --none: #e3e7ea;
+  --focus: #1d4ed8;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #eceff2;
+    --muted: #a6afb8;
+    --line: #3a4148;
+    --bg: #14181c;
+    --available: #3cc49a;
+    --soon-bg: #3d3414;
+    --soon-fg: #d9ad2e;
+    --broken: #e8964a;
+    --none: #2a3036;
+    --focus: #8fb3ff;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+main {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 1.5rem 16px 3rem;
+}
+
+#coverage { margin-top: 2.5rem; }
+#coverage h2 { margin: 0 0 0.25rem; }
+.coverage-summary { margin: 0 0 1rem; color: var(--muted); }
+
+[role="tablist"] { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+[role="tab"] {
+  font: inherit;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+[role="tab"][aria-selected="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+label { display: block; font-weight: 600; margin-bottom: 0.25rem; }
+input[type="search"] {
+  box-sizing: border-box;
+  width: 100%;
+  font: inherit;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.results { margin-top: 1rem; }
+.group h3 { margin: 1rem 0 0.25rem; font-size: 1rem; }
+.results ul { margin: 0; padding-left: 1.25rem; columns: 2 14rem; }
+.results li { break-inside: avoid; padding: 0.1rem 0; }
+.results details { margin-top: 1rem; }
+.results summary { cursor: pointer; font-weight: 600; }
+.note, .credit { color: var(--muted); font-size: 0.875rem; }
+
+.map-info { min-height: 3em; margin: 0 0 0.5rem; }
+.map { display: block; width: 100%; max-height: 80vh; height: auto; }
+.map path { stroke: var(--bg); stroke-width: 0.5; cursor: pointer; vector-effect: non-scaling-stroke; }
+.map path.selected { stroke: var(--text); stroke-width: 2; }
+.map .ring { fill: none; stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+.map .r-available { stroke: var(--available); }
+.map .r-soon { stroke: var(--soon-fg); }
+.map .r-broken { stroke: var(--broken); }
+.map .stripe-bg { fill: var(--soon-bg); }
+.map .stripe-fg { fill: var(--soon-fg); }
+path.c-available, .swatch.c-available { fill: var(--available); background: var(--available); }
+path.c-soon { fill: url(#soon-stripes); }
+.swatch.c-soon { background: repeating-linear-gradient(45deg, var(--soon-bg) 0 3px, var(--soon-fg) 3px 6px); }
+path.c-broken, .swatch.c-broken { fill: var(--broken); background: var(--broken); }
+path.c-none, .swatch.c-none { fill: var(--none); background: var(--none); }
+
+.legend { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; padding: 0; margin: 0.75rem 0 0; font-size: 0.875rem; }
+.legend li { display: flex; align-items: center; gap: 0.4rem; }
+.swatch { width: 1.1rem; height: 1.1rem; border-radius: 3px; border: 1px solid var(--line); display: inline-block; }

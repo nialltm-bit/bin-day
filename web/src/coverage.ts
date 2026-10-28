@@ -63,14 +63,43 @@ export function canAskForHouseNumber(council: CouncilEntry): boolean {
   return inputs.includes("house_number") && !inputs.includes("uprn");
 }
 
+/**
+ * How far along a council is, from the registry alone. The homepage coverage list and map and the postcode lookup both
+ * use this, so they can never disagree.
+ * - `available`: we can show bin days now.
+ * - `soon`: we have a source, but it needs a UPRN and nothing can find one yet.
+ * - `broken`: we have a source and it is failing.
+ * - `none`: no source.
+ */
+export type Availability = "available" | "soon" | "broken" | "none";
+
+export function availabilityOf(council: CouncilEntry | undefined, canFindUprn = false): Availability {
+  if (!council || council.status === "unsupported") return "none";
+  if (council.status === "broken") return "broken";
+  if (canAskForHouseNumber(council)) return "available";
+  // A UPRN source is only offered once something can find the UPRN. Today nothing free can, so this stays false.
+  if (canFindUprn && (council.inputs ?? []).includes("uprn")) return "available";
+  return "soon";
+}
+
 export function classifyCouncil(postcode: string, onsCode: string, name: string, councils: CouncilEntry[], canFindUprn = false): Outcome {
   const council = councils.find((c) => c.ons_code === onsCode);
-  if (!council || council.status === "unsupported") return { kind: "council_not_covered", postcode, ons_code: onsCode, name: council?.name ?? name };
-  if (council.status === "broken") return { kind: "council_unavailable", postcode, ons_code: onsCode, name: council.name };
-  if (canAskForHouseNumber(council)) return { kind: "ready", postcode, ons_code: onsCode, name: council.name, ask: "house_number" };
-  // A UPRN source is only offered once something can find the UPRN. Today nothing free can, so this stays false.
-  if (canFindUprn && (council.inputs ?? []).includes("uprn")) return { kind: "ready", postcode, ons_code: onsCode, name: council.name, ask: "address_list" };
-  return { kind: "council_needs_address_lookup", postcode, ons_code: onsCode, name: council.name };
+  switch (availabilityOf(council, canFindUprn)) {
+    case "none":
+      return { kind: "council_not_covered", postcode, ons_code: onsCode, name: council?.name ?? name };
+    case "broken":
+      return { kind: "council_unavailable", postcode, ons_code: onsCode, name: council?.name ?? name };
+    case "soon":
+      return { kind: "council_needs_address_lookup", postcode, ons_code: onsCode, name: council?.name ?? name };
+    case "available":
+      return {
+        kind: "ready",
+        postcode,
+        ons_code: onsCode,
+        name: council?.name ?? name,
+        ask: council && canAskForHouseNumber(council) ? "house_number" : "address_list",
+      };
+  }
 }
 
 export interface LookupDeps {

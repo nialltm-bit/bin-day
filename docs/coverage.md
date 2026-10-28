@@ -43,6 +43,29 @@ count, first and last time. This replaces the email waitlist in FRE-274 for v1, 
 that straddles a boundary is given to one council, so the page asks for the house number and the council's own system
 has the last word. We have not tested a straddling postcode.
 
+## The homepage coverage section ("Where we cover")
+
+Two views of the same data, chosen with tabs: **List** (with a "find your council" box) and **Map**.
+
+- **Same rules as the lookup.** Each council is `covered`, `on the way` (we have a source but can't find addresses yet),
+  `not working right now`, or `not covered yet`, worked out by `availabilityOf` in `web/src/coverage.ts`. The list, the
+  map and the postcode lookup use that one function, so they can't disagree.
+- **The page says so when nothing is covered.** The summary line is built from the counts ("We can show bin days for 0
+  of 361 councils. 1 more is on the way."), so it is true however much is covered.
+- **List.** Covered, on the way and not working are listed. The long "not covered yet" list is folded away and opens
+  when you type in the search box. The list is also the accessible version of the map.
+- **Map.** One SVG path per council, drawn from `web/public/data/council-shapes.json` (no map tiles, no third-party map
+  service, no key). Covered is green, on the way is striped amber, not working is orange, not covered is grey, and a ring
+  marks every council we have any work on, because a small council would otherwise be lost on a map of the whole
+  country. Tap a council to see its status in words. Colour is never the only signal: the legend names every state and the
+  tap text spells it out.
+- **If the outlines don't load,** the list still works from the registry and says the full list didn't load.
+- **Outlines.** `scripts/build_council_shapes.py` (run by the *Build council outlines* workflow) downloads the newest ONS
+  Local Authority District boundaries (361 councils: England 296, Scotland 32, Wales 22, Northern Ireland 11, May 2026),
+  simplifies them to about 400 m, and writes about 300 KB (about 100 KB compressed). Boundaries are Crown copyright and
+  database right under the Open Government Licence, and the page carries that credit. Re-run the workflow when councils
+  merge or change.
+
 ## Adding councils that need a UPRN
 
 Nothing else needs to change for these. The fetcher, store and feed already work from UPRNs, and B&NES runs end to
