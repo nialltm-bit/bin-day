@@ -1,0 +1,49 @@
+name: Spot check the covered councils
+
+# Runs every covered council once with its public test address and looks for results that can't be right (see
+# scripts/spot_check.py). Writes docs/spot-check.md, with a spread of councils to check by hand, and the data behind it.
+# Test addresses are upstream's public ones; nothing here is a real person's address.
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/nifty-faraday-obdwan]
+    paths:
+      - .github/workflows/spot-check.yml
+      - scripts/spot_check.py
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Start a Chrome service for councils that need a browser
+        run: docker run -d --name selenium -p 4444:4444 --shm-size=2g selenium/standalone-chrome:latest
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r fetcher/requirements.txt
+      - name: Wait for the Chrome service
+        run: |
+          for i in $(seq 1 60); do
+            curl -fs http://localhost:4444/status | grep -q '"ready": *true' && exit 0
+            sleep 2
+          done
+          echo "Chrome service not ready" >&2; exit 1
+      - name: Check each council
+        env:
+          PYTHONPATH: .
+        run: python scripts/spot_check.py registry/councils.json docs/spike-results/spot-check.json docs/spot-check.md http://localhost:4444 3
+      - name: Commit the report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/spike-results/spot-check.json docs/spot-check.md
+          git commit -m "Update the spot check of the covered councils [skip ci]" || exit 0
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
