@@ -11,6 +11,8 @@ export interface CouncilEntry {
   name: string;
   status: "supported" | "unsupported" | "broken";
   inputs?: string[];
+  /** For a council that takes a house number: whether a number or name is enough, or it needs the whole first line. */
+  house_input?: "number_or_name" | "first_line";
 }
 
 export type Outcome =
@@ -32,9 +34,10 @@ export type Outcome =
   | { kind: "council_unavailable"; postcode: string; ons_code: string; name: string }
   /**
    * Ready. `house_number`: ask for a house number or name and let the council's own system match it.
+   * `first_line`: the council's system needs the whole first line of the address ("12 High Street"), not just a number.
    * `address_list`: the council needs a UPRN and we have a finder, so show the addresses to pick from.
    */
-  | { kind: "ready"; postcode: string; ons_code: string; name: string; ask: "house_number" | "address_list" };
+  | { kind: "ready"; postcode: string; ons_code: string; name: string; ask: "house_number" | "first_line" | "address_list" };
 
 export interface Message {
   headline: string;
@@ -97,7 +100,7 @@ export function classifyCouncil(postcode: string, onsCode: string, name: string,
         postcode,
         ons_code: onsCode,
         name: council?.name ?? name,
-        ask: council && canAskForHouseNumber(council) ? "house_number" : "address_list",
+        ask: council && canAskForHouseNumber(council) ? (council.house_input === "first_line" ? "first_line" : "house_number") : "address_list",
       };
   }
 }
@@ -189,7 +192,12 @@ export function messageFor(outcome: Outcome): Message {
     case "ready":
       return {
         headline: `Your council is ${outcome.name}`,
-        detail: outcome.ask === "address_list" ? "Pick your address." : "Enter your house number or name.",
+        detail:
+          outcome.ask === "address_list"
+            ? "Pick your address."
+            : outcome.ask === "first_line"
+              ? "Enter the first line of your address, for example 12 High Street."
+              : "Enter your house number or name.",
       };
   }
 }

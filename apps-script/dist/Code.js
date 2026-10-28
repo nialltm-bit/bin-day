@@ -352,6 +352,7 @@
           "postcode",
           "house_number"
         ],
+        house_input: "first_line",
         needs_selenium: false,
         bin_types: {
           "General Waste": {
@@ -368,7 +369,7 @@
           house_number: "1 Northumberland Avenue"
         },
         last_verified: "2026-10-28",
-        notes: "Plain HTTP, no browser (it uses the ReCollect API, and upstream passes -s to skip fetching the page). Takes a postcode and a house number (no UPRN). On 2026-10-28 the module returned 8 entries: General Waste and Recycling, each every 14 days for about seven weeks, so this is a full schedule and no every_weeks is set. Passed upstream's integration suite (FRE-263). Only two bin names have been seen. Newcastle also runs a paid garden waste service, but this module did not return a garden bin for the test address, so garden waste is not mapped yet and the garden question has no effect here. Bin colours and the council's own naming have not been checked against its website, so only neutral labels are set."
+        notes: `Plain HTTP, no browser (it uses the ReCollect API, and upstream passes -s to skip fetching the page). Takes a postcode and a house number (no UPRN). On 2026-10-28 the module returned 8 entries: General Waste and Recycling, each every 14 days for about seven weeks, so this is a full schedule and no every_weeks is set. Passed upstream's integration suite (FRE-263). Only two bin names have been seen. Newcastle also runs a paid garden waste service, but this module did not return a garden bin for the test address, so garden waste is not mapped yet and the garden question has no effect here. Bin colours and the council's own naming have not been checked against its website, so only neutral labels are set. On 2026-10-28 a bare house number ("1") found no address for the test postcode, while the first line of the address (house number and street) worked, so house_input is first_line. The module ignores the postcode when it is given a text address, and when a postcode search finds addresses but none starts with the text it falls back to the first one listed, so a typo can return another house's dates. See docs/coverage.md.`
       }
     ]
   };
@@ -603,6 +604,9 @@
     for (const input of council.inputs ?? []) {
       if (input === "postcode" && typeof postcode !== "string") return fail("postcode needed");
       if (input === "house_number" && typeof house_number !== "string") return fail("house_number needed");
+    }
+    if (council.house_input === "first_line" && typeof house_number === "string" && house_number.trim().split(/[\s,]+/).filter(Boolean).length < 2) {
+      return fail("first line needed");
     }
     let key;
     if ((council.inputs ?? []).includes("uprn")) {

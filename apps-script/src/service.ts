@@ -199,6 +199,11 @@ function subscribe(request: Record<string, unknown>, deps: Deps): Reply {
     if (input === "postcode" && typeof postcode !== "string") return fail("postcode needed");
     if (input === "house_number" && typeof house_number !== "string") return fail("house_number needed");
   }
+  // A council that matches on the whole first line of the address can't use a bare number: it would find nothing, or
+  // the wrong house. So the first line needs at least a number or name and a street.
+  if (council.house_input === "first_line" && typeof house_number === "string" && house_number.trim().split(/[\s,]+/).filter(Boolean).length < 2) {
+    return fail("first line needed");
+  }
   // The key this address is stored under: its UPRN where the council needs one, otherwise one made from what was typed.
   let key: string;
   if ((council.inputs ?? []).includes("uprn")) {

@@ -85,13 +85,24 @@ for example `h-E08000021-NE34XE-1`. The same house typed two ways gets the same 
 people subscribe. The key starts with a letter or digit and holds only letters, digits and dashes, so it can never be
 read as a formula in the Sheet. The Sheet column is still called `uprn`.
 
+## What Newcastle taught us about house-number councils
+
+Newcastle's source (the ReCollect address search) was run from GitHub Actions on 2026-10-28 with a public test address:
+
+- **The first line of the address works** ("12 High Street" style): 8 collections came back and both bin names mapped
+  (General Waste to general, Recycling to recycling).
+- **A bare number does not:** "No address found". So the registry says `house_input: first_line`, the page asks for "the
+  first line of your address, for example 12 High Street", and `subscribe` refuses a single word for such a council.
+- **Wrong-house risk.** The module ignores the postcode when it is given a text address, and when a postcode search finds
+  addresses but none starts with the text it falls back to the first one listed. A typo can therefore return another
+  house's dates, and we can't see which address it matched. Nothing here protects against that yet. A "check this is
+  you" step would need the module to return the address it matched, or a change in the module.
+
 ## Still open
 
-- **What a person types for the house.** Newcastle's source says "house number or full address". The test address uses a
-  full address ("1 Northumberland Avenue"). I also ran the plain number ("1"); see the pull request for the result.
-  Until a plain number is shown to work, the lookup page should not promise it.
 - **Garden waste.** Newcastle's module returned only General Waste and Recycling for the test address, so the garden
   question has no effect for it yet.
 - **Other councils.** 28 more councils passed upstream's suite with a postcode and house number and no browser. Each
-  needs the same check: run the module, map its bin names, confirm frequencies if it is a `next_only` council.
+  needs the same checks as Newcastle: run it with a number and with a first line, map its bin names, and confirm
+  frequencies if it is a `next_only` council.
 - FRE-274 still describes an email waitlist and should be reworded.

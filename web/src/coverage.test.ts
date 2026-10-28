@@ -9,6 +9,7 @@ const FAKE: CouncilEntry[] = [
   { ons_code: "E06000097", name: "Nowhere Yet", status: "unsupported" },
   { ons_code: "E06000096", name: "Uprnton", status: "supported", inputs: ["uprn"] },
   { ons_code: "E06000095", name: "Both", status: "supported", inputs: ["uprn", "postcode", "house_number"] },
+  { ons_code: "E06000094", name: "Lineton", status: "supported", inputs: ["postcode", "house_number"], house_input: "first_line" },
 ];
 
 function fakeFetch(status: number, body: unknown): typeof fetch {
@@ -36,6 +37,17 @@ describe("classifyCouncil", () => {
 
   it("is ready only when the council is supported and takes a house number without a UPRN", () => {
     expect(pick("E06000099")).toBe("ready");
+  });
+
+  it("asks for the whole first line where the council's system needs it, and says so in the words shown", () => {
+    const out = classifyCouncil("AA1 1AA", "E06000094", "x", FAKE);
+    expect(out).toMatchObject({ kind: "ready", ask: "first_line" });
+    expect(messageFor(out).detail).toMatch(/first line of your address/);
+    expect(messageFor(classifyCouncil("AA1 1AA", "E06000099", "x", FAKE)).detail).toBe("Enter your house number or name.");
+  });
+
+  it("with the real registry, Newcastle is ready and asks for the first line", () => {
+    expect(classifyCouncil("NE3 4XE", "E08000021", "Newcastle upon Tyne", REAL)).toMatchObject({ kind: "ready", ask: "first_line" });
   });
 
   it("does not offer a council that needs a UPRN while nothing can find one, even if it also lists a house number", () => {
