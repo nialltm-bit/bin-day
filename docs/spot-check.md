@@ -3,8 +3,8 @@
 Every covered council, run once with its public test address. This catches councils that don't fetch and results that
 can't be right (a bin on two weekdays, odd gaps, no general or recycling bin). It cannot say the dates are true.
 
-- Councils checked: 43. Fetched: 40. Did not fetch: 3.
-- Fetched but flagged: 2.
+- Councils checked: 41. Fetched: 41. Did not fetch: 0.
+- Fetched but flagged: 0.
 
 ## To check by hand
 
@@ -42,15 +42,16 @@ Address: HU17 8LG, 14. Council site: https://www.eastriding.gov.uk
 | Brown Bin (Garden Waste) | garden | 2026-10-28 |
 | Green Bin (General Waste) | general | 2026-11-06 |
 
-### Somerset
+### Brighton and Hove
 
-Address: TA6 4AA, 5. Council site: https://www.somerset.gov.uk/
+Address: BN1 8NE, 44. Council site: https://enviroservices.brighton-hove.gov.uk/link/collections
 
 | Bin (council's name) | We call it | Next dates |
 |---|---|---|
-| Food Recycling | food | 2026-10-28 |
-| Recycling Collection | recycling | 2026-10-28 |
-| Rubbish Collection | general | 2026-10-28 |
+| Food waste | food | 2026-10-29 |
+| Garden Waste | garden | 2026-11-06 |
+| Recycling | recycling | 2026-11-02 |
+| Refuse | general | 2026-10-29 |
 
 ### Ceredigion
 
@@ -82,58 +83,4 @@ Address: EN4 8TB, 26A. Council site: https://www.barnet.gov.uk/recycling-and-was
 | Food Waste | food | 2026-11-02, 2026-11-09 |
 | General Waste | general | 2026-11-02, 2026-11-09 |
 | Recycling Bin | recycling | 2026-11-02, 2026-11-09 |
-
-### Brighton and Hove
-
-Address: BN1 8NE, 44. Council site: https://enviroservices.brighton-hove.gov.uk/link/collections
-
-
-- Flag: did not fetch (FetchError)
-
-### East Hampshire
-
-Address: GU31 4AG, 15 College Street. Council site: https://www.easthants.gov.uk
-
-| Bin (council's name) | We call it | Next dates |
-|---|---|---|
-| Recycling (green bin) and glass box(es) | recycling | 2026-10-29 |
-
-- Flag: no general waste bin
-
-### Test Valley
-
-Address: SO51 0BY, 2. Council site: https://testvalley.gov.uk/wasteandrecycling/when-are-my-bins-collected/when-are-my-bins-collected
-
-| Bin (council's name) | We call it | Next dates |
-|---|---|---|
-| Food Waste | food | 2026-11-03, 2026-11-10 |
-| Garden Waste | garden | 2026-10-30, 2026-11-13 |
-
-- Flag: no general waste bin
-- Flag: no recycling bin
-
-### Surrey Heath
-
-Address: GU20 6PN, 36. Council site: https://asjwsw-wrpsurreyheathmunicipal-live.whitespacews.com/
-
-
-- Flag: did not fetch (UnmappedBinError: unmapped bin names: Batteries/small electricals/textiles)
-
-### Neath Port Talbot
-
-Address: SA13 3BA, 2. Council site: https://www.npt.gov.uk
-
-
-- Flag: did not fetch (UnmappedBinError: unmapped bin names: Batteries (Battery Bag))
-
-## Did not fetch
-
-- Brighton and Hove: FetchError
-- Surrey Heath: UnmappedBinError: unmapped bin names: Batteries/small electricals/textiles
-- Neath Port Talbot: UnmappedBinError: unmapped bin names: Batteries (Battery Bag)
-
-## Fetched but flagged
-
-- East Hampshire: no general waste bin
-- Test Valley: no general waste bin; no recycling bin
 

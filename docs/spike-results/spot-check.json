@@ -252,12 +252,38 @@
         "house_number": "44"
       },
       "url": "https://enviroservices.brighton-hove.gov.uk/link/collections",
-      "ok": false,
-      "error": "FetchError",
-      "bins": [],
-      "flags": [
-        "did not fetch (FetchError)"
-      ]
+      "ok": true,
+      "bins": [
+        {
+          "name": "Food waste",
+          "stream": "food",
+          "next": [
+            "2026-10-29"
+          ]
+        },
+        {
+          "name": "Garden Waste",
+          "stream": "garden",
+          "next": [
+            "2026-11-06"
+          ]
+        },
+        {
+          "name": "Recycling",
+          "stream": "recycling",
+          "next": [
+            "2026-11-02"
+          ]
+        },
+        {
+          "name": "Refuse",
+          "stream": "general",
+          "next": [
+            "2026-10-29"
+          ]
+        }
+      ],
+      "flags": []
     },
     {
       "ons_code": "E06000066",
@@ -483,64 +509,6 @@
         }
       ],
       "flags": []
-    },
-    {
-      "ons_code": "E07000085",
-      "name": "East Hampshire",
-      "schedule": "next_only",
-      "browser": false,
-      "address": {
-        "postcode": "GU31 4AG",
-        "house_number": "15 College Street"
-      },
-      "url": "https://www.easthants.gov.uk",
-      "ok": true,
-      "bins": [
-        {
-          "name": "Recycling (green bin) and glass box(es)",
-          "stream": "recycling",
-          "next": [
-            "2026-10-29"
-          ]
-        }
-      ],
-      "flags": [
-        "no general waste bin"
-      ]
-    },
-    {
-      "ons_code": "E07000093",
-      "name": "Test Valley",
-      "schedule": "next_only",
-      "browser": true,
-      "address": {
-        "postcode": "SO51 0BY",
-        "house_number": "2"
-      },
-      "url": "https://testvalley.gov.uk/wasteandrecycling/when-are-my-bins-collected/when-are-my-bins-collected",
-      "ok": true,
-      "bins": [
-        {
-          "name": "Food Waste",
-          "stream": "food",
-          "next": [
-            "2026-11-03",
-            "2026-11-10"
-          ]
-        },
-        {
-          "name": "Garden Waste",
-          "stream": "garden",
-          "next": [
-            "2026-10-30",
-            "2026-11-13"
-          ]
-        }
-      ],
-      "flags": [
-        "no general waste bin",
-        "no recycling bin"
-      ]
     },
     {
       "ons_code": "E07000094",
@@ -1128,12 +1096,37 @@
         "house_number": "36"
       },
       "url": "https://asjwsw-wrpsurreyheathmunicipal-live.whitespacews.com/",
-      "ok": false,
-      "error": "UnmappedBinError: unmapped bin names: Batteries/small electricals/textiles",
-      "bins": [],
-      "flags": [
-        "did not fetch (UnmappedBinError: unmapped bin names: Batteries/small electricals/textiles)"
-      ]
+      "ok": true,
+      "bins": [
+        {
+          "name": "Food waste",
+          "stream": "food",
+          "next": [
+            "2026-10-29",
+            "2026-11-05",
+            "2026-11-12",
+            "2026-11-19"
+          ]
+        },
+        {
+          "name": "Recycling",
+          "stream": "recycling",
+          "next": [
+            "2026-11-05",
+            "2026-11-19"
+          ]
+        },
+        {
+          "name": "Rubbish",
+          "stream": "general",
+          "next": [
+            "2026-10-29",
+            "2026-11-12",
+            "2026-11-26"
+          ]
+        }
+      ],
+      "flags": []
     },
     {
       "ons_code": "E07000224",
@@ -1560,14 +1553,14 @@
           "name": "blue bin",
           "stream": "recycling",
           "next": [
-            "2027-10-27"
+            "2026-11-10"
           ]
         },
         {
           "name": "brown bin",
           "stream": "garden",
           "next": [
-            "2027-10-27"
+            "2026-11-03"
           ]
         }
       ],
@@ -1746,12 +1739,56 @@
         "house_number": "2"
       },
       "url": "https://www.npt.gov.uk",
-      "ok": false,
-      "error": "UnmappedBinError: unmapped bin names: Batteries (Battery Bag)",
-      "bins": [],
-      "flags": [
-        "did not fetch (UnmappedBinError: unmapped bin names: Batteries (Battery Bag))"
-      ]
+      "ok": true,
+      "bins": [
+        {
+          "name": "Cardboard, Cartons and Paper (White Bag)",
+          "stream": "recycling",
+          "next": [
+            "2026-11-02",
+            "2026-11-09"
+          ]
+        },
+        {
+          "name": "Food Waste (Green Bin)",
+          "stream": "food",
+          "next": [
+            "2026-11-02",
+            "2026-11-09"
+          ]
+        },
+        {
+          "name": "Garden Waste (Green bag)",
+          "stream": "garden",
+          "next": [
+            "2026-11-09"
+          ]
+        },
+        {
+          "name": "General Household Rubbish (Wheelie bin / black bags)",
+          "stream": "general",
+          "next": [
+            "2026-11-09"
+          ]
+        },
+        {
+          "name": "Glass (Black box without lid)",
+          "stream": "recycling",
+          "next": [
+            "2026-11-02",
+            "2026-11-09"
+          ]
+        },
+        {
+          "name": "Plastic / Tins / Cans (White Bag)",
+          "stream": "recycling",
+          "next": [
+            "2026-11-02",
+            "2026-11-09"
+          ]
+        }
+      ],
+      "flags": []
     }
   ]
 }
