@@ -5,21 +5,6 @@ Added 0 councils. Left out 67.
 ## Added
 
 
-## Re-checked against the current mapping rules
-
-- corrected: Colchester
-- corrected: Rochford
-- corrected: North Hertfordshire
-- corrected: St. Helens
-- corrected: Wirral
-- corrected: Ceredigion
-- taken out until its bin names can be settled: Mid Ulster
-- taken out until its bin names can be settled: East Ayrshire
-- taken out until its bin names can be settled: East Lothian
-- taken out until its bin names can be settled: Comhairle nan Eilean Siar
-- taken out until its bin names can be settled: Stirling
-- taken out until its bin names can be settled: Caerphilly County Borough
-
 ## Left out, and why
 
 - BassetlawDistrictCouncil: already in the registry (left unchanged)
