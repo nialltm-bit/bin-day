@@ -1,7 +1,53 @@
 import { buildCalendar, pocEvents } from "./ics";
 import { feedFor, FEED_TOKEN } from "./feed";
+import { parseBankHolidays, setBankHolidays, setCouncils, slimCouncils } from "./registry";
+import { type Remote, loadJson } from "./remote";
 import { handle } from "./service";
 import { sheetTables } from "./sheets";
+
+const DEFAULT_REPO = "nialltm-bit/bin-day";
+const REGISTRY_SECONDS = 600; // a change to the council list reaches the script within about ten minutes
+const BANK_HOLIDAY_SECONDS = 3600;
+
+function rawUrl(path: string): string {
+  const repo = PropertiesService.getScriptProperties().getProperty("GITHUB_REPO");
+  const name = repo && /^[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+$/.test(repo) ? repo : DEFAULT_REPO;
+  return `https://raw.githubusercontent.com/${name}/main/${path}`;
+}
+
+const remote: Remote = {
+  fetchText(url) {
+    try {
+      const response = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
+      return response.getResponseCode() === 200 ? response.getContentText() : null;
+    } catch {
+      return null;
+    }
+  },
+  cacheGet: (key) => CacheService.getScriptCache().get(key),
+  cachePut(key, value, seconds) {
+    try {
+      CacheService.getScriptCache().put(key, value, seconds);
+    } catch {
+      // A full or unavailable cache only means the next request fetches again.
+    }
+  },
+};
+
+/**
+ * Uses the live council list and bank holidays from GitHub, so adding councils needs no redeploy. The copies bundled into
+ * the script are the fallback, used if GitHub can't be reached or the file doesn't pass the checks. Never throws.
+ */
+function refreshData(): void {
+  try {
+    const councils = loadJson(remote, "registry", rawUrl("registry/councils.json"), slimCouncils, REGISTRY_SECONDS);
+    if (councils) setCouncils(councils);
+    const holidays = loadJson(remote, "bankholidays", rawUrl("registry/bank-holidays.json"), parseBankHolidays, BANK_HOLIDAY_SECONDS);
+    if (holidays) setBankHolidays(holidays);
+  } catch (error) {
+    console.error(`Using the bundled council list: ${error instanceof Error ? error.name : "error"}`);
+  }
+}
 
 function json(body: unknown): GoogleAppsScript.Content.TextOutput {
   return ContentService.createTextOutput(JSON.stringify(body)).setMimeType(ContentService.MimeType.JSON);
@@ -16,6 +62,7 @@ function doGet(e: GoogleAppsScript.Events.DoGet): GoogleAppsScript.Content.TextO
   }
   const token = e?.parameter?.feed;
   if (token && token !== "poc") {
+    refreshData();
     const now = new Date();
     const today = Utilities.formatDate(now, "Europe/London", "yyyy-MM-dd");
     const calendar = FEED_TOKEN.test(token) ? feedFor(token, { tables: sheetTables, now, today }) : null;
@@ -103,6 +150,7 @@ function doPost(e: GoogleAppsScript.Events.DoPost): GoogleAppsScript.Content.Tex
   }
   // Requests with an action are the fetcher's store API and need the shared secret.
   if (typeof body === "object" && body !== null && "action" in body) {
+    refreshData();
     const properties = PropertiesService.getScriptProperties();
     const secret = properties.getProperty("FETCHER_SECRET") ?? undefined;
     const max = Number(properties.getProperty("MAX_SUBSCRIPTIONS"));

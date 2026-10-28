@@ -93,3 +93,41 @@ export function centreOf(d: string): { x: number; y: number } | null {
   }
   return { x: (minX + maxX) / 2, y: (minY + maxY) / 2 };
 }
+
+/** London's 32 boroughs and the City of London all have ONS codes starting E09. */
+export function isLondon(code: string): boolean {
+  return code.startsWith("E09");
+}
+
+export interface Bounds {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+/** The box that holds every point of the given paths. Null if there are no points. */
+export function boundsOf(paths: string[]): Bounds | null {
+  let minX = Infinity;
+  let maxX = -Infinity;
+  let minY = Infinity;
+  let maxY = -Infinity;
+  for (const d of paths) {
+    const numbers = d.match(/-?\d+(?:\.\d+)?/g)?.map(Number) ?? [];
+    for (let i = 0; i + 1 < numbers.length; i += 2) {
+      minX = Math.min(minX, numbers[i]);
+      maxX = Math.max(maxX, numbers[i]);
+      minY = Math.min(minY, numbers[i + 1]);
+      maxY = Math.max(maxY, numbers[i + 1]);
+    }
+  }
+  return minX === Infinity ? null : { x: minX, y: minY, width: maxX - minX, height: maxY - minY };
+}
+
+/** The same box with a margin round it, as an SVG viewBox. */
+export function viewBoxFor(bounds: Bounds, margin = 0.05): string {
+  const mx = bounds.width * margin;
+  const my = bounds.height * margin;
+  const round = (n: number) => Math.round(n * 10) / 10;
+  return `${round(bounds.x - mx)} ${round(bounds.y - my)} ${round(bounds.width + 2 * mx)} ${round(bounds.height + 2 * my)}`;
+}

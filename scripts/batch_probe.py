@@ -4,17 +4,22 @@ For each council it runs the module with upstream's test address, then again wit
 records: whether it worked, the bin names, whether it returns one date per bin or a schedule, and whether the bare
 number finds the same house as the full text. It also notes whether the module's source mentions a browser.
 
-Usage: batch_probe.py <upstream input.json> <full-suite.json> <output json> [pause seconds]
+A council that upstream runs with a browser is probed through the Selenium service at the address given, if there is one.
+Councils already in the output file are skipped, so a run only does the new ones. Set PROBE_ALL=1 to redo everything.
+
+Usage: batch_probe.py <upstream input.json> <full-suite.json> <output json> [pause seconds] [selenium url]
 Logs and output are public, so they hold council module names, bin names and counts, never an address.
 """
 import importlib
 import json
+import os
 import re
+import signal
 import sys
 import time
 from datetime import datetime
 
-from uk_bin_collection.uk_bin_collection.collect_data import UKBinCollectionApp
+TIMEOUT_SECONDS = 180
 
 
 def passed_modules(suite_path):
@@ -22,22 +27,40 @@ def passed_modules(suite_path):
     return {re.search(r"\[(.+)\]", c["test"]).group(1) for c in suite["cases"] if c["status"] == "passed"}
 
 
-def candidates(inputs, passed):
+def candidates(inputs, passed, done=frozenset()):
+    """Councils that take a postcode and a house number (no UPRN), passed upstream's own test, and aren't done yet."""
     for name, entry in sorted(inputs.items()):
         if entry.get("uprn") or not (entry.get("postcode") and entry.get("house_number")):
             continue
-        if entry.get("web_driver") or name not in passed:
+        if name not in passed or name in done:
             continue
         yield name, entry
 
 
-def run_module(name, entry, house_number):
+class Timeout(Exception):
+    pass
+
+
+def _on_alarm(signum, frame):
+    raise Timeout(f"no result after {TIMEOUT_SECONDS}s")
+
+
+def run_module(name, entry, house_number, selenium_url=None):
+    from uk_bin_collection.uk_bin_collection.collect_data import UKBinCollectionApp
+
     args = [name, entry["url"], f"-p={entry['postcode']}", f"-n={house_number}"]
+    if entry.get("web_driver") and selenium_url:
+        args.append(f"-w={selenium_url}")
     if entry.get("skip_get_url") is True:
         args.append("-s")
     app = UKBinCollectionApp()
     app.set_args(args)
-    data = json.loads(app.run())
+    signal.signal(signal.SIGALRM, _on_alarm)
+    signal.alarm(TIMEOUT_SECONDS)
+    try:
+        data = json.loads(app.run())
+    finally:
+        signal.alarm(0)
     found = {}
     for item in data.get("bins", []):
         found.setdefault(item["type"], []).append(datetime.strptime(item["collectionDate"], "%d/%m/%Y").date())
@@ -67,13 +90,19 @@ def leading_number(house_number):
     return match.group(1) if match else None
 
 
-def main(input_path, suite_path, out_path, pause="10"):
+def main(input_path, suite_path, out_path, pause="10", selenium_url=None):
     inputs = json.load(open(input_path))
-    results = []
-    for name, entry in candidates(inputs, passed_modules(suite_path)):
+    previous = []
+    if os.path.exists(out_path) and os.environ.get("PROBE_ALL") != "1":
+        previous = json.load(open(out_path))["results"]
+    done = {row["module"] for row in previous}
+    results = list(previous)
+    todo = list(candidates(inputs, passed_modules(suite_path), done))
+    print(f"already probed: {len(done)} | to probe now: {len(todo)}")
+    for name, entry in todo:
         row = {"module": name, "ons_code": entry.get("LAD24CD"), "browser_in_source": uses_browser(name)}
         try:
-            full = run_module(name, entry, str(entry["house_number"]))
+            full = run_module(name, entry, str(entry["house_number"]), selenium_url)
             row.update(describe(full))
             row["ok"] = bool(full)
         except Exception as err:  # upstream modules raise anything
@@ -83,7 +112,7 @@ def main(input_path, suite_path, out_path, pause="10"):
         if full and number and number != str(entry["house_number"]).strip():
             time.sleep(float(pause))
             try:
-                bare = run_module(name, entry, number)
+                bare = run_module(name, entry, number, selenium_url)
                 row["bare_number"] = "same_house" if bare == full else "different_house" if bare else "no_result"
             except Exception as err:
                 row["bare_number"] = f"error_{type(err).__name__}"
@@ -91,10 +120,11 @@ def main(input_path, suite_path, out_path, pause="10"):
             row["bare_number"] = "not_applicable"
         results.append(row)
         print(name, {k: row.get(k) for k in ("ok", "schedule", "bare_number", "browser_in_source", "error")})
+        json.dump({"results": results}, open(out_path, "w"), indent=1)  # saved as we go, so a long run keeps its progress
         time.sleep(float(pause))
     json.dump({"results": results}, open(out_path, "w"), indent=1)
-    print("councils probed:", len(results), "| worked:", sum(r["ok"] for r in results))
+    print("councils probed in total:", len(results), "| worked:", sum(r["ok"] for r in results))
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:5])
+    main(*sys.argv[1:6])

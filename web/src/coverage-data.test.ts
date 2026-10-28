@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import councilData from "../../registry/councils.json";
 import type { CouncilEntry } from "./coverage";
-import { LABELS, ORDER, buildViews, centreOf, countByAvailability, describe as describeView, filterViews, summary } from "./coverage-data";
+import shapesFile from "../public/data/council-shapes.json";
+import { LABELS, ORDER, boundsOf, buildViews, centreOf, countByAvailability, isLondon, viewBoxFor, describe as describeView, filterViews, summary } from "./coverage-data";
 
 const REAL = (councilData as { councils: CouncilEntry[] }).councils;
 const REGISTRY: CouncilEntry[] = [
@@ -87,5 +88,41 @@ describe("centreOf", () => {
   it("copes with decimals and finds nothing in an empty path", () => {
     expect(centreOf("M1.5 2.5L3.5 4.5Z")).toEqual({ x: 2.5, y: 3.5 });
     expect(centreOf("")).toBeNull();
+  });
+});
+
+describe("London", () => {
+  it("is every council whose ONS code starts E09, and nothing else", () => {
+    expect(isLondon("E09000005")).toBe(true);
+    expect(isLondon("E09000001")).toBe(true);
+    for (const other of ["E08000021", "E06000022", "E07000171", "W06000018", "S12000010", "N09000006", "E0900000"]) {
+      expect(isLondon(other) && other.length === 9, other).toBe(false);
+    }
+  });
+
+  it("finds 33 councils in the real outlines, all inside the map and small enough to deserve their own box", () => {
+    const shapes = shapesFile as { viewBox: string; councils: { code: string; d: string }[] };
+    const london = shapes.councils.filter((c) => isLondon(c.code));
+    expect(london).toHaveLength(33);
+    const bounds = boundsOf(london.map((c) => c.d));
+    const [, , width, height] = shapes.viewBox.split(" ").map(Number);
+    expect(bounds).not.toBeNull();
+    expect((bounds?.x ?? -1) >= 0 && (bounds?.y ?? -1) >= 0).toBe(true);
+    expect((bounds?.x ?? 0) + (bounds?.width ?? 0)).toBeLessThanOrEqual(width);
+    expect((bounds?.y ?? 0) + (bounds?.height ?? 0)).toBeLessThanOrEqual(height);
+    expect(bounds?.width ?? 999).toBeLessThan(width / 4);
+  });
+});
+
+describe("boundsOf and viewBoxFor", () => {
+  it("is the box round every point of every path", () => {
+    expect(boundsOf(["M10 20L30 20L30 60Z", "M50 0L70 5Z"])).toEqual({ x: 10, y: 0, width: 60, height: 60 });
+  });
+  it("has no box for no points", () => {
+    expect(boundsOf([])).toBeNull();
+    expect(boundsOf([""])).toBeNull();
+  });
+  it("adds a margin on every side", () => {
+    expect(viewBoxFor({ x: 100, y: 200, width: 40, height: 20 }, 0.1)).toBe("96 198 48 24");
   });
 });

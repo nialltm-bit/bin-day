@@ -11,7 +11,10 @@ interface Fetched {
 }
 
 /** Runs the built script with stand-ins for Apps Script's services, and returns the functions it declares at the top level. */
-function load(properties: Record<string, string> = {}, fetched: Fetched = {}) {
+function load(properties: Record<string, string> = {}, fetched: Fetched = {}, files: Record<string, string | undefined> = {}) {
+  const cache = new Map<string, string>();
+  const rawFetches: string[] = [];
+  (fetched as Fetched & { rawFetches?: string[] }).rawFetches = rawFetches;
   const output = (text: string) => ({
     text,
     mime: "",
@@ -30,8 +33,16 @@ function load(properties: Record<string, string> = {}, fetched: Fetched = {}) {
       }),
     },
     Utilities: { formatDate: () => "2026102812", getUuid: () => "00000000-0000-4000-8000-000000000000" },
+    CacheService: {
+      getScriptCache: () => ({ get: (k: string) => cache.get(k) ?? null, put: (k: string, v: string) => void cache.set(k, v) }),
+    },
     UrlFetchApp: {
       fetch: (url: string, options: Record<string, unknown>) => {
+        if (url.startsWith("https://raw.githubusercontent.com/")) {
+          rawFetches.push(url);
+          const body = files[url];
+          return { getResponseCode: () => (body === undefined ? 404 : 200), getContentText: () => body ?? "" };
+        }
         fetched.url = url;
         fetched.options = options;
         return { getResponseCode: () => 204 };
@@ -75,5 +86,48 @@ describe("the built script", () => {
     const fetched: Fetched = {};
     load({}, fetched).testFetchRequest();
     expect(fetched.url).toBeUndefined();
+  });
+});
+
+describe("the live council list", () => {
+  const RAW = "https://raw.githubusercontent.com/nialltm-bit/bin-day/main/registry/councils.json";
+  const subscribe = (script: ReturnType<typeof load>) =>
+    JSON.parse(script.doPost({ postData: { contents: JSON.stringify({ action: "subscribe", ons_code: "E06000099", uprn: "1" }) } }).text);
+  const numberton = { ons_code: "E06000099", name: "Numberton", status: "supported", schedule: "full", inputs: ["postcode", "house_number"], bin_types: {} };
+
+  it("doesn't know a council that is only on GitHub unless it loads the live list", () => {
+    expect(subscribe(load())).toEqual({ ok: false, error: "council not supported yet" });
+  });
+
+  it("recognises a council that is only in the live list, with no redeploy", () => {
+    const script = load({}, {}, { [RAW]: JSON.stringify({ councils: [numberton] }) });
+    // Past the council check, so the next thing missing is the postcode it needs.
+    expect(subscribe(script)).toEqual({ ok: false, error: "postcode needed" });
+  });
+
+  it("fetches the live list once and then serves it from the cache", () => {
+    const fetched: Fetched = {};
+    const script = load({}, fetched, { [RAW]: JSON.stringify({ councils: [numberton] }) });
+    subscribe(script);
+    subscribe(script);
+    subscribe(script);
+    expect((fetched as Fetched & { rawFetches: string[] }).rawFetches.filter((u) => u === RAW)).toHaveLength(1);
+  });
+
+  it("falls back to the bundled list if the live one is missing or broken", () => {
+    expect(subscribe(load({}, {}, { [RAW]: "<html>not json" }))).toEqual({ ok: false, error: "council not supported yet" });
+    expect(subscribe(load({}, {}, { [RAW]: JSON.stringify({ councils: [] }) }))).toEqual({ ok: false, error: "council not supported yet" });
+  });
+
+  it("still serves a council from the bundled list when the live list can't be reached", () => {
+    const script = load();
+    const reply = JSON.parse(script.doPost({ postData: { contents: JSON.stringify({ action: "subscribe", ons_code: "E06000022", uprn: "nope" }) } }).text);
+    expect(reply).toEqual({ ok: false, error: "bad uprn" }); // got as far as checking the UPRN, so B&NES was recognised
+  });
+
+  it("reads the repository from the GITHUB_REPO setting if there is one", () => {
+    const other = "https://raw.githubusercontent.com/someone/else/main/registry/councils.json";
+    const script = load({ GITHUB_REPO: "someone/else" }, {}, { [other]: JSON.stringify({ councils: [numberton] }) });
+    expect(subscribe(script)).toEqual({ ok: false, error: "postcode needed" });
   });
 });

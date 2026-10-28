@@ -1,0 +1,27 @@
+name: Check the deployed site
+
+# Reads the live homepage's script to see whether the script address was built in. Prints yes or no, never the address.
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/nifty-faraday-obdwan]
+    paths:
+      - .github/workflows/check-deployed.yml
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: |
+          set -u
+          BASE="https://${GITHUB_REPOSITORY_OWNER}.github.io/bin-day"
+          curl -sSL -m 30 -w "index status %{http_code}\n" -o index.html "$BASE/"
+          JS=$(grep -o 'assets/main-[^"]*\.js' index.html | head -1)
+          echo "main script: ${JS:-none found}"
+          curl -sSL -m 30 -o main.js "$BASE/$JS"
+          echo "script address built in: $(grep -c 'script.google.com/macros' main.js)"
+          echo "page code mentions 'switched on': $(grep -c "switched on" main.js)"

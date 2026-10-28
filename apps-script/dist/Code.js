@@ -801,16 +801,77 @@
   };
 
   // src/registry.ts
-  var councils = councils_default.councils;
+  var BUNDLED_COUNCILS = councils_default.councils;
+  var councils = BUNDLED_COUNCILS;
   function getCouncil(onsCode) {
     return councils.find((council) => council.ons_code === onsCode);
+  }
+  function setCouncils(list) {
+    councils = list;
+  }
+  var ONS_CODE = /^[ENSW][0-9]{8}$/;
+  var STREAMS = ["general", "recycling", "food", "garden"];
+  var STATUSES = ["supported", "unsupported", "broken"];
+  var INPUTS = ["uprn", "postcode", "house_number"];
+  var MAX_COUNCILS = 2e3;
+  function slimBinTypes(value) {
+    if (typeof value !== "object" || value === null || Array.isArray(value)) return null;
+    const slim = {};
+    for (const [name, raw] of Object.entries(value)) {
+      const bin = raw;
+      if (name.length > 200 || typeof bin !== "object" || bin === null || !STREAMS.includes(bin.stream)) return null;
+      const entry = { stream: bin.stream };
+      if (typeof bin.label === "string" && bin.label.length <= 200) entry.label = bin.label;
+      if (typeof bin.every_weeks === "number" && Number.isInteger(bin.every_weeks) && bin.every_weeks >= 1 && bin.every_weeks <= 4) entry.every_weeks = bin.every_weeks;
+      slim[name] = entry;
+    }
+    return slim;
+  }
+  function slimCouncils(raw) {
+    const list = raw?.councils;
+    if (!Array.isArray(list) || list.length > MAX_COUNCILS) return null;
+    const slim = [];
+    for (const item of list) {
+      const c = item;
+      if (typeof c !== "object" || c === null) continue;
+      if (typeof c.ons_code !== "string" || !ONS_CODE.test(c.ons_code)) continue;
+      if (typeof c.name !== "string" || c.name === "" || c.name.length > 200) continue;
+      if (!STATUSES.includes(c.status)) continue;
+      const council = { ons_code: c.ons_code, name: c.name, status: c.status };
+      if (c.schedule === "next_only" || c.schedule === "full") council.schedule = c.schedule;
+      if (Array.isArray(c.inputs) && c.inputs.every((i) => INPUTS.includes(i))) council.inputs = c.inputs;
+      if (c.house_input === "number_or_name" || c.house_input === "first_line") council.house_input = c.house_input;
+      if (c.bin_types !== void 0) {
+        const bins = slimBinTypes(c.bin_types);
+        if (bins === null) continue;
+        council.bin_types = bins;
+      }
+      slim.push(council);
+    }
+    return slim.length > 0 ? slim : null;
   }
   function regionFor(onsCode) {
     return onsCode.startsWith("E") || onsCode.startsWith("W") ? "england-and-wales" : onsCode.startsWith("S") ? "scotland" : "northern-ireland";
   }
+  var BUNDLED_BANK_HOLIDAYS = bank_holidays_default;
+  var bankHolidays = BUNDLED_BANK_HOLIDAYS;
+  function setBankHolidays(data) {
+    bankHolidays = data;
+  }
+  function parseBankHolidays(raw) {
+    const regions = raw?.regions;
+    if (typeof regions !== "object" || regions === null) return null;
+    const clean = {};
+    for (const [name, value] of Object.entries(regions)) {
+      const region = value;
+      if (typeof region !== "object" || region === null || !Array.isArray(region.dates)) return null;
+      if (!region.dates.every((d) => typeof d === "string" && /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(d)) || region.dates.length > 500) return null;
+      clean[name] = { verified: region.verified === true, dates: region.dates };
+    }
+    return "england-and-wales" in clean ? { regions: clean } : null;
+  }
   function bankHolidaysFor(onsCode) {
-    const regions = bank_holidays_default.regions;
-    const region = regions[regionFor(onsCode)];
+    const region = bankHolidays.regions[regionFor(onsCode)];
     return region?.verified ? region.dates : void 0;
   }
 
@@ -975,15 +1036,57 @@
     return { status: "ready", collections: days };
   }
 
+  // src/remote.ts
+  var CHUNK_CHARS = 3e4;
+  var MAX_CHUNKS = 30;
+  function readCache(remote2, key) {
+    const count = Number(remote2.cacheGet(`${key}:n`));
+    if (!Number.isInteger(count) || count < 1 || count > MAX_CHUNKS) return null;
+    let text2 = "";
+    for (let i = 0; i < count; i++) {
+      const part = remote2.cacheGet(`${key}:${i}`);
+      if (part === null) return null;
+      text2 += part;
+    }
+    return text2;
+  }
+  function writeCache(remote2, key, text2, seconds) {
+    const chunks = [];
+    for (let i = 0; i < text2.length; i += CHUNK_CHARS) chunks.push(text2.slice(i, i + CHUNK_CHARS));
+    if (chunks.length === 0 || chunks.length > MAX_CHUNKS) return;
+    chunks.forEach((chunk, i) => remote2.cachePut(`${key}:${i}`, chunk, seconds));
+    remote2.cachePut(`${key}:n`, String(chunks.length), seconds);
+  }
+  function tryParse(text2, parse) {
+    try {
+      return parse(JSON.parse(text2));
+    } catch {
+      return null;
+    }
+  }
+  function loadJson(remote2, key, url, parse, seconds) {
+    const cached = readCache(remote2, key);
+    if (cached !== null) {
+      const value2 = tryParse(cached, (raw) => raw);
+      if (value2 !== null) return value2;
+    }
+    const text2 = remote2.fetchText(url);
+    if (text2 === null) return null;
+    const value = tryParse(text2, parse);
+    if (value === null) return null;
+    writeCache(remote2, key, JSON.stringify(value), seconds);
+    return value;
+  }
+
   // src/service.ts
-  var STREAMS = ["general", "recycling", "food", "garden"];
+  var STREAMS2 = ["general", "recycling", "food", "garden"];
   var CHANGE_KINDS = ["expected_shift", "round_change"];
   var DEFAULT_MAX_SUBSCRIPTIONS = 5e3;
   var DEFAULT_MAX_PER_ADDRESS = 20;
   var DEFAULT_MAX_WAITLIST_COUNCILS = 500;
   var UPRN = /^[0-9]{1,12}$/;
   var ADDRESS_ID = /^(?:[0-9]{1,12}|h-[ENSW][0-9]{8}-[A-Z0-9]{5,7}-[a-z0-9-]{1,40})$/;
-  var ONS_CODE = /^[ENSW][0-9]{8}$/;
+  var ONS_CODE2 = /^[ENSW][0-9]{8}$/;
   var TIMESTAMP = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+(Z|[+-][0-9]{2}:[0-9]{2})$/;
   var DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
   var MAX_TEXT = 500;
@@ -1037,14 +1140,14 @@
       const { date, bin_name, stream } = item;
       if (typeof date !== "string" || !DATE.test(date)) return null;
       if (text(bin_name, 200) === null || typeof bin_name !== "string") return null;
-      if (typeof stream !== "string" || !STREAMS.includes(stream)) return null;
+      if (typeof stream !== "string" || !STREAMS2.includes(stream)) return null;
       rows2.push({ date, bin_name, stream });
     }
     return rows2;
   }
   function subscribe(request, deps) {
     const { uprn, ons_code, postcode, house_number, garden } = request;
-    if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
+    if (typeof ons_code !== "string" || !ONS_CODE2.test(ons_code)) return fail("bad ons_code");
     if (postcode !== void 0 && !(typeof postcode === "string" && POSTCODE.test(postcode))) return fail("bad postcode");
     if (house_number !== void 0 && !(typeof house_number === "string" && HOUSE_NUMBER.test(house_number))) return fail("bad house_number");
     if (garden !== void 0 && typeof garden !== "boolean") return fail("bad garden");
@@ -1108,7 +1211,7 @@
   }
   function joinWaitlist(request, deps) {
     const { ons_code } = request;
-    if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
+    if (typeof ons_code !== "string" || !ONS_CODE2.test(ons_code)) return fail("bad ons_code");
     const withLock = deps.withLock ?? ((work) => work());
     const { tables } = deps;
     return withLock(() => {
@@ -1137,7 +1240,7 @@
       case "add_address": {
         const { uprn, ons_code, postcode, house_number } = request;
         if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
-        if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
+        if (typeof ons_code !== "string" || !ONS_CODE2.test(ons_code)) return fail("bad ons_code");
         if (postcode !== void 0 && !(typeof postcode === "string" && POSTCODE.test(postcode))) return fail("bad postcode");
         if (house_number !== void 0 && !(typeof house_number === "string" && HOUSE_NUMBER.test(house_number))) return fail("bad house_number");
         const row = { uprn, ons_code };
@@ -1156,7 +1259,7 @@
       case "save_changes": {
         const { uprn, ons_code, now } = request;
         if (typeof uprn !== "string" || !ADDRESS_ID.test(uprn)) return fail("bad uprn");
-        if (typeof ons_code !== "string" || !ONS_CODE.test(ons_code)) return fail("bad ons_code");
+        if (typeof ons_code !== "string" || !ONS_CODE2.test(ons_code)) return fail("bad ons_code");
         if (typeof now !== "string" || !TIMESTAMP.test(now)) return fail("bad timestamp");
         const rows2 = validChanges(request.changes, uprn, ons_code, now);
         if (rows2 === null) return fail("bad changes");
@@ -1324,6 +1427,41 @@
   };
 
   // src/main.ts
+  var DEFAULT_REPO = "nialltm-bit/bin-day";
+  var REGISTRY_SECONDS = 600;
+  var BANK_HOLIDAY_SECONDS = 3600;
+  function rawUrl(path) {
+    const repo = PropertiesService.getScriptProperties().getProperty("GITHUB_REPO");
+    const name = repo && /^[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+$/.test(repo) ? repo : DEFAULT_REPO;
+    return `https://raw.githubusercontent.com/${name}/main/${path}`;
+  }
+  var remote = {
+    fetchText(url) {
+      try {
+        const response = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
+        return response.getResponseCode() === 200 ? response.getContentText() : null;
+      } catch {
+        return null;
+      }
+    },
+    cacheGet: (key) => CacheService.getScriptCache().get(key),
+    cachePut(key, value, seconds) {
+      try {
+        CacheService.getScriptCache().put(key, value, seconds);
+      } catch {
+      }
+    }
+  };
+  function refreshData() {
+    try {
+      const councils2 = loadJson(remote, "registry", rawUrl("registry/councils.json"), slimCouncils, REGISTRY_SECONDS);
+      if (councils2) setCouncils(councils2);
+      const holidays = loadJson(remote, "bankholidays", rawUrl("registry/bank-holidays.json"), parseBankHolidays, BANK_HOLIDAY_SECONDS);
+      if (holidays) setBankHolidays(holidays);
+    } catch (error) {
+      console.error(`Using the bundled council list: ${error instanceof Error ? error.name : "error"}`);
+    }
+  }
   function json(body) {
     return ContentService.createTextOutput(JSON.stringify(body)).setMimeType(ContentService.MimeType.JSON);
   }
@@ -1336,6 +1474,7 @@
     }
     const token = e?.parameter?.feed;
     if (token && token !== "poc") {
+      refreshData();
       const now = /* @__PURE__ */ new Date();
       const today = Utilities.formatDate(now, "Europe/London", "yyyy-MM-dd");
       const calendar = FEED_TOKEN.test(token) ? feedFor(token, { tables: sheetTables, now, today }) : null;
@@ -1398,6 +1537,7 @@
       return json({ ok: false, error: "body is not JSON" });
     }
     if (typeof body === "object" && body !== null && "action" in body) {
+      refreshData();
       const properties = PropertiesService.getScriptProperties();
       const secret = properties.getProperty("FETCHER_SECRET") ?? void 0;
       const max = Number(properties.getProperty("MAX_SUBSCRIPTIONS"));
