@@ -95,3 +95,43 @@ path.c-none, .swatch.c-none { fill: var(--none); background: var(--none); }
 .legend { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; padding: 0; margin: 0.75rem 0 0; font-size: 0.875rem; }
 .legend li { display: flex; align-items: center; gap: 0.4rem; }
 .swatch { width: 1.1rem; height: 1.1rem; border-radius: 3px; border: 1px solid var(--line); display: inline-block; }
+
+#lookup { margin-top: 1.5rem; }
+#lookup h2 { margin: 0 0 0.5rem; }
+#lookup .row { display: flex; gap: 0.5rem; }
+#lookup .row input { flex: 1; min-width: 0; text-transform: uppercase; }
+#lookup input[type="text"] {
+  box-sizing: border-box;
+  width: 100%;
+  font: inherit;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+}
+#lookup .row input[type="text"] { width: auto; }
+#lookup button, #lookup a.button {
+  display: inline-block;
+  font: inherit;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--text);
+  border-radius: 8px;
+  background: var(--text);
+  color: var(--bg);
+  cursor: pointer;
+  text-decoration: none;
+}
+#lookup button.secondary { background: transparent; color: var(--text); }
+#lookup button:disabled { opacity: 0.6; cursor: default; }
+#lookup-message h3, #lookup-result h3 { margin: 1rem 0 0.25rem; font-size: 1.1rem; }
+#lookup-details { margin-top: 1rem; }
+#lookup-details input[type="text"] { margin-bottom: 0.25rem; }
+#lookup fieldset { border: 0; padding: 0; margin: 1rem 0; }
+#lookup legend { font-weight: 600; padding: 0; margin-bottom: 0.25rem; }
+#lookup .choice { display: inline-block; font-weight: 400; margin-right: 1.25rem; }
+#lookup .error { color: #b3261e; margin: 0.25rem 0; min-height: 0; }
+@media (prefers-color-scheme: dark) { #lookup .error { color: #ff8a80; } }
+#lookup .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+#lookup input.copy { font-size: 0.875rem; }
+#lookup .count { margin-top: 0.5rem; }

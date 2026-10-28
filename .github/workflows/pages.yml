@@ -29,6 +29,9 @@ jobs:
         working-directory: web
       - run: npm run build
         working-directory: web
+        env:
+          # The script's public web app address, set once as a repository variable (Settings, Variables).
+          VITE_SCRIPT_URL: ${{ vars.BIN_DAY_SCRIPT_URL }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web/dist
