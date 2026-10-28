@@ -3,6 +3,7 @@
 Reads upstream's test inputs and the batch probe results (scripts/batch_probe.py). For each council that returned a full
 schedule without a browser, it builds a registry entry: the module and inputs from upstream, the bin names mapped to
 streams by keyword, the schedule from what the probe saw, and whether a bare house number finds the same house.
+A council that needs a browser is added with needs_selenium set, and the fetch workflows run a Chrome service for it.
 A council it can't map completely (an unrecognised bin name, no council code, a postcode that belongs to another
 council) is left out and listed in the report, so a person only looks at exceptions. Existing registry entries are never
 changed.
@@ -64,12 +65,13 @@ def build_entry(row: dict, upstream: dict, code: str, today: str) -> tuple[dict 
         "source": source,
         "inputs": ["postcode", "house_number"],
         "house_input": "first_line" if first_line else "number_or_name",
-        "needs_selenium": False,
+        "needs_selenium": bool(row.get("browser_in_source")),
         "bin_types": bin_types,
         "test_address": {"postcode": upstream["postcode"], "house_number": str(upstream["house_number"])},
         "last_verified": today,
         "notes": (
-            f"Generated from upstream's test inputs and a probe on {today}: plain HTTP (no browser in the module), "
+            f"Generated from upstream's test inputs and a probe on {today}: "
+            f"{'drives a browser (Selenium)' if row.get('browser_in_source') else 'plain HTTP (no browser in the module)'}, "
             f"returned a full schedule of {row['most_dates_for_one_bin']} dates over {row['span_days']} days. "
             f"Bin streams were mapped from the council's own bin names by keyword and are not checked against the "
             f"council's website. A bare house number: {bare.replace('_', ' ')}. No colours are set."
@@ -90,9 +92,6 @@ def main(input_path, probe_path, registry_path, report_path):
         entry_in = upstream[module]
         if not row.get("ok"):
             skipped.append((module, f"probe failed ({row.get('error', 'no result')})"))
-            continue
-        if row.get("browser_in_source"):
-            skipped.append((module, "its source mentions a browser"))
             continue
         if row["schedule"] != "full":
             skipped.append((module, "returns only the next date per bin, so every_weeks must be confirmed from the council"))

@@ -71,3 +71,12 @@ def test_skip_get_url_is_copied_from_upstream():
 def test_an_entry_the_registry_would_reject_is_left_out_not_fatal():
     entry, _ = generate.build_entry(ROW, {**UPSTREAM, "url": "http://example.gov.uk/bins"}, "E06000001", "2026-10-28")
     assert any("https" in problem for problem in registry.validate({"councils": [entry]}))
+
+
+def test_a_council_that_drives_a_browser_is_added_with_needs_selenium():
+    entry, _ = generate.build_entry({**ROW, "browser_in_source": True}, UPSTREAM, "E06000001", "2026-10-28")
+    assert entry["needs_selenium"] is True
+    assert "browser" in entry["notes"]
+    assert registry.validate({"councils": [entry]}) == []
+    plain, _ = generate.build_entry({**ROW, "browser_in_source": False}, UPSTREAM, "E06000001", "2026-10-28")
+    assert plain["needs_selenium"] is False

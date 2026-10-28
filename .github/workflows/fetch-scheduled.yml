@@ -46,12 +46,23 @@ jobs:
           fi
       - uses: actions/checkout@v4
         if: steps.config.outputs.configured == 'true'
+      - name: Start a Chrome service for councils that need a browser
+        if: steps.config.outputs.configured == 'true'
+        run: docker run -d --name selenium -p 4444:4444 --shm-size=2g selenium/standalone-chrome:latest
       - uses: actions/setup-python@v5
         if: steps.config.outputs.configured == 'true'
         with:
           python-version: "3.12"
       - run: pip install -r fetcher/requirements.txt
         if: steps.config.outputs.configured == 'true'
+      - name: Wait for the Chrome service
+        if: steps.config.outputs.configured == 'true'
+        run: |
+          for i in $(seq 1 60); do
+            curl -fs http://localhost:4444/status | grep -q '"ready": *true' && exit 0
+            sleep 2
+          done
+          echo "Chrome service not ready" >&2; exit 1
       - name: Add the address, if one was given
         if: steps.config.outputs.configured == 'true' && inputs.add_uprn != ''
         env:
@@ -62,4 +73,4 @@ jobs:
         if: steps.config.outputs.configured == 'true'
         env:
           FORCE: ${{ inputs.force && '--force' || '' }}
-        run: python -m fetcher.run fetch --sheet $FORCE
+        run: python -m fetcher.run fetch --sheet --selenium-url http://localhost:4444 $FORCE
