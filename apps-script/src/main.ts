@@ -124,5 +124,6 @@ function doPost(e: GoogleAppsScript.Events.DoPost): GoogleAppsScript.Content.Tex
   return json({ ok: true, received: body });
 }
 
-// Apps Script looks for top-level functions by name, so expose them on the global object.
-Object.assign(globalThis, { doGet, doPost, testFetchRequest });
+// The bundle is wrapped in a function, but Apps Script finds its entry points by name at the top level, and the editor's
+// Run list only shows functions declared there. build.mjs adds plain top-level functions that call these.
+Object.assign(globalThis, { __binDay: { doGet, doPost, testFetchRequest } });
