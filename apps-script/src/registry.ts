@@ -29,8 +29,41 @@ export interface Council {
 const BUNDLED_COUNCILS = (councilData as unknown as { councils: Council[] }).councils;
 let councils: Council[] = BUNDLED_COUNCILS;
 
+/** Frequencies the fetcher has learned for next_only councils: ONS code, then the council's bin name, then weeks. */
+export type LearnedFrequencies = Record<string, Record<string, number>>;
+let learned: LearnedFrequencies = {};
+
+/** The council, with each learned frequency filled in for a bin that has none set by hand. */
 export function getCouncil(onsCode: string): Council | undefined {
-  return councils.find((council) => council.ons_code === onsCode);
+  const council = councils.find((c) => c.ons_code === onsCode);
+  const weeks = learned[onsCode];
+  if (!council || !weeks || council.schedule !== "next_only" || !council.bin_types) return council;
+  const bin_types: Record<string, BinType> = {};
+  for (const [name, bin] of Object.entries(council.bin_types)) {
+    bin_types[name] = bin.every_weeks === undefined && weeks[name] !== undefined ? { ...bin, every_weeks: weeks[name] } : bin;
+  }
+  return { ...council, bin_types };
+}
+
+/** Replaces the learned frequencies, for example with the live copy. */
+export function setLearnedFrequencies(data: LearnedFrequencies): void {
+  learned = data;
+}
+
+/** Keeps only the bins whose frequency has been learned (trusted by the fetcher). Null if the file isn't usable. */
+export function parseLearnedFrequencies(raw: unknown): LearnedFrequencies | null {
+  const bins = (raw as { bins?: unknown } | null)?.bins;
+  if (typeof bins !== "object" || bins === null || Array.isArray(bins)) return null;
+  const result: LearnedFrequencies = {};
+  for (const [code, perBin] of Object.entries(bins)) {
+    if (!ONS_CODE.test(code) || typeof perBin !== "object" || perBin === null) continue;
+    for (const [name, entry] of Object.entries(perBin)) {
+      const weeks = (entry as { weeks?: unknown } | null)?.weeks;
+      if (name.length > 200 || typeof weeks !== "number" || !Number.isInteger(weeks) || weeks < 1 || weeks > 4) continue;
+      (result[code] ??= {})[name] = weeks;
+    }
+  }
+  return result;
 }
 
 /** Replaces the registry the script uses, for example with the live copy. */
@@ -41,6 +74,7 @@ export function setCouncils(list: Council[]): void {
 /** Goes back to the bundled registry. For tests. */
 export function resetRegistry(): void {
   councils = BUNDLED_COUNCILS;
+  learned = {};
   bankHolidays = BUNDLED_BANK_HOLIDAYS;
 }
 

@@ -81,7 +81,6 @@ def test_load_raises_on_an_invalid_file(tmp_path):
         (lambda e: e.update(inputs=[]), "at least one input"),
         (lambda e: e.pop("schedule"), "must say whether they return next_only dates or a full schedule"),
         (lambda e: e.update(schedule="weekly"), "schedule must be one of"),
-        (lambda e: e["bin_types"]["Green Recycling Box"].pop("every_weeks"), "needs every_weeks because the council returns next_only"),
         (lambda e: e["bin_types"]["Green Recycling Box"].update(every_weeks=0), "every_weeks must be one of 1, 2, 3, 4"),
         (lambda e: e["bin_types"]["Green Recycling Box"].update(every_weeks=5), "every_weeks must be one of 1, 2, 3, 4"),
         (lambda e: e["bin_types"]["Green Recycling Box"].update(every_weeks="2"), "every_weeks must be one of 1, 2, 3, 4"),
@@ -119,6 +118,13 @@ def test_duplicate_ons_codes_are_rejected():
 
 def test_top_level_shape_is_checked():
     assert registry.validate([]) == ["registry must be an object with a 'councils' list"]
+
+
+def test_a_next_only_council_may_leave_frequencies_to_be_learned():
+    entry = valid_entry()
+    for bin_type in entry["bin_types"].values():
+        bin_type.pop("every_weeks")
+    assert problems_for(entry) == []
 
 
 def test_a_full_schedule_council_needs_no_frequencies():

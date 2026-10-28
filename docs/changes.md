@@ -39,7 +39,7 @@ The difference between the date we got and the date we expected is classified as
 we look, so the move back to the normal day is also expected. A shift of 3 days or more at Christmas is recorded as a
 round change (a rare, once-a-year alert), and a holiday region whose dates are not verified never hides a change.
 
-A bin we have not seen before, or one with no `every_weeks`, has nothing to compare with and is not a change.
+A bin we have not seen before, or one with no `every_weeks` (set by hand or learned, see `registry/README.md`), has nothing to compare with and is not a change.
 
 **Holiday weeks** are Monday to Sunday weeks that have a bank holiday in them or overlap 22 December to 13 January.
 The same rule is in the calendar feed, and both implementations are tested against the same cases in

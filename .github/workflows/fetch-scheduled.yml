@@ -21,7 +21,7 @@ on:
         default: E06000022
 
 permissions:
-  contents: read
+  contents: write  # only to save learned bin frequencies (council codes and counts, no addresses)
 
 concurrency:
   group: fetch-scheduled
@@ -74,3 +74,13 @@ jobs:
         env:
           FORCE: ${{ inputs.force && '--force' || '' }}
         run: python -m fetcher.run fetch --sheet --selenium-url http://localhost:4444 $FORCE
+      - name: Save learned bin frequencies
+        if: steps.config.outputs.configured == 'true' && always()
+        run: |
+          git add registry/learned-frequencies.json
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update learned bin frequencies [skip ci]"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin "HEAD:$GITHUB_REF_NAME"

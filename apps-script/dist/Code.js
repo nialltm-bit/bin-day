@@ -1213,8 +1213,33 @@
   // src/registry.ts
   var BUNDLED_COUNCILS = councils_default.councils;
   var councils = BUNDLED_COUNCILS;
+  var learned = {};
   function getCouncil(onsCode) {
-    return councils.find((council) => council.ons_code === onsCode);
+    const council = councils.find((c) => c.ons_code === onsCode);
+    const weeks = learned[onsCode];
+    if (!council || !weeks || council.schedule !== "next_only" || !council.bin_types) return council;
+    const bin_types = {};
+    for (const [name, bin] of Object.entries(council.bin_types)) {
+      bin_types[name] = bin.every_weeks === void 0 && weeks[name] !== void 0 ? { ...bin, every_weeks: weeks[name] } : bin;
+    }
+    return { ...council, bin_types };
+  }
+  function setLearnedFrequencies(data) {
+    learned = data;
+  }
+  function parseLearnedFrequencies(raw) {
+    const bins = raw?.bins;
+    if (typeof bins !== "object" || bins === null || Array.isArray(bins)) return null;
+    const result = {};
+    for (const [code, perBin] of Object.entries(bins)) {
+      if (!ONS_CODE.test(code) || typeof perBin !== "object" || perBin === null) continue;
+      for (const [name, entry] of Object.entries(perBin)) {
+        const weeks = entry?.weeks;
+        if (name.length > 200 || typeof weeks !== "number" || !Number.isInteger(weeks) || weeks < 1 || weeks > 4) continue;
+        (result[code] ??= {})[name] = weeks;
+      }
+    }
+    return result;
   }
   function setCouncils(list) {
     councils = list;
@@ -1866,6 +1891,8 @@
     try {
       const councils2 = loadJson(remote, "registry", rawUrl("registry/councils.json"), slimCouncils, REGISTRY_SECONDS);
       if (councils2) setCouncils(councils2);
+      const learned2 = loadJson(remote, "learned", rawUrl("registry/learned-frequencies.json"), parseLearnedFrequencies, REGISTRY_SECONDS);
+      if (learned2) setLearnedFrequencies(learned2);
       const holidays = loadJson(remote, "bankholidays", rawUrl("registry/bank-holidays.json"), parseBankHolidays, BANK_HOLIDAY_SECONDS);
       if (holidays) setBankHolidays(holidays);
     } catch (error) {
