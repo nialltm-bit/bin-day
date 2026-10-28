@@ -19,9 +19,10 @@ never promise to tell anyone anything later, because we hold no contact details.
 | Channel Islands or Isle of Man | Not covered; link to find your council | no |
 | Service gives no council for the postcode | Couldn't place the postcode; link to find your council | no |
 | Council not in the registry, or `unsupported` | "We don't cover X yet" | yes |
-| Council supported, but its source needs a UPRN | "We can't find addresses in X yet" | yes |
+| Council supported, but its source needs a UPRN, and nothing can find the UPRN | "We can't find addresses in X yet" | yes |
 | Council `broken` | "X's bin day data isn't working right now, try later" | no |
 | Council supported and takes a house number | Ask for the house number or name | n/a |
+| Council supported, needs a UPRN, and a UPRN finder is wired in | Show the addresses to pick from | n/a |
 
 Every case that leaves someone without bin days, apart from a typo or a temporary fault, links to the official
 [Find your local council](https://www.gov.uk/find-local-council) page, so nobody is left with nowhere to go.
@@ -41,6 +42,15 @@ count, first and last time. This replaces the email waitlist in FRE-274 for v1, 
 `admin_district` is the collecting council in both unitary and two-tier areas (the district, not the county). A postcode
 that straddles a boundary is given to one council, so the page asks for the house number and the council's own system
 has the last word. We have not tested a straddling postcode.
+
+## Adding councils that need a UPRN
+
+Nothing else needs to change for these. The fetcher, store and feed already work from UPRNs, and B&NES runs end to
+end on one. The registry entry is added the usual way (`registry/README.md`). What is missing is something that turns
+a typed address into a UPRN for free. When one exists, it is plugged in by passing `canFindUprn: true` to `lookup` in
+`web/src/coverage.ts`, and every supported UPRN council becomes ready with an address list to pick from. Until then
+they show "We can't find addresses in X yet". Adding their registry entries now is possible but they would stay dark,
+and each one needs its bin names and frequencies checked first.
 
 ## Still open
 

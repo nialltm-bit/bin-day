@@ -30,8 +30,11 @@ export type Outcome =
   | { kind: "council_needs_address_lookup"; postcode: string; ons_code: string; name: string }
   /** We have a source for this council, but it is failing at the moment. */
   | { kind: "council_unavailable"; postcode: string; ons_code: string; name: string }
-  /** Ready: ask for a house number or name, then fetch. */
-  | { kind: "ready"; postcode: string; ons_code: string; name: string };
+  /**
+   * Ready. `house_number`: ask for a house number or name and let the council's own system match it.
+   * `address_list`: the council needs a UPRN and we have a finder, so show the addresses to pick from.
+   */
+  | { kind: "ready"; postcode: string; ons_code: string; name: string; ask: "house_number" | "address_list" };
 
 export interface Message {
   headline: string;
@@ -60,17 +63,21 @@ export function canAskForHouseNumber(council: CouncilEntry): boolean {
   return inputs.includes("house_number") && !inputs.includes("uprn");
 }
 
-export function classifyCouncil(postcode: string, onsCode: string, name: string, councils: CouncilEntry[]): Outcome {
+export function classifyCouncil(postcode: string, onsCode: string, name: string, councils: CouncilEntry[], canFindUprn = false): Outcome {
   const council = councils.find((c) => c.ons_code === onsCode);
   if (!council || council.status === "unsupported") return { kind: "council_not_covered", postcode, ons_code: onsCode, name: council?.name ?? name };
   if (council.status === "broken") return { kind: "council_unavailable", postcode, ons_code: onsCode, name: council.name };
-  if (!canAskForHouseNumber(council)) return { kind: "council_needs_address_lookup", postcode, ons_code: onsCode, name: council.name };
-  return { kind: "ready", postcode, ons_code: onsCode, name: council.name };
+  if (canAskForHouseNumber(council)) return { kind: "ready", postcode, ons_code: onsCode, name: council.name, ask: "house_number" };
+  // A UPRN source is only offered once something can find the UPRN. Today nothing free can, so this stays false.
+  if (canFindUprn && (council.inputs ?? []).includes("uprn")) return { kind: "ready", postcode, ons_code: onsCode, name: council.name, ask: "address_list" };
+  return { kind: "council_needs_address_lookup", postcode, ons_code: onsCode, name: council.name };
 }
 
 export interface LookupDeps {
   fetch: typeof fetch;
   councils: CouncilEntry[];
+  /** True once an address finder that returns UPRNs is wired in. Councils that need a UPRN are offered only then. */
+  canFindUprn?: boolean;
 }
 
 function cleanName(value: unknown): string {
@@ -103,7 +110,7 @@ export async function lookup(rawPostcode: string, deps: LookupDeps): Promise<Out
   const codes = result.codes as Record<string, unknown> | undefined;
   const onsCode = codes?.admin_district;
   if (typeof onsCode !== "string" || !/^[ENSW][0-9]{8}$/.test(onsCode)) return { kind: "council_unknown", postcode };
-  return classifyCouncil(postcode, onsCode, cleanName(result.admin_district), deps.councils);
+  return classifyCouncil(postcode, onsCode, cleanName(result.admin_district), deps.councils, deps.canFindUprn === true);
 }
 
 const find = { label: "Find your council's own bin day page", url: FIND_COUNCIL_URL };
@@ -151,6 +158,9 @@ export function messageFor(outcome: Outcome): Message {
         help: find,
       };
     case "ready":
-      return { headline: `Your council is ${outcome.name}`, detail: "Enter your house number or name." };
+      return {
+        headline: `Your council is ${outcome.name}`,
+        detail: outcome.ask === "address_list" ? "Pick your address." : "Enter your house number or name.",
+      };
   }
 }

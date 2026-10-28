@@ -38,9 +38,19 @@ describe("classifyCouncil", () => {
     expect(pick("E06000099")).toBe("ready");
   });
 
-  it("does not offer a council that needs a UPRN, even if it also lists a house number", () => {
+  it("does not offer a council that needs a UPRN while nothing can find one, even if it also lists a house number", () => {
     expect(pick("E06000096")).toBe("council_needs_address_lookup");
     expect(pick("E06000095")).toBe("council_needs_address_lookup");
+  });
+
+  it("offers a UPRN council as an address list once a UPRN finder exists, and not before", () => {
+    const withFinder = (code: string) => classifyCouncil("AA1 1AA", code, "x", FAKE, true);
+    expect(withFinder("E06000096")).toMatchObject({ kind: "ready", ask: "address_list" });
+    expect(withFinder("E06000095")).toMatchObject({ kind: "ready", ask: "address_list" });
+    expect(withFinder("E06000099")).toMatchObject({ kind: "ready", ask: "house_number" });
+    expect(withFinder("E06000098").kind).toBe("council_unavailable");
+    expect(withFinder("E06000097").kind).toBe("council_not_covered");
+    expect(classifyCouncil("BA1 5AW", "E06000022", "Bath", REAL, true)).toMatchObject({ kind: "ready", ask: "address_list" });
   });
 
   it("says a broken source is unavailable, not unsupported", () => {
@@ -74,7 +84,7 @@ describe("lookup", () => {
 
   it("finds a ready council from the service's admin district code", async () => {
     const f = answer({ country: "England", admin_district: "Numberton", codes: { admin_district: "E06000099" } });
-    expect(await run("aa1 1aa", f)).toEqual({ kind: "ready", postcode: "AA1 1AA", ons_code: "E06000099", name: "Numberton" });
+    expect(await run("aa1 1aa", f)).toEqual({ kind: "ready", postcode: "AA1 1AA", ons_code: "E06000099", name: "Numberton", ask: "house_number" });
   });
 
   it("reports a postcode the service doesn't know", async () => {
@@ -126,7 +136,7 @@ describe("messageFor", () => {
     { kind: "council_not_covered", postcode: "AA1 1AA", ons_code: "E06000001", name: "Hartlepool" },
     { kind: "council_needs_address_lookup", postcode: "AA1 1AA", ons_code: "E06000022", name: "Bath" },
     { kind: "council_unavailable", postcode: "AA1 1AA", ons_code: "E06000098", name: "Brokenshire" },
-    { kind: "ready", postcode: "AA1 1AA", ons_code: "E06000099", name: "Numberton" },
+    { kind: "ready", postcode: "AA1 1AA", ons_code: "E06000099", name: "Numberton", ask: "house_number" },
   ];
 
   it("has words for every outcome", () => {
