@@ -1,7 +1,7 @@
 name: Generate registry entries
 
 # Adds every council that probed cleanly (see batch-probe.yml) to registry/councils.json, and writes a report of what it
-# left out and why. Existing entries are never changed.
+# left out and why. Existing entries are never changed. Uses the colour-name evidence if there is any.
 on:
   workflow_dispatch:
   push:
@@ -28,7 +28,7 @@ jobs:
       - name: Generate
         env:
           PYTHONPATH: .
-        run: python scripts/generate_registry.py "$RUNNER_TEMP/input.json" docs/spike-results/batch-probe.json registry/councils.json docs/spike-results/generated-registry-report.md
+        run: python scripts/generate_registry.py "$RUNNER_TEMP/input.json" docs/spike-results/batch-probe.json registry/councils.json docs/spike-results/generated-registry-report.md docs/spike-results/bin-colour-evidence.json
       - name: Check it
         run: python -m fetcher.registry
       - name: Commit

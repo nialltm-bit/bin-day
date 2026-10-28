@@ -111,3 +111,63 @@ def test_a_next_only_council_is_added_without_frequencies_to_be_learned():
     assert registry.validate({"councils": [entry]}) == []
     assert all("every_weeks" not in b for b in entry["bin_types"].values())
     assert "learned" in entry["notes"]
+
+
+def test_a_colour_only_name_is_mapped_from_the_councils_website_evidence():
+    evidence = {"ExampleCouncil": {"bins": {"Green Bin": {"stream": "garden", "votes": {"garden": 4}}}}}
+    row = {**ROW, "bins": ["General Waste", "Green Bin"]}
+    entry, reason = generate.build_entry(row, UPSTREAM, "E06000001", "2026-10-28", evidence)
+    assert reason is None
+    assert entry["bin_types"]["Green Bin"]["stream"] == "garden"
+    assert "read from the council's website" in entry["notes"]
+    assert registry.validate({"councils": [entry]}) == []
+
+
+def test_a_colour_with_no_clear_evidence_is_still_left_out():
+    evidence = {"ExampleCouncil": {"bins": {"Green Bin": {"stream": None, "votes": {"garden": 1, "recycling": 1}}}}}
+    entry, reason = generate.build_entry({**ROW, "bins": ["General Waste", "Green Bin"]}, UPSTREAM, "E06000001", "2026-10-28", evidence)
+    assert entry is None
+
+
+def test_non_recyclable_is_general_waste_not_recycling():
+    names = ("Non-recyclable rubbish", "General non-recyclable waste", "Non recyclable Waste", "Non-Recyclables (Purple Lid)")
+    for name in names + ("Green non-recyclable",):
+        assert generate.stream_for(name) == "general", name
+
+
+def test_a_name_that_says_two_streams_is_not_guessed():
+    for name in ("Food and Garden", "Glass+Food", "Paper/Card+Food", "Garden and food waste bin (Brown)", "Food & Garden"):
+        assert generate.stream_for(name) is None, name
+        assert generate.streams_in(name) == {"food", "garden"} or len(generate.streams_in(name)) == 2
+
+
+def test_one_stream_said_twice_or_in_brackets_is_fine():
+    assert generate.stream_for("Cardboard, Cartons and Paper (White Bag)") == "recycling"
+    assert generate.stream_for("Recycling (green bin) and glass box(es)") == "recycling"
+    assert generate.stream_for("Mixed recycling (paper/card/plastics/tins/cans)") == "recycling"
+    assert generate.stream_for("Green Bin (General Waste)") == "general"
+    assert generate.stream_for("Food Recycling Collection Bin") == "food"
+
+
+def test_a_name_that_says_two_streams_is_not_settled_by_website_evidence():
+    evidence = {"ExampleCouncil": {"bins": {"Food and Garden": {"stream": "garden"}}}}
+    row = {**ROW, "bins": ["General Waste", "Food and Garden"]}
+    entry, reason = generate.build_entry(row, UPSTREAM, "E06000001", "2026-10-28", evidence)
+    assert entry is None
+
+
+def _generated(bins):
+    entry, _ = generate.build_entry({**ROW, "bins": ["General Waste"]}, UPSTREAM, "E06000001", "2026-10-28")
+    entry["bin_types"] = {name: {"stream": stream, "label": name} for name, stream in bins.items()}
+    return entry
+
+
+def test_repair_corrects_a_wrong_stream_and_removes_a_council_it_cannot_settle():
+    wrong = _generated({"Non-recyclable waste": "recycling", "Recycling": "recycling"})
+    unsettled = {**_generated({"Food and Garden": "food"}), "ons_code": "E06000002", "name": "Unsettled"}
+    by_hand = {**_generated({"Food and Garden": "food"}), "ons_code": "E06000003", "name": "By hand", "notes": "Checked by a person"}
+    data = {"councils": [wrong, unsettled, by_hand]}
+    corrected, removed = generate.repair(data, None)
+    assert corrected == ["Example"] and removed == ["Unsettled"]
+    assert wrong["bin_types"]["Non-recyclable waste"]["stream"] == "general"
+    assert [c["name"] for c in data["councils"]] == ["Example", "By hand"]
