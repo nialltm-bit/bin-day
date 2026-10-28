@@ -330,6 +330,44 @@
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 5 dates over 28 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
       },
       {
+        ons_code: "E06000011",
+        name: "East Riding of Yorkshire",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "EastRidingCouncil",
+          url: "https://www.eastriding.gov.uk",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          "Blue Bin (Recycling)": {
+            stream: "recycling",
+            label: "Blue Bin (Recycling)"
+          },
+          "Brown Bin (Garden Waste)": {
+            stream: "garden",
+            label: "Brown Bin (Garden Waste)"
+          },
+          "Green Bin (General Waste)": {
+            stream: "general",
+            label: "Green Bin (General Waste)"
+          }
+        },
+        test_address: {
+          postcode: "HU17 8LG",
+          house_number: "14"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
         ons_code: "E06000022",
         name: "Bath and North East Somerset",
         status: "supported",
@@ -452,6 +490,124 @@
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 7 dates over 84 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
       },
       {
+        ons_code: "E06000041",
+        name: "Wokingham",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "WokinghamBoroughCouncil",
+          url: "https://www.wokingham.gov.uk/rubbish-and-recycling/waste-collection/find-your-bin-collection-day",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          "Garden waste": {
+            stream: "garden",
+            label: "Garden waste"
+          },
+          "Household waste": {
+            stream: "general",
+            label: "Household waste"
+          },
+          Recycling: {
+            stream: "recycling",
+            label: "Recycling"
+          }
+        },
+        test_address: {
+          postcode: "RG40 2HR",
+          house_number: "90"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E06000043",
+        name: "Brighton and Hove",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "BrightonandHoveCityCouncil",
+          url: "https://enviroservices.brighton-hove.gov.uk/link/collections",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Food waste": {
+            stream: "food",
+            label: "Food waste"
+          },
+          "Garden Waste": {
+            stream: "garden",
+            label: "Garden Waste"
+          },
+          Recycling: {
+            stream: "recycling",
+            label: "Recycling"
+          },
+          Refuse: {
+            stream: "general",
+            label: "Refuse"
+          }
+        },
+        test_address: {
+          postcode: "BN1 8NE",
+          house_number: "44"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E06000066",
+        name: "Somerset",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "SomersetCouncil",
+          url: "https://www.somerset.gov.uk/",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Food Recycling": {
+            stream: "food",
+            label: "Food Recycling"
+          },
+          "Recycling Collection": {
+            stream: "recycling",
+            label: "Recycling Collection"
+          },
+          "Rubbish Collection": {
+            stream: "general",
+            label: "Rubbish Collection"
+          }
+        },
+        test_address: {
+          postcode: "TA6 4AA",
+          house_number: "5"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
         ons_code: "E07000037",
         name: "High Peak",
         status: "supported",
@@ -569,6 +725,203 @@
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 11 dates over 112 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
       },
       {
+        ons_code: "E07000080",
+        name: "Forest of Dean",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "ForestOfDeanDistrictCouncil",
+          url: "https://community.fdean.gov.uk/s/waste-collection-enquiry",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "240 Litre Refuse": {
+            stream: "general",
+            label: "240 Litre Refuse"
+          },
+          "Blue Bag": {
+            stream: "recycling",
+            label: "Blue Bag"
+          },
+          "Garden Bin": {
+            stream: "garden",
+            label: "Garden Bin"
+          },
+          "Green Recycling Box": {
+            stream: "recycling",
+            label: "Green Recycling Box"
+          },
+          "Outdoor Food Caddy": {
+            stream: "food",
+            label: "Outdoor Food Caddy"
+          }
+        },
+        test_address: {
+          postcode: "GL15 6JT",
+          house_number: "ELMOGAL, PARKEND ROAD, BREAM, LYDNEY"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E07000085",
+        name: "East Hampshire",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "EastHampshireDC",
+          url: "https://www.easthants.gov.uk",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          "Recycling (green bin) and glass box(es)": {
+            stream: "recycling",
+            label: "Recycling (green bin) and glass box(es)"
+          }
+        },
+        test_address: {
+          postcode: "GU31 4AG",
+          house_number: "15 College Street"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: same house. No colours are set."
+      },
+      {
+        ons_code: "E07000093",
+        name: "Test Valley",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "TestValleyBoroughCouncil",
+          url: "https://testvalley.gov.uk/wasteandrecycling/when-are-my-bins-collected/when-are-my-bins-collected",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Food Waste": {
+            stream: "food",
+            label: "Food Waste"
+          },
+          "Garden Waste": {
+            stream: "garden",
+            label: "Garden Waste"
+          }
+        },
+        test_address: {
+          postcode: "SO51 0BY",
+          house_number: "2"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E07000094",
+        name: "Winchester",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "WinchesterCityCouncil",
+          url: "https://iportal.itouchvision.com/icollectionday/collection-day"
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "FOOD WASTE: your next weekly collection is on": {
+            stream: "food",
+            label: "FOOD WASTE: your next weekly collection is on"
+          },
+          "Garden Waste Collection": {
+            stream: "garden",
+            label: "Garden Waste Collection"
+          },
+          "General Waste Collection": {
+            stream: "general",
+            label: "General Waste Collection"
+          },
+          "Glass Collection": {
+            stream: "recycling",
+            label: "Glass Collection"
+          },
+          "Recycling Collection": {
+            stream: "recycling",
+            label: "Recycling Collection"
+          }
+        },
+        test_address: {
+          postcode: "SO23 7GA",
+          house_number: "12"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E07000099",
+        name: "North Hertfordshire",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "NorthHertfordshireDistrictCouncil",
+          url: "https://waste.nc.north-herts.gov.uk/w/webpage/find-bin-collection-day-input-address",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Cardboard & Paper": {
+            stream: "recycling",
+            label: "Cardboard & Paper"
+          },
+          "Food Waste": {
+            stream: "food",
+            label: "Food Waste"
+          },
+          "Mixed Recycling": {
+            stream: "recycling",
+            label: "Mixed Recycling"
+          },
+          "Non-Recyclable Waste": {
+            stream: "recycling",
+            label: "Non-Recyclable Waste"
+          }
+        },
+        test_address: {
+          postcode: "SG5 1PZ",
+          house_number: "Stewards Flat"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
         ons_code: "E07000109",
         name: "Gravesham",
         status: "supported",
@@ -611,6 +964,128 @@
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 8 dates over 21 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
       },
       {
+        ons_code: "E07000110",
+        name: "Maidstone",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "MaidstoneBoroughCouncil",
+          url: "https://my.maidstone.gov.uk/service/Find-your-bin-day",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Food waste on Tuesdays": {
+            stream: "food",
+            label: "Food waste on Tuesdays"
+          },
+          "Garden Waste on Tuesdays": {
+            stream: "garden",
+            label: "Garden Waste on Tuesdays"
+          },
+          "General waste on Tuesdays": {
+            stream: "general",
+            label: "General waste on Tuesdays"
+          },
+          "Recycling on Tuesdays": {
+            stream: "recycling",
+            label: "Recycling on Tuesdays"
+          }
+        },
+        test_address: {
+          postcode: "ME16 8BT",
+          house_number: "71"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E07000111",
+        name: "Sevenoaks",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "SevenoaksDistrictCouncil",
+          url: "https://sevenoaks-dc-host01.oncreate.app/w/webpage/waste-collection-day",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          Food: {
+            stream: "food",
+            label: "Food"
+          },
+          "General waste": {
+            stream: "general",
+            label: "General waste"
+          },
+          Recycling: {
+            stream: "recycling",
+            label: "Recycling"
+          }
+        },
+        test_address: {
+          postcode: "TN15 6EB",
+          house_number: "60 Hever Road"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: same house. No colours are set."
+      },
+      {
+        ons_code: "E07000144",
+        name: "Broadland",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "BroadlandDistrictCouncil",
+          url: "https://area.southnorfolkandbroadland.gov.uk/FindAddress",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          Food: {
+            stream: "food",
+            label: "Food"
+          },
+          Garden: {
+            stream: "garden",
+            label: "Garden"
+          },
+          Recycling: {
+            stream: "recycling",
+            label: "Recycling"
+          },
+          Rubbish: {
+            stream: "general",
+            label: "Rubbish"
+          }
+        },
+        test_address: {
+          postcode: "NR10 3FD",
+          house_number: "1"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
         ons_code: "E07000171",
         name: "Bassetlaw",
         status: "supported",
@@ -647,6 +1122,48 @@
         },
         last_verified: "2026-10-28",
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 4 dates over 42 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: error ValueError. No colours are set."
+      },
+      {
+        ons_code: "E07000181",
+        name: "West Oxfordshire",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "WestOxfordshireDistrictCouncil",
+          url: "https://community.westoxon.gov.uk/s/waste-collection-enquiry",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "1100 Litre Recycling": {
+            stream: "recycling",
+            label: "1100 Litre Recycling"
+          },
+          "1100 Litre Refuse": {
+            stream: "general",
+            label: "1100 Litre Refuse"
+          },
+          "140 Litre Food": {
+            stream: "food",
+            label: "140 Litre Food"
+          },
+          "240 Litre Glass": {
+            stream: "recycling",
+            label: "240 Litre Glass"
+          }
+        },
+        test_address: {
+          postcode: "OX28 1YA",
+          house_number: "24"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
       },
       {
         ons_code: "E07000200",
@@ -741,6 +1258,86 @@
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned a full schedule of 4 dates over 21 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
       },
       {
+        ons_code: "E07000209",
+        name: "Guildford",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "GuildfordCouncil",
+          url: "https://my.guildford.gov.uk/customers/s/view-bin-collections",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Food Containers": {
+            stream: "food",
+            label: "Food Containers"
+          },
+          "Recycling Containers": {
+            stream: "recycling",
+            label: "Recycling Containers"
+          },
+          "Refuse Containers": {
+            stream: "general",
+            label: "Refuse Containers"
+          }
+        },
+        test_address: {
+          postcode: "GU3 1AH",
+          house_number: "THE LODGE"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E07000213",
+        name: "Spelthorne",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "SpelthorneBoroughCouncil",
+          url: "https://www.spelthorne.gov.uk",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          "Food Waste Bin": {
+            stream: "food",
+            label: "Food Waste Bin"
+          },
+          "Garden Waste": {
+            stream: "garden",
+            label: "Garden Waste"
+          },
+          "Recycling Bin": {
+            stream: "recycling",
+            label: "Recycling Bin"
+          },
+          "Rubbish Bin": {
+            stream: "general",
+            label: "Rubbish Bin"
+          }
+        },
+        test_address: {
+          postcode: "TW18 2PR",
+          house_number: "1"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
         ons_code: "E07000214",
         name: "Surrey Heath",
         status: "supported",
@@ -777,6 +1374,48 @@
         },
         last_verified: "2026-10-28",
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 5 dates over 28 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E07000224",
+        name: "Arun",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "ArunCouncil",
+          url: "https://www1.arun.gov.uk/when-are-my-bins-collected",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          Food: {
+            stream: "food",
+            label: "Food"
+          },
+          Garden: {
+            stream: "garden",
+            label: "Garden"
+          },
+          Recycling: {
+            stream: "recycling",
+            label: "Recycling"
+          },
+          Rubbish: {
+            stream: "general",
+            label: "Rubbish"
+          }
+        },
+        test_address: {
+          postcode: "BN16 4DA",
+          house_number: "1"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
       },
       {
         ons_code: "E08000013",
@@ -922,6 +1561,44 @@
         notes: `Plain HTTP, no browser (it uses the ReCollect API, and upstream passes -s to skip fetching the page). Takes a postcode and a house number (no UPRN). On 2026-10-28 the module returned 8 entries: General Waste and Recycling, each every 14 days for about seven weeks, so this is a full schedule and no every_weeks is set. Passed upstream's integration suite (FRE-263). Only two bin names have been seen. Newcastle also runs a paid garden waste service, but this module did not return a garden bin for the test address, so garden waste is not mapped yet and the garden question has no effect here. Bin colours and the council's own naming have not been checked against its website, so only neutral labels are set. On 2026-10-28 a bare house number ("1") found no address for the test postcode, while the first line of the address (house number and street) worked, so house_input is first_line. The module ignores the postcode when it is given a text address, and when a postcode search finds addresses but none starts with the text it falls back to the first one listed, so a typo can return another house's dates. See docs/coverage.md.`
       },
       {
+        ons_code: "E09000003",
+        name: "Barnet",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "BarnetCouncil",
+          url: "https://www.barnet.gov.uk/recycling-and-waste/bin-collections/find-your-bin-collection-day",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Food Waste": {
+            stream: "food",
+            label: "Food Waste"
+          },
+          "General Waste": {
+            stream: "general",
+            label: "General Waste"
+          },
+          "Recycling Bin": {
+            stream: "recycling",
+            label: "Recycling Bin"
+          }
+        },
+        test_address: {
+          postcode: "EN4 8TB",
+          house_number: "26A"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
         ons_code: "E09000005",
         name: "Brent",
         status: "supported",
@@ -968,6 +1645,86 @@
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 9 dates over 56 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
       },
       {
+        ons_code: "E09000008",
+        name: "Croydon",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "CroydonCouncil",
+          url: "https://service.croydon.gov.uk/wasteservices/w/webpage/bin-day-enter-address",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Food waste": {
+            stream: "food",
+            label: "Food waste"
+          },
+          "General rubbish": {
+            stream: "general",
+            label: "General rubbish"
+          },
+          "Glass, plastics, cans and cartons recycling": {
+            stream: "recycling",
+            label: "Glass, plastics, cans and cartons recycling"
+          },
+          "Paper and card recycling": {
+            stream: "recycling",
+            label: "Paper and card recycling"
+          }
+        },
+        test_address: {
+          postcode: "SE25 5DW",
+          house_number: "13"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "E09000010",
+        name: "Enfield",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "EnfieldCouncil",
+          url: "https://www.enfield.gov.uk/services/rubbish-and-recycling/find-my-collection-day",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "black bin": {
+            stream: "general",
+            label: "black bin"
+          },
+          "blue bin": {
+            stream: "recycling",
+            label: "blue bin"
+          },
+          "brown bin": {
+            stream: "garden",
+            label: "brown bin"
+          }
+        },
+        test_address: {
+          postcode: "N13 5AJ",
+          house_number: "111"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
         ons_code: "E09000012",
         name: "Hackney",
         status: "supported",
@@ -1004,6 +1761,116 @@
         },
         last_verified: "2026-10-28",
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 108 dates over 770 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "N09000006",
+        name: "Fermanagh and Omagh",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "FermanaghOmaghDistrictCouncil",
+          url: "https://www.fermanaghomagh.com/services/environment-and-waste/waste-collection-calendar/",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          "Black Landfill": {
+            stream: "general",
+            label: "Black Landfill"
+          },
+          "Blue Recycling": {
+            stream: "recycling",
+            label: "Blue Recycling"
+          },
+          "Brown Composting": {
+            stream: "garden",
+            label: "Brown Composting"
+          }
+        },
+        test_address: {
+          postcode: "BT74 6DQ",
+          house_number: "20"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "N09000007",
+        name: "Lisburn and Castlereagh",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "LisburnCastlereaghCityCouncil",
+          url: "https://lisburn.isl-fusion.com",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: false,
+        bin_types: {
+          BrownBin: {
+            stream: "garden",
+            label: "BrownBin"
+          },
+          RecycleBin: {
+            stream: "recycling",
+            label: "RecycleBin"
+          },
+          ResidualBin: {
+            stream: "general",
+            label: "ResidualBin"
+          }
+        },
+        test_address: {
+          postcode: "BT28 1JN",
+          house_number: "97"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "N09000009",
+        name: "Mid Ulster",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "MidUlsterDistrictCouncil",
+          url: "https://www.midulstercouncil.org",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Garden and food waste bin (Brown)": {
+            stream: "food",
+            label: "Garden and food waste bin (Brown)"
+          },
+          "General waste bin (Black)": {
+            stream: "general",
+            label: "General waste bin (Black)"
+          }
+        },
+        test_address: {
+          postcode: "BT71 5HY",
+          house_number: "20 HILLHEAD, STEWARTSTOWN, BT71 5HY"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: same house. No colours are set."
       },
       {
         ons_code: "S12000008",
@@ -1168,6 +2035,97 @@
         },
         last_verified: "2026-10-28",
         notes: "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 35 dates over 58 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: error ValueError. No colours are set."
+      },
+      {
+        ons_code: "W06000008",
+        name: "Ceredigion",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "CeredigionCountyCouncil",
+          url: "https://www.ceredigion.gov.uk/resident/bins-recycling/"
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Clear Recycling Bag": {
+            stream: "recycling",
+            label: "Clear Recycling Bag"
+          },
+          "Food Waste": {
+            stream: "food",
+            label: "Food Waste"
+          },
+          "Glass Bottles and Jars": {
+            stream: "recycling",
+            label: "Glass Bottles and Jars"
+          },
+          "Non-Recyclable Waste": {
+            stream: "recycling",
+            label: "Non-Recyclable Waste"
+          }
+        },
+        test_address: {
+          postcode: "SY23 4RQ",
+          house_number: "BLAEN CWMMAGWR, TRISANT, CEREDIGION, SY23 4RQ"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
+      },
+      {
+        ons_code: "W06000012",
+        name: "Neath Port Talbot",
+        status: "supported",
+        schedule: "next_only",
+        source: {
+          type: "ukbcd",
+          module: "NeathPortTalbotCouncil",
+          url: "https://www.npt.gov.uk",
+          skip_get_url: true
+        },
+        inputs: [
+          "postcode",
+          "house_number"
+        ],
+        house_input: "number_or_name",
+        needs_selenium: true,
+        bin_types: {
+          "Cardboard, Cartons and Paper (White Bag)": {
+            stream: "recycling",
+            label: "Cardboard, Cartons and Paper (White Bag)"
+          },
+          "Food Waste (Green Bin)": {
+            stream: "food",
+            label: "Food Waste (Green Bin)"
+          },
+          "Garden Waste (Green bag)": {
+            stream: "garden",
+            label: "Garden Waste (Green bag)"
+          },
+          "General Household Rubbish (Wheelie bin / black bags)": {
+            stream: "general",
+            label: "General Household Rubbish (Wheelie bin / black bags)"
+          },
+          "Glass (Black box without lid)": {
+            stream: "recycling",
+            label: "Glass (Black box without lid)"
+          },
+          "Plastic / Tins / Cans (White Bag)": {
+            stream: "recycling",
+            label: "Plastic / Tins / Cans (White Bag)"
+          }
+        },
+        test_address: {
+          postcode: "SA13 3BA",
+          house_number: "2"
+        },
+        last_verified: "2026-10-28",
+        notes: "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
       },
       {
         ons_code: "W06000018",
