@@ -50,6 +50,9 @@ def build_entry(row: dict, upstream: dict, code: str, today: str, evidence: dict
         bin_types[name] = {"stream": stream, "label": name}
     if not bin_types:
         return None, "no bin we can map"
+    missing = incomplete(bin_types)
+    if missing:
+        return None, missing
     source = {"type": "ukbcd", "module": row["module"], "url": upstream["url"]}
     if upstream.get("skip_get_url") is True:
         source["skip_get_url"] = True
@@ -93,6 +96,15 @@ def build_entry(row: dict, upstream: dict, code: str, today: str, evidence: dict
 GENERATED = "Generated from upstream's test inputs"
 
 
+def incomplete(bin_types: dict) -> str | None:
+    """Why a council's bins can't be the whole household service, or None. A calendar with no general waste bin, or no
+    recycling bin, would silently leave out the collections people most need, so such a council is left out until it is
+    sorted out."""
+    streams = {b["stream"] for b in bin_types.values()}
+    missing = [name for name, stream in (("general waste", "general"), ("recycling", "recycling")) if stream not in streams]
+    return f"the bins found have no {' and no '.join(missing)} bin, so the calendar would be incomplete" if missing else None
+
+
 def repair(data: dict, evidence: dict | None) -> tuple[list[str], list[str]]:
     """Re-checks the generated entries against the current mapping rules, because the rules get better.
 
@@ -117,6 +129,8 @@ def repair(data: dict, evidence: dict | None) -> tuple[list[str], list[str]]:
             elif stream != bin_type["stream"]:
                 bin_type["stream"] = stream
                 changed = True
+        if not drop and incomplete(council["bin_types"]):
+            drop = True
         if drop:
             removed.append(council["name"])
         else:

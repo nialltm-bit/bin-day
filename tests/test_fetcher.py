@@ -468,3 +468,9 @@ def test_a_bin_the_keyword_rules_say_two_things_about_is_still_a_failure(bathnes
     response = {"bins": [{"type": "Food and Garden", "collectionDate": "03/11/2026"}]}
     with pytest.raises(UnmappedBinError, match="Food and Garden"):
         normalise(bathnes, response)
+
+
+def test_the_same_bin_listed_twice_on_one_day_gives_one_collection(bathnes):
+    day = "03/11/2026"
+    black = {"type": "Black Rubbish Bin (140L)", "collectionDate": day}
+    assert len(normalise(bathnes, {"bins": [black, black]})) == 1

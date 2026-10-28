@@ -5,6 +5,10 @@ name: Spot check the covered councils
 # Test addresses are upstream's public ones; nothing here is a real person's address.
 on:
   workflow_dispatch:
+    inputs:
+      only:
+        description: Only these councils, as ONS codes separated by commas (blank means all of them)
+        default: ""
   push:
     branches: [claude/nifty-faraday-obdwan]
     paths:
@@ -38,7 +42,8 @@ jobs:
       - name: Check each council
         env:
           PYTHONPATH: .
-        run: python scripts/spot_check.py registry/councils.json docs/spike-results/spot-check.json docs/spot-check.md http://localhost:4444 3
+          ONLY: ${{ inputs.only }}
+        run: python scripts/spot_check.py registry/councils.json docs/spike-results/spot-check.json docs/spot-check.md http://localhost:4444 3 "$ONLY"
       - name: Commit the report
         run: |
           git config user.name "github-actions[bot]"

@@ -6,7 +6,7 @@ there dates, does each bin keep to one weekday and a whole number of weeks betwe
 recycling bin. It can't say whether the dates are *true*: that needs a person to put the same address into the council's own
 page, so the report also picks a spread of councils to check by hand.
 
-Usage: spot_check.py <registry councils.json> <output json> <output markdown> [selenium url] [pause seconds]
+Usage: spot_check.py <registry councils.json> <output json> <output markdown> [selenium url] [pause seconds] [ONS codes, comma separated]
 The output is public: council names, bin names, dates for public test addresses, never a real address.
 """
 import json
@@ -15,7 +15,7 @@ import time
 from datetime import date, datetime
 
 from fetcher import registry
-from fetcher.model import Address, FetchError
+from fetcher.model import Address, FetchError, UnmappedBinError
 from fetcher.normalise import normalise
 from fetcher.upstream import run_ukbcd
 
@@ -97,7 +97,9 @@ def run_one(council: dict, selenium_url: str | None, today: date) -> dict:
     except FetchError as err:
         # Only the kind of failure, never the text: upstream's error text can carry the request.
         kind = getattr(err, "kind", type(err).__name__)
-        return {**result, "ok": False, "error": kind, "bins": [], "flags": [f"did not fetch ({kind})"]}
+        # A bin name the registry can't map is the council's own wording, not an address, so it is worth showing.
+        detail = f": {err}" if isinstance(err, UnmappedBinError) else ""
+        return {**result, "ok": False, "error": kind + detail, "bins": [], "flags": [f"did not fetch ({kind}{detail})"]}
     return {**result, "ok": True, **check_council(council, collections, today)}
 
 
@@ -155,8 +157,12 @@ def markdown(results: list[dict], picks: list[dict], today: date) -> str:
     return "\n".join(lines) + "\n"
 
 
-def main(registry_path: str, json_path: str, md_path: str, selenium_url: str | None = None, pause: float = 2.0) -> None:
-    councils = [c for c in json.load(open(registry_path))["councils"] if registry.is_fetchable(c)]
+def main(
+    registry_path: str, json_path: str, md_path: str, selenium_url: str | None = None, pause: float = 2.0, only: str = ""
+) -> None:
+    wanted = {code for code in only.split(",") if code}
+    everything = json.load(open(registry_path))["councils"]
+    councils = [c for c in everything if registry.is_fetchable(c) and (not wanted or c["ons_code"] in wanted)]
     today = datetime.now().date()
     results = []
     for council in councils:
@@ -171,4 +177,5 @@ def main(registry_path: str, json_path: str, md_path: str, selenium_url: str | N
 
 if __name__ == "__main__":
     chrome = sys.argv[4] if len(sys.argv) > 4 else None
-    main(sys.argv[1], sys.argv[2], sys.argv[3], chrome, *(float(x) for x in sys.argv[5:6]))
+    pause = float(sys.argv[5]) if len(sys.argv) > 5 else 2.0
+    main(sys.argv[1], sys.argv[2], sys.argv[3], chrome, pause, sys.argv[6] if len(sys.argv) > 6 else "")

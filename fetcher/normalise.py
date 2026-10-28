@@ -39,4 +39,5 @@ def normalise(council: dict, response: object) -> list[Collection]:
         collections.append(Collection(date=date, bin_name=name, stream=stream))
     if unmapped:
         raise UnmappedBinError("unmapped bin names: " + ", ".join(sorted(unmapped)))
-    return sorted(collections, key=lambda c: (c.date, c.stream, c.bin_name))
+    unique = {(c.date, c.bin_name): c for c in collections}  # a module that lists the same bin twice on a day gives one
+    return sorted(unique.values(), key=lambda c: (c.date, c.stream, c.bin_name))
