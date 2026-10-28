@@ -28,7 +28,7 @@ jobs:
       - name: Generate
         env:
           PYTHONPATH: .
-        run: python scripts/generate_registry.py "$RUNNER_TEMP/input.json" docs/spike-results/batch-probe.json registry/councils.json docs/spike-results/generated-registry-report.md
+        run: python scripts/generate_registry.py "$RUNNER_TEMP/input.json" docs/spike-results/batch-probe.json registry/councils.json docs/spike-results/generated-registry-report.md docs/spike-results/bin-colour-evidence.json
       - name: Check it
         run: python -m fetcher.registry
       - name: Commit

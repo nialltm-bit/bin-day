@@ -1,0 +1,37 @@
+name: Map colour-only bin names
+
+# Reads each council's own website to work out what its colour-only bin names mean (scripts/map_bin_colours.py), then
+# runs the registry generator so the councils that could be mapped are added. Evidence is saved in docs/spike-results.
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/nifty-faraday-obdwan]
+    paths:
+      - .github/workflows/map-bin-colours.yml
+      - scripts/map_bin_colours.py
+
+permissions:
+  contents: write
+
+jobs:
+  map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: curl -fsSL -o "$RUNNER_TEMP/input.json" https://raw.githubusercontent.com/robbrad/UKBinCollectionData/0.173.5/uk_bin_collection/tests/input.json
+      - name: Read the council sites
+        run: python scripts/map_bin_colours.py "$RUNNER_TEMP/input.json" docs/spike-results/batch-probe.json docs/spike-results/bin-colour-evidence.json
+      - name: Commit the evidence
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/spike-results/bin-colour-evidence.json
+          git commit -m "Save what the council sites say about colour-only bin names [skip ci]" || exit 0
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"

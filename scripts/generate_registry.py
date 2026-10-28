@@ -8,12 +8,16 @@ A council it can't map completely (an unrecognised bin name, no council code, a 
 council) is left out and listed in the report, so a person only looks at exceptions. Existing registry entries are never
 changed.
 
-Usage: generate_registry.py <upstream input.json> <batch-probe.json> <registry councils.json> <report.md>
+Usage: generate_registry.py <upstream input.json> <batch-probe.json> <registry councils.json> <report.md> [bin-colour-evidence.json]
+
+The optional evidence file (scripts/map_bin_colours.py) says what a colour-only bin name means according to the council's
+own website; a name it maps with enough evidence is used, and the entry's notes say so.
 """
 import json
 import sys
 import urllib.request
 from datetime import date
+from pathlib import Path
 
 from fetcher import registry
 
@@ -49,13 +53,18 @@ def council_for_postcode(postcode: str) -> str | None:
         return None
 
 
-def build_entry(row: dict, upstream: dict, code: str, today: str) -> tuple[dict | None, str | None]:
+def build_entry(row: dict, upstream: dict, code: str, today: str, evidence: dict | None = None) -> tuple[dict | None, str | None]:
     """A registry entry for one probed council, or (None, reason) if it can't be built completely."""
     bin_types = {}
+    from_site: list[str] = []
     for name in row["bins"]:
         if any(word in name.lower() for word in IGNORED_WORDS):
             continue
         stream = stream_for(name)
+        if stream is None:
+            stream = ((evidence or {}).get(row["module"], {}).get("bins", {}).get(name) or {}).get("stream")
+            if stream is not None:
+                from_site.append(name)
         if stream is None:
             return None, f"unrecognised bin name {name!r}"
         bin_types[name] = {"stream": stream, "label": name}
@@ -73,6 +82,10 @@ def build_entry(row: dict, upstream: dict, code: str, today: str) -> tuple[dict 
         )
     else:
         returned = f"returned a full schedule of {row['most_dates_for_one_bin']} dates over {row['span_days']} days. "
+    site_note = ""
+    if from_site:
+        names = ", ".join(map(repr, from_site))
+        site_note = f", except {names}, which were read from the council's website (see docs/spike-results/bin-colour-evidence.json)"
     entry = {
         "ons_code": code,
         "name": upstream.get("wiki_name") or row["module"],
@@ -89,14 +102,16 @@ def build_entry(row: dict, upstream: dict, code: str, today: str) -> tuple[dict 
             f"Generated from upstream's test inputs and a probe on {today}: "
             f"{'drives a browser (Selenium)' if row.get('browser_in_source') else 'plain HTTP (no browser in the module)'}, "
             f"{returned}"
-            f"Bin streams were mapped from the council's own bin names by keyword and are not checked against the "
-            f"council's website. A bare house number: {bare.replace('_', ' ')}. No colours are set."
+            f"Bin streams were mapped from the council's own bin names by keyword"
+            f"{site_note}"
+            + f", and are not checked by a person. A bare house number: {bare.replace('_', ' ')}. No colours are set."
         ),
     }
     return entry, None
 
 
-def main(input_path, probe_path, registry_path, report_path):
+def main(input_path, probe_path, registry_path, report_path, evidence_path=None):
+    evidence = json.load(open(evidence_path)) if evidence_path and Path(evidence_path).exists() else None
     upstream = json.load(open(input_path))
     probe = json.load(open(probe_path))["results"]
     data = json.load(open(registry_path))
@@ -120,7 +135,7 @@ def main(input_path, probe_path, registry_path, report_path):
         if code in existing:
             skipped.append((module, "already in the registry (left unchanged)"))
             continue
-        entry, reason = build_entry(row, entry_in, code, today)
+        entry, reason = build_entry(row, entry_in, code, today, evidence)
         if entry is None:
             skipped.append((module, reason))
             continue
@@ -147,4 +162,4 @@ def main(input_path, probe_path, registry_path, report_path):
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:5])
+    main(*sys.argv[1:6])

@@ -111,3 +111,19 @@ def test_a_next_only_council_is_added_without_frequencies_to_be_learned():
     assert registry.validate({"councils": [entry]}) == []
     assert all("every_weeks" not in b for b in entry["bin_types"].values())
     assert "learned" in entry["notes"]
+
+
+def test_a_colour_only_name_is_mapped_from_the_councils_website_evidence():
+    evidence = {"ExampleCouncil": {"bins": {"Green Bin": {"stream": "garden", "votes": {"garden": 4}}}}}
+    row = {**ROW, "bins": ["General Waste", "Green Bin"]}
+    entry, reason = generate.build_entry(row, UPSTREAM, "E06000001", "2026-10-28", evidence)
+    assert reason is None
+    assert entry["bin_types"]["Green Bin"]["stream"] == "garden"
+    assert "read from the council's website" in entry["notes"]
+    assert registry.validate({"councils": [entry]}) == []
+
+
+def test_a_colour_with_no_clear_evidence_is_still_left_out():
+    evidence = {"ExampleCouncil": {"bins": {"Green Bin": {"stream": None, "votes": {"garden": 1, "recycling": 1}}}}}
+    entry, reason = generate.build_entry({**ROW, "bins": ["General Waste", "Green Bin"]}, UPSTREAM, "E06000001", "2026-10-28", evidence)
+    assert entry is None
