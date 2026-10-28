@@ -17,7 +17,7 @@
 | `inputs` | What the source needs: any of `uprn`, `postcode`, `house_number`. |
 | `house_input` | Optional, only for councils that take a `house_number`. `number_or_name` (the default) means a house number or name is enough. `first_line` means the module needs the whole first line of the address ("12 High Street"), because a bare number finds nothing. The page asks for what this says. |
 | `needs_selenium` | `true` if the module drives a browser. Only `ukbcd` sources can. |
-| `bin_types` | Maps each of the council's own bin names to a waste `stream` (`general`, `recycling`, `food`, `garden`) with an optional `label` and `colour` to show people, and `every_weeks` (1, 2, 3 or 4): how often the council empties that bin. `every_weeks` is required for `next_only` councils, so the feed and refresh can work out later dates, and must not be set for `full` ones. |
+| `bin_types` | Maps each of the council's own bin names to a waste `stream` (`general`, `recycling`, `food`, `garden`) with an optional `label` and `colour` to show people, and `every_weeks` (1, 2, 3 or 4): how often the council empties that bin. For `next_only` councils `every_weeks` lets the feed and refresh work out later dates. Leave it out and the fetcher learns it from repeat fetches (see `learned-frequencies.json` below); until it has, the feed shows only the confirmed date. A value set by hand always wins over a learned one. It must not be set for `full` councils. |
 | `test_address` | A known-good address (every required input) for health checks. |
 | `min_interval_seconds` | Minimum gap between our requests to this council. Optional; the fetcher defaults to 10 seconds. |
 | `last_verified` | Date the source was last confirmed to work. |
@@ -29,7 +29,7 @@ Unknown keys are rejected, so typos get caught.
 
 1. Find its module and test inputs in upstream's `uk_bin_collection/tests/input.json` (we pin `uk_bin_collection` 0.173.5). Check in `docs/spike-ukbincollectiondata.md` whether the council passed the full-suite run.
 2. Copy the B&NES entry and change it. Set `needs_selenium` by checking whether the module uses a browser, not by whether `input.json` lists a web driver (some listed councils do not use one).
-3. Work out `schedule` by looking at what the module returns for the test address: one date per bin means `next_only`, many future dates means `full`. For a `next_only` council, set each bin's `every_weeks` from the council's own website, not from a guess or from the dates returned, and record the pages you used in `notes`.
+3. Work out `schedule` by looking at what the module returns for the test address: one date per bin means `next_only`, many future dates means `full`. For a `next_only` council, either leave `every_weeks` out so it is learned, or set it from the council's own website (not from a guess or from the dates returned) and record the pages you used in `notes`.
 4. Run the module for the test address and list the bin names it returns. Add each one to `bin_types`. A name that is missing is treated as a failure by the fetcher, so that an unmapped bin never reaches a calendar silently.
 5. Run `python -m fetcher.registry`. CI runs the same check.
 
@@ -41,3 +41,12 @@ round changes). A region is only used once it is marked `"verified": true`, afte
 its official page. England and Wales is verified; Scotland and Northern Ireland are drafts. See `docs/changes.md`.
 
 Streams are limited to four for now. Some councils collect glass or hygiene waste separately, so the list may need to grow (FRE-269).
+
+## learned-frequencies.json
+
+Written by the scheduled fetch (`fetcher/learned.py`), not by hand. For each `next_only` council's bin with no `every_weeks`,
+it tallies how many times a gap of 1, 2, 3 or 4 weeks was seen between one Sunday fetch's date and the next. Once one
+value has been seen twice and nothing else has, it is recorded as `weeks` and used by the fetcher and the feed. After that
+it is locked: a later disagreement only adds to `conflicts` (and the fetch log shows `learned_conflict`), and change
+detection treats the moved date as a round change. Gaps that touch a bank holiday week, or aren't whole weeks, are ignored.
+It holds only council codes, the council's own bin names and counts: no addresses.

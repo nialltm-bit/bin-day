@@ -18,6 +18,7 @@ from datetime import UTC, date, datetime
 from pathlib import Path
 
 from fetcher import holidays as holiday_data
+from fetcher import learned as learning
 from fetcher import registry
 from fetcher.changes import check_response, detect_changes
 from fetcher.model import Address, FetchError, UpstreamError
@@ -47,6 +48,24 @@ def format_outcome(outcome: Outcome) -> dict:
     return line
 
 
+def observe_frequencies(
+    council: dict, learned: dict, previous: list[dict], collections: list, today: date, holidays: list[str] | None
+) -> tuple[str, ...]:
+    """Records what this fetch shows about how often each bin is emptied. Returns a marker for each conflict."""
+    conflicts: list[str] = []
+    for bin_name in sorted({c.bin_name for c in collections}):
+        if not learning.needs_learning(council, bin_name):
+            continue
+        before = [date.fromisoformat(p["date"]) for p in previous if p["bin_name"] == bin_name]
+        if not before:
+            continue
+        newest = min(date.fromisoformat(c.date) for c in collections if c.bin_name == bin_name)
+        weeks = learning.observed_weeks(max(before), newest, today, holidays)
+        if weeks is not None and learning.record(learned, council["ons_code"], bin_name, weeks):
+            conflicts.append(learning.CONFLICT)
+    return tuple(conflicts)
+
+
 def run(
     store: Store,
     councils: dict[str, dict],
@@ -57,7 +76,10 @@ def run(
     force: bool = False,
     only_uprn: str | None = None,
     holiday_regions: dict[str, dict] | None = None,
+    learned: dict | None = None,
 ) -> list[Outcome]:
+    """`learned` is the tally of frequencies learned so far (fetcher/learned.py). It is updated in place."""
+    learned = learned if learned is not None else {"bins": {}}
     limiter = limiter or CouncilRateLimiter()
     holiday_regions = holiday_data.load() if holiday_regions is None else holiday_regions
     stamp = now.isoformat(timespec="seconds")
@@ -84,7 +106,10 @@ def run(
             collections = normalise(council, fetch(council, address, selenium_url))
             previous = store.previous_collections(address.uprn)
             check_response(collections, previous, today)
-            changes = detect_changes(council, previous, collections, today, holiday_data.dates_for(address.ons_code, holiday_regions))
+            holiday_dates = holiday_data.dates_for(address.ons_code, holiday_regions)
+            conflicts = observe_frequencies(council, learned, previous, collections, today, holiday_dates)
+            with_learned = learning.apply({address.ons_code: council}, learned)[address.ons_code]
+            changes = detect_changes(with_learned, previous, collections, today, holiday_dates)
         except FetchError as err:
             store.save_failure(address.uprn, stamp, str(err))
             safe = err.kind if isinstance(err, UpstreamError) else str(err)
@@ -94,7 +119,7 @@ def run(
             if changes:
                 store.save_changes(address.uprn, address.ons_code, stamp, changes)
             detail = f"{len(collections)} collections"
-            outcomes.append(Outcome(address.uprn, address.ons_code, "fetched", detail, detail, tuple(c.kind for c in changes)))
+            outcomes.append(Outcome(address.uprn, address.ons_code, "fetched", detail, detail, tuple(c.kind for c in changes) + conflicts))
     return outcomes
 
 
@@ -118,6 +143,7 @@ def main(argv: list[str] | None = None) -> int:
     fetch.add_argument("--selenium-url")
     fetch.add_argument("--force", action="store_true", help="fetch even if not due")
     fetch.add_argument("--uprn", help="only this address")
+    fetch.add_argument("--learned", type=Path, default=learning.LEARNED_PATH, help="where learned bin frequencies are kept")
 
     args = parser.parse_args(argv)
     try:
@@ -129,6 +155,8 @@ def main(argv: list[str] | None = None) -> int:
         store.add_address(Address(uprn=args.uprn, ons_code=args.ons, postcode=args.postcode, house_number=args.house_number))
         return 0
 
+    learned = learning.load(args.learned)
+    before = json.dumps(learned, sort_keys=True)
     outcomes = run(
         store,
         registry.load(),
@@ -136,7 +164,10 @@ def main(argv: list[str] | None = None) -> int:
         selenium_url=args.selenium_url,
         force=args.force,
         only_uprn=args.uprn,
+        learned=learned,
     )
+    if json.dumps(learned, sort_keys=True) != before:
+        learning.save(learned, args.learned)
     for outcome in outcomes:
         print(json.dumps(format_outcome(outcome)))
     counts = {s: sum(o.status == s for o in outcomes) for s in ("fetched", "failed", "skipped")}

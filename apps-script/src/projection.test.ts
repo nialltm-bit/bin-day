@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import vectors from "../../registry/test-vectors/holiday-weeks.json";
 import { inHolidayWeek, projectCollections } from "./projection";
-import { type Council, bankHolidaysFor, getCouncil } from "./registry";
+import { type Council, bankHolidaysFor, getCouncil, parseLearnedFrequencies, resetRegistry, setCouncils, setLearnedFrequencies } from "./registry";
 
 const bathnes = getCouncil("E06000022") as Council;
 const holidays = bankHolidaysFor("E06000022");
@@ -123,5 +123,44 @@ describe("bank holiday data", () => {
     for (const { date, holiday_week, why } of vectors.cases) {
       expect(inHolidayWeek(date, holidays as string[]), `${date}: ${why}`).toBe(holiday_week);
     }
+  });
+});
+
+describe("a next_only council whose frequencies are learned", () => {
+  const council: Council = {
+    ons_code: "E06000099",
+    name: "Example",
+    status: "supported",
+    schedule: "next_only",
+    bin_types: { Black: { stream: "general" }, Box: { stream: "recycling", every_weeks: 1 } },
+  };
+  const project = () => projectCollections({ collections: [{ date: "2026-10-30", bin_name: "Black", stream: "general" }], council: getCouncil("E06000099") as Council, today: "2026-10-26", holidays: [] });
+
+  it("shows only the confirmed date until a frequency is learned", () => {
+    setCouncils([council]);
+    setLearnedFrequencies({});
+    expect(project().map((c) => c.date)).toEqual(["2026-10-30"]);
+    resetRegistry();
+  });
+
+  it("projects with the learned frequency once the fetcher trusts it", () => {
+    setCouncils([council]);
+    setLearnedFrequencies({ E06000099: { Black: 2 } });
+    expect(project().slice(0, 3).map((c) => [c.date, c.confirmed])).toEqual([["2026-10-30", true], ["2026-11-13", false], ["2026-11-27", false]]);
+    resetRegistry();
+  });
+
+  it("keeps only trusted frequencies from the learned file", () => {
+    const raw = { bins: { E06000099: { Black: { observations: { "2": 2 }, weeks: 2 }, Bad: { weeks: 9 }, Unsure: { observations: { "1": 1 } } }, nope: { X: { weeks: 1 } } } };
+    expect(parseLearnedFrequencies(raw)).toEqual({ E06000099: { Black: 2 } });
+    expect(parseLearnedFrequencies({ bins: {} })).toEqual({});
+    expect(parseLearnedFrequencies(null)).toBeNull();
+  });
+
+  it("does not override a frequency set by hand", () => {
+    setCouncils([council]);
+    setLearnedFrequencies({ E06000099: { Box: 3 } });
+    expect((getCouncil("E06000099") as Council).bin_types?.Box.every_weeks).toBe(1);
+    resetRegistry();
   });
 });

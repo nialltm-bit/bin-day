@@ -66,11 +66,18 @@ def build_entry(row: dict, upstream: dict, code: str, today: str) -> tuple[dict 
         source["skip_get_url"] = True
     bare = row.get("bare_number", "not_applicable")
     first_line = bare in ("different_house", "no_result") or bare.startswith("error_")
+    if row["schedule"] == "next_only":
+        returned = (
+            "returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches "
+            "(fetcher/learned.py) and the feed shows only confirmed dates until then. "
+        )
+    else:
+        returned = f"returned a full schedule of {row['most_dates_for_one_bin']} dates over {row['span_days']} days. "
     entry = {
         "ons_code": code,
         "name": upstream.get("wiki_name") or row["module"],
         "status": "supported",
-        "schedule": "full",
+        "schedule": "next_only" if row["schedule"] == "next_only" else "full",
         "source": source,
         "inputs": ["postcode", "house_number"],
         "house_input": "first_line" if first_line else "number_or_name",
@@ -81,7 +88,7 @@ def build_entry(row: dict, upstream: dict, code: str, today: str) -> tuple[dict 
         "notes": (
             f"Generated from upstream's test inputs and a probe on {today}: "
             f"{'drives a browser (Selenium)' if row.get('browser_in_source') else 'plain HTTP (no browser in the module)'}, "
-            f"returned a full schedule of {row['most_dates_for_one_bin']} dates over {row['span_days']} days. "
+            f"{returned}"
             f"Bin streams were mapped from the council's own bin names by keyword and are not checked against the "
             f"council's website. A bare house number: {bare.replace('_', ' ')}. No colours are set."
         ),
@@ -101,9 +108,6 @@ def main(input_path, probe_path, registry_path, report_path):
         entry_in = upstream[module]
         if not row.get("ok"):
             skipped.append((module, f"probe failed ({row.get('error', 'no result')})"))
-            continue
-        if row["schedule"] != "full":
-            skipped.append((module, "returns only the next date per bin, so every_weeks must be confirmed from the council"))
             continue
         from_postcode = council_for_postcode(entry_in["postcode"])
         code = entry_in.get("LAD24CD") or from_postcode

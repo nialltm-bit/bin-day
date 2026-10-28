@@ -1,6 +1,6 @@
 import { buildCalendar, pocEvents } from "./ics";
 import { feedFor, FEED_TOKEN } from "./feed";
-import { parseBankHolidays, setBankHolidays, setCouncils, slimCouncils } from "./registry";
+import { parseBankHolidays, parseLearnedFrequencies, setBankHolidays, setCouncils, setLearnedFrequencies, slimCouncils } from "./registry";
 import { type Remote, loadJson } from "./remote";
 import { handle } from "./service";
 import { sheetTables } from "./sheets";
@@ -42,6 +42,8 @@ function refreshData(): void {
   try {
     const councils = loadJson(remote, "registry", rawUrl("registry/councils.json"), slimCouncils, REGISTRY_SECONDS);
     if (councils) setCouncils(councils);
+    const learned = loadJson(remote, "learned", rawUrl("registry/learned-frequencies.json"), parseLearnedFrequencies, REGISTRY_SECONDS);
+    if (learned) setLearnedFrequencies(learned);
     const holidays = loadJson(remote, "bankholidays", rawUrl("registry/bank-holidays.json"), parseBankHolidays, BANK_HOLIDAY_SECONDS);
     if (holidays) setBankHolidays(holidays);
   } catch (error) {

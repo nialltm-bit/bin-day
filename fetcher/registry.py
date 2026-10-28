@@ -150,8 +150,6 @@ def _check_council(index: int, council: object, seen: set[str], problems: list[s
         for name, entry in bin_types.items():
             if not isinstance(entry, dict):
                 continue
-            if schedule == "next_only" and "every_weeks" not in entry:
-                problems.append(f"{where}: bin_types['{name}'] needs every_weeks because the council returns next_only dates")
             if schedule == "full" and "every_weeks" in entry:
                 problems.append(f"{where}: bin_types['{name}'] should not set every_weeks because the council returns a full schedule")
     if status == "supported" and not council.get("bin_types"):

@@ -101,3 +101,13 @@ def test_a_council_that_drives_a_browser_is_added_with_needs_selenium():
     assert registry.validate({"councils": [entry]}) == []
     plain, _ = generate.build_entry({**ROW, "browser_in_source": False}, UPSTREAM, "E06000001", "2026-10-28")
     assert plain["needs_selenium"] is False
+
+
+def test_a_next_only_council_is_added_without_frequencies_to_be_learned():
+    row = {**ROW, "schedule": "next_only", "most_dates_for_one_bin": 1, "span_days": 0}
+    entry, reason = generate.build_entry(row, UPSTREAM, "E06000001", "2026-10-28")
+    assert reason is None
+    assert entry["schedule"] == "next_only"
+    assert registry.validate({"councils": [entry]}) == []
+    assert all("every_weeks" not in b for b in entry["bin_types"].values())
+    assert "learned" in entry["notes"]
