@@ -459,3 +459,67 @@ describe("councils that take a postcode and house number (no UPRN)", () => {
     expect(handle({ action: "subscribe", ons_code: "E06000022" }, publicDeps())).toEqual({ ok: false, error: "bad uprn" });
   });
 });
+
+describe("fetching at sign-up", () => {
+  const publicDeps = (extra: Partial<Deps> = {}): Deps => ({ ...deps, newToken: () => "t".repeat(64), newId: () => "idid", nowIso: () => NOW, ...extra });
+  const subscribe = (d: Deps, body: Record<string, unknown> = {}) => handle({ action: "subscribe", uprn: "100120000855", ons_code: "E06000022", ...body }, d);
+
+  it("asks for a fetch when a sign-up adds an address nobody has fetched", () => {
+    let calls = 0;
+    expect(subscribe(publicDeps({ requestFetch: () => void calls++ })).ok).toBe(true);
+    expect(calls).toBe(1);
+  });
+
+  it("does not ask again for an address that is already there", () => {
+    let calls = 0;
+    const d = publicDeps({ requestFetch: () => void calls++ });
+    subscribe(d);
+    subscribe(d);
+    subscribe(d);
+    expect(calls).toBe(1);
+  });
+
+  it("does not ask when the sign-up is refused", () => {
+    let calls = 0;
+    const d = publicDeps({ requestFetch: () => void calls++ });
+    expect(subscribe(d, { uprn: "nope" }).ok).toBe(false);
+    expect(handle({ action: "subscribe", ons_code: "E06000023", uprn: "1" }, d).ok).toBe(false);
+    expect(subscribe({ ...d, maxSubscriptions: 0 }).ok).toBe(false);
+    expect(calls).toBe(0);
+  });
+
+  it("still signs the person up if asking for a fetch fails", () => {
+    const d = publicDeps({
+      requestFetch: () => {
+        throw new Error("GitHub is down");
+      },
+    });
+    expect(subscribe(d)).toEqual({ ok: true, token: "t".repeat(64) });
+    expect(store.subscriptions).toHaveLength(1);
+  });
+
+  it("works with no way to ask for a fetch", () => {
+    expect(subscribe(publicDeps()).ok).toBe(true);
+  });
+});
+
+describe("upcoming (public)", () => {
+  const publicDeps = (): Deps => ({ ...deps, newToken: () => "e".repeat(64), newId: () => "idid", nowIso: () => NOW, todayIso: () => "2026-10-27" });
+
+  it("is pending after sign-up, then shows the dates once the fetcher has saved them, with no secret", () => {
+    const d = publicDeps();
+    handle({ action: "subscribe", uprn: "100120000855", ons_code: "E06000022" }, d);
+    expect(handle({ action: "upcoming", token: "e".repeat(64) }, d)).toEqual({ ok: true, status: "pending", collections: [] });
+    handle({ secret: SECRET, action: "save_success", uprn: "100120000855", now: "2026-10-27T05:17:00+00:00", collections: COLLECTIONS }, d);
+    const reply = handle({ action: "upcoming", token: "e".repeat(64) }, d);
+    expect(reply).toMatchObject({ ok: true, status: "ready" });
+    expect((reply as unknown as { collections: { date: string; label: string }[] }).collections[0]).toMatchObject({ date: "2026-10-30", label: "rubbish + food" });
+  });
+
+  it("says not found for an unknown token and rejects a missing or non-text one", () => {
+    const d = publicDeps();
+    expect(handle({ action: "upcoming", token: "f".repeat(64) }, d)).toEqual({ ok: false, error: "not found" });
+    expect(handle({ action: "upcoming" }, d)).toEqual({ ok: false, error: "bad token" });
+    expect(handle({ action: "upcoming", token: 5 }, d)).toEqual({ ok: false, error: "bad token" });
+  });
+});

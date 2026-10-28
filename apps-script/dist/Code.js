@@ -886,8 +886,10 @@
     }
     return groups;
   }
+  function streamsLabel(group) {
+    return STREAM_ORDER.filter((stream) => group.some((c) => c.stream === stream)).map((s) => STREAM_NAME[s]).join(" + ");
+  }
   function eventFor(id, date, ordinal, group) {
-    const streams = STREAM_ORDER.filter((stream) => group.some((c) => c.stream === stream));
     const ordered = [...group].sort((a, b) => STREAM_ORDER.indexOf(a.stream) - STREAM_ORDER.indexOf(b.stream) || a.bin_name.localeCompare(b.bin_name));
     const labels = [...new Set(ordered.map((c) => c.label))];
     const projected = group.some((c) => !c.confirmed);
@@ -896,7 +898,7 @@
     return {
       // Keyed on the week, not the date, so a date that moves within its week updates the event instead of duplicating it.
       uid: `${id}-${isoWeek(date)}-${ordinal}@bin-day`,
-      summary: `Bins: ${streams.map((s) => STREAM_NAME[s]).join(" + ")}`,
+      summary: `Bins: ${streamsLabel(group)}`,
       description: lines.join("\n"),
       start: { kind: "date", date },
       alarm: ALARM_EVENING_BEFORE
@@ -950,6 +952,27 @@
       consecutiveFailures: result?.consecutive_failures ?? 0,
       changes: deps.tables.recentChanges(subscription.uprn)
     });
+  }
+  var UPCOMING_DAYS = 6;
+  function upcomingFor(token, deps) {
+    if (!FEED_TOKEN.test(token)) return null;
+    const subscription = deps.tables.findSubscription(token);
+    if (!subscription) return null;
+    const council = getCouncil(subscription.ons_code);
+    if (!council) return null;
+    const result = deps.tables.getResult(subscription.uprn);
+    if (!result || result.fetched_at === null) {
+      return { status: (result?.consecutive_failures ?? 0) > 0 ? "failed" : "pending", collections: [] };
+    }
+    if (daysBetween(result.fetched_at.slice(0, 10), deps.today) > STALE_DAYS) return { status: "failed", collections: [] };
+    const wanted = projectCollections({
+      collections: result.collections,
+      council,
+      today: deps.today,
+      holidays: bankHolidaysFor(subscription.ons_code)
+    }).filter((collection) => subscription.garden || collection.stream !== "garden");
+    const days = [...groupByDate(wanted)].sort(([a], [b]) => a.localeCompare(b)).slice(0, UPCOMING_DAYS).map(([date, group]) => ({ date, label: streamsLabel(group), projected: group.some((c) => !c.confirmed) }));
+    return { status: "ready", collections: days };
   }
 
   // src/service.ts
@@ -1046,7 +1069,8 @@
     if (!deps.newToken || !deps.newId) return fail("not configured");
     const withLock = deps.withLock ?? ((work) => work());
     const { tables } = deps;
-    return withLock(() => {
+    let added = false;
+    const reply = withLock(() => {
       if (tables.countSubscriptions() >= (deps.maxSubscriptions ?? DEFAULT_MAX_SUBSCRIPTIONS)) return fail("full");
       if (tables.countSubscriptions(key) >= (deps.maxPerAddress ?? DEFAULT_MAX_PER_ADDRESS)) return fail("too many feeds for this address");
       if (!tables.addresses().some((address) => address.uprn === key)) {
@@ -1054,6 +1078,7 @@
         if (typeof postcode === "string") row.postcode = postcode;
         if (typeof house_number === "string") row.house_number = house_number;
         tables.addAddress(row);
+        added = true;
       }
       const token = deps.newToken?.();
       tables.addSubscription({
@@ -1066,6 +1091,20 @@
       });
       return { ok: true, token };
     });
+    if (added && reply.ok) {
+      try {
+        deps.requestFetch?.();
+      } catch {
+      }
+    }
+    return reply;
+  }
+  function upcoming(request, deps) {
+    const { token } = request;
+    if (typeof token !== "string") return fail("bad token");
+    const today = deps.todayIso?.() ?? (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+    const found = upcomingFor(token, { tables: deps.tables, today });
+    return found === null ? fail("not found") : { ok: true, ...found };
   }
   function joinWaitlist(request, deps) {
     const { ons_code } = request;
@@ -1082,6 +1121,7 @@
     const request = body;
     if (request.action === "subscribe") return subscribe(request, deps);
     if (request.action === "join_waitlist") return joinWaitlist(request, deps);
+    if (request.action === "upcoming") return upcoming(request, deps);
     if (deps.secret === void 0 || deps.secret === "") return fail("not configured");
     if (typeof request.secret !== "string" || !safeEqual(request.secret, deps.secret)) return fail("unauthorised");
     const withLock = deps.withLock ?? ((work) => work());
@@ -1318,6 +1358,38 @@
       lock.releaseLock();
     }
   }
+  var MAX_FETCH_REQUESTS_PER_HOUR = 20;
+  function dispatchFetch() {
+    const properties = PropertiesService.getScriptProperties();
+    const token = properties.getProperty("GITHUB_TOKEN");
+    const repo = properties.getProperty("GITHUB_REPO");
+    if (!token || !repo || !/^[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+$/.test(repo)) return null;
+    const response = UrlFetchApp.fetch(`https://api.github.com/repos/${repo}/actions/workflows/fetch-scheduled.yml/dispatches`, {
+      method: "post",
+      contentType: "application/json",
+      headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" },
+      payload: JSON.stringify({ ref: "main" }),
+      muteHttpExceptions: true
+    });
+    return response.getResponseCode();
+  }
+  function requestFetch() {
+    try {
+      const properties = PropertiesService.getScriptProperties();
+      const key = `fetch_requests_${Utilities.formatDate(/* @__PURE__ */ new Date(), "UTC", "yyyyMMddHH")}`;
+      const used = Number(properties.getProperty(key)) || 0;
+      if (used >= MAX_FETCH_REQUESTS_PER_HOUR) return;
+      properties.setProperty(key, String(used + 1));
+      const code = dispatchFetch();
+      if (code !== null && code !== 204) console.error(`Asking GitHub for a fetch failed: HTTP ${code}`);
+    } catch (error) {
+      console.error(`Asking GitHub for a fetch failed: ${error instanceof Error ? error.name : "error"}`);
+    }
+  }
+  function testFetchRequest() {
+    const code = dispatchFetch();
+    console.log(code === null ? "Not set up: add the GITHUB_TOKEN and GITHUB_REPO script properties." : `GitHub answered HTTP ${code} (204 means the fetch was requested).`);
+  }
   function doPost(e) {
     let body;
     try {
@@ -1337,11 +1409,13 @@
           newToken: () => randomHex(2),
           newId: () => randomHex(1).slice(0, 8),
           nowIso: () => (/* @__PURE__ */ new Date()).toISOString(),
+          todayIso: () => Utilities.formatDate(/* @__PURE__ */ new Date(), "Europe/London", "yyyy-MM-dd"),
+          requestFetch,
           maxSubscriptions: max > 0 ? max : void 0
         })
       );
     }
     return json({ ok: true, received: body });
   }
-  Object.assign(globalThis, { doGet, doPost });
+  Object.assign(globalThis, { doGet, doPost, testFetchRequest });
 })();

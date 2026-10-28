@@ -42,6 +42,58 @@ function withScriptLock<T>(work: () => T): T {
   }
 }
 
+const MAX_FETCH_REQUESTS_PER_HOUR = 20;
+
+/**
+ * Asks GitHub to run the "Fetch (scheduled)" workflow, and returns GitHub's status code (204 means it was accepted), or
+ * null if the script isn't set up for it. The workflow takes no inputs (its inputs would be public) and fetches whatever
+ * is due, which includes every address nobody has fetched yet. Needs the GITHUB_TOKEN script property (a token that may
+ * run Actions on this one repository) and GITHUB_REPO ("owner/name").
+ */
+function dispatchFetch(): number | null {
+  const properties = PropertiesService.getScriptProperties();
+  const token = properties.getProperty("GITHUB_TOKEN");
+  const repo = properties.getProperty("GITHUB_REPO");
+  if (!token || !repo || !/^[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+$/.test(repo)) return null;
+  const response = UrlFetchApp.fetch(`https://api.github.com/repos/${repo}/actions/workflows/fetch-scheduled.yml/dispatches`, {
+    method: "post",
+    contentType: "application/json",
+    headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" },
+    payload: JSON.stringify({ ref: "main" }),
+    muteHttpExceptions: true,
+  });
+  return response.getResponseCode();
+}
+
+/**
+ * Called when a sign-up adds a new address. Without the setup above it does nothing and the daily run still fetches the
+ * address. Capped per hour so the public sign-up can't be used to flood Actions. Never throws, and logs only a status
+ * code (the log is private to the script's owner, but there is no reason to put anything else in it).
+ */
+function requestFetch(): void {
+  try {
+    const properties = PropertiesService.getScriptProperties();
+    const key = `fetch_requests_${Utilities.formatDate(new Date(), "UTC", "yyyyMMddHH")}`;
+    const used = Number(properties.getProperty(key)) || 0;
+    if (used >= MAX_FETCH_REQUESTS_PER_HOUR) return;
+    properties.setProperty(key, String(used + 1));
+    const code = dispatchFetch();
+    if (code !== null && code !== 204) console.error(`Asking GitHub for a fetch failed: HTTP ${code}`);
+  } catch (error) {
+    console.error(`Asking GitHub for a fetch failed: ${error instanceof Error ? error.name : "error"}`);
+  }
+}
+
+/**
+ * For the script's owner to run once from the editor (Run, then testFetchRequest) after setting GITHUB_TOKEN and
+ * GITHUB_REPO. It asks for a fetch and logs the answer: 204 is success. The first run also asks for the permission to
+ * connect to an external service, which the sign-up needs.
+ */
+function testFetchRequest(): void {
+  const code = dispatchFetch();
+  console.log(code === null ? "Not set up: add the GITHUB_TOKEN and GITHUB_REPO script properties." : `GitHub answered HTTP ${code} (204 means the fetch was requested).`);
+}
+
 function doPost(e: GoogleAppsScript.Events.DoPost): GoogleAppsScript.Content.TextOutput {
   let body: unknown;
   try {
@@ -62,6 +114,8 @@ function doPost(e: GoogleAppsScript.Events.DoPost): GoogleAppsScript.Content.Tex
         newToken: () => randomHex(2),
         newId: () => randomHex(1).slice(0, 8),
         nowIso: () => new Date().toISOString(),
+        todayIso: () => Utilities.formatDate(new Date(), "Europe/London", "yyyy-MM-dd"),
+        requestFetch,
         maxSubscriptions: max > 0 ? max : undefined,
       }),
     );
@@ -71,4 +125,4 @@ function doPost(e: GoogleAppsScript.Events.DoPost): GoogleAppsScript.Content.Tex
 }
 
 // Apps Script looks for top-level functions by name, so expose them on the global object.
-Object.assign(globalThis, { doGet, doPost });
+Object.assign(globalThis, { doGet, doPost, testFetchRequest });

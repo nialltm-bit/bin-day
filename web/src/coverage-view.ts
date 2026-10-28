@@ -2,16 +2,9 @@
 import type { CouncilEntry } from "./coverage";
 import { type CouncilView, LABELS, ORDER, type Shapes, buildViews, centreOf, describe, filterViews, summary } from "./coverage-data";
 
+import { el } from "./dom";
+
 const SVG_NS = "http://www.w3.org/2000/svg";
-
-type Child = Node | string;
-
-function el<K extends keyof HTMLElementTagNameMap>(tag: K, attrs: Record<string, string> = {}, ...children: Child[]): HTMLElementTagNameMap[K] {
-  const node = document.createElement(tag);
-  for (const [name, value] of Object.entries(attrs)) node.setAttribute(name, value);
-  node.append(...children);
-  return node;
-}
 
 function svgEl(tag: string, attrs: Record<string, string> = {}): SVGElement {
   const node = document.createElementNS(SVG_NS, tag);
