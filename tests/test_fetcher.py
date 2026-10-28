@@ -66,8 +66,8 @@ def test_normalise_rejects_bad_dates(bathnes):
 
 
 def test_unmapped_bin_is_a_failure_naming_the_bin(bathnes):
-    response = {"bins": [{"type": "Purple Garden Sack", "collectionDate": "03/11/2026"}]}
-    with pytest.raises(UnmappedBinError, match="Purple Garden Sack"):
+    response = {"bins": [{"type": "Purple Sack", "collectionDate": "03/11/2026"}]}
+    with pytest.raises(UnmappedBinError, match="Purple Sack"):
         normalise(bathnes, response)
 
 
@@ -249,10 +249,10 @@ def test_a_failed_address_is_not_retried_until_due_again(tmp_path, councils):
 
 def test_unmapped_bin_is_recorded_as_a_failure(tmp_path, councils):
     store = make_store(tmp_path, "100120000855")
-    odd = {"bins": [{"type": "Purple Garden Sack", "collectionDate": "03/11/2026"}]}
+    odd = {"bins": [{"type": "Purple Sack", "collectionDate": "03/11/2026"}]}
     outcomes = run(store, councils, NOW, fetch=lambda *a: odd, limiter=no_wait())
     assert outcomes[0].status == "failed"
-    assert "Purple Garden Sack" in store.result("100120000855")["last_error"]
+    assert "Purple Sack" in store.result("100120000855")["last_error"]
 
 
 def test_unknown_and_unsupported_councils_are_skipped(tmp_path, councils):
@@ -336,7 +336,7 @@ def test_upstream_errors_log_only_their_kind_but_the_store_keeps_the_message(tmp
 
 
 def test_no_log_line_contains_the_uprn(tmp_path, councils):
-    odd = {"bins": [{"type": "Purple Garden Sack", "collectionDate": "03/11/2026"}]}
+    odd = {"bins": [{"type": "Purple Sack", "collectionDate": "03/11/2026"}]}
     for index, fetch in enumerate((lambda *a: GOOD_RESPONSE, lambda *a: odd, lambda *a: {"bins": []})):
         folder = tmp_path / str(index)
         folder.mkdir()
@@ -455,3 +455,16 @@ def test_a_failing_next_only_address_is_not_retried_until_the_next_sunday(tmp_pa
     assert len(calls) == 1
     run_on(store, councils, SUNDAY + timedelta(days=7), broken)
     assert len(calls) == 2
+
+
+def test_a_bin_the_registry_has_not_met_is_settled_by_the_keyword_rules_when_they_are_clear(bathnes):
+    day = "03/11/2026"
+    response = {"bins": [{"type": "Garden", "collectionDate": day}, {"type": "Black Rubbish Bin (140L)", "collectionDate": day}]}
+    streams = {c.bin_name: c.stream for c in normalise(bathnes, response)}
+    assert streams == {"Garden": "garden", "Black Rubbish Bin (140L)": "general"}
+
+
+def test_a_bin_the_keyword_rules_say_two_things_about_is_still_a_failure(bathnes):
+    response = {"bins": [{"type": "Food and Garden", "collectionDate": "03/11/2026"}]}
+    with pytest.raises(UnmappedBinError, match="Food and Garden"):
+        normalise(bathnes, response)
