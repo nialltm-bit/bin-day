@@ -2335,6 +2335,7 @@
   // src/service.ts
   var DEFAULT_FEED_LIFE_DAYS = 365;
   var MIN_FEED_LIFE_DAYS = 30;
+  var DAY = /^\d{4}-\d{2}-\d{2}$/;
   var STREAMS2 = ["general", "recycling", "food", "garden"];
   var CHANGE_KINDS = ["expected_shift", "round_change"];
   var DEFAULT_MAX_SUBSCRIPTIONS = 5e3;
@@ -2568,8 +2569,8 @@
           let expired = 0;
           let addresses = 0;
           for (const feed of tables.subscriptions()) {
-            const lastUsed = (_a2 = feed.last_used) != null ? _a2 : feed.created_at.slice(0, 10);
-            if (daysBetween(lastUsed, today) <= days) continue;
+            const lastUsed = ((_a2 = feed.last_used) != null ? _a2 : feed.created_at).slice(0, 10);
+            if (!DAY.test(lastUsed) || !(daysBetween(lastUsed, today) > days)) continue;
             if (tables.deleteSubscription(feed.token) === null) continue;
             expired += 1;
             if (tables.countSubscriptions(feed.uprn) === 0) {
@@ -2629,15 +2630,26 @@
     const last = SUBSCRIPTION_HEADERS.length;
     if (sheet.getRange(1, last).getValue() === "") {
       sheet.getRange(1, last).setValue("last_used");
-      sheet.getRange(1, last, sheet.getMaxRows(), 1).setNumberFormat("@");
+    }
+    const properties = PropertiesService.getScriptProperties();
+    if (properties.getProperty("subscription_dates_are_text") !== "yes") {
+      for (const column of [6, last]) sheet.getRange(1, column, sheet.getMaxRows(), 1).setNumberFormat("@");
+      properties.setProperty("subscription_dates_are_text", "yes");
     }
     return sheet;
   }
   function subscriptionFrom(values) {
     const [token, id, uprn, onsCode, garden, createdAt, lastUsed] = values;
-    const row = { token: String(token), id: String(id), uprn: String(uprn), ons_code: String(onsCode), garden: garden === "yes", created_at: String(createdAt) };
+    const row = {
+      token: String(token),
+      id: String(id),
+      uprn: String(uprn),
+      ons_code: String(onsCode),
+      garden: garden === "yes",
+      created_at: cellText(createdAt, true)
+    };
     const used = optional(lastUsed);
-    if (used) row.last_used = used;
+    if (used) row.last_used = cellText(lastUsed);
     return row;
   }
   function rows(sheet) {
@@ -2650,6 +2662,12 @@
     const column = sheet.getRange(2, 1, last - 1, 1).getValues();
     const index = column.findIndex((row) => String(row[0]) === uprn);
     return index === -1 ? null : index + 2;
+  }
+  function cellText(value, withTime = false) {
+    if (value instanceof Date) {
+      return Utilities.formatDate(value, "UTC", withTime ? "yyyy-MM-dd'T'HH:mm:ss'+00:00'" : "yyyy-MM-dd");
+    }
+    return String(value);
   }
   function optional(value) {
     return value === "" || value === void 0 || value === null ? void 0 : String(value);
@@ -2752,7 +2770,7 @@
       const rowNumber = findRow(sheet, token);
       if (rowNumber === null) return;
       const cell = sheet.getRange(rowNumber, SUBSCRIPTION_HEADERS.length);
-      if (String(cell.getValue()) !== today) cell.setValue(today);
+      if (cellText(cell.getValue()) !== today) cell.setValue(today);
     },
     hasAddress(uprn) {
       return findRow(table("addresses", ADDRESS_HEADERS), uprn) !== null;

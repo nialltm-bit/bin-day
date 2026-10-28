@@ -678,3 +678,25 @@ describe("using a feed", () => {
     expect(store.subscriptions[0]?.last_used).toBe("2026-11-02");
   });
 });
+
+describe("expire_feeds never deletes on a date it can't read", () => {
+  const today = "2026-10-28";
+  const run = () => handle({ secret: SECRET, action: "expire_feeds" }, { secret: SECRET, tables: store.tables, todayIso: () => today });
+
+  it("keeps a feed whose last-used day or sign-up time is not a date", () => {
+    for (const [i, bad] of ["Wed Oct 28 2026 00:00:00 GMT+0000", "not a date", "", "2026-13-99x"].entries()) {
+      const token = String(i).repeat(64);
+      store.tables.addSubscription({ token, id: "0000000" + i, uprn: "10000000000" + i, ons_code: "E06000022", garden: false, created_at: bad, last_used: bad });
+      store.tables.addAddress({ uprn: "10000000000" + i, ons_code: "E06000022" });
+    }
+    expect(run()).toEqual({ ok: true, expired: 0, addresses_deleted: 0 });
+    expect(store.subscriptions).toHaveLength(4);
+    expect(store.addresses).toHaveLength(4);
+  });
+
+  it("keeps a feed made today, with or without a last-used day", () => {
+    store.tables.addSubscription({ token: "a".repeat(64), id: "00000001", uprn: "100000000001", ons_code: "E06000022", garden: false, created_at: "2026-10-28T22:10:00+00:00" });
+    store.tables.addSubscription({ token: "b".repeat(64), id: "00000002", uprn: "100000000002", ons_code: "E06000022", garden: false, created_at: "2026-10-28T22:10:00+00:00", last_used: "2026-10-28" });
+    expect(run()).toEqual({ ok: true, expired: 0, addresses_deleted: 0 });
+  });
+});
