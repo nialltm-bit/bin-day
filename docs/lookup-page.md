@@ -58,3 +58,17 @@ The script must also be redeployed with the latest `apps-script/dist/Code.js` fo
 ## Checked
 
 `web/src/signup.ts` and `web/src/lookup-view.ts` have unit tests for the checks, the request, the reasons the script can give and the calendar links. The whole page was also driven in a browser at phone width with the postcode service and the script faked: bad and unknown postcodes, the postcode service down, Channel Islands, a council we don't cover (and the count), a UPRN council, a ready council (bare number refused, missing garden answer, successful sign-up, links, clearing). The poll was checked with the script faked to answer pending twice and then ready (dates shown after about 10 seconds), and to answer failed (the message shown at once). The script's `subscribe` and `upcoming` actions, the shared date logic and the request for a fetch are unit tested. None of it has been run against the real script, the real GitHub token or a real fetch.
+
+## Calendar setup guide (FRE-273)
+
+After sign-up the page shows three add buttons (Google, Apple, Outlook) and a short guide for each, in `web/src/calendar-guide.ts`.
+The browser's own description picks which comes first (Apple devices: Apple; Windows: Outlook; Android and anything else:
+Google), the first guide starts open and the others fold. Each guide ends with the night-before notification: Google's
+needs a step in Google Calendar's settings because Google ignores reminders that come with a subscribed calendar; Apple's is
+built in (6pm the evening before) with a check for the Remove Alerts setting; Outlook's is built in but Outlook doesn't
+always show it, and the guide says so.
+
+Not done: the screenshots the ticket asked for (those need real accounts on each calendar) and the email-reminder
+alternative (no email in v1; see FRE-271 and FRE-285). Every step is written from how the calendars are documented and has
+not been tried on a live account: check each guide on a real Google, Apple and Outlook account before launch, especially
+the Outlook reminder and the Google "All-day event notifications" wording.
