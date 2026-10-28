@@ -1,16 +1,17 @@
 # Generated registry report (2026-10-28)
 
-Added 0 councils. Left out 67.
+Added 2 councils. Left out 65.
 
 ## Added
 
+- BuryCouncil (E08000002)
+- NorthNorfolkDistrictCouncil (E07000147)
 
 ## Left out, and why
 
 - BassetlawDistrictCouncil: already in the registry (left unchanged)
 - BracknellForestCouncil: already in the registry (left unchanged)
 - BrentCouncil: already in the registry (left unchanged)
-- BuryCouncil: unrecognised bin name 'green'
 - CaerphillyCountyBoroughCouncil: already in the registry (left unchanged)
 - CneSiarCouncil: already in the registry (left unchanged)
 - EastAyrshireCouncil: already in the registry (left unchanged)
@@ -60,11 +61,10 @@ Added 0 councils. Left out 67.
 - MidUlsterDistrictCouncil: already in the registry (left unchanged)
 - NeathPortTalbotCouncil: already in the registry (left unchanged)
 - NorthHertfordshireDistrictCouncil: already in the registry (left unchanged)
-- NorthNorfolkDistrictCouncil: unrecognised bin name 'Green bin'
 - PeterboroughCityCouncil: unrecognised bin name 'Empty Bin 240L Green'
 - SevenoaksDistrictCouncil: already in the registry (left unchanged)
 - SomersetCouncil: already in the registry (left unchanged)
-- SouthKestevenDistrictCouncil: unrecognised bin name 'GREEN'
+- SouthKestevenDistrictCouncil: unrecognised bin name 'Purple Bin'
 - StHelensBC: already in the registry (left unchanged)
 - StirlingCouncil: already in the registry (left unchanged)
 - SwaleBoroughCouncil: unrecognised bin name 'green bin'
