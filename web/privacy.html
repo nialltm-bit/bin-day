@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy - Bin Day</title>
+  </head>
+  <body>
+    <main>
+      <p><a href="./">&larr; Bin Day</a></p>
+      <h1>Privacy and cookies</h1>
+      <p>Last updated 28 October 2026.</p>
+
+      <h2>Who we are</h2>
+      <p>Bin Day is run by FreshTech, which decides how your information is used (the "controller" under UK GDPR).</p>
+
+      <h2>What we keep, and why</h2>
+      <p>We keep only what is needed to show your bin days and keep your calendar up to date.</p>
+      <ul>
+        <li><strong>Your address, as you typed it.</strong> Your postcode, and your house number or the first line of your address (for some councils a property reference instead). We use it to ask your council for your collection dates. We keep it so we can check again each week.</li>
+        <li><strong>Whether you have a garden waste bin</strong>, and <strong>your council</strong>, so your calendar shows the right bins.</li>
+        <li><strong>Your calendar feed</strong>: a long random code that is part of your calendar link, a short reference, and the time you signed up. The code is what keeps your feed private, so keep your link to yourself.</li>
+        <li><strong>Your bin dates</strong> as the council gave them, when we last checked, and any change we noticed (for example a collection moved).</li>
+        <li><strong>A count for councils we don't cover yet.</strong> If you press the button, we add one to that council's count. Nothing about you is kept with it.</li>
+      </ul>
+      <p>We don't ask for your name or your email address, and we don't send you email. We don't use advertising or analytics, and we don't sell or share your information for marketing.</p>
+      <p>Our reason for using your information is our legitimate interest in giving you the service you asked for (UK GDPR Article 6(1)(f)). We keep it to the minimum, you would expect it, and you can delete it yourself at any time (below).</p>
+
+      <h2>Who else handles it</h2>
+      <ul>
+        <li><strong>Your council's website.</strong> To get your dates, our checking program sends your postcode and house number or address line to your council's own system, as if you had typed them there.</li>
+        <li><strong>postcodes.io</strong> (a free postcode service). Your browser sends the postcode you type to it, to find which council you are in.</li>
+        <li><strong>Google.</strong> Our sign-up and calendar service runs on Google Apps Script, and what we keep is stored in a private Google Sheet. Google can see the requests it receives, including your internet address, under <a href="https://policies.google.com/privacy" rel="noopener">its own privacy policy</a>.</li>
+        <li><strong>GitHub.</strong> This site is hosted on GitHub Pages and the checking program runs on GitHub Actions. GitHub can see visits to this page under <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">its own privacy statement</a>. The project's code and run logs are public, but we make sure addresses never appear in them.</li>
+        <li><strong>Your calendar app</strong> (Google, Apple, Outlook or another) fetches your calendar link regularly. Anyone who has your link can see your bin days, so don't share it.</li>
+      </ul>
+      <p>Google and GitHub may handle information outside the UK, using the safeguards they describe in their own policies.</p>
+
+      <h2>Cookies</h2>
+      <p>This site doesn't set cookies and doesn't store anything in your browser, so there is no cookie banner. Google and GitHub, who run the services above, are responsible for anything they do on their own sites.</p>
+
+      <h2>How long we keep it</h2>
+      <p>We keep your address, feed and dates until you delete your feed. We don't yet delete feeds that stop being used; until we do, please delete yours if you no longer need it. If more than one feed uses the same address, the address and its dates are kept until the last of those feeds is deleted.</p>
+
+      <h2>Delete your calendar feed</h2>
+      <p>Paste your calendar link here. Your feed stops working straight away, and your address, bin dates and recorded changes are deleted with it (unless another feed uses the same address, as above). You can then remove the calendar from your calendar app.</p>
+      <div id="delete-feed"></div>
+      <noscript><p>Turn on JavaScript to delete your feed from this page, or ask us using the contact route below.</p></noscript>
+
+      <h2>Your rights</h2>
+      <p>You can ask to see, correct or delete what we hold about you, to restrict or object to how we use it, and to complain to the Information Commissioner's Office at <a href="https://ico.org.uk/make-a-complaint/" rel="noopener">ico.org.uk</a>. Deleting your feed above deletes it without asking us. Nothing here needs your name, because we don't keep it.</p>
+
+      <h2>Contact</h2>
+      <p>Questions or requests: open an issue on <a href="https://github.com/nialltm-bit/bin-day/issues" rel="noopener">our GitHub page</a>. Issues there are public, so please don't put your address, calendar link or any personal details in one; just say what you need and we'll tell you how to carry on.</p>
+    </main>
+    <script type="module" src="/src/privacy.ts"></script>
+  </body>
+</html>

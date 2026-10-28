@@ -17,6 +17,16 @@ export function memoryTables() {
     countSubscriptions: (uprn) => subscriptions.filter((s) => uprn === undefined || s.uprn === uprn).length,
     addSubscription: (row) => void subscriptions.push({ ...row }),
     findSubscription: (token) => subscriptions.find((s) => s.token === token) ?? null,
+    deleteSubscription: (token) => {
+      const index = subscriptions.findIndex((s) => s.token === token);
+      return index === -1 ? null : (subscriptions.splice(index, 1)[0] as SubscriptionRow);
+    },
+    deleteAddress: (uprn) => {
+      for (const list of [addresses, changes] as { uprn: string }[][]) {
+        for (let i = list.length - 1; i >= 0; i--) if (list[i].uprn === uprn) list.splice(i, 1);
+      }
+      results.delete(uprn);
+    },
     bumpWaitlist: (onsCode, at, maxCouncils) => {
       const row = waitlist.get(onsCode);
       if (row) {

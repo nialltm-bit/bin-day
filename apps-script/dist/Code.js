@@ -2476,6 +2476,19 @@
       return { ok: true };
     });
   }
+  function unsubscribe(request, deps) {
+    var _a;
+    const { token } = request;
+    if (typeof token !== "string" || !FEED_TOKEN.test(token)) return fail("bad token");
+    const withLock = (_a = deps.withLock) != null ? _a : ((work) => work());
+    const { tables } = deps;
+    return withLock(() => {
+      const removed = tables.deleteSubscription(token);
+      if (removed === null) return fail("not found");
+      if (tables.countSubscriptions(removed.uprn) === 0) tables.deleteAddress(removed.uprn);
+      return { ok: true };
+    });
+  }
   function handle(body, deps) {
     var _a;
     if (typeof body !== "object" || body === null) return fail("bad request");
@@ -2483,6 +2496,7 @@
     if (request.action === "subscribe") return subscribe(request, deps);
     if (request.action === "join_waitlist") return joinWaitlist(request, deps);
     if (request.action === "upcoming") return upcoming(request, deps);
+    if (request.action === "unsubscribe") return unsubscribe(request, deps);
     if (deps.secret === void 0 || deps.secret === "") return fail("not configured");
     if (typeof request.secret !== "string" || !safeEqual(request.secret, deps.secret)) return fail("unauthorised");
     const withLock = (_a = deps.withLock) != null ? _a : ((work) => work());
@@ -2684,6 +2698,25 @@
       if (rowNumber === null) return null;
       const [, id, uprn, onsCode, garden, createdAt] = sheet.getRange(rowNumber, 1, 1, SUBSCRIPTION_HEADERS.length).getValues()[0];
       return { token, id: String(id), uprn: String(uprn), ons_code: String(onsCode), garden: garden === "yes", created_at: String(createdAt) };
+    },
+    deleteSubscription(token) {
+      const found = sheetTables.findSubscription(token);
+      if (found === null) return null;
+      const sheet = table("subscriptions", SUBSCRIPTION_HEADERS, [1, 3]);
+      const rowNumber = findRow(sheet, token);
+      if (rowNumber !== null) sheet.deleteRow(rowNumber);
+      return found;
+    },
+    deleteAddress(uprn) {
+      const removeMatching = (sheet, column) => {
+        const last = sheet.getLastRow();
+        if (last < 2) return;
+        const values = sheet.getRange(2, column, last - 1, 1).getValues();
+        for (let i = values.length - 1; i >= 0; i--) if (String(values[i][0]) === uprn) sheet.deleteRow(i + 2);
+      };
+      removeMatching(table("addresses", ADDRESS_HEADERS), 1);
+      removeMatching(table("results", RESULT_HEADERS), 1);
+      removeMatching(table("changes", CHANGE_HEADERS, [1, 2, 3, 4, 5, 6, 7, 8]), 2);
     },
     bumpWaitlist(onsCode, at, maxCouncils) {
       const sheet = table("waitlist", WAITLIST_HEADERS, [1, 3, 4]);
