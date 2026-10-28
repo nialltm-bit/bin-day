@@ -5,6 +5,11 @@ Added 0 councils. Left out 67.
 ## Added
 
 
+## Re-checked against the current mapping rules
+
+- taken out until its bin names can be settled: East Hampshire
+- taken out until its bin names can be settled: Test Valley
+
 ## Left out, and why
 
 - BassetlawDistrictCouncil: already in the registry (left unchanged)
@@ -14,7 +19,7 @@ Added 0 councils. Left out 67.
 - CaerphillyCountyBoroughCouncil: unrecognised bin name 'Food & Garden'
 - CneSiarCouncil: unrecognised bin name 'Organic Food & Garden Waste / Mixed Recycling (Blue Bin)'
 - EastAyrshireCouncil: unrecognised bin name 'Glass+Food'
-- EastHampshireDC: already in the registry (left unchanged)
+- EastHampshireDC: the bins found have no general waste bin, so the calendar would be incomplete
 - EastLothianCouncil: unrecognised bin name 'Food waste and recycling'
 - EdinburghCityCouncil: unrecognised bin name 'Green Bin'
 - FermanaghOmaghDistrictCouncil: already in the registry (left unchanged)
@@ -68,7 +73,7 @@ Added 0 councils. Left out 67.
 - StHelensBC: already in the registry (left unchanged)
 - StirlingCouncil: unrecognised bin name 'Food and Garden'
 - SwaleBoroughCouncil: unrecognised bin name 'green bin'
-- TestValleyBoroughCouncil: already in the registry (left unchanged)
+- TestValleyBoroughCouncil: the bins found have no general waste and no recycling bin, so the calendar would be incomplete
 - WestLothianCouncil: unrecognised bin name 'Brown Bin (Now for Garden and Food Waste)'
 - WestOxfordshireDistrictCouncil: already in the registry (left unchanged)
 - WinchesterCityCouncil: already in the registry (left unchanged)
