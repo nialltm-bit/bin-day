@@ -36,14 +36,6 @@
    "error": "TimeoutException"
   },
   {
-   "group": "uprn_alt",
-   "module": "BlackpoolCouncil",
-   "ons_code": "E06000009",
-   "browser_in_source": false,
-   "ok": false,
-   "error": "ValueError"
-  },
-  {
    "group": "remaining",
    "module": "BostonBoroughCouncil",
    "ons_code": "E07000136",
@@ -85,22 +77,6 @@
     14
    ],
    "ok": true
-  },
-  {
-   "group": "uprn_alt",
-   "module": "BroxtoweBoroughCouncil",
-   "ons_code": "E07000172",
-   "browser_in_source": true,
-   "ok": false,
-   "error": "ValueError"
-  },
-  {
-   "group": "uprn_alt",
-   "module": "CalderdaleCouncil",
-   "ons_code": "E08000033",
-   "browser_in_source": false,
-   "ok": false,
-   "error": "ValueError"
   },
   {
    "group": "other_id",
@@ -213,14 +189,6 @@
    "ok": true
   },
   {
-   "group": "uprn_alt",
-   "module": "HorshamDistrictCouncil",
-   "ons_code": "E07000227",
-   "browser_in_source": false,
-   "ok": false,
-   "error": "ValueError"
-  },
-  {
    "group": "remaining",
    "module": "InverclydeCouncil",
    "ons_code": null,
@@ -268,22 +236,6 @@
    "browser_in_source": false,
    "ok": false,
    "error": "MissingSchema"
-  },
-  {
-   "group": "uprn_alt",
-   "module": "LincolnCouncil",
-   "ons_code": "E07000138",
-   "browser_in_source": false,
-   "ok": false,
-   "error": "ValueError"
-  },
-  {
-   "group": "uprn_alt",
-   "module": "LondonBoroughCamdenCouncil",
-   "ons_code": "E09000007",
-   "browser_in_source": false,
-   "ok": false,
-   "error": "ValueError"
   },
   {
    "group": "single",
@@ -353,28 +305,6 @@
    "schedule": "next_only",
    "gaps_days": [],
    "ok": true
-  },
-  {
-   "group": "uprn_alt",
-   "module": "MorayCouncil",
-   "ons_code": "S12000020",
-   "browser_in_source": false,
-   "bins": [
-    "Blue Bin",
-    "Brown Bin",
-    "Glass Container",
-    "Green Bin",
-    "Purple Bin"
-   ],
-   "most_dates_for_one_bin": 3,
-   "span_days": 42,
-   "schedule": "full",
-   "gaps_days": [
-    14,
-    21
-   ],
-   "ok": true,
-   "without_uprn": "same_bins_different_dates"
   },
   {
    "group": "other_id",
@@ -502,22 +432,6 @@
    "ok": true
   },
   {
-   "group": "uprn_alt",
-   "module": "ScottishBordersCouncil",
-   "ons_code": null,
-   "browser_in_source": false,
-   "ok": false,
-   "error": "ValueError"
-  },
-  {
-   "group": "uprn_alt",
-   "module": "SheffieldCityCouncil",
-   "ons_code": "E08000019",
-   "browser_in_source": false,
-   "ok": false,
-   "error": "ValueError"
-  },
-  {
    "group": "single",
    "module": "ShetlandIslandsCouncil",
    "ons_code": null,
@@ -546,24 +460,6 @@
    "schedule": "next_only",
    "gaps_days": [],
    "ok": true
-  },
-  {
-   "group": "uprn_alt",
-   "module": "SouthDerbyshireDistrictCouncil",
-   "ons_code": "E07000039",
-   "browser_in_source": false,
-   "bins": [
-    "Black and Food Waste Bins",
-    "Green, Brown and Food Waste Bins "
-   ],
-   "most_dates_for_one_bin": 4,
-   "span_days": 42,
-   "schedule": "full",
-   "gaps_days": [
-    14
-   ],
-   "ok": true,
-   "without_uprn": "same_schedule"
   },
   {
    "group": "single",
@@ -643,33 +539,6 @@
    "error": "TimeoutException"
   },
   {
-   "group": "uprn_alt",
-   "module": "UttlesfordDistrictCouncil",
-   "ons_code": "E07000077",
-   "browser_in_source": true,
-   "ok": false,
-   "error": "ValueError"
-  },
-  {
-   "group": "uprn_alt",
-   "module": "ValeofGlamorganCouncil",
-   "ons_code": "W06000014",
-   "browser_in_source": false,
-   "bins": [
-    "Black bag",
-    "Separated recycling"
-   ],
-   "most_dates_for_one_bin": 48,
-   "span_days": 329,
-   "schedule": "full",
-   "gaps_days": [
-    7,
-    21
-   ],
-   "ok": true,
-   "without_uprn": "same_bins_different_dates"
-  },
-  {
    "group": "url",
    "module": "WakefieldCityCouncil",
    "ons_code": "E08000036",
@@ -688,14 +557,6 @@
    "ok": true
   },
   {
-   "group": "uprn_alt",
-   "module": "WalthamForest",
-   "ons_code": "E09000031",
-   "browser_in_source": true,
-   "ok": false,
-   "error": "TypeError"
-  },
-  {
    "group": "remaining",
    "module": "WaverleyBoroughCouncil",
    "ons_code": "E07000216",
@@ -710,34 +571,6 @@
    "browser_in_source": true,
    "ok": false,
    "error": "TimeoutException"
-  },
-  {
-   "group": "uprn_alt",
-   "module": "WestDevonBoroughCouncil",
-   "ons_code": "E07000047",
-   "browser_in_source": true,
-   "ok": false,
-   "error": "TimeoutException"
-  },
-  {
-   "group": "uprn_alt",
-   "module": "WestMorlandAndFurness",
-   "ons_code": "E06000064",
-   "browser_in_source": false,
-   "bins": [
-    "General Waste",
-    "Recyclable waste"
-   ],
-   "most_dates_for_one_bin": 27,
-   "span_days": 364,
-   "schedule": "full",
-   "gaps_days": [
-    13,
-    14,
-    15
-   ],
-   "ok": true,
-   "without_uprn": "same_schedule"
   },
   {
    "group": "other_id",
@@ -766,14 +599,6 @@
    "browser_in_source": false,
    "ok": false,
    "error": "IndexError"
-  },
-  {
-   "group": "uprn_alt",
-   "module": "WolverhamptonCityCouncil",
-   "ons_code": "E08000031",
-   "browser_in_source": false,
-   "ok": false,
-   "error": "ValueError"
   }
  ]
 }

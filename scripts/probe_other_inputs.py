@@ -2,7 +2,7 @@
 
 Groups, picked from upstream's test inputs and the module's own source:
 - uprn_alt: takes a UPRN in upstream's test, but its source also reads a postcode and a house number, and the test gives all
-  three. Run once with the UPRN only (the known-good answer) and once with the postcode and house number only, and compare: does
+  three. Run once with every input upstream's test gives (the known-good answer) and once with the postcode and house number only, and compare: does
   the council return the same schedule without a UPRN?
 - single: takes a postcode only, or a house number (usually a street name) only.
 - other_id: takes a council-specific reference stored under `uprn` (a street code, a property ID, a USRN), run as upstream's test does.
@@ -111,7 +111,7 @@ def probe_one(group, name, entry, selenium_url):
     use = [k for k in ("uprn", "postcode", "house_number") if entry.get(k)]
     try:
         if group == "uprn_alt":
-            reference = run_with(name, entry, ["uprn"], selenium_url)
+            reference = run_with(name, entry, use, selenium_url)  # every input, as upstream's own test does
             row.update(bp.describe(reference))
             row["ok"] = bool(reference)
             time.sleep(PAUSE)
