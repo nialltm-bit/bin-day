@@ -496,9 +496,9 @@
       "house_input": "number_or_name",
       "needs_selenium": true,
       "bin_types": {
-        "FOOD WASTE: your next weekly collection is on": {
+        "FOOD WASTE": {
           "stream": "food",
-          "label": "FOOD WASTE: your next weekly collection is on"
+          "label": "FOOD WASTE"
         },
         "Garden Waste Collection": {
           "stream": "garden",
@@ -626,21 +626,21 @@
       "house_input": "number_or_name",
       "needs_selenium": true,
       "bin_types": {
-        "Food waste on Tuesdays": {
+        "Food waste": {
           "stream": "food",
-          "label": "Food waste on Tuesdays"
+          "label": "Food waste"
         },
-        "Garden Waste on Tuesdays": {
+        "Garden Waste": {
           "stream": "garden",
-          "label": "Garden Waste on Tuesdays"
+          "label": "Garden Waste"
         },
-        "General waste on Tuesdays": {
+        "General waste": {
           "stream": "general",
-          "label": "General waste on Tuesdays"
+          "label": "General waste"
         },
-        "Recycling on Tuesdays": {
+        "Recycling": {
           "stream": "recycling",
-          "label": "Recycling on Tuesdays"
+          "label": "Recycling"
         }
       },
       "test_address": {

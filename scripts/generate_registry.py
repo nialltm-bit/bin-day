@@ -20,7 +20,7 @@ from datetime import date
 from pathlib import Path
 
 from fetcher import registry
-from fetcher.streams import IGNORED_WORDS, STREAM_WORDS, stream_for, streams_in  # noqa: F401  (re-exported for tests)
+from fetcher.streams import IGNORED_WORDS, STREAM_WORDS, canonical_name, stream_for, streams_in  # noqa: F401  (re-exported for tests)
 
 
 def council_for_postcode(postcode: str) -> str | None:
@@ -37,7 +37,8 @@ def build_entry(row: dict, upstream: dict, code: str, today: str, evidence: dict
     """A registry entry for one probed council, or (None, reason) if it can't be built completely."""
     bin_types = {}
     from_site: list[str] = []
-    for name in row["bins"]:
+    for raw in row["bins"]:
+        name = canonical_name(raw)  # the fetcher names bins the same way, so a round change doesn't break the mapping
         if any(word in name.lower() for word in IGNORED_WORDS):
             continue
         stream = stream_for(name)

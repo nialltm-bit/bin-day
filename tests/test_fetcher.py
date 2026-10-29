@@ -483,3 +483,35 @@ def test_the_same_bin_listed_twice_on_one_day_gives_one_collection(bathnes):
     day = "03/11/2026"
     black = {"type": "Black Rubbish Bin (140L)", "collectionDate": day}
     assert len(normalise(bathnes, {"bins": [black, black]})) == 1
+
+
+@pytest.mark.parametrize(
+    ("raw", "canonical"),
+    [
+        ("Food waste on Tuesdays", "Food waste"),
+        ("Recycling on Wednesday", "Recycling"),
+        ("Garden Waste on Thursdays (fortnightly)", "Garden Waste"),
+        ("FOOD WASTE: your next weekly collection is on", "FOOD WASTE"),
+        ("Recycling - next collection is 12 November", "Recycling"),
+        ("Blue Bin (Friday)", "Blue Bin"),
+        ("General Waste", "General Waste"),
+        ("Saturday", "Saturday"),  # nothing left would be nothing: keep what the council said
+    ],
+)
+def test_bin_names_lose_weekday_and_next_collection_wording(raw, canonical):
+    from fetcher.streams import canonical_name
+
+    assert canonical_name(raw) == canonical
+
+
+def test_a_round_change_to_another_weekday_still_maps_and_keeps_the_same_name(councils):
+    council = {**councils[BATHNES], "bin_types": {"Food waste": {"stream": "food"}}}
+    for day in ("Tuesdays", "Wednesdays"):
+        got = normalise(council, {"bins": [{"type": f"Food waste on {day}", "collectionDate": "03/11/2026"}]})
+        assert [(c.bin_name, c.stream) for c in got] == [("Food waste", "food")]
+
+
+def test_the_registry_rejects_a_bin_name_that_carries_a_weekday():
+    council = {**registry.load()[BATHNES], "bin_types": {"Food waste on Tuesdays": {"stream": "food", "every_weeks": 1}}}
+    problems = registry.validate({"councils": [council]})
+    assert any("should be 'Food waste'" in p for p in problems)
