@@ -79,11 +79,17 @@ and each one needs its bin names and frequencies checked first.
 
 The store, fetcher and feed treat the address key as an opaque string. For a council that needs a UPRN the key is the
 UPRN. For a council that takes a postcode and a house number (Newcastle upon Tyne is the first) there is no UPRN, so
-`subscribe` in the Apps Script makes the key from what was typed (`addressKey` in `apps-script/src/service.ts`):
-`h-` + council code + postcode with no space + the house number or name in lower case with symbols turned into dashes,
-for example `h-E08000021-NE34XE-1`. The same house typed two ways gets the same key, so it is fetched once however many
-people subscribe. The key starts with a letter or digit and holds only letters, digits and dashes, so it can never be
-read as a formula in the Sheet. The Sheet column is still called `uprn`.
+`subscribe` in the Apps Script makes the key from what was typed (`opaqueAddressKey` in `apps-script/src/service.ts`):
+`a-` + the first 32 hex characters of an HMAC-SHA256 of council code, postcode (no space, upper case) and house
+number or name (lower case, symbols turned into dashes). The HMAC secret is the script property `ADDRESS_KEY_SECRET`,
+created automatically the first time it is needed. **Keep it**: if it is lost, the same house gets a new key and is
+fetched again as a new address. The same house typed two ways gets the same key, so it is fetched once however many
+people subscribe. The key holds only letters and digits after `a-`, so it can never be read as a formula in the Sheet,
+and it carries none of the address, so the `results`, `changes` and `subscriptions` tabs hold no postcode or house.
+
+Older rows keep their readable keys (`h-` + council code + postcode + house slug); a new sign-up for an address that
+already has one reuses it rather than being fetched twice. The `addresses` tab still holds the plain postcode and house
+text, because the fetcher needs it to ask the council. The Sheet column is still called `uprn`.
 
 ## What Newcastle taught us about house-number councils
 

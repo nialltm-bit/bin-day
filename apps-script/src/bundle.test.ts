@@ -32,7 +32,12 @@ function load(properties: Record<string, string> = {}, fetched: Fetched = {}, fi
         setProperty: (k: string, v: string) => void (properties[k] = v),
       }),
     },
-    Utilities: { formatDate: () => "2026102812", getUuid: () => "00000000-0000-4000-8000-000000000000" },
+    Utilities: {
+      formatDate: () => "2026102812",
+      getUuid: () => "00000000-0000-4000-8000-000000000000",
+      // Some signed bytes, as Apps Script returns them; the real HMAC is checked in the script, this checks it is wired up.
+      computeHmacSha256Signature: (text: string) => Array.from({ length: 32 }, (_, i) => ((text.length * 31 + i * 17) % 256) - 128),
+    },
     CacheService: {
       getScriptCache: () => ({ get: (k: string) => cache.get(k) ?? null, put: (k: string, v: string) => void cache.set(k, v) }),
     },

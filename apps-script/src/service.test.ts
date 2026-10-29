@@ -478,6 +478,58 @@ describe("councils that take a postcode and house number (no UPRN)", () => {
   it("leaves a UPRN council needing a UPRN", () => {
     expect(handle({ action: "subscribe", ons_code: "E06000022" }, publicDeps())).toEqual({ ok: false, error: "bad uprn" });
   });
+
+  describe("with a key hash (opaque keys)", () => {
+    // Not a real hash: stable, and nothing like its input.
+    const fakeHash = (text: string) => {
+      let h = 0;
+      let out = "";
+      for (let round = 0; round < 8; round++) {
+        for (const ch of `${round}${text}`) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+        out += h.toString(16).padStart(8, "0");
+      }
+      return out;
+    };
+    const hashed = (): Deps => ({ ...publicDeps(), keyHash: fakeHash });
+
+    it("keys the address with a hash that carries none of what was typed", () => {
+      expect(subscribe({}, hashed()).ok).toBe(true);
+      const key = store.addresses[0].uprn;
+      expect(key).toMatch(/^a-[0-9a-f]{32}$/);
+      expect(key.toLowerCase()).not.toContain("ne11aa");
+      expect(key).not.toContain("high");
+      expect(store.subscriptions[0].uprn).toBe(key);
+      expect(store.addresses[0]).toMatchObject({ postcode: "NE1 1AA", house_number: "12 High Street" });
+    });
+
+    it("gives the same key however it is typed, and different keys for different houses", () => {
+      subscribe({}, hashed());
+      subscribe({ postcode: "ne11aa", house_number: "12  HIGH street " }, hashed());
+      subscribe({ house_number: "12A High Street" }, hashed());
+      expect(store.addresses).toHaveLength(2);
+      expect(new Set(store.subscriptions.map((s) => s.uprn)).size).toBe(2);
+    });
+
+    it("lets the fetcher list, save and read results under that key", () => {
+      subscribe({}, hashed());
+      const key = store.addresses[0].uprn;
+      expect(call({ action: "save_success", uprn: key, now: NOW, collections: COLLECTIONS })).toEqual({ ok: true });
+      expect(call({ action: "get_result", uprn: key })).toMatchObject({ ok: true, result: { uprn: key } });
+    });
+
+    it("keeps using an address already stored under the old readable key", () => {
+      subscribe();
+      subscribe({}, hashed());
+      expect(store.addresses).toHaveLength(1);
+      expect(store.addresses[0].uprn).toBe("h-E08000021-NE11AA-12-high-street");
+      expect(store.subscriptions).toHaveLength(2);
+    });
+
+    it("refuses an address that can't be keyed", () => {
+      expect(subscribe({ postcode: "AB1" }, hashed())).toEqual({ ok: false, error: "bad address" });
+      expect(store.addresses).toEqual([]);
+    });
+  });
 });
 
 describe("fetching at sign-up", () => {

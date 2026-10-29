@@ -127,6 +127,8 @@ export interface Deps {
   requestFetch?: () => void;
   /** Says whether another contact-form message may be accepted now (an hourly cap that keeps the form from being flooded). */
   contactAllowed?: () => boolean;
+  /** HMAC-SHA256 of the text with the script's secret, as hex. Makes the store key for an address with no UPRN opaque. */
+  keyHash?: (text: string) => string;
 }
 
 /** The longest message and reply-to the contact form takes, and the most messages kept at once. */
@@ -147,10 +149,11 @@ export type Reply = { ok: true; [key: string]: unknown } | { ok: false; error: s
 const UPRN = /^[0-9]{1,12}$/;
 /**
  * What the store keys an address by. A council that needs a UPRN uses the UPRN. A council that takes a postcode and a
- * house number has no UPRN, so it uses a key made from those (see addressKey). Both start with a digit or a letter,
+ * house number has no UPRN, so it uses a key made from those (see opaqueAddressKey; older rows hold the readable form from
+ * addressKey, which is still recognised). Both start with a digit or a letter,
  * so a key can never be read as a formula in the Sheet.
  */
-const ADDRESS_ID = /^(?:[0-9]{1,12}|h-[ENSW][0-9]{8}-[A-Z0-9]{5,7}-[a-z0-9-]{1,40})$/;
+const ADDRESS_ID = /^(?:[0-9]{1,12}|a-[0-9a-f]{32}|h-[ENSW][0-9]{8}-[A-Z0-9]{5,7}-[a-z0-9-]{1,40})$/;
 const ONS_CODE = /^[ENSW][0-9]{8}$/;
 const TIMESTAMP = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+(Z|[+-][0-9]{2}:[0-9]{2})$/;
 const DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
@@ -161,11 +164,20 @@ const POSTCODE = /^[A-Za-z0-9][A-Za-z0-9 ]{1,9}$/;
 const HOUSE_NUMBER = /^[A-Za-z0-9][A-Za-z0-9 ,'./-]{0,99}$/;
 
 /**
- * The store key for an address with no UPRN: the council, the postcode with no space, and the house number or name in
- * lower case with anything that isn't a letter or digit turned into one dash. The same address typed two ways ("12 ",
+ * The older, readable store key for an address with no UPRN: the council, the postcode with no space, and the house number or name in
+ * lower case with anything that isn't a letter or digit turned into one dash. New sign-ups use opaqueAddressKey; this is only
+ * used to find an address row made before that. The same address typed two ways ("12 ",
  * "12") gets the same key, so it is fetched once however many people subscribe. Null if there is nothing usable.
  */
 export function addressKey(onsCode: string, postcode: string, houseNumber: string): string | null {
+  const { compact, house } = tidyAddress(postcode, houseNumber);
+  const key = `h-${onsCode}-${compact}-${house}`;
+  return ADDRESS_ID.test(key) ? key : null;
+}
+
+/** An address as typed, tidied so the same address typed two ways comes out the same: the postcode with no space in upper case, the
+ * house number or name in lower case with anything that isn't a letter or digit turned into one dash. */
+function tidyAddress(postcode: string, houseNumber: string): { compact: string; house: string } {
   const compact = postcode.replace(/\s+/g, "").toUpperCase();
   const house = houseNumber
     .toLowerCase()
@@ -173,7 +185,19 @@ export function addressKey(onsCode: string, postcode: string, houseNumber: strin
     .replace(/^-+|-+$/g, "")
     .slice(0, 40)
     .replace(/-+$/g, "");
-  const key = `h-${onsCode}-${compact}-${house}`;
+  return { compact, house };
+}
+
+/**
+ * The store key for an address with no UPRN, which says nothing about the address: a keyed hash (`hash` is HMAC-SHA256 with a secret that
+ * only the script holds) of the council, postcode and house, cut to 128 bits. The same address always gets the same key, so it is fetched
+ * once however many people subscribe, but the key can't be turned back into the address, even by someone who tries every postcode, and
+ * the dates, changes and feeds tabs no longer contain the address. Null if there is nothing usable.
+ */
+export function opaqueAddressKey(onsCode: string, postcode: string, houseNumber: string, hash: (text: string) => string): string | null {
+  const { compact, house } = tidyAddress(postcode, houseNumber);
+  if (compact === "" || house === "") return null;
+  const key = `a-${hash(`${onsCode}|${compact}|${house}`).slice(0, 32)}`;
   return ADDRESS_ID.test(key) ? key : null;
 }
 
@@ -259,9 +283,14 @@ function subscribe(request: Record<string, unknown>, deps: Deps): Reply {
     if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
     key = uprn;
   } else {
-    const made = typeof postcode === "string" && typeof house_number === "string" ? addressKey(ons_code, postcode, house_number) : null;
-    if (made === null) return fail("bad address");
-    key = made;
+    if (typeof postcode !== "string" || typeof house_number !== "string") return fail("bad address");
+    const readable = addressKey(ons_code, postcode, house_number);
+    if (readable === null) return fail("bad address");
+    // Without a hash (tests, or a script not set up for it) the readable key is used. Otherwise the opaque one, except for an
+    // address that already has a row under the readable key: it keeps that row, so it isn't fetched twice.
+    const opaque = deps.keyHash ? opaqueAddressKey(ons_code, postcode, house_number, deps.keyHash) : null;
+    if (deps.keyHash && opaque === null) return fail("bad address");
+    key = opaque !== null && !deps.tables.hasAddress(readable) ? opaque : readable;
   }
   if (!deps.newToken || !deps.newId) return fail("not configured");
 
