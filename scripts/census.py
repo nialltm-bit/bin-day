@@ -38,7 +38,8 @@ PLATFORM_RULES = [
     ("iTouchVision", "domain", r"itouchvision"),
     ("ReCollect", "domain", r"recollect\.net"),
     ("Verint (empro)", "domain", r"verintcloudservices"),
-    ("Jadu", "keyword", r"\bjadu\b|myforms\.[a-z\-]+\.gov\.uk"),
+    ("Jadu", "keyword", r"\bjadu\b|myforms\.[a-z\-]+\.gov\.uk|/xfp/form"),
+    ("Ebase forms", "path", r"/ebase/"),
     ("Power Apps portal (Dynamics)", "domain", r"powerappsportals\.com|\.crm[0-9]*\.dynamics\.com"),
     ("Oncreate", "domain", r"oncreate\.app"),
     ("Mendix", "keyword", r"mendix"),
@@ -119,6 +120,56 @@ def hosts_in(source: str) -> list[str]:
     return found
 
 
+TLD = re.compile(r"\.(?:gov\.uk|gov\.wales|gov\.scot|org\.uk|co\.uk|uk|org|com|net|app|digital|cymru)$")
+
+
+def host_pattern(host: str) -> str:
+    """The host with the council's own name replaced by <council>, so 'forms.chorley.gov.uk' and 'forms.sstaffs.gov.uk' match."""
+    base = TLD.sub("", host)
+    labels = base.split(".")
+    if len(labels) == 1:
+        return "<council>" + host[len(base):]
+    return ".".join(labels[:-1] + ["<council>"]) + host[len(base):]
+
+
+def path_pattern(path: str) -> str:
+    segments = [seg for seg in path.split("?")[0].split("/") if seg][:3]
+    out = []
+    for seg in segments:
+        seg = seg.lower()
+        out.append("<id>" if re.search(r"[0-9{}%]", seg) and not re.fullmatch(r"v[0-9]+|r[0-9]+", seg) else seg)
+    return "/" + "/".join(out)
+
+
+def technique(source: str) -> str:
+    """A rough description of how the module reads the page, for clustering."""
+    tags = []
+    if re.search(r"selenium|webdriver", source):
+        tags.append("browser")
+    if "__viewstate" in source or "__eventvalidation" in source:
+        tags.append("aspnet-form")
+    if "admin-ajax.php" in source or "wp-json" in source:
+        tags.append("wordpress")
+    if "umbraco" in source:
+        tags.append("umbraco")
+    if re.search(r"\.json\(\)|json\.loads", source):
+        tags.append("json")
+    if "beautifulsoup" in source:
+        tags.append("html")
+    if "envelope" in source and "soap" in source:
+        tags.append("soap")
+    return "+".join(tags) or "other"
+
+
+def endpoint_of(source: str, url: str) -> str:
+    """The URL that does the work: the first called URL with a path that is not the council's main page, else the input URL."""
+    urls = [u for u in re.findall(r"https?://[A-Za-z0-9.\-]+(?:/[^\s\"'`)<>]*)?", source) if not any(n in u for n in NOISE_HOSTS)]
+    for u in urls:
+        if urlparse(u).path.strip("/"):
+            return u
+    return urls[0] if urls else url
+
+
 def platform_of(name: str, source: str, url: str, entry: dict) -> tuple[str, str, str]:
     """(platform, confidence, evidence). Confidence is high for a vendor domain or path, medium for a keyword, low if
     the module is a bespoke scraper of the council's own site or a third-party page we could not name."""
@@ -151,7 +202,7 @@ def report_reasons() -> dict[str, str]:
     reasons = {}
     for line in REPORT.read_text().splitlines():
         match = re.match(r"- (\w+): (.+)", line)
-        if match:
+        if match and "already in the registry" not in match.group(2):  # true when it ran; the registry has since changed
             reasons[match.group(1)] = match.group(2)
     return reasons
 
@@ -241,6 +292,11 @@ def main(out_dir, population_path=None):
             if host not in hosts:
                 hosts.insert(0, host)
         row["platform"], row["platform_confidence"], row["platform_evidence"] = platform, confidence, evidence
+        endpoint = urlparse(endpoint_of(source, url))
+        row["endpoint_host"] = endpoint.hostname or ""
+        row["endpoint_host_pattern"] = host_pattern(endpoint.hostname) if endpoint.hostname else ""
+        row["endpoint_path_pattern"] = path_pattern(endpoint.path) if endpoint.hostname else ""
+        row["technique"] = technique(source)
         row["domains"] = " ".join(hosts[:6])
 
         reg = registry.get(module)
@@ -306,8 +362,24 @@ def main(out_dir, population_path=None):
             "our_status": ("supported" if code in registry_codes else best["our_status"]) if best else "no_upstream_module",
         })
 
+    bespoke = [r for r in rows if r.get("platform", "").startswith("Bespoke")]
+    clusters: dict[tuple, list[dict]] = {}
+    for r in bespoke:
+        clusters.setdefault((r["endpoint_host_pattern"], r["endpoint_path_pattern"].split("/")[1] if r["endpoint_path_pattern"] != "/" else ""), []).append(r)
+    cluster_rows = []
+    for (host, first), members in sorted(clusters.items(), key=lambda kv: (-len(kv[1]), kv[0])):
+        cluster_rows.append({
+            "cluster": f"{host}/{first}", "host_pattern": host, "first_path_segment": first, "modules": len(members),
+            "techniques": " ".join(sorted({m["technique"] for m in members})),
+            "members": " ".join(m["module"] for m in members),
+        })
+
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
+    with open(out / "coverage-census-bespoke-clusters.csv", "w", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=list(cluster_rows[0]))
+        writer.writeheader()
+        writer.writerows(cluster_rows)
     for name, data in (("coverage-census-modules.csv", rows), ("coverage-census-councils.csv", council_rows)):
         fields = list(dict.fromkeys(k for r in data for k in r))
         with open(out / name, "w", newline="") as fh:

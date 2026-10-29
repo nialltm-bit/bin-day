@@ -89,7 +89,7 @@ E07000063,Lewes,England,,LewesDistrictCouncil,LewesDistrictCouncil,True,uprn,Tru
 E07000064,Rother,England,,RotherDistrictCouncil,RotherDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
 E07000065,Wealden,England,,WealdenDistrictCouncil,WealdenDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
 E07000066,Basildon,England,,BasildonCouncil,BasildonCouncil,True,uprn,True,True,Power Apps portal (Dynamics),high,passed,False,False,False,never_probed
-E07000067,Braintree,England,,BraintreeDistrictCouncil,BraintreeDistrictCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000067,Braintree,England,,BraintreeDistrictCouncil,BraintreeDistrictCouncil,True,uprn+postcode,True,False,Jadu,medium,passed,False,False,False,never_probed
 E07000068,Brentwood,England,,GooglePublicCalendarCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
 E07000069,Castle Point,England,,CastlepointDistrictCouncil,CastlepointDistrictCouncil,True,other_id,False,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
 E07000070,Chelmsford,England,,ChelmsfordCityCouncil,ChelmsfordCityCouncil,True,postcode+house_number,False,True,Google Calendar (public iCal),high,passed,True,False,False,left_out: probe failed (ValueError)
@@ -107,7 +107,7 @@ E07000081,Gloucester,England,,GloucesterCityCouncil,GloucesterCityCouncil,True,u
 E07000082,Stroud,England,,StroudDistrictCouncil,StroudDistrictCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
 E07000083,Tewkesbury,England,,TewkesburyBoroughCouncil,TewkesburyBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
 E07000084,Basingstoke and Deane,England,,BasingstokeCouncil,BasingstokeCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
-E07000085,East Hampshire,England,,EastHampshireDC GooglePublicCalendarCouncil,EastHampshireDC,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,True,supported
+E07000085,East Hampshire,England,,EastHampshireDC GooglePublicCalendarCouncil,EastHampshireDC,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,False,"left_out: the bins found have no general waste bin, so the calendar would be incomplete"
 E07000086,Eastleigh,England,,EastleighBoroughCouncil,EastleighBoroughCouncil,True,uprn,True,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
 E07000087,Fareham,England,,FarehamBoroughCouncil,FarehamBoroughCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
 E07000088,Gosport,England,,GosportBoroughCouncil,GosportBoroughCouncil,True,postcode,False,False,Supatrak,high,passed,False,False,False,never_probed
@@ -115,7 +115,7 @@ E07000089,Hart,England,,HartDistrictCouncil,HartDistrictCouncil,True,uprn,True,F
 E07000090,Havant,England,,GooglePublicCalendarCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
 E07000091,New Forest,England,,NewForestCouncil,NewForestCouncil,True,uprn+postcode,True,True,Civica UFS,high,passed,False,False,False,never_probed
 E07000092,Rushmoor,England,,RushmoorCouncil,RushmoorCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
-E07000093,Test Valley,England,,TestValleyBoroughCouncil,TestValleyBoroughCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,True,supported
+E07000093,Test Valley,England,,TestValleyBoroughCouncil,TestValleyBoroughCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,False,"left_out: the bins found have no general waste and no recycling bin, so the calendar would be incomplete"
 E07000094,Winchester,England,,WinchesterCityCouncil,WinchesterCityCouncil,True,postcode+house_number,False,True,iTouchVision,high,passed,True,True,True,supported
 E07000095,Broxbourne,England,,BroxbourneCouncil,BroxbourneCouncil,True,uprn+postcode,True,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
 E07000096,Dacorum,England,,DacorumBoroughCouncil,DacorumBoroughCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
@@ -133,10 +133,10 @@ E07000111,Sevenoaks,England,,SevenoaksDistrictCouncil,SevenoaksDistrictCouncil,T
 E07000112,Folkestone and Hythe,England,,FolkestoneandHytheDistrictCouncil,FolkestoneandHytheDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
 E07000113,Swale,England,,SwaleBoroughCouncil,SwaleBoroughCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,passed,True,True,False,left_out: unrecognised bin name 'green bin'
 E07000114,Thanet,England,,ThanetDistrictCouncil,ThanetDistrictCouncil,True,uprn,True,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
-E07000115,Tonbridge and Malling,England,,TonbridgeAndMallingBC,TonbridgeAndMallingBC,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
+E07000115,Tonbridge and Malling,England,,TonbridgeAndMallingBC,TonbridgeAndMallingBC,True,uprn+postcode,True,False,Jadu,medium,failed,False,False,False,never_probed
 E07000116,Tunbridge Wells,England,,TunbridgeWellsCouncil,TunbridgeWellsCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
 E07000117,Burnley,England,,BurnleyBoroughCouncil,BurnleyBoroughCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
-E07000118,Chorley,England,,ChorleyCouncil,ChorleyCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000118,Chorley,England,,ChorleyCouncil,ChorleyCouncil,True,uprn+postcode,True,False,Jadu,medium,passed,False,False,False,never_probed
 E07000119,Fylde,England,,,,False,,,,,,,False,False,False,no_upstream_module
 E07000120,Hyndburn,England,,HyndburnBoroughCouncil,HyndburnBoroughCouncil,True,uprn+postcode,True,True,iTouchVision,high,passed,False,False,False,never_probed
 E07000121,Lancaster,England,,LancasterCityCouncil,LancasterCityCouncil,True,postcode+house_number,False,False,Whitespace,high,failed,False,False,False,never_probed
@@ -144,7 +144,7 @@ E07000122,Pendle,England,,GooglePublicCalendarCouncil,GooglePublicCalendarCounci
 E07000123,Preston,England,,PrestonCityCouncil,PrestonCityCouncil,True,postcode+house_number,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
 E07000124,Ribble Valley,England,,GooglePublicCalendarCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
 E07000125,Rossendale,England,,GooglePublicCalendarCouncil,GooglePublicCalendarCouncil,True,ical_url,False,False,Google Calendar (public iCal),high,passed,False,False,False,never_probed
-E07000126,South Ribble,England,,SouthRibbleCouncil,SouthRibbleCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000126,South Ribble,England,,SouthRibbleCouncil,SouthRibbleCouncil,True,uprn+postcode,True,False,Jadu,medium,passed,False,False,False,never_probed
 E07000127,West Lancashire,England,,WestLancashireBoroughCouncil,WestLancashireBoroughCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
 E07000128,Wyre,England,,WyreCouncil,WyreCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
 E07000129,Blaby,England,,BlabyDistrictCouncil,BlabyDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
@@ -176,9 +176,9 @@ E07000174,Mansfield,England,,MansfieldDistrictCouncil,MansfieldDistrictCouncil,T
 E07000175,Newark and Sherwood,England,,NewarkAndSherwoodDC,NewarkAndSherwoodDC,True,other_id,False,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
 E07000176,Rushcliffe,England,,RushcliffeBoroughCouncil,RushcliffeBoroughCouncil,True,uprn+postcode,True,True,RenderForm.aspx form engine,high,passed,False,False,False,never_probed
 E07000177,Cherwell,England,,CherwellDistrictCouncil,CherwellDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
-E07000178,Oxford,England,,OxfordCityCouncil,OxfordCityCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
-E07000179,South Oxfordshire,England,,SouthOxfordshireCouncil,SouthOxfordshireCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
-E07000180,Vale of White Horse,England,,ValeofWhiteHorseCouncil,ValeofWhiteHorseCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000178,Oxford,England,,OxfordCityCouncil,OxfordCityCouncil,True,uprn+postcode,True,False,Jadu,medium,passed,False,False,False,never_probed
+E07000179,South Oxfordshire,England,,SouthOxfordshireCouncil,SouthOxfordshireCouncil,True,uprn,True,False,Ebase forms,high,passed,False,False,False,never_probed
+E07000180,Vale of White Horse,England,,ValeofWhiteHorseCouncil,ValeofWhiteHorseCouncil,True,uprn,True,False,Ebase forms,high,passed,False,False,False,never_probed
 E07000181,West Oxfordshire,England,,WestOxfordshireDistrictCouncil,WestOxfordshireDistrictCouncil,True,postcode+house_number,False,True,Salesforce Experience Cloud,high,passed,True,True,True,supported
 E07000192,Cannock Chase,England,,CannockChaseDistrictCouncil,CannockChaseDistrictCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
 E07000193,East Staffordshire,England,,EastStaffordshireBoroughCouncil,EastStaffordshireBoroughCouncil,True,url_property_ref,False,True,Bespoke council site (browser form),low,failed,False,False,False,never_probed
@@ -221,7 +221,7 @@ E07000237,Worcester,England,,WorcesterCityCouncil,WorcesterCityCouncil,True,uprn
 E07000238,Wychavon,England,,WychavonDistrictCouncil,WychavonDistrictCouncil,True,uprn+postcode,True,True,Bespoke council site (browser form),low,passed,False,False,False,never_probed
 E07000239,Wyre Forest,England,,WyreForestDistrictCouncil,WyreForestDistrictCouncil,True,postcode+house_number,False,False,Bespoke council site (HTML/JSON),low,passed,True,True,False,left_out: source.url must be an https URL
 E07000240,St Albans,England,,StAlbansCityAndDistrictCouncil,StAlbansCityAndDistrictCouncil,True,uprn,True,False,Bespoke council site (HTML/JSON),low,failed,False,False,False,never_probed
-E07000241,Welwyn Hatfield,England,,WelhatCouncil,WelhatCouncil,True,uprn+postcode,True,False,Bespoke council site (HTML/JSON),low,passed,False,False,False,never_probed
+E07000241,Welwyn Hatfield,England,,WelhatCouncil,WelhatCouncil,True,uprn+postcode,True,False,Jadu,medium,passed,False,False,False,never_probed
 E07000242,East Hertfordshire,England,,EastHertsCouncil,EastHertsCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,failed,False,False,False,never_probed
 E07000243,Stevenage,England,,StevenageBoroughCouncil,StevenageBoroughCouncil,True,uprn,True,False,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed
 E07000244,East Suffolk,England,,EastSuffolkCouncil,EastSuffolkCouncil,True,uprn+postcode,True,True,Granicus/Firmstep AchieveForms,high,passed,False,False,False,never_probed

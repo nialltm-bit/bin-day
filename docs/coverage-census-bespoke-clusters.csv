@@ -1,0 +1,175 @@
+cluster,host_pattern,first_path_segment,modules,techniques,members
+www.<council>.gov.uk/,www.<council>.gov.uk,,5,browser+html html,HinckleyandBosworthBoroughCouncil LondonBoroughOfRichmondUponThames NorthEastLincs NuneatonBedworthBoroughCouncil WirralCouncil
+www.<council>.gov.uk/bins-and-recycling,www.<council>.gov.uk,bins-and-recycling,5,browser+html html json+html,CneSiarCouncil HullCityCouncil NorthEastDerbyshireDistrictCouncil SalfordCityCouncil SeftonCouncil
+www.<council>.gov.uk/homepage,www.<council>.gov.uk,homepage,5,html,CherwellDistrictCouncil LichfieldDistrictCouncil NewcastleUnderLymeCouncil RunnymedeBoroughCouncil TamworthBoroughCouncil
+www.<council>.gov.uk/info,www.<council>.gov.uk,info,4,html json+html,BirminghamCityCouncil KingsLynnandWestNorfolkBC RoyalBoroughofGreenwich SwindonBoroughCouncil
+www.<council>.gov.uk/umbraco,www.<council>.gov.uk,umbraco,4,umbraco+html umbraco+json+html,CornwallCouncil MerthyrTydfilCountyBoroughCouncil RushmoorCouncil TeignbridgeCouncil
+<council>.co.uk/house.php,<council>.co.uk,house.php,3,html,EastbourneBoroughCouncil EnvironmentFirst LewesDistrictCouncil
+www.<council>.gov.uk/article,www.<council>.gov.uk,article,3,browser+html html,StHelensBC SunderlandCityCouncil WestLothianCouncil
+api.<council>.gov.uk/api,api.<council>.gov.uk,api,2,json,MedwayCouncil ReadingBoroughCouncil
+bincollections.<council>.gov.uk/bincollections,bincollections.<council>.gov.uk,bincollections,2,html,BromsgroveDistrictCouncil RedditchBoroughCouncil
+bins.<council>.net/api,bins.<council>.net,api,2,json,FenlandDistrictCouncil RotherhamCouncil
+community.<council>.gov.uk/s,community.<council>.gov.uk,s,2,browser+html,CotswoldDistrictCouncil ForestOfDeanDistrictCouncil
+maps.<council>.gov.uk/,maps.<council>.gov.uk,,2,html json,EastHampshireDC MonmouthshireCountyCouncil
+my.<council>.gov.uk/location,my.<council>.gov.uk,location,2,html,CharnwoodBoroughCouncil OadbyAndWigstonBoroughCouncil
+recyclingservices.<council>.gov.uk/,recyclingservices.<council>.gov.uk,,2,other,BrentCouncil BromleyBoroughCouncil
+servicelayer3c.<council>.net/wastecalendar,servicelayer3c.<council>.net,wastecalendar,2,json json+html,CambridgeCityCouncil SouthCambridgeshireCouncil
+waste-services.<council>.gov.uk/,waste-services.<council>.gov.uk,,2,other,KingstonUponThamesCouncil LondonBoroughSutton
+www.<council>.co.uk/get_calendar.php,www.<council>.co.uk,get_calendar.php,2,json,DundeeCityCouncil SouthAyrshireCouncil
+www.<council>.gov.uk/bincollections,www.<council>.gov.uk,bincollections,2,html,BasingstokeCouncil WyreCouncil
+www.<council>.gov.uk/binday,www.<council>.gov.uk,binday,2,browser+html,SouthKestevenDistrictCouncil WestBerkshireCouncil
+www.<council>.gov.uk/bins-recycling-and-street-cleaning,www.<council>.gov.uk,bins-recycling-and-street-cleaning,2,html,CumberlandCouncil WestMorlandAndFurness
+www.<council>.gov.uk/check-your-collection-day,www.<council>.gov.uk,check-your-collection-day,2,browser+html,BaberghDistrictCouncil MidSuffolkDistrictCouncil
+www.<council>.gov.uk/directory,www.<council>.gov.uk,directory,2,html json+html,EdinburghCityCouncil ShetlandIslandsCouncil
+www.<council>.gov.uk/en,www.<council>.gov.uk,en,2,browser+html html,BlaenauGwentCountyBoroughCouncil RhonddaCynonTaffCouncil
+www.<council>.gov.uk/recycling-and-waste,www.<council>.gov.uk,recycling-and-waste,2,html wordpress+json+html,WealdenDistrictCouncil WestDunbartonshireCouncil
+www.<council>.gov.uk/resident,www.<council>.gov.uk,resident,2,browser+html html,ArmaghBanbridgeCraigavonCouncil CeredigionCountyCouncil
+www.<council>.gov.uk/rubbish-and-recycling,www.<council>.gov.uk,rubbish-and-recycling,2,browser+html html,ArgyllandButeCouncil WokinghamBoroughCouncil
+www.<council>.gov.uk/rubbish-recycling,www.<council>.gov.uk,rubbish-recycling,2,browser+html html,BarkingDagenham HerefordshireCouncil
+www.<council>.gov.uk/services,www.<council>.gov.uk,services,2,browser+html html,EastDunbartonshireCouncil EnfieldCouncil
+www.<council>.gov.uk/site,www.<council>.gov.uk,site,2,json other,EalingCouncil LondonBoroughEaling
+www.<council>.gov.uk/waste-and-recycling,www.<council>.gov.uk,waste-and-recycling,2,html json+html,BedfordshireCouncil WolverhamptonCityCouncil
+www.<council>.gov.uk/waste-collection-schedule,www.<council>.gov.uk,waste-collection-schedule,2,html,EastLothianCouncil NorthTynesideCouncil
+www.<council>.gov.uk/where-i-live,www.<council>.gov.uk,where-i-live,2,browser+html html,SouthStaffordshireDistrictCouncil WakefieldCityCouncil
+<council>.co.uk/wp-admin,<council>.co.uk,wp-admin,1,wordpress+json,LeicesterCityCouncil
+<council>.gov.uk/,<council>.gov.uk,,1,json+html,LondonBoroughLewisham
+<council>.gov.uk/addressfinder,<council>.gov.uk,addressfinder,1,json+html,EastDevonDC
+<council>.gov.uk/bin-days,<council>.gov.uk,bin-days,1,browser+html,EastRenfrewshireCouncil
+<council>.gov.uk/bins,<council>.gov.uk,bins,1,html,LiverpoolCityCouncil
+<council>.gov.uk/bins-littering-and-the-environment,<council>.gov.uk,bins-littering-and-the-environment,1,browser+html,SwaleBoroughCouncil
+<council>.gov.uk/repositories,<council>.gov.uk,repositories,1,json+html,ExeterCityCouncil
+<council>.gov.uk/residents,<council>.gov.uk,residents,1,html,AntrimAndNewtonabbeyCouncil
+<council>.gov.uk/wasteandrecycling,<council>.gov.uk,wasteandrecycling,1,browser+html,TestValleyBoroughCouncil
+api-2.<council>.gov.uk/incab,api-2.<council>.gov.uk,incab,1,json,TewkesburyBoroughCouncil
+api.<council>.co.uk/get-bin-collection-calendar,api.<council>.co.uk,get-bin-collection-calendar,1,json,GedlingBoroughCouncil
+api.<council>.digital/openapi,api.<council>.digital,openapi,1,json,WestNorthamptonshireCouncil
+api.<council>.gov.uk/public,api.<council>.gov.uk,public,1,json,LeedsCityCouncil
+api.<council>.gov.uk/v1,api.<council>.gov.uk,v1,1,json+html,StratfordUponAvonCouncil
+api.<council>.gov.uk/wastecomp,api.<council>.gov.uk,wastecomp,1,json,SouthGloucestershireCouncil
+app.<council>.gov.uk/bin-collection,app.<council>.gov.uk,bin-collection,1,html,IpswichBoroughCouncil
+app.<council>.gov.uk/bincollection,app.<council>.gov.uk,bincollection,1,aspnet-form+html,NewarkAndSherwoodDC
+apps.<council>.gov.uk/cpapps,apps.<council>.gov.uk,cpapps,1,html,CastlepointDistrictCouncil
+apps.<council>.gov.uk/myneighbourhood,apps.<council>.gov.uk,myneighbourhood,1,aspnet-form+html,WiganBoroughCouncil
+area.<council>.gov.uk/findaddress,area.<council>.gov.uk,findaddress,1,browser+html,BroadlandDistrictCouncil
+authwebservice.<council>.gov.uk/authenticationwebservice.asmx,authwebservice.<council>.gov.uk,authenticationwebservice.asmx,1,json+soap,CardiffCouncil
+beta.<council>.gov.uk/bins-and-recycling,beta.<council>.gov.uk,bins-and-recycling,1,browser+html,NeathPortTalbotCouncil
+bincollection.<council>.gov.uk/details,bincollection.<council>.gov.uk,details,1,html,NewhamCouncil
+bincollection.<council>.gov.uk/postcode,bincollection.<council>.gov.uk,postcode,1,browser+html,NorthumberlandCouncil
+bindayfinder.<council>.gov.uk/refuse_roads.php,bindayfinder.<council>.gov.uk,refuse_roads.php,1,html,MorayCouncil
+bins.<council>.gov.uk/,bins.<council>.gov.uk,,1,browser+html,UttlesfordDistrictCouncil
+bins.<council>.gov.uk/property,bins.<council>.gov.uk,property,1,html,ShropshireCouncil
+bridgendportal.<council>.net/,bridgendportal.<council>.net,,1,json+html,BridgendCountyBoroughCouncil
+cag.<council>.gov.uk/bincollections,cag.<council>.gov.uk,bincollections,1,html,WalsallCouncil
+ccdc.opendata.<council>/dynamiccall.dll,ccdc.opendata.<council>,dynamiccall.dll,1,html,CannockChaseDistrictCouncil
+cms.<council>.gov.uk/bin-collection-search,cms.<council>.gov.uk,bin-collection-search,1,json,NorthNorthamptonshireCouncil
+dac.<council>.gov.uk/bindayfinder,dac.<council>.gov.uk,bindayfinder,1,json+html,TelfordAndWrekinCouncil
+digital.<council>.gov.uk/bincollectioncalendar,digital.<council>.gov.uk,bincollectioncalendar,1,html,SolihullCouncil
+digitalservices.<council>.gov.uk/wasteday,digitalservices.<council>.gov.uk,wasteday,1,browser+html,IsleOfWightCouncil
+diogel.gwynedd.<council>.cymru/daearyddol,diogel.gwynedd.<council>.cymru,daearyddol,1,html,GwyneddCouncil
+el2.<council>.gov.uk/myarea,el2.<council>.gov.uk,myarea,1,json,HastingsBoroughCouncil
+enviroservices.<council>.gov.uk/link,enviroservices.<council>.gov.uk,link,1,browser+html,BrightonandHoveCityCouncil
+estates7.<council>.gov.uk/propertyportal,estates7.<council>.gov.uk,propertyportal,1,html,WarwickDistrictCouncil
+fixmystreet.<council>.gov.uk/,fixmystreet.<council>.gov.uk,,1,other,MertonCouncil
+forms.<council>.gov.uk/bincollections,forms.<council>.gov.uk,bincollections,1,html,WindsorAndMaidenheadCouncil
+forms.<council>.gov.uk/waste,forms.<council>.gov.uk,waste,1,html,NorthSomersetCouncil
+forms.<council>.gov.uk/xforms,forms.<council>.gov.uk,xforms,1,browser+html,NorthNorfolkDistrictCouncil
+geoapi.<council>.gov.uk/v1,geoapi.<council>.gov.uk,v1,1,json+html,DorsetCouncil
+geoserver.<council>.gov.uk/<id>,geoserver.<council>.gov.uk,<id>,1,json+html,NottinghamCityCouncil
+gis.<council>.gov.uk/<id>,gis.<council>.gov.uk,<id>,1,json,StAlbansCityAndDistrictCouncil
+ilambassadorformsprod.<council>.net/wastecollectiondays,ilambassadorformsprod.<council>.net,wastecollectiondays,1,html,WiltshireCouncil
+info.<council>.gov.uk/webservices,info.<council>.gov.uk,webservices,1,json,AmberValleyBoroughCouncil
+lite.<council>.gov.uk/bincollections,lite.<council>.gov.uk,bincollections,1,json,TamesideMBCouncil
+m.<council>.gov.uk/bin_collections,m.<council>.gov.uk,bin_collections,1,json,NorthLincolnshireCouncil
+maldon.<council>.co.uk/maldon,maldon.<council>.co.uk,maldon,1,html,MaldonDistrictCouncil
+maps.<council>.gov.uk/isharelive.web,maps.<council>.gov.uk,isharelive.web,1,json,SouthDerbyshireDistrictCouncil
+maps.<council>.gov.uk/map,maps.<council>.gov.uk,map,1,json+html,CheltenhamBoroughCouncil
+maps.<council>.gov.uk/mywestsuffolk.aspx,maps.<council>.gov.uk,mywestsuffolk.aspx,1,html,WestSuffolkCouncil
+my.<council>.gov.uk/data,my.<council>.gov.uk,data,1,json+html,NorthWestLeicestershire
+my.<council>.gov.uk/myeden.aspx,my.<council>.gov.uk,myeden.aspx,1,other,EdenDistrictCouncil
+my.<council>.gov.uk/recyclerefuse,my.<council>.gov.uk,recyclerefuse,1,browser+html,LondonBoroughRedbridge
+my.<council>.gov.uk/set-location,my.<council>.gov.uk,set-location,1,html,MeltonBoroughCouncil
+my.<council>.gov.uk/set-location.php,my.<council>.gov.uk,set-location.php,1,html,BlabyDistrictCouncil
+myaccount.<council>.gov.uk/article,myaccount.<council>.gov.uk,article,1,browser+html,GreatYarmouthBoroughCouncil
+myaccount.<council>.gov.uk/bin-collections,myaccount.<council>.gov.uk,bin-collections,1,html,StockportBoroughCouncil
+mybins.<council>.gov.uk/api,mybins.<council>.gov.uk,api,1,json,BlackburnCouncil
+myproperty.<council>.gov.uk/molevalley,myproperty.<council>.gov.uk,molevalley,1,json+html,MoleValleyDistrictCouncil
+myvale.<council>.gov.uk/getdata.aspx,myvale.<council>.gov.uk,getdata.aspx,1,json+html,ValeofGlamorganCouncil
+nearest.<council>.gov.uk/property,nearest.<council>.gov.uk,property,1,html,PembrokeshireCountyCouncil
+online.<council>.gov.uk/apps,online.<council>.gov.uk,apps,1,html,AberdeenshireCouncil
+online.<council>.gov.uk/find-bin-collection-day,online.<council>.gov.uk,find-bin-collection-day,1,aspnet-form+html,BelfastCityCouncil
+onlineservices.<council>.gov.uk/forms,onlineservices.<council>.gov.uk,forms,1,html,GlasgowCityCouncil
+portal.<council>.gov.uk/bincollectiondates,portal.<council>.gov.uk,bincollectiondates,1,html,OldhamCouncil
+portal.digital.<council>.gov.uk/w,portal.digital.<council>.gov.uk,w,1,browser+html,AshfieldDistrictCouncil
+portal.waste.<council>.gov.uk/api,portal.waste.<council>.gov.uk,api,1,json,DoverDistrictCouncil
+prod-17.uksouth.logic.<council>.com/workflows,prod-17.uksouth.logic.<council>.com,workflows,1,json,BCPCouncil
+recycling.<council>.gov.uk/api,recycling.<council>.gov.uk,api,1,json,FalkirkCouncil
+recyclingandrubbishcollections.<council>.gov.uk/api,recyclingandrubbishcollections.<council>.gov.uk,api,1,json,LondonBoroughCamdenCouncil
+refusecalendarapi.<council>.gov.uk/csrf,refusecalendarapi.<council>.gov.uk,csrf,1,json,DenbighshireCouncil
+report.<council>.gov.uk/,report.<council>.gov.uk,,1,other,PeterboroughCityCouncil
+satellite.<council>.gov.uk/environment,satellite.<council>.gov.uk,environment,1,html,HorshamDistrictCouncil
+secure.<council>.gov.uk/binday,secure.<council>.gov.uk,binday,1,html,DerbyCityCouncil
+secure.<council>.gov.uk/inmyarea,secure.<council>.gov.uk,inmyarea,1,html,HarrogateBoroughCouncil
+secure.<council>.gov.uk/waste,secure.<council>.gov.uk,waste,1,browser+html,AshfordBoroughCouncil
+selfserve.<council>.gov.uk/wccroundlookup,selfserve.<council>.gov.uk,wccroundlookup,1,html,WorcesterCityCouncil
+selfservice.<council>.gov.uk/service,selfservice.<council>.gov.uk,service,1,browser+html,PrestonCityCouncil
+selfservice.<council>.gov.uk/wdcroundlookup,selfservice.<council>.gov.uk,wdcroundlookup,1,browser+html,WychavonDistrictCouncil
+selfservice.mybfc.<council>.gov.uk/,selfservice.mybfc.<council>.gov.uk,,1,json+html,BracknellForestCouncil
+service.<council>.gov.uk/wasteservices,service.<council>.gov.uk,wasteservices,1,browser+html,CroydonCouncil
+service.<council>.gov.uk/webapp,service.<council>.gov.uk,webapp,1,html,FolkestoneandHytheDistrictCouncil
+services.<council>.gov.uk/bins,services.<council>.gov.uk,bins,1,html,SouthwarkCouncil
+swict.<council>.gov.uk/<id>,swict.<council>.gov.uk,<id>,1,json+html,MalvernHillsDC
+tdcws01.<council>.gov.uk/tdcwebappspublic,tdcws01.<council>.gov.uk,tdcwebappspublic,1,json+html,TandridgeDistrictCouncil
+transact.<council>.gov.uk/env,transact.<council>.gov.uk,env,1,json+html,WestminsterCityCouncil
+waste-api.<council>.gov.uk/api,waste-api.<council>.gov.uk,api,1,json,YorkCouncil
+waste.<council>.gov.uk/,waste.<council>.gov.uk,,1,other,BexleyCouncil
+waste.<council>.gov.uk/mycollections,waste.<council>.gov.uk,mycollections,1,json+html,SouthHamsDistrictCouncil
+waste.<council>.gov.uk/viewcollection,waste.<council>.gov.uk,viewcollection,1,html,BarnsleyMBCouncil
+waste.nc.<council>.gov.uk/w,waste.nc.<council>.gov.uk,w,1,browser+html,NorthHertfordshireDistrictCouncil
+waste.services.<council>.gov.uk/,waste.services.<council>.gov.uk,,1,html,MidSussexDistrictCouncil
+wastecollections.<council>.gov.uk/api,wastecollections.<council>.gov.uk,api,1,json,HaringeyCouncil
+wasterecyclingapi.<council>.gov.uk/api,wasterecyclingapi.<council>.gov.uk,api,1,json,EastRidingCouncil
+wasteservices.<council>.gov.uk/api,wasteservices.<council>.gov.uk,api,1,json,SheffieldCityCouncil
+webapp.<council>.gov.uk/publicwebforms,webapp.<council>.gov.uk,publicwebforms,1,browser+html,HaltonBoroughCouncil
+webapps.<council>.gov.uk/bincollections,webapps.<council>.gov.uk,bincollections,1,browser+html,DacorumBoroughCouncil
+wlnk.<council>.co.uk/map,wlnk.<council>.co.uk,map,1,json+html,WestLindseyDistrictCouncil
+www.<council>.gov.uk/actions,www.<council>.gov.uk,actions,1,json,OrkneyIslandsCouncil
+www.<council>.gov.uk/address,www.<council>.gov.uk,address,1,html,StaffordBoroughCouncil
+www.<council>.gov.uk/ajax,www.<council>.gov.uk,ajax,1,json,LondonBoroughHarrow
+www.<council>.gov.uk/app-services,www.<council>.gov.uk,app-services,1,json+html,BuryCouncil
+www.<council>.gov.uk/assets,www.<council>.gov.uk,assets,1,json,InverclydeCouncil
+www.<council>.gov.uk/bin-calendar,www.<council>.gov.uk,bin-calendar,1,json+html,NorthYorkshire
+www.<council>.gov.uk/bin-collection-date,www.<council>.gov.uk,bin-collection-date,1,browser+html,BroxbourneCouncil
+www.<council>.gov.uk/bin-collection-dates,www.<council>.gov.uk,bin-collection-dates,1,html,NorthLanarkshireCouncil
+www.<council>.gov.uk/bin-collection-days,www.<council>.gov.uk,bin-collection-days,1,browser+html,StocktonOnTeesCouncil
+www.<council>.gov.uk/bin-collections,www.<council>.gov.uk,bin-collections,1,json,WarringtonBoroughCouncil
+www.<council>.gov.uk/bin-day,www.<council>.gov.uk,bin-day,1,html,AdurAndWorthingCouncils
+www.<council>.gov.uk/bin-recycling-day,www.<council>.gov.uk,bin-recycling-day,1,html,LondonBoroughHammersmithandFulham
+www.<council>.gov.uk/bincalendar,www.<council>.gov.uk,bincalendar,1,html,FarehamBoroughCouncil
+www.<council>.gov.uk/bins-and-collections,www.<council>.gov.uk,bins-and-collections,1,json+html,RochfordCouncil
+www.<council>.gov.uk/bins-rubbish-recycling,www.<council>.gov.uk,bins-rubbish-recycling,1,browser+html,EastStaffordshireBoroughCouncil
+www.<council>.gov.uk/bins-waste-and-recycling,www.<council>.gov.uk,bins-waste-and-recycling,1,html,DarlingtonBoroughCouncil
+www.<council>.gov.uk/checkyourbinday,www.<council>.gov.uk,checkyourbinday,1,browser+html,ChichesterDistrictCouncil
+www.<council>.gov.uk/collection-days,www.<council>.gov.uk,collection-days,1,browser+html,SomersetCouncil
+www.<council>.gov.uk/contensis-forms,www.<council>.gov.uk,contensis-forms,1,html,ConwyCountyBorough
+www.<council>.gov.uk/environment,www.<council>.gov.uk,environment,1,html,CalderdaleCouncil
+www.<council>.gov.uk/findwastecollections,www.<council>.gov.uk,findwastecollections,1,browser+html,BostonBoroughCouncil
+www.<council>.gov.uk/household-bin-collection-days,www.<council>.gov.uk,household-bin-collection-days,1,json+html,ThurrockCouncil
+www.<council>.gov.uk/my-house,www.<council>.gov.uk,my-house,1,html,StroudDistrictCouncil
+www.<council>.gov.uk/my-property,www.<council>.gov.uk,my-property,1,html,WandsworthCouncil
+www.<council>.gov.uk/mywastecollections,www.<council>.gov.uk,mywastecollections,1,browser+html,EastLindseyDistrictCouncil
+www.<council>.gov.uk/querybin.asp,www.<council>.gov.uk,querybin.asp,1,html,WyreForestDistrictCouncil
+www.<council>.gov.uk/recycling,www.<council>.gov.uk,recycling,1,browser+html,TorbayCouncil
+www.<council>.gov.uk/refuse-calendar,www.<council>.gov.uk,refuse-calendar,1,html,HuntingdonDistrictCouncil
+www.<council>.gov.uk/thursafwmonbincollectioncalendar,www.<council>.gov.uk,thursafwmonbincollectioncalendar,1,html,CoventryCityCouncil
+www.<council>.gov.uk/waste-bins-and-recycling,www.<council>.gov.uk,waste-bins-and-recycling,1,browser+html,EastleighBoroughCouncil
+www.<council>.gov.uk/whereilive,www.<council>.gov.uk,whereilive,1,other,SouthamptonCityCouncil
+www.<council>.gov.uk/wp-admin,www.<council>.gov.uk,wp-admin,1,wordpress+json+html,RotherDistrictCouncil
+www.<council>.gov.uk/wp-content,www.<council>.gov.uk,wp-content,1,browser+json+html,ThanetDistrictCouncil
+www.<council>.gov.uk/your-area,www.<council>.gov.uk,your-area,1,html,IslingtonCouncil
+www.<council>.gov.uk/your-recycling-calendar,www.<council>.gov.uk,your-recycling-calendar,1,browser+html,ColchesterCityCouncil
+www.<council>.gov.wales/umbraco,www.<council>.gov.wales,umbraco,1,umbraco+html,CarmarthenshireCountyCouncil
+www.<council>.org/resident,www.<council>.org,resident,1,browser+html,MidUlsterDistrictCouncil
+www.<council>.org.uk/bins,www.<council>.org.uk,bins,1,html,NorthKestevenDistrictCouncil
+www1.<council>.gov.uk/when-are-my-bins-collected,www1.<council>.gov.uk,when-are-my-bins-collected,1,browser+html,ArunCouncil
+your.<council>.gov.uk/yourwestlancs.aspx,your.<council>.gov.uk,yourwestlancs.aspx,1,aspnet-form+html,WestLancashireBoroughCouncil
+zbr7r13ke2.execute-api.eu-west-2.<council>.com/beta,zbr7r13ke2.execute-api.eu-west-2.<council>.com,beta,1,json,CanterburyCityCouncil

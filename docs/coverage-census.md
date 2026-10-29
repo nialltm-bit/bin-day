@@ -16,17 +16,17 @@ A *council* here is one of the 361 Local Authority Districts in the outlines fil
 | Non-UPRN (postcode, house number, URL or other) | 131 | 36% | n/a |  |
 | Probed by us | 67 | 19% | n/a | batch probe covers only postcode + house number, no browser needed, passing upstream's own test |
 | Working when probed | 64 | 18% | n/a |  |
-| Supported (in the registry) | 42 | 12% | n/a | non-UPRN only |
+| Supported (in the registry) | 40 | 11% | n/a | non-UPRN only |
 
-Supported in the registry in total: 43 (1 needs a UPRN, 42 does not).
+Supported in the registry in total: 41 (1 needs a UPRN, 40 does not).
 
 ### Where the non-UPRN councils stand
 
 | Status with us | Councils |
 |---|---|
 | never_probed | 64 |
-| supported | 42 |
-| left_out | 25 |
+| supported | 40 |
+| left_out | 27 |
 
 Why probed councils were left out of the registry (from the generator's last report):
 
@@ -35,6 +35,8 @@ Why probed councils were left out of the registry (from the generator's last rep
 | unrecognised bin name | 21 |
 | probe failed (ConnectionError) | 1 |
 | probe failed (ValueError) | 1 |
+| the bins found have no general waste bin, so the calendar would be incomplete | 1 |
+| the bins found have no general waste and no recycling bin, so the calendar would be incomplete | 1 |
 | probe failed (ReadTimeout) | 1 |
 | source.url must be an https URL | 1 |
 
@@ -44,16 +46,18 @@ Platform is inferred from the module's code and the domains it calls (rules in `
 
 | Platform | Councils | Population | Supported | Browser needed | Confidence |
 |---|---|---|---|---|---|
-| Bespoke council site (HTML/JSON) | 135 | n/a | 0 | 0 | low |
+| Bespoke council site (HTML/JSON) | 127 | n/a | 0 | 0 | low |
 | Granicus/Firmstep AchieveForms | 37 | n/a | 0 | 9 | high |
 | Bespoke council site (browser form) | 12 | n/a | 0 | 12 | low |
 | Bartec | 7 | n/a | 1 | 0 | high |
+| Jadu | 6 | n/a | 0 | 0 | medium |
 | Whitespace | 6 | n/a | 0 | 0 | high |
 | iTouchVision | 4 | n/a | 0 | 2 | high |
 | Civica UFS | 3 | n/a | 0 | 1 | high |
 | FCC Environment portal | 3 | n/a | 0 | 1 | high |
 | RenderForm.aspx form engine | 3 | n/a | 0 | 2 | high |
 | Cloud9 Technologies | 2 | n/a | 0 | 0 | high |
+| Ebase forms | 2 | n/a | 0 | 0 | high |
 | Google Calendar (public iCal) | 2 | n/a | 0 | 0 | high |
 | Power Apps portal (Dynamics) | 2 | n/a | 0 | 1 | high |
 | PublicDashboard (shared upstream base class) | 2 | n/a | 0 | 0 | high |
@@ -69,8 +73,8 @@ Input class is what upstream's own test passes for the module (`input.json`). Br
 
 | Input class | Browser | Councils | Population | Upstream test passed | Failed | Supported |
 |---|---|---|---|---|---|---|
-| postcode+house_number | yes | 49 | n/a | 34 | 15 | 23 |
-| postcode+house_number | no | 43 | n/a | 33 | 10 | 19 |
+| postcode+house_number | yes | 49 | n/a | 34 | 15 | 22 |
+| postcode+house_number | no | 43 | n/a | 33 | 10 | 18 |
 | ical_url | no | 11 | n/a | 11 | 0 | 0 |
 | postcode | no | 9 | n/a | 7 | 2 | 0 |
 | url_property_ref | no | 6 | n/a | 4 | 2 | 0 |
@@ -86,11 +90,12 @@ Input class names: `postcode+house_number` is the class we already support. `hou
 
 | Platform | Councils | Population | Need UPRN | Don't | Supported |
 |---|---|---|---|---|---|
-| Bespoke council site (HTML/JSON) | 177 | n/a | 135 | 42 | 8 |
-| Bespoke council site (browser form) | 49 | n/a | 12 | 37 | 16 |
+| Bespoke council site (HTML/JSON) | 169 | n/a | 127 | 42 | 7 |
+| Bespoke council site (browser form) | 49 | n/a | 12 | 37 | 15 |
 | Granicus/Firmstep AchieveForms | 42 | n/a | 37 | 5 | 3 |
 | Google Calendar (public iCal) | 15 | n/a | 2 | 13 | 0 |
 | Whitespace | 12 | n/a | 6 | 6 | 1 |
+| Jadu | 8 | n/a | 6 | 2 | 1 |
 | Bartec | 7 | n/a | 7 | 0 | 1 |
 | ReCollect | 7 | n/a | 0 | 7 | 3 |
 | Council CMS apiserver/ajaxlibrary API | 5 | n/a | 1 | 4 | 0 |
@@ -103,8 +108,8 @@ Input class names: `postcode+house_number` is the class we already support. `hou
 | Verint (empro) | 3 | n/a | 2 | 1 | 0 |
 | ArcGIS/Esri | 2 | n/a | 1 | 1 | 0 |
 | Cloud9 Technologies | 2 | n/a | 2 | 0 | 0 |
+| Ebase forms | 2 | n/a | 2 | 0 | 0 |
 | Isl Fusion | 2 | n/a | 0 | 2 | 2 |
-| Jadu | 2 | n/a | 0 | 2 | 1 |
 | Oncreate | 2 | n/a | 0 | 2 | 2 |
 | Power Apps portal (Dynamics) | 2 | n/a | 2 | 0 | 0 |
 | WSCollExternal SOAP (Azure) | 2 | n/a | 2 | 0 | 0 |
@@ -113,9 +118,52 @@ Input class names: `postcode+house_number` is the class we already support. `hou
 | Supatrak | 1 | n/a | 0 | 1 | 0 |
 | iEG4 | 1 | n/a | 0 | 1 | 1 |
 
+## Bespoke modules grouped by endpoint
+
+The 221 modules with no named vendor, grouped by the host pattern and first URL path segment of the endpoint that does the work (the council's own name in the host is replaced by `<council>`). Groups are unnamed: a shared pattern is a hint that councils are on the same product, not proof. Full list, including the single-module clusters: [`coverage-census-bespoke-clusters.csv`](coverage-census-bespoke-clusters.csv).
+
+32 clusters hold more than one module (79 modules); the other 142 are one-offs.
+
+| Endpoint pattern | Modules | How it reads the page | Councils |
+|---|---|---|---|
+| `www.<council>.gov.uk/` | 5 | browser+html html | HinckleyandBosworthBoroughCouncil, LondonBoroughOfRichmondUponThames, NorthEastLincs, NuneatonBedworthBoroughCouncil, WirralCouncil |
+| `www.<council>.gov.uk/bins-and-recycling` | 5 | browser+html html json+html | CneSiarCouncil, HullCityCouncil, NorthEastDerbyshireDistrictCouncil, SalfordCityCouncil, SeftonCouncil |
+| `www.<council>.gov.uk/homepage` | 5 | html | CherwellDistrictCouncil, LichfieldDistrictCouncil, NewcastleUnderLymeCouncil, RunnymedeBoroughCouncil, TamworthBoroughCouncil |
+| `www.<council>.gov.uk/info` | 4 | html json+html | BirminghamCityCouncil, KingsLynnandWestNorfolkBC, RoyalBoroughofGreenwich, SwindonBoroughCouncil |
+| `www.<council>.gov.uk/umbraco` | 4 | umbraco+html umbraco+json+html | CornwallCouncil, MerthyrTydfilCountyBoroughCouncil, RushmoorCouncil, TeignbridgeCouncil |
+| `<council>.co.uk/house.php` | 3 | html | EastbourneBoroughCouncil, EnvironmentFirst, LewesDistrictCouncil |
+| `www.<council>.gov.uk/article` | 3 | browser+html html | StHelensBC, SunderlandCityCouncil, WestLothianCouncil |
+| `api.<council>.gov.uk/api` | 2 | json | MedwayCouncil, ReadingBoroughCouncil |
+| `bincollections.<council>.gov.uk/bincollections` | 2 | html | BromsgroveDistrictCouncil, RedditchBoroughCouncil |
+| `bins.<council>.net/api` | 2 | json | FenlandDistrictCouncil, RotherhamCouncil |
+| `community.<council>.gov.uk/s` | 2 | browser+html | CotswoldDistrictCouncil, ForestOfDeanDistrictCouncil |
+| `maps.<council>.gov.uk/` | 2 | html json | EastHampshireDC, MonmouthshireCountyCouncil |
+| `my.<council>.gov.uk/location` | 2 | html | CharnwoodBoroughCouncil, OadbyAndWigstonBoroughCouncil |
+| `recyclingservices.<council>.gov.uk/` | 2 | other | BrentCouncil, BromleyBoroughCouncil |
+| `servicelayer3c.<council>.net/wastecalendar` | 2 | json json+html | CambridgeCityCouncil, SouthCambridgeshireCouncil |
+| `waste-services.<council>.gov.uk/` | 2 | other | KingstonUponThamesCouncil, LondonBoroughSutton |
+| `www.<council>.co.uk/get_calendar.php` | 2 | json | DundeeCityCouncil, SouthAyrshireCouncil |
+| `www.<council>.gov.uk/bincollections` | 2 | html | BasingstokeCouncil, WyreCouncil |
+| `www.<council>.gov.uk/binday` | 2 | browser+html | SouthKestevenDistrictCouncil, WestBerkshireCouncil |
+| `www.<council>.gov.uk/bins-recycling-and-street-cleaning` | 2 | html | CumberlandCouncil, WestMorlandAndFurness |
+| `www.<council>.gov.uk/check-your-collection-day` | 2 | browser+html | BaberghDistrictCouncil, MidSuffolkDistrictCouncil |
+| `www.<council>.gov.uk/directory` | 2 | html json+html | EdinburghCityCouncil, ShetlandIslandsCouncil |
+| `www.<council>.gov.uk/en` | 2 | browser+html html | BlaenauGwentCountyBoroughCouncil, RhonddaCynonTaffCouncil |
+| `www.<council>.gov.uk/recycling-and-waste` | 2 | html wordpress+json+html | WealdenDistrictCouncil, WestDunbartonshireCouncil |
+| `www.<council>.gov.uk/resident` | 2 | browser+html html | ArmaghBanbridgeCraigavonCouncil, CeredigionCountyCouncil |
+| `www.<council>.gov.uk/rubbish-and-recycling` | 2 | browser+html html | ArgyllandButeCouncil, WokinghamBoroughCouncil |
+| `www.<council>.gov.uk/rubbish-recycling` | 2 | browser+html html | BarkingDagenham, HerefordshireCouncil |
+| `www.<council>.gov.uk/services` | 2 | browser+html html | EastDunbartonshireCouncil, EnfieldCouncil |
+| `www.<council>.gov.uk/site` | 2 | json other | EalingCouncil, LondonBoroughEaling |
+| `www.<council>.gov.uk/waste-and-recycling` | 2 | html json+html | BedfordshireCouncil, WolverhamptonCityCouncil |
+| `www.<council>.gov.uk/waste-collection-schedule` | 2 | html | EastLothianCouncil, NorthTynesideCouncil |
+| `www.<council>.gov.uk/where-i-live` | 2 | browser+html html | SouthStaffordshireDistrictCouncil, WakefieldCityCouncil |
+
+Path patterns worth a closer look in a later phase: `/waste/` pages on `recyclingservices.` and `waste-services.` hosts (Brent, Bromley, Kingston, Sutton) share one page template, and the code does not name its vendor. `/info`, `/homepage` and `/bins-and-recycling` clusters are council web CMS page layouts and do not point to a single product.
+
 ## What could not be classified confidently
 
-- **229 modules have no vendor signature** (platform `Bespoke council site`). Many are probably on a shared vendor platform we could not name from the code alone (no vendor domain, API path or name appears). They are not individually listed here; filter `platform_confidence == low` in the modules CSV. No module shows an Echo or Symology signature; Echo-type sites may be hiding in the bespoke group.
+- **221 modules have no vendor signature** (platform `Bespoke council site`). Many are probably on a shared vendor platform we could not name from the code alone (no vendor domain, API path or name appears). They are not individually listed here; filter `platform_confidence == low` in the modules CSV. No module shows an Echo or Symology signature; Echo-type sites may be hiding in the bespoke group.
 - `FyldeCouncil`: no entry in upstream's `input.json`, so its inputs, browser need and test status are unknown; council code assumed from the module name.
 - `SocietyWorks`: no entry in upstream's `input.json`, so its inputs, browser need and test status are unknown (a base class, not a council).
 - `BarnsleyMBCouncil`: LAD code corrected: upstream has the pre-2023 code E08000016.

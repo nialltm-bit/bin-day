@@ -147,6 +147,22 @@ def main(csv_dir, out_path):
             for name, rows in sorted(groups.items(), key=lambda kv: (-len(kv[1]), kv[0]))]
     out += [table(["Platform", "Councils", "Population", "Need UPRN", "Don't", "Supported"], body), ""]
 
+    clusters = load(Path(csv_dir) / "coverage-census-bespoke-clusters.csv")
+    bespoke_total = sum(int(c["modules"]) for c in clusters)
+    shared = [c for c in clusters if int(c["modules"]) > 1]
+    out += ["## Bespoke modules grouped by endpoint", "",
+            f"The {bespoke_total} modules with no named vendor, grouped by the host pattern and first URL path segment of the endpoint that does the work "
+            "(the council's own name in the host is replaced by `<council>`). Groups are unnamed: a shared pattern is a hint that councils are on the same "
+            "product, not proof. Full list, including the single-module clusters: "
+            "[`coverage-census-bespoke-clusters.csv`](coverage-census-bespoke-clusters.csv).", "",
+            f"{len(shared)} clusters hold more than one module ({sum(int(c['modules']) for c in shared)} modules); the other {bespoke_total - sum(int(c['modules']) for c in shared)} "
+            "are one-offs.", ""]
+    out += [table(["Endpoint pattern", "Modules", "How it reads the page", "Councils"],
+                  [[f"`{c['cluster']}`", c["modules"], c["techniques"], c["members"].replace(" ", ", ")] for c in shared]), ""]
+    out += ["Path patterns worth a closer look in a later phase: `/waste/` pages on `recyclingservices.` and `waste-services.` hosts (Brent, Bromley, Kingston, "
+            "Sutton) share one page template, and the code does not name its vendor. `/info`, `/homepage` and `/bins-and-recycling` clusters are council "
+            "web CMS page layouts and do not point to a single product.", ""]
+
     # Things we couldn't classify confidently
     out += ["## What could not be classified confidently", ""]
     items = []
