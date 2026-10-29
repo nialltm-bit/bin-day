@@ -1,6 +1,7 @@
 """Learns how often each bin is emptied, for councils that return only the next date per bin (FRE-293).
 
-The fetcher visits a `next_only` address once a week, on a Sunday. If the date it got last time has since passed, the gap
+The fetcher visits a `next_only` address once a week, on a Sunday (and, so that learning needs no subscribers, each such council's
+public test address, fetcher/testaddress.py). If the date it got last time has since passed, the gap
 between that date and the new next date is the bin's frequency: 7, 14, 21 or 28 days. Each such gap is one observation
 for that council's bin (never for an address), and the tallies live in `registry/learned-frequencies.json`. That file is
 public, so it holds only council codes, the council's own bin names and counts: no addresses.

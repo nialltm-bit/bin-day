@@ -1,7 +1,8 @@
 name: Fetch (scheduled)
 
 # Fetches every address that is due today from the private Google Sheet store and saves the results back.
-# Does nothing until the BIN_DAY_STORE_URL and BIN_DAY_STORE_SECRET repository secrets exist (see docs/store.md).
+# The store steps do nothing until the BIN_DAY_STORE_URL and BIN_DAY_STORE_SECRET repository secrets exist (see docs/store.md).
+# The test-address step needs no secrets, so frequency learning runs regardless.
 on:
   schedule:
     - cron: "17 5 * * *"
@@ -21,7 +22,7 @@ on:
         default: E06000022
 
 permissions:
-  contents: write  # only to save learned bin frequencies (council codes and counts, no addresses)
+  contents: write  # only to save learned bin frequencies (council codes, bin names, counts and dates for public test addresses; no user addresses)
 
 concurrency:
   group: fetch-scheduled
@@ -45,18 +46,13 @@ jobs:
             echo "configured=true" >> "$GITHUB_OUTPUT"
           fi
       - uses: actions/checkout@v4
-        if: steps.config.outputs.configured == 'true'
       - name: Start a Chrome service for councils that need a browser
-        if: steps.config.outputs.configured == 'true'
         run: docker run -d --name selenium -p 4444:4444 --shm-size=2g selenium/standalone-chrome:latest
       - uses: actions/setup-python@v5
-        if: steps.config.outputs.configured == 'true'
         with:
           python-version: "3.12"
       - run: pip install -r fetcher/requirements.txt
-        if: steps.config.outputs.configured == 'true'
       - name: Wait for the Chrome service
-        if: steps.config.outputs.configured == 'true'
         run: |
           for i in $(seq 1 60); do
             curl -fs http://localhost:4444/status | grep -q '"ready": *true' && exit 0
@@ -74,13 +70,18 @@ jobs:
         env:
           FORCE: ${{ inputs.force && '--force' || '' }}
         run: python -m fetcher.run fetch --sheet --selenium-url http://localhost:4444 $FORCE
+      - name: Fetch each next_only council's public test address, to learn bin frequencies
+        # Needs no store: these are upstream's public test addresses, one call per council per week, so learning
+        # starts before anyone subscribes. See fetcher/testaddress.py.
+        if: always()
+        run: python -m fetcher.run test-addresses --selenium-url http://localhost:4444
       - name: Delete feeds nobody has used for a year, with their addresses
         if: steps.config.outputs.configured == 'true' && always()
         run: python -m fetcher.run expire --sheet --days 365
       - name: Save learned bin frequencies
-        if: steps.config.outputs.configured == 'true' && always()
+        if: always()
         run: |
-          git add registry/learned-frequencies.json
+          git add registry/learned-frequencies.json registry/test-address-observations.json
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
