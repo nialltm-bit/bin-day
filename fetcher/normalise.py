@@ -27,7 +27,7 @@ def normalise(council: dict, response: object) -> list[Collection]:
     for item in response["bins"]:
         if not isinstance(item, dict) or "type" not in item or "collectionDate" not in item:
             raise FetchError(f"odd collection entry: {item!r}")
-        name = str(item["type"])
+        name = streams.canonical_name(str(item["type"]))  # no weekday or "next collection" wording: see fetcher/streams.py
         try:
             date = datetime.strptime(item["collectionDate"], UPSTREAM_DATE_FORMAT).date().isoformat()
         except (TypeError, ValueError) as err:

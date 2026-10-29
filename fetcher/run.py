@@ -27,6 +27,7 @@ from fetcher.ratelimit import DEFAULT_MIN_INTERVAL, CouncilRateLimiter
 from fetcher.schedule import is_due
 from fetcher.sheet_store import SheetStore, StoreError
 from fetcher.store import FileStore, Store
+from fetcher.streams import canonical_name
 from fetcher.upstream import run_ukbcd
 
 
@@ -104,7 +105,7 @@ def run(
         limiter.wait(address.ons_code, council.get("min_interval_seconds", DEFAULT_MIN_INTERVAL))
         try:
             collections = normalise(council, fetch(council, address, selenium_url))
-            previous = store.previous_collections(address.uprn)
+            previous = [{**p, "bin_name": canonical_name(p["bin_name"])} for p in store.previous_collections(address.uprn)]
             check_response(collections, previous, today)
             holiday_dates = holiday_data.dates_for(address.ons_code, holiday_regions)
             conflicts = observe_frequencies(council, learned, previous, collections, today, holiday_dates)

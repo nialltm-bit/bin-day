@@ -24,6 +24,27 @@ def is_ignored(bin_name: str) -> bool:
     return any(word in bin_name.lower() for word in IGNORED_WORDS)
 
 
+WEEKDAY = r"(?:mon|tues|wednes|thurs|fri|satur|sun)day"
+# "FOOD WASTE: your next weekly collection is on" (Winchester): the wording, and the date it used to be followed by, go.
+NEXT_COLLECTION = re.compile(r"\s*[:\-\u2013(]?\s*(?:your\s+)?next\s+(?:\w+\s+)?collection\b.*$", re.I)
+# "Food waste on Tuesdays" (Maidstone): the weekday is the round, not the bin, and it changes when the round does.
+ON_WEEKDAY = re.compile(rf"\s+on\s+{WEEKDAY}s?\b.*$", re.I)
+BARE_WEEKDAY = re.compile(rf"\s*[(\-\u2013:,]?\s*\b{WEEKDAY}s?\b\)?", re.I)
+
+
+def canonical_name(bin_name: str) -> str:
+    """The bin's name without the weekday or the "next collection" wording some councils put in it.
+
+    A council that writes "Food waste on Tuesdays" would otherwise get a new name, and so a failed mapping, a lost learned
+    frequency and a false change, the day its round moves to Wednesday. A name that is nothing but such wording is kept as it is.
+    """
+    name = NEXT_COLLECTION.sub("", bin_name)
+    name = ON_WEEKDAY.sub("", name)
+    name = BARE_WEEKDAY.sub("", name)
+    name = re.sub(r"\s+", " ", name).strip(" :-\u2013,(")
+    return name or bin_name
+
+
 NON_RECYCLABLE = re.compile(r"non[\s-]?recycl", re.I)
 JOINER = re.compile(r"\s*(?:\+|&|/|,|\band\b)\s*", re.I)
 

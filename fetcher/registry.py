@@ -8,6 +8,8 @@ import re
 import sys
 from pathlib import Path
 
+from fetcher.streams import canonical_name
+
 REGISTRY_PATH = Path(__file__).resolve().parent.parent / "registry" / "councils.json"
 
 STATUSES = ("supported", "unsupported", "broken")
@@ -75,6 +77,8 @@ def _check_bin_types(where: str, bin_types: object, problems: list[str]) -> None
         problems.append(f"{where}: bin_types must be an object")
         return
     for name, entry in bin_types.items():
+        if canonical_name(name) != name:
+            problems.append(f"{where}: bin_types['{name}'] should be '{canonical_name(name)}' (no weekday or 'next collection' wording)")
         if not isinstance(entry, dict):
             problems.append(f"{where}: bin_types['{name}'] must be an object")
             continue
