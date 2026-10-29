@@ -94,6 +94,30 @@ function withScriptLock<T>(work: () => T): T {
 const MAX_FETCH_REQUESTS_PER_HOUR = 20;
 const MAX_CONTACT_MESSAGES_PER_HOUR = 20;
 
+/**
+ * The secret behind the address keys (script property ADDRESS_KEY_SECRET), made at random the first time it is needed. Keep it: if it
+ * were lost, an address signed up again would get a different key from before (nothing is lost or exposed, the address is just stored
+ * twice until the old feed is deleted).
+ */
+function addressKeySecret(): string {
+  const properties = PropertiesService.getScriptProperties();
+  const existing = properties.getProperty("ADDRESS_KEY_SECRET");
+  if (existing) return existing;
+  return withScriptLock(() => {
+    const again = properties.getProperty("ADDRESS_KEY_SECRET");
+    if (again) return again;
+    const made = randomHex(2);
+    properties.setProperty("ADDRESS_KEY_SECRET", made);
+    return made;
+  });
+}
+
+/** HMAC-SHA256 of the text with the address key secret, as lower-case hex. */
+function keyHash(text: string): string {
+  const bytes = Utilities.computeHmacSha256Signature(text, addressKeySecret());
+  return bytes.map((byte) => (byte < 0 ? byte + 256 : byte).toString(16).padStart(2, "0")).join("");
+}
+
 /** True and counts it while fewer than the hourly limit of contact-form messages have been accepted this hour. */
 function contactAllowed(): boolean {
   const properties = PropertiesService.getScriptProperties();
@@ -178,6 +202,7 @@ function doPost(e: GoogleAppsScript.Events.DoPost): GoogleAppsScript.Content.Tex
         todayIso: () => Utilities.formatDate(new Date(), "Europe/London", "yyyy-MM-dd"),
         requestFetch,
         contactAllowed,
+        keyHash,
         maxSubscriptions: max > 0 ? max : undefined,
       }),
     );

@@ -15,7 +15,7 @@ which they would expect, and which they can delete themselves.
 
 | Data | Where | Why | Kept until |
 |---|---|---|---|
-| Postcode and house number or first line (councils with no UPRN), or a UPRN (councils that need one; none live yet) | `addresses` tab | To ask the council for the dates, weekly | The last feed on the address is deleted |
+| Postcode and house number or first line (councils with no UPRN), or a UPRN (councils that need one; none live yet) | `addresses` tab | To ask the council for the dates, weekly. This is the only tab holding the plain address: other tabs refer to it by a keyed hash that reveals nothing about it (older rows have a readable key until their address is deleted) | The last feed on the address is deleted |
 | Council code, garden waste yes/no, feed token, short id, sign-up time, last day used | `subscriptions` tab | To build the calendar and keep the link private; to find feeds nobody uses | The feed is deleted, or unused for 12 months |
 | Fetched dates, last attempt, last error text | `results` tab | To build the calendar; to say when a check failed | The address is deleted |
 | Recorded changes (moved collections) | `changes` tab | To warn about round changes | The address is deleted |

@@ -2283,7 +2283,7 @@
   var DEFAULT_MAX_PER_ADDRESS = 20;
   var DEFAULT_MAX_WAITLIST_COUNCILS = 500;
   var UPRN = /^[0-9]{1,12}$/;
-  var ADDRESS_ID = /^(?:[0-9]{1,12}|h-[ENSW][0-9]{8}-[A-Z0-9]{5,7}-[a-z0-9-]{1,40})$/;
+  var ADDRESS_ID = /^(?:[0-9]{1,12}|a-[0-9a-f]{32}|h-[ENSW][0-9]{8}-[A-Z0-9]{5,7}-[a-z0-9-]{1,40})$/;
   var ONS_CODE2 = /^[ENSW][0-9]{8}$/;
   var TIMESTAMP = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+(Z|[+-][0-9]{2}:[0-9]{2})$/;
   var DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
@@ -2291,9 +2291,19 @@
   var POSTCODE = /^[A-Za-z0-9][A-Za-z0-9 ]{1,9}$/;
   var HOUSE_NUMBER = /^[A-Za-z0-9][A-Za-z0-9 ,'./-]{0,99}$/;
   function addressKey(onsCode, postcode, houseNumber) {
+    const { compact, house } = tidyAddress(postcode, houseNumber);
+    const key = `h-${onsCode}-${compact}-${house}`;
+    return ADDRESS_ID.test(key) ? key : null;
+  }
+  function tidyAddress(postcode, houseNumber) {
     const compact = postcode.replace(/\s+/g, "").toUpperCase();
     const house = houseNumber.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40).replace(/-+$/g, "");
-    const key = `h-${onsCode}-${compact}-${house}`;
+    return { compact, house };
+  }
+  function opaqueAddressKey(onsCode, postcode, houseNumber, hash) {
+    const { compact, house } = tidyAddress(postcode, houseNumber);
+    if (compact === "" || house === "") return null;
+    const key = `a-${hash(`${onsCode}|${compact}|${house}`).slice(0, 32)}`;
     return ADDRESS_ID.test(key) ? key : null;
   }
   function fail(error) {
@@ -2364,9 +2374,12 @@
       if (typeof uprn !== "string" || !UPRN.test(uprn)) return fail("bad uprn");
       key = uprn;
     } else {
-      const made = typeof postcode === "string" && typeof house_number === "string" ? addressKey(ons_code, postcode, house_number) : null;
-      if (made === null) return fail("bad address");
-      key = made;
+      if (typeof postcode !== "string" || typeof house_number !== "string") return fail("bad address");
+      const readable = addressKey(ons_code, postcode, house_number);
+      if (readable === null) return fail("bad address");
+      const opaque = deps.keyHash ? opaqueAddressKey(ons_code, postcode, house_number, deps.keyHash) : null;
+      if (deps.keyHash && opaque === null) return fail("bad address");
+      key = opaque !== null && !deps.tables.hasAddress(readable) ? opaque : readable;
     }
     if (!deps.newToken || !deps.newId) return fail("not configured");
     const withLock = (_c = deps.withLock) != null ? _c : ((work) => work());
@@ -2876,6 +2889,22 @@
   }
   var MAX_FETCH_REQUESTS_PER_HOUR = 20;
   var MAX_CONTACT_MESSAGES_PER_HOUR = 20;
+  function addressKeySecret() {
+    const properties = PropertiesService.getScriptProperties();
+    const existing = properties.getProperty("ADDRESS_KEY_SECRET");
+    if (existing) return existing;
+    return withScriptLock(() => {
+      const again = properties.getProperty("ADDRESS_KEY_SECRET");
+      if (again) return again;
+      const made = randomHex(2);
+      properties.setProperty("ADDRESS_KEY_SECRET", made);
+      return made;
+    });
+  }
+  function keyHash(text2) {
+    const bytes = Utilities.computeHmacSha256Signature(text2, addressKeySecret());
+    return bytes.map((byte) => (byte < 0 ? byte + 256 : byte).toString(16).padStart(2, "0")).join("");
+  }
   function contactAllowed() {
     const properties = PropertiesService.getScriptProperties();
     const key = `contact_messages_${Utilities.formatDate(/* @__PURE__ */ new Date(), "UTC", "yyyyMMddHH")}`;
@@ -2939,6 +2968,7 @@
           todayIso: () => Utilities.formatDate(/* @__PURE__ */ new Date(), "Europe/London", "yyyy-MM-dd"),
           requestFetch,
           contactAllowed,
+          keyHash,
           maxSubscriptions: max > 0 ? max : void 0
         })
       );
