@@ -1208,6 +1208,254 @@
    "gaps_days": [],
    "ok": true,
    "bare_number": "not_applicable"
+  },
+  {
+   "module": "MidlothianCouncil",
+   "ons_code": "S12000019",
+   "browser_in_source": true,
+   "bins": [
+    "Cardboard",
+    "Food waste",
+    "Garden waste",
+    "General waste",
+    "Glass",
+    "Recycling"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "bare_number": "not_applicable",
+   "source": "phase3 remaining"
+  },
+  {
+   "module": "ThurrockCouncil",
+   "ons_code": "E06000034",
+   "browser_in_source": false,
+   "bins": [
+    "Blue Bin",
+    "Brown Bin",
+    "Food Bin",
+    "Green/Grey Bin"
+   ],
+   "most_dates_for_one_bin": 56,
+   "span_days": 385,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true,
+   "bare_number": "not_applicable",
+   "source": "phase3 remaining"
+  },
+  {
+   "module": "BlackpoolCouncil",
+   "ons_code": "E06000009",
+   "browser_in_source": false,
+   "bins": [
+    "Empty Bin 23ltr Food Caddy",
+    "Empty Bin Domestic Refuse 240L",
+    "Empty Bin Paper & Card 240L"
+   ],
+   "most_dates_for_one_bin": 2,
+   "span_days": 7,
+   "schedule": "next_only",
+   "gaps_days": [
+    7
+   ],
+   "ok": true,
+   "bare_number": "not_applicable",
+   "source": "phase3 uprn_alt"
+  },
+  {
+   "module": "CalderdaleCouncil",
+   "ons_code": "E08000033",
+   "browser_in_source": false,
+   "bins": [
+    "Recycling",
+    "Waste"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "bare_number": "not_applicable",
+   "source": "phase3 uprn_alt"
+  },
+  {
+   "module": "LincolnCouncil",
+   "ons_code": "E07000138",
+   "browser_in_source": false,
+   "bins": [
+    "Black Bin",
+    "Brown Bin",
+    "Green Bin"
+   ],
+   "most_dates_for_one_bin": 5,
+   "span_days": 28,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true,
+   "bare_number": "not_applicable",
+   "source": "phase3 uprn_alt"
+  },
+  {
+   "module": "LondonBoroughCamdenCouncil",
+   "ons_code": "E09000007",
+   "browser_in_source": false,
+   "bins": [
+    "Food collection",
+    "Recycling collection",
+    "Rubbish collection"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "bare_number": "not_applicable",
+   "source": "phase3 uprn_alt"
+  },
+  {
+   "module": "MorayCouncil",
+   "ons_code": "S12000020",
+   "browser_in_source": false,
+   "bins": [
+    "Blue Bin",
+    "Brown Bin",
+    "Glass Container",
+    "Green Bin",
+    "Purple Bin"
+   ],
+   "most_dates_for_one_bin": 4,
+   "span_days": 42,
+   "schedule": "full",
+   "gaps_days": [
+    14,
+    21
+   ],
+   "ok": true,
+   "bare_number": "untested",
+   "source": "phase3 uprn_alt"
+  },
+  {
+   "module": "ScottishBordersCouncil",
+   "ons_code": null,
+   "browser_in_source": false,
+   "bins": [
+    "Food",
+    "General Waste",
+    "Recycling"
+   ],
+   "most_dates_for_one_bin": 14,
+   "span_days": 91,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true,
+   "bare_number": "not_applicable",
+   "source": "phase3 uprn_alt"
+  },
+  {
+   "module": "SheffieldCityCouncil",
+   "ons_code": "E08000019",
+   "browser_in_source": false,
+   "bins": [
+    "Black Bin",
+    "Blue Bin",
+    "Brown Bin"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "bare_number": "not_applicable",
+   "source": "phase3 uprn_alt"
+  },
+  {
+   "module": "SouthDerbyshireDistrictCouncil",
+   "ons_code": "E07000039",
+   "browser_in_source": false,
+   "bins": [
+    "Black and Food Waste Bins",
+    "Green, Brown and Food Waste Bins "
+   ],
+   "most_dates_for_one_bin": 4,
+   "span_days": 42,
+   "schedule": "full",
+   "gaps_days": [
+    14
+   ],
+   "ok": true,
+   "bare_number": "not_applicable",
+   "source": "phase3 uprn_alt"
+  },
+  {
+   "module": "UttlesfordDistrictCouncil",
+   "ons_code": "E07000077",
+   "browser_in_source": true,
+   "bins": [
+    "black",
+    "brown",
+    "green"
+   ],
+   "most_dates_for_one_bin": 6,
+   "span_days": 35,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true,
+   "bare_number": "untested",
+   "source": "phase3 uprn_alt"
+  },
+  {
+   "module": "WalthamForest",
+   "ons_code": "E09000031",
+   "browser_in_source": true,
+   "bins": [
+    "Food Waste Collection Service",
+    "Garden Waste Collection Service",
+    "Recycling Collection Service",
+    "Refuse Collection Service"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "bare_number": "untested",
+   "source": "phase3 uprn_alt"
+  },
+  {
+   "module": "WestMorlandAndFurness",
+   "ons_code": "E06000064",
+   "browser_in_source": false,
+   "bins": [
+    "General Waste",
+    "Recyclable waste"
+   ],
+   "most_dates_for_one_bin": 27,
+   "span_days": 364,
+   "schedule": "full",
+   "gaps_days": [
+    13,
+    14,
+    15
+   ],
+   "ok": true,
+   "bare_number": "not_applicable",
+   "source": "phase3 uprn_alt"
   }
  ]
 }

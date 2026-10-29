@@ -189,3 +189,13 @@ def test_repair_takes_out_a_generated_council_with_an_incomplete_set_of_bins():
     data = {"councils": [entry]}
     corrected, removed = generate.repair(data, None)
     assert removed == ["Example"] and data["councils"] == []
+
+
+def test_an_untested_bare_number_means_the_first_line_is_asked_for():
+    row = {
+        "module": "Untested", "ok": True, "bins": ["Black Bin", "Recycling"], "schedule": "full",
+        "most_dates_for_one_bin": 4, "span_days": 42, "bare_number": "untested", "browser_in_source": False,
+    }
+    upstream = {"url": "https://x.gov.uk", "postcode": "AA1 1AA", "house_number": "12 High Street"}
+    entry, reason = generate.build_entry(row, upstream, "E06000099", "2026-10-29")
+    assert reason is None and entry["house_input"] == "first_line"

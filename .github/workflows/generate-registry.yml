@@ -5,7 +5,7 @@ name: Generate registry entries
 on:
   workflow_dispatch:
   push:
-    branches: [claude/nifty-faraday-obdwan]
+    branches: [claude/generate-phase3]
     paths:
       - .github/workflows/generate-registry.yml
       - scripts/generate_registry.py
