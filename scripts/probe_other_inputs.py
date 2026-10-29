@@ -2,8 +2,8 @@
 
 Groups, picked from upstream's test inputs and the module's own source:
 - uprn_alt: takes a UPRN in upstream's test, but its source also reads a postcode and a house number, and the test gives all
-  three. Run once with every input upstream's test gives (the known-good answer) and once with the postcode and house number only, and compare: does
-  the council return the same schedule without a UPRN?
+  three. Run once with every input upstream's test gives (the known-good answer) and once with the postcode and house number
+  only, and compare: does the council return the same schedule without a UPRN?
 - single: takes a postcode only, or a house number (usually a street name) only.
 - other_id: takes a council-specific reference stored under `uprn` (a street code, a property ID, a USRN), run as upstream's test does.
 - url: the identifier is inside the URL, run with upstream's test URL.
