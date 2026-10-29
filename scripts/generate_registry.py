@@ -57,7 +57,7 @@ def build_entry(row: dict, upstream: dict, code: str, today: str, evidence: dict
     if upstream.get("skip_get_url") is True:
         source["skip_get_url"] = True
     bare = row.get("bare_number", "not_applicable")
-    first_line = bare in ("different_house", "no_result") or bare.startswith("error_")
+    first_line = bare in ("different_house", "no_result", "untested") or bare.startswith("error_")  # untested: ask for more, never less
     if row["schedule"] == "next_only":
         returned = (
             "returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches "

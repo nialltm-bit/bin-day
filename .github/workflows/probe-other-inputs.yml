@@ -1,0 +1,48 @@
+name: Probe the councils the batch probe leaves out (Phase 3)
+
+# One request per council per call, with a pause between calls, from a GitHub runner with a Chrome service for browser councils.
+# See scripts/probe_other_inputs.py for which councils and why. Councils already in the results file are skipped.
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/phase3-probes]
+    paths:
+      - .github/workflows/probe-other-inputs.yml
+      - scripts/probe_other_inputs.py
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Start a Chrome service for councils that need a browser
+        run: docker run -d --name selenium -p 4444:4444 --shm-size=2g selenium/standalone-chrome:latest
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install uk_bin_collection==0.173.5
+      - run: curl -fsSL -o "$RUNNER_TEMP/input.json" https://raw.githubusercontent.com/robbrad/UKBinCollectionData/0.173.5/uk_bin_collection/tests/input.json
+      - name: Wait for the Chrome service
+        run: |
+          for i in $(seq 1 60); do
+            curl -fs http://localhost:4444/status | grep -q '"ready": *true' && exit 0
+            sleep 2
+          done
+          echo "Chrome service not ready" >&2; exit 1
+      - name: Probe each council, one request at a time
+        run: python scripts/probe_other_inputs.py "$RUNNER_TEMP/input.json" docs/spike-results/full-suite.json docs/spike-results/batch-probe.json docs/spike-results/phase3-probe.json 10 http://localhost:4444
+      - name: Commit the results
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/spike-results/phase3-probe.json
+          git commit -m "Add the Phase 3 probe results [skip ci]" || exit 0
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
