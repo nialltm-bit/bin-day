@@ -1,0 +1,876 @@
+{
+ "results": [
+  {
+   "group": "url",
+   "module": "AntrimAndNewtonabbeyCouncil",
+   "ons_code": "N09000001",
+   "browser_in_source": false,
+   "bins": [
+    "Black bins",
+    "Brown bins",
+    "Wheelie boxes"
+   ],
+   "most_dates_for_one_bin": 4,
+   "span_days": 21,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true
+  },
+  {
+   "group": "remaining",
+   "module": "AshfieldDistrictCouncil",
+   "ons_code": "E07000170",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "group": "remaining",
+   "module": "BarkingDagenham",
+   "ons_code": "E09000002",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "group": "remaining",
+   "module": "BostonBoroughCouncil",
+   "ons_code": "E07000136",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "group": "single",
+   "module": "BridgendCountyBoroughCouncil",
+   "ons_code": null,
+   "browser_in_source": false,
+   "bins": [
+    "Recycling collection",
+    "Refuse Sacks collection"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true
+  },
+  {
+   "group": "url",
+   "module": "BromleyBoroughCouncil",
+   "ons_code": "E09000006",
+   "browser_in_source": false,
+   "bins": [
+    "Food Waste collection",
+    "Mixed Recycling (Cans, Plastics & Glass) collection",
+    "Non-Recyclable Refuse collection",
+    "Paper & Cardboard collection"
+   ],
+   "most_dates_for_one_bin": 9,
+   "span_days": 56,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true
+  },
+  {
+   "group": "other_id",
+   "module": "CastlepointDistrictCouncil",
+   "ons_code": "E07000069",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "ConnectTimeout"
+  },
+  {
+   "group": "remaining",
+   "module": "ChichesterDistrictCouncil",
+   "ons_code": "E07000225",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "group": "url",
+   "module": "CoventryCityCouncil",
+   "ons_code": "E08000026",
+   "browser_in_source": false,
+   "bins": [
+    "Food waste caddy",
+    "Garden waste (brown-lidded bin)",
+    "Household waste (green-lidded bin)",
+    "Recycling (blue-lidded bin)"
+   ],
+   "most_dates_for_one_bin": 12,
+   "span_days": 84,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true
+  },
+  {
+   "group": "remaining",
+   "module": "DacorumBoroughCouncil",
+   "ons_code": "E07000096",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "Timeout"
+  },
+  {
+   "group": "remaining",
+   "module": "EastLindseyDistrictCouncil",
+   "ons_code": "E07000137",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "group": "remaining",
+   "module": "EastRenfrewshireCouncil",
+   "ons_code": "S12000011",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "group": "url",
+   "module": "EastStaffordshireBoroughCouncil",
+   "ons_code": "E07000193",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "Timeout"
+  },
+  {
+   "group": "single",
+   "module": "EppingForestDistrictCouncil",
+   "ons_code": "E07000072",
+   "browser_in_source": false,
+   "bins": [
+    "Black Bin",
+    "Blue Box and Recycling Sack",
+    "Green-lidded Bin"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true
+  },
+  {
+   "group": "single",
+   "module": "GedlingBoroughCouncil",
+   "ons_code": "E07000173",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "ReadTimeout"
+  },
+  {
+   "group": "single",
+   "module": "GosportBoroughCouncil",
+   "ons_code": "E07000082",
+   "browser_in_source": false,
+   "bins": [
+    "Domestic",
+    "Garden",
+    "Recycling"
+   ],
+   "most_dates_for_one_bin": 2,
+   "span_days": 13,
+   "schedule": "next_only",
+   "gaps_days": [
+    13
+   ],
+   "ok": true
+  },
+  {
+   "group": "remaining",
+   "module": "InverclydeCouncil",
+   "ons_code": null,
+   "browser_in_source": false,
+   "ok": false,
+   "error": "ConnectTimeout"
+  },
+  {
+   "group": "single",
+   "module": "IpswichBoroughCouncil",
+   "ons_code": "E07000202",
+   "browser_in_source": false,
+   "bins": [],
+   "most_dates_for_one_bin": 0,
+   "span_days": 0,
+   "schedule": "none",
+   "gaps_days": [],
+   "ok": false
+  },
+  {
+   "group": "url",
+   "module": "KingstonUponThamesCouncil",
+   "ons_code": "E09000021",
+   "browser_in_source": false,
+   "bins": [
+    "Food waste collection",
+    "Garden Waste collection",
+    "Mixed recycling collection",
+    "Non-recyclable Refuse collection",
+    "Paper and card collection"
+   ],
+   "most_dates_for_one_bin": 8,
+   "span_days": 49,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true
+  },
+  {
+   "group": "remaining",
+   "module": "LancasterCityCouncil",
+   "ons_code": "E07000121",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "MissingSchema"
+  },
+  {
+   "group": "single",
+   "module": "LondonBoroughHammersmithandFulham",
+   "ons_code": "E09000013",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "AttributeError"
+  },
+  {
+   "group": "single",
+   "module": "MerthyrTydfilCountyBoroughCouncil",
+   "ons_code": null,
+   "browser_in_source": false,
+   "bins": [
+    "Garden Waste",
+    "Household Waste",
+    "Recycling"
+   ],
+   "most_dates_for_one_bin": 4,
+   "span_days": 21,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true
+  },
+  {
+   "group": "remaining",
+   "module": "MidAndEastAntrimBoroughCouncil",
+   "ons_code": "N09000008",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "ValueError"
+  },
+  {
+   "group": "single",
+   "module": "MiddlesbroughCouncil",
+   "ons_code": "E06000002",
+   "browser_in_source": false,
+   "bins": [
+    "Food Waste",
+    "Refuse (Household Rubbish)"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true
+  },
+  {
+   "group": "remaining",
+   "module": "MidlothianCouncil",
+   "ons_code": "S12000019",
+   "browser_in_source": true,
+   "bins": [
+    "Cardboard",
+    "Food waste",
+    "Garden waste",
+    "General waste",
+    "Glass",
+    "Recycling"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true
+  },
+  {
+   "group": "other_id",
+   "module": "NewarkAndSherwoodDC",
+   "ons_code": "E07000175",
+   "browser_in_source": false,
+   "bins": [
+    "Silver recycling"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true
+  },
+  {
+   "group": "single",
+   "module": "NorthEastDerbyshireDistrictCouncil",
+   "ons_code": "E07000038",
+   "browser_in_source": true,
+   "bins": [
+    "Black Bin",
+    "Burgundy Bin",
+    "Food Caddy",
+    "Green Bin"
+   ],
+   "most_dates_for_one_bin": 56,
+   "span_days": 392,
+   "schedule": "full",
+   "gaps_days": [
+    6,
+    7,
+    8,
+    13,
+    14,
+    15,
+    21,
+    63
+   ],
+   "ok": true
+  },
+  {
+   "group": "url",
+   "module": "NorthLanarkshireCouncil",
+   "ons_code": "S12000050",
+   "browser_in_source": false,
+   "bins": [
+    "Blue-lidded Recycling Bin",
+    "Food and Garden",
+    "General Waste",
+    "Glass, Metals, Plastics and Cartons"
+   ],
+   "most_dates_for_one_bin": 2,
+   "span_days": 21,
+   "schedule": "next_only",
+   "gaps_days": [
+    14,
+    21
+   ],
+   "ok": true
+  },
+  {
+   "group": "single",
+   "module": "NuneatonBedworthBoroughCouncil",
+   "ons_code": "E07000219",
+   "browser_in_source": false,
+   "bins": [
+    "Black Bin",
+    "Brown Bin",
+    "Green Bin"
+   ],
+   "most_dates_for_one_bin": 53,
+   "span_days": 728,
+   "schedule": "full",
+   "gaps_days": [
+    14,
+    28
+   ],
+   "ok": true
+  },
+  {
+   "group": "single",
+   "module": "OrkneyIslandsCouncil",
+   "ons_code": null,
+   "browser_in_source": false,
+   "bins": [
+    "General Waste",
+    "Glass & Plastic",
+    "Paper & Metal"
+   ],
+   "most_dates_for_one_bin": 26,
+   "span_days": 364,
+   "schedule": "full",
+   "gaps_days": [
+    14,
+    28
+   ],
+   "ok": true
+  },
+  {
+   "group": "remaining",
+   "module": "PrestonCityCouncil",
+   "ons_code": "E07000123",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "Timeout"
+  },
+  {
+   "group": "single",
+   "module": "RotherhamCouncil",
+   "ons_code": "E08000018",
+   "browser_in_source": false,
+   "bins": [
+    "BLACK BIN",
+    "GREEN BIN",
+    "PINK BIN"
+   ],
+   "most_dates_for_one_bin": 3,
+   "span_days": 28,
+   "schedule": "full",
+   "gaps_days": [
+    14,
+    28
+   ],
+   "ok": true
+  },
+  {
+   "group": "single",
+   "module": "ShetlandIslandsCouncil",
+   "ons_code": null,
+   "browser_in_source": false,
+   "bins": [
+    "Recycling Collection",
+    "Rubbish Collection"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true
+  },
+  {
+   "group": "url",
+   "module": "ShropshireCouncil",
+   "ons_code": "E06000051",
+   "browser_in_source": false,
+   "bins": [
+    "General Waste Collection",
+    "Recycling Collection"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true
+  },
+  {
+   "group": "single",
+   "module": "SouthLanarkshireCouncil",
+   "ons_code": "S12000029",
+   "browser_in_source": false,
+   "bins": [
+    "Black/green bin - non-recyclable waste",
+    "Blue bin - paper and card recycling",
+    "Burgundy bin - food and garden waste",
+    "Grey bin - glass, cans and plastics"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true
+  },
+  {
+   "group": "remaining",
+   "module": "SouthTynesideCouncil",
+   "ons_code": "E08000023",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "JSONDecodeError"
+  },
+  {
+   "group": "remaining",
+   "module": "StocktonOnTeesCouncil",
+   "ons_code": "E06000004",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "group": "other_id",
+   "module": "TamworthBoroughCouncil",
+   "ons_code": null,
+   "browser_in_source": false,
+   "bins": [
+    "Black Bin",
+    "Blue Bag",
+    "Blue Bin"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true
+  },
+  {
+   "group": "remaining",
+   "module": "ThurrockCouncil",
+   "ons_code": "E06000034",
+   "browser_in_source": false,
+   "bins": [
+    "Blue Bin",
+    "Brown Bin",
+    "Food Bin",
+    "Green/Grey Bin"
+   ],
+   "most_dates_for_one_bin": 56,
+   "span_days": 385,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true
+  },
+  {
+   "group": "remaining",
+   "module": "TorfaenCouncil",
+   "ons_code": null,
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "group": "url",
+   "module": "WakefieldCityCouncil",
+   "ons_code": "E08000036",
+   "browser_in_source": true,
+   "bins": [
+    "Garden waste recycling",
+    "Household waste",
+    "Mixed recycling"
+   ],
+   "most_dates_for_one_bin": 9,
+   "span_days": 112,
+   "schedule": "full",
+   "gaps_days": [
+    14
+   ],
+   "ok": true
+  },
+  {
+   "group": "remaining",
+   "module": "WaverleyBoroughCouncil",
+   "ons_code": "E07000216",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "IndexError"
+  },
+  {
+   "group": "remaining",
+   "module": "WestBerkshireCouncil",
+   "ons_code": "E06000037",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "group": "other_id",
+   "module": "WestminsterCityCouncil",
+   "ons_code": null,
+   "browser_in_source": false,
+   "bins": [
+    "Food Recycling Collection",
+    "Recycling Collection",
+    "Rubbish Collection"
+   ],
+   "most_dates_for_one_bin": 4,
+   "span_days": 11,
+   "schedule": "next_only",
+   "gaps_days": [
+    3,
+    4,
+    7
+   ],
+   "ok": true
+  },
+  {
+   "group": "remaining",
+   "module": "WokingBoroughCouncil",
+   "ons_code": "E07000217",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "IndexError"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "BlackpoolCouncil",
+   "ons_code": "E06000009",
+   "browser_in_source": false,
+   "bins": [
+    "Empty Bin 23ltr Food Caddy",
+    "Empty Bin Domestic Refuse 240L",
+    "Empty Bin Paper & Card 240L"
+   ],
+   "most_dates_for_one_bin": 2,
+   "span_days": 7,
+   "schedule": "next_only",
+   "gaps_days": [
+    7
+   ],
+   "ok": true,
+   "without_uprn": "same_schedule"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "BroxtoweBoroughCouncil",
+   "ons_code": "E07000172",
+   "browser_in_source": true,
+   "bins": [
+    "BLACK 240L",
+    "GLASS BAG",
+    "GREEN 240L"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "without_uprn": "error_ValueError"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "CalderdaleCouncil",
+   "ons_code": "E08000033",
+   "browser_in_source": false,
+   "bins": [
+    "Recycling",
+    "Waste"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "without_uprn": "same_schedule"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "HorshamDistrictCouncil",
+   "ons_code": "E07000227",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "ConnectionError"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "LincolnCouncil",
+   "ons_code": "E07000138",
+   "browser_in_source": false,
+   "bins": [
+    "Black Bin",
+    "Brown Bin",
+    "Green Bin"
+   ],
+   "most_dates_for_one_bin": 5,
+   "span_days": 28,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true,
+   "without_uprn": "same_schedule"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "LondonBoroughCamdenCouncil",
+   "ons_code": "E09000007",
+   "browser_in_source": false,
+   "bins": [
+    "Food collection",
+    "Recycling collection",
+    "Rubbish collection"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "without_uprn": "same_schedule"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "MorayCouncil",
+   "ons_code": "S12000020",
+   "browser_in_source": false,
+   "bins": [
+    "Blue Bin",
+    "Brown Bin",
+    "Glass Container",
+    "Green Bin",
+    "Purple Bin"
+   ],
+   "most_dates_for_one_bin": 4,
+   "span_days": 42,
+   "schedule": "full",
+   "gaps_days": [
+    14,
+    21
+   ],
+   "ok": true,
+   "without_uprn": "same_schedule"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "ScottishBordersCouncil",
+   "ons_code": null,
+   "browser_in_source": false,
+   "bins": [
+    "Food",
+    "General Waste",
+    "Recycling"
+   ],
+   "most_dates_for_one_bin": 14,
+   "span_days": 91,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true,
+   "without_uprn": "same_schedule"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "SheffieldCityCouncil",
+   "ons_code": "E08000019",
+   "browser_in_source": false,
+   "bins": [
+    "Black Bin",
+    "Blue Bin",
+    "Brown Bin"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "without_uprn": "same_schedule"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "SouthDerbyshireDistrictCouncil",
+   "ons_code": "E07000039",
+   "browser_in_source": false,
+   "bins": [
+    "Black and Food Waste Bins",
+    "Green, Brown and Food Waste Bins "
+   ],
+   "most_dates_for_one_bin": 4,
+   "span_days": 42,
+   "schedule": "full",
+   "gaps_days": [
+    14
+   ],
+   "ok": true,
+   "without_uprn": "same_schedule"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "UttlesfordDistrictCouncil",
+   "ons_code": "E07000077",
+   "browser_in_source": true,
+   "bins": [
+    "black",
+    "brown",
+    "green"
+   ],
+   "most_dates_for_one_bin": 6,
+   "span_days": 35,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true,
+   "without_uprn": "same_schedule"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "ValeofGlamorganCouncil",
+   "ons_code": "W06000014",
+   "browser_in_source": false,
+   "bins": [
+    "Black bag",
+    "Separated recycling"
+   ],
+   "most_dates_for_one_bin": 48,
+   "span_days": 329,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    21
+   ],
+   "ok": true,
+   "without_uprn": "same_bins_different_dates"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "WalthamForest",
+   "ons_code": "E09000031",
+   "browser_in_source": true,
+   "bins": [
+    "Food Waste Collection Service",
+    "Garden Waste Collection Service",
+    "Recycling Collection Service",
+    "Refuse Collection Service"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "without_uprn": "same_schedule"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "WestDevonBoroughCouncil",
+   "ons_code": "E07000047",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "WestMorlandAndFurness",
+   "ons_code": "E06000064",
+   "browser_in_source": false,
+   "bins": [
+    "General Waste",
+    "Recyclable waste"
+   ],
+   "most_dates_for_one_bin": 27,
+   "span_days": 364,
+   "schedule": "full",
+   "gaps_days": [
+    13,
+    14,
+    15
+   ],
+   "ok": true,
+   "without_uprn": "same_schedule"
+  },
+  {
+   "group": "uprn_alt",
+   "module": "WolverhamptonCityCouncil",
+   "ons_code": "E08000031",
+   "browser_in_source": false,
+   "bins": [],
+   "most_dates_for_one_bin": 0,
+   "span_days": 0,
+   "schedule": "none",
+   "gaps_days": [],
+   "ok": false,
+   "without_uprn": "no_result"
+  }
+ ]
+}
