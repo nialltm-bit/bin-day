@@ -1,14 +1,17 @@
-# Generated registry report (2026-10-28)
+# Generated registry report (2026-10-29)
 
-Added 0 councils. Left out 67.
+Added 8 councils. Left out 72.
 
 ## Added
 
-
-## Re-checked against the current mapping rules
-
-- taken out until its bin names can be settled: East Hampshire
-- taken out until its bin names can be settled: Test Valley
+- MidlothianCouncil (S12000019)
+- ThurrockCouncil (E06000034)
+- BlackpoolCouncil (E06000009)
+- CalderdaleCouncil (E08000033)
+- LondonBoroughCamdenCouncil (E09000007)
+- ScottishBordersCouncil (S12000026)
+- WalthamForest (E09000031)
+- WestMorlandAndFurness (E06000064)
 
 ## Left out, and why
 
@@ -79,3 +82,8 @@ Added 0 councils. Left out 67.
 - WinchesterCityCouncil: already in the registry (left unchanged)
 - WirralCouncil: already in the registry (left unchanged)
 - WokinghamBoroughCouncil: already in the registry (left unchanged)
+- LincolnCouncil: unrecognised bin name 'Green Bin'
+- MorayCouncil: unrecognised bin name 'Green Bin'
+- SheffieldCityCouncil: upstream says E08000019 but the test postcode is in E08000039
+- SouthDerbyshireDistrictCouncil: unrecognised bin name 'Black and Food Waste Bins'
+- UttlesfordDistrictCouncil: unrecognised bin name 'green'
