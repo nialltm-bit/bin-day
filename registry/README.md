@@ -51,6 +51,12 @@ it is locked: a later disagreement only adds to `conflicts` (and the fetch log s
 detection treats the moved date as a round change. Gaps that touch a bank holiday week, or aren't whole weeks, are ignored.
 It holds only council codes, the council's own bin names and counts: no addresses.
 
+Learning does not wait for subscribers. The scheduled workflow also fetches each `next_only` council's `test_address` (upstream's
+public test address, one call per council per week) while some bin of that council has no frequency, and feeds the result into
+the same tally (`fetcher/testaddress.py`). The last date seen for each bin is kept in `test-address-observations.json`: council
+codes, the council's own bin names and dates for a public address, nothing about any user. A council stops being fetched this way
+once every bin of it has a frequency.
+
 ## Bin names the registry hasn't met
 
 If a council returns a bin name that isn't in `bin_types` (a seasonal garden bin that wasn't on offer when the council was probed,

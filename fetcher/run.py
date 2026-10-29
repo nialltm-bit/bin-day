@@ -123,6 +123,25 @@ def run(
     return outcomes
 
 
+def run_test_address_command(args) -> int:
+    from fetcher import testaddress  # imported here because it imports this module
+
+    state_path = args.state or testaddress.STATE_PATH
+    state, learned = testaddress.load(state_path), learning.load(args.learned)
+    before = json.dumps(state, sort_keys=True), json.dumps(learned, sort_keys=True)
+    outcomes = testaddress.run_test_addresses(
+        registry.load(), datetime.now(UTC), state, learned, selenium_url=args.selenium_url, force=args.force
+    )
+    if json.dumps(state, sort_keys=True) != before[0]:
+        testaddress.save(state, state_path)
+    if json.dumps(learned, sort_keys=True) != before[1]:
+        learning.save(learned, args.learned)
+    for outcome in outcomes:
+        print(json.dumps(format_outcome(outcome)))
+    print(json.dumps({"summary": {s: sum(o.status == s for o in outcomes) for s in ("fetched", "failed", "skipped")}}))
+    return 0  # a failing test address is a council problem to see in the log, not a reason to stop the workflow
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -145,11 +164,19 @@ def main(argv: list[str] | None = None) -> int:
     fetch.add_argument("--uprn", help="only this address")
     fetch.add_argument("--learned", type=Path, default=learning.LEARNED_PATH, help="where learned bin frequencies are kept")
 
+    test = commands.add_parser("test-addresses", help="fetch each next_only council's public test address, to learn bin frequencies")
+    test.add_argument("--selenium-url")
+    test.add_argument("--force", action="store_true", help="fetch even if not due")
+    test.add_argument("--learned", type=Path, default=learning.LEARNED_PATH)
+    test.add_argument("--state", type=Path, help="where the last-seen dates are kept (default registry/test-address-observations.json)")
+
     expire = commands.add_parser("expire", help="delete feeds nobody has used for a long time, with their addresses")
     expire.add_argument("--sheet", action="store_true", required=True)
     expire.add_argument("--days", type=int, default=365)
 
     args = parser.parse_args(argv)
+    if args.command == "test-addresses":
+        return run_test_address_command(args)
     try:
         store = SheetStore.from_env() if args.sheet else FileStore(args.store)
     except StoreError as err:
