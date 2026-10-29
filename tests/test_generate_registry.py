@@ -53,10 +53,10 @@ def test_an_ambiguous_colour_is_left_out_not_guessed():
 
 
 def test_extra_collections_and_markers_are_left_out_of_the_entry():
-    bins = ["General Waste", "Transition Week", "Batteries/small electricals/textiles", "AHP"]
+    bins = ["General Waste", "Recycling", "Transition Week", "Batteries/small electricals/textiles", "AHP"]
     entry, reason = generate.build_entry({**ROW, "bins": bins}, UPSTREAM, "E06000001", "2026-10-28")
     assert reason is None
-    assert list(entry["bin_types"]) == ["General Waste"]
+    assert list(entry["bin_types"]) == ["General Waste", "Recycling"]
     assert registry.validate({"councils": [entry]}) == []
 
 
@@ -115,7 +115,7 @@ def test_a_next_only_council_is_added_without_frequencies_to_be_learned():
 
 def test_a_colour_only_name_is_mapped_from_the_councils_website_evidence():
     evidence = {"ExampleCouncil": {"bins": {"Green Bin": {"stream": "garden", "votes": {"garden": 4}}}}}
-    row = {**ROW, "bins": ["General Waste", "Green Bin"]}
+    row = {**ROW, "bins": ["General Waste", "Recycling", "Green Bin"]}
     entry, reason = generate.build_entry(row, UPSTREAM, "E06000001", "2026-10-28", evidence)
     assert reason is None
     assert entry["bin_types"]["Green Bin"]["stream"] == "garden"
@@ -157,17 +157,35 @@ def test_a_name_that_says_two_streams_is_not_settled_by_website_evidence():
 
 
 def _generated(bins):
-    entry, _ = generate.build_entry({**ROW, "bins": ["General Waste"]}, UPSTREAM, "E06000001", "2026-10-28")
+    entry, _ = generate.build_entry(ROW, UPSTREAM, "E06000001", "2026-10-28")
     entry["bin_types"] = {name: {"stream": stream, "label": name} for name, stream in bins.items()}
     return entry
 
 
 def test_repair_corrects_a_wrong_stream_and_removes_a_council_it_cannot_settle():
     wrong = _generated({"Non-recyclable waste": "recycling", "Recycling": "recycling"})
-    unsettled = {**_generated({"Food and Garden": "food"}), "ons_code": "E06000002", "name": "Unsettled"}
+    mixed = {"Food and Garden": "food", "General": "general", "Recycling": "recycling"}
+    unsettled = {**_generated(mixed), "ons_code": "E06000002", "name": "Unsettled"}
     by_hand = {**_generated({"Food and Garden": "food"}), "ons_code": "E06000003", "name": "By hand", "notes": "Checked by a person"}
     data = {"councils": [wrong, unsettled, by_hand]}
     corrected, removed = generate.repair(data, None)
     assert corrected == ["Example"] and removed == ["Unsettled"]
     assert wrong["bin_types"]["Non-recyclable waste"]["stream"] == "general"
     assert [c["name"] for c in data["councils"]] == ["Example", "By hand"]
+
+
+def test_a_council_whose_bins_have_no_general_or_no_recycling_bin_is_left_out():
+    only_food = {**ROW, "bins": ["Food Waste", "Garden Waste"]}
+    entry, reason = generate.build_entry(only_food, UPSTREAM, "E06000001", "2026-10-28")
+    assert entry is None and "no general waste and no recycling" in reason
+    no_recycling = {**ROW, "bins": ["General Waste", "Food waste"]}
+    entry, reason = generate.build_entry(no_recycling, UPSTREAM, "E06000001", "2026-10-28")
+    assert entry is None and "no recycling" in reason
+
+
+def test_repair_takes_out_a_generated_council_with_an_incomplete_set_of_bins():
+    entry, _ = generate.build_entry(ROW, UPSTREAM, "E06000001", "2026-10-28")
+    entry["bin_types"] = {"Food Waste": {"stream": "food", "label": "Food Waste"}}
+    data = {"councils": [entry]}
+    corrected, removed = generate.repair(data, None)
+    assert removed == ["Example"] and data["councils"] == []

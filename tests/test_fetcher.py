@@ -468,3 +468,18 @@ def test_a_bin_the_keyword_rules_say_two_things_about_is_still_a_failure(bathnes
     response = {"bins": [{"type": "Food and Garden", "collectionDate": "03/11/2026"}]}
     with pytest.raises(UnmappedBinError, match="Food and Garden"):
         normalise(bathnes, response)
+
+
+def test_an_extra_collection_we_do_not_remind_about_is_skipped_not_a_failure(bathnes):
+    day = "03/11/2026"
+    black = {"type": "Black Rubbish Bin (140L)", "collectionDate": day}
+    response = {"bins": [black, {"type": "Batteries (Battery Bag)", "collectionDate": day}]}
+    assert [c.bin_name for c in normalise(bathnes, response)] == ["Black Rubbish Bin (140L)"]
+    with pytest.raises(FetchError):  # but a response of nothing else is still not a calendar
+        normalise(bathnes, {"bins": [{"type": "Batteries/small electricals/textiles", "collectionDate": day}]})
+
+
+def test_the_same_bin_listed_twice_on_one_day_gives_one_collection(bathnes):
+    day = "03/11/2026"
+    black = {"type": "Black Rubbish Bin (140L)", "collectionDate": day}
+    assert len(normalise(bathnes, {"bins": [black, black]})) == 1

@@ -106,3 +106,11 @@ Newcastle's source (the ReCollect address search) was run from GitHub Actions on
   needs the same checks as Newcastle: run it with a number and with a first line, map its bin names, and confirm
   frequencies if it is a `next_only` council.
 - FRE-274 still describes an email waitlist and should be reworded.
+
+## Spot check
+
+`scripts/spot_check.py` (workflow "Spot check the covered councils", run by hand) runs every covered council once with its
+public test address and writes `docs/spot-check.md`. It flags councils that don't fetch, a bin on two far-apart weekdays, odd
+gaps between collections, and a set of bins with no general waste or no recycling bin. It can't say the dates are true: to
+check that, put the same test address into the council's own bin page and compare. Run it after adding councils or changing
+how bins are mapped, and look at "Did not fetch" and "Fetched but flagged".
