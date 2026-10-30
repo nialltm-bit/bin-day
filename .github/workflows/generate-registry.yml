@@ -2,6 +2,7 @@ name: Generate registry entries
 
 # Adds every council that probed cleanly (see batch-probe.yml) to registry/councils.json, and writes a report of what it
 # left out and why. Existing entries are never changed. Uses the colour-name evidence if there is any.
+# UPRN councils that can search by postcode and house number are included (scripts/without_uprn.py).
 on:
   workflow_dispatch:
   push:
@@ -24,7 +25,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - run: pip install --no-deps uk_bin_collection==0.173.5
       - run: curl -fsSL -o "$RUNNER_TEMP/input.json" https://raw.githubusercontent.com/robbrad/UKBinCollectionData/0.173.5/uk_bin_collection/tests/input.json
+      - name: Treat UPRN councils that can search by postcode and house number as such
+        run: |
+          python scripts/without_uprn.py "$RUNNER_TEMP/input.json" "$(python -c 'import importlib.util as u; print(list(u.find_spec("uk_bin_collection.uk_bin_collection.councils").submodule_search_locations)[0])')" "$RUNNER_TEMP/input.json"
       - name: Generate
         env:
           PYTHONPATH: .

@@ -1,14 +1,10 @@
-# Generated registry report (2026-10-28)
+# Generated registry report (2026-10-30)
 
-Added 0 councils. Left out 67.
+Added 1 councils. Left out 81.
 
 ## Added
 
-
-## Re-checked against the current mapping rules
-
-- taken out until its bin names can be settled: East Hampshire
-- taken out until its bin names can be settled: Test Valley
+- SheffieldCityCouncil (E08000039)
 
 ## Left out, and why
 
@@ -69,7 +65,7 @@ Added 0 councils. Left out 67.
 - PeterboroughCityCouncil: unrecognised bin name 'Empty Bin 240L Green'
 - SevenoaksDistrictCouncil: already in the registry (left unchanged)
 - SomersetCouncil: already in the registry (left unchanged)
-- SouthKestevenDistrictCouncil: unrecognised bin name 'Purple Bin'
+- SouthKestevenDistrictCouncil: unrecognised bin name 'GREEN'
 - StHelensBC: already in the registry (left unchanged)
 - StirlingCouncil: unrecognised bin name 'Food and Garden'
 - SwaleBoroughCouncil: unrecognised bin name 'green bin'
@@ -79,3 +75,17 @@ Added 0 councils. Left out 67.
 - WinchesterCityCouncil: already in the registry (left unchanged)
 - WirralCouncil: already in the registry (left unchanged)
 - WokinghamBoroughCouncil: already in the registry (left unchanged)
+- BlackpoolCouncil: already in the registry (left unchanged)
+- BroxtoweBoroughCouncil: probe failed (ValueError)
+- CalderdaleCouncil: already in the registry (left unchanged)
+- LincolnCouncil: unrecognised bin name 'Green Bin'
+- LondonBoroughCamdenCouncil: already in the registry (left unchanged)
+- MidlothianCouncil: already in the registry (left unchanged)
+- MorayCouncil: unrecognised bin name 'Green Bin'
+- ScottishBordersCouncil: already in the registry (left unchanged)
+- SouthDerbyshireDistrictCouncil: unrecognised bin name 'Black and Food Waste Bins'
+- ThurrockCouncil: already in the registry (left unchanged)
+- UttlesfordDistrictCouncil: unrecognised bin name 'green'
+- ValeofGlamorganCouncil: already in the registry (left unchanged)
+- WalthamForest: already in the registry (left unchanged)
+- WestMorlandAndFurness: already in the registry (left unchanged)

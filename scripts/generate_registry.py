@@ -33,6 +33,25 @@ def council_for_postcode(postcode: str) -> str | None:
         return None
 
 
+def current_codes() -> set[str]:
+    """The codes of the councils that exist now (the outlines the site's map uses)."""
+    path = Path(__file__).resolve().parent.parent / "web" / "public" / "data" / "council-shapes.json"
+    return {c["code"] for c in json.load(open(path))["councils"]}
+
+
+def settle_code(upstream_code: str | None, from_postcode: str | None, current: set[str]) -> tuple[str | None, str | None]:
+    """The council code to use, or (None, reason). Upstream sometimes still has a code that has since been retired (a
+    council that was merged or recoded); then the code of the council the test postcode is in is the right one. Any
+    other disagreement means one of them is wrong, so the council is left out."""
+    if upstream_code is None:
+        return from_postcode, None if from_postcode else "no council code"
+    if from_postcode and from_postcode != upstream_code:
+        if upstream_code not in current and from_postcode in current:
+            return from_postcode, None
+        return None, f"upstream says {upstream_code} but the test postcode is in {from_postcode}"
+    return upstream_code, None
+
+
 def build_entry(row: dict, upstream: dict, code: str, today: str, evidence: dict | None = None) -> tuple[dict | None, str | None]:
     """A registry entry for one probed council, or (None, reason) if it can't be built completely."""
     bin_types = {}
@@ -149,6 +168,7 @@ def main(input_path, probe_path, registry_path, report_path, evidence_path=None)
     corrected, removed = repair(data, evidence)
     existing = {c["ons_code"] for c in data["councils"]}
     today = date.today().isoformat()
+    current = current_codes()
     added, skipped = [], []
     for row in probe:
         module = row["module"]
@@ -157,12 +177,9 @@ def main(input_path, probe_path, registry_path, report_path, evidence_path=None)
             skipped.append((module, f"probe failed ({row.get('error', 'no result')})"))
             continue
         from_postcode = council_for_postcode(entry_in["postcode"])
-        code = entry_in.get("LAD24CD") or from_postcode
+        code, why = settle_code(entry_in.get("LAD24CD"), from_postcode, current)
         if code is None:
-            skipped.append((module, "no council code"))
-            continue
-        if from_postcode and from_postcode != code:
-            skipped.append((module, f"upstream says {code} but the test postcode is in {from_postcode}"))
+            skipped.append((module, why))
             continue
         if code in existing:
             skipped.append((module, "already in the registry (left unchanged)"))
