@@ -199,17 +199,25 @@
     }
   },
   "SouthKestevenDistrictCouncil": {
-    "pages_read": 0,
+    "pages_read": 12,
     "bins": {
       "GREEN": {
-        "stream": null,
-        "votes": {},
-        "pages": []
+        "stream": "garden",
+        "votes": {
+          "garden": 3
+        },
+        "pages": [
+          "https://www.southkesteven.gov.uk/gardenwasteFAQs"
+        ]
       },
       "Purple Bin": {
         "stream": null,
-        "votes": {},
-        "pages": []
+        "votes": {
+          "food": 1
+        },
+        "pages": [
+          "https://www.southkesteven.gov.uk/recycling"
+        ]
       }
     }
   },
@@ -230,6 +238,45 @@
         "stream": null,
         "votes": {},
         "pages": []
+      }
+    }
+  },
+  "LincolnCouncil": {
+    "pages_read": 2,
+    "bins": {
+      "Green Bin": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      }
+    }
+  },
+  "MorayCouncil": {
+    "pages_read": 1,
+    "bins": {
+      "Green Bin": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      },
+      "Purple Bin": {
+        "stream": null,
+        "votes": {},
+        "pages": []
+      }
+    }
+  },
+  "UttlesfordDistrictCouncil": {
+    "pages_read": 1,
+    "bins": {
+      "green": {
+        "stream": "recycling",
+        "votes": {
+          "recycling": 3
+        },
+        "pages": [
+          "https://bins.uttlesford.gov.uk/"
+        ]
       }
     }
   }
