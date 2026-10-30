@@ -189,3 +189,17 @@ def test_repair_takes_out_a_generated_council_with_an_incomplete_set_of_bins():
     data = {"councils": [entry]}
     corrected, removed = generate.repair(data, None)
     assert removed == ["Example"] and data["councils"] == []
+
+
+def test_a_retired_upstream_code_gives_way_to_the_code_of_the_test_postcode():
+    now = {"E08000039", "E09000007"}
+    assert generate.settle_code("E08000019", "E08000039", now) == ("E08000039", None)  # retired code
+    assert generate.settle_code("E09000007", "E09000007", now) == ("E09000007", None)
+    assert generate.settle_code(None, "E09000007", now) == ("E09000007", None)
+    assert generate.settle_code("E09000007", None, now) == ("E09000007", None)
+    assert generate.settle_code(None, None, now) == (None, "no council code")
+
+
+def test_two_current_codes_that_disagree_leave_the_council_out():
+    code, why = generate.settle_code("E09000007", "E08000039", {"E08000039", "E09000007"})
+    assert code is None and "E09000007" in why and "E08000039" in why
