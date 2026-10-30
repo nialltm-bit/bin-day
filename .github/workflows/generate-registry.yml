@@ -2,7 +2,7 @@ name: Generate registry entries
 
 # Adds every council that probed cleanly (see batch-probe.yml) to registry/councils.json, and writes a report of what it
 # left out and why. Existing entries are never changed. Uses the colour-name evidence if there is any.
-# UPRN councils that can search by postcode and house number are included (scripts/without_uprn.py), as are colour-only names the colour mapping settled.
+# UPRN councils that can search by postcode and house number are included (scripts/without_uprn.py), as are colour-only names the colour mapping settled and councils whose upstream test failed but whose probe worked.
 on:
   workflow_dispatch:
   push:
