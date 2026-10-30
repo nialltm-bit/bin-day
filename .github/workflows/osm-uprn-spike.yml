@@ -1,0 +1,44 @@
+name: Spike - can open data turn a postcode and house number into a UPRN
+
+# Measures (scripts/spike_osm_uprn.py) how often OS Open UPRN plus OpenStreetMap house numbers would find a home's UPRN,
+# using upstream's public test UPRNs. Counts only; nothing here is a real person's address. Writes
+# docs/spike-results/osm-uprn.json.
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/nifty-faraday-obdwan]
+    paths:
+      - .github/workflows/osm-uprn-spike.yml
+      - scripts/spike_osm_uprn.py
+
+permissions:
+  contents: write
+
+jobs:
+  spike:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: curl -fsSL -o "$RUNNER_TEMP/input.json" https://raw.githubusercontent.com/robbrad/UKBinCollectionData/0.173.5/uk_bin_collection/tests/input.json
+      - name: Download OS Open UPRN (open data, Open Government Licence)
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/uprn.zip" "https://api.os.uk/downloads/v1/products/OpenUPRN/downloads?area=GB&format=CSV&redirect"
+          unzip -o -q "$RUNNER_TEMP/uprn.zip" -d "$RUNNER_TEMP/uprn"
+          ls "$RUNNER_TEMP/uprn" | sed 's/[0-9]//g'
+      - name: Measure
+        run: python scripts/spike_osm_uprn.py "$RUNNER_TEMP/input.json" "$(ls $RUNNER_TEMP/uprn/*.csv | head -1)" docs/spike-results/osm-uprn.json 2
+      - name: Commit the results
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/spike-results/osm-uprn.json
+          git commit -m "Add the open-data UPRN spike results [skip ci]" || exit 0
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"

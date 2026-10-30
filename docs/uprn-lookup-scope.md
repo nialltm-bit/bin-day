@@ -20,45 +20,49 @@ should only have to type things they know.
 failed it. By nation: England 184, Scotland 15, Wales 13, Northern Ireland 3. Population is not known yet (the census
 could not fetch the ONS file), so I can't say how many people these cover.
 
-## The options
+## Ruled out
+
+- **Asking the resident to find and paste their UPRN** (with a link to a finder site). Decided against: nobody knows
+  what a UPRN is, and it is the sort of step that makes people give up. The resident types a postcode and a house number or
+  name, and nothing else.
+- **Paid lookups** (Ideal Postcodes, OS Places): about £30 to £45 per 1,000 sign-ups. The project must be free to run
+  (`spike-address-lookup.md`).
+
+## The options left
 
 | # | Option | Resident experience | Free | Councils it opens | Build effort | Main risk |
 |---|---|---|---|---|---|---|
-| A | **Paste your UPRN**, with a link to a free finder (findmyaddress.co.uk, uprn.uk) | Looks up their UPRN on another site, copies a number back | Yes | Up to about 187, all at once, once their entries are generated | Small: a UPRN box on the sign-up page, validation, wording; entries come from the existing probe and generator | Friction and drop-off. A wrong UPRN gives the wrong bin day. Depends on a third-party site staying up, and its terms need checking before we send people there |
-| B | **Per-platform address search**: call the same postcode-to-address API the council's system uses, one resolver per platform | Types postcode, picks address. Best experience | Yes, but each council's API terms are unchecked | About 20 to 25 (Whitespace 6, Jadu 6, Bartec 4, AchieveForms where it exposes a lookup, and a few more) | Medium per platform, and each is reverse engineering that can break | The 133 bespoke councils get nothing from it |
-| C | **Open data postcode to homes on a map**: ONS UPRN Directory plus OS Open UPRN (open, national, UPRN with coordinates, no address text), resident taps their home | Types postcode, taps a dot on a map | Yes, but needs about 100 to 200 MB of static data on Pages | All of them, in principle | Large: build the data shards, a map picker, test | Tapping the right house in a terrace is error-prone and the wrong tap is a wrong bin day. Adding OpenStreetMap house numbers could help; coverage unknown. The ONS file could not be fetched from this session, so the size is an estimate |
-| D | **Paid lookup** (Ideal Postcodes, OS Places) | Types postcode, picks address | No: about £30 to £45 per 1,000 sign-ups (see `spike-address-lookup.md`) | All | Small | Breaks the free rule. Ruled out for now |
-| E | **Ask the finder sites for an API** (uprn.uk, whatsmyuprn.com, findmyaddress.co.uk) | Best, if it works | Unknown | All | One email each | No reply, or a charge. Costs nothing to try |
+| B | **Per-platform address search**: call the same postcode-to-address API the council's own system uses, one resolver per platform | Types postcode and number. Same as now | Yes, but each council's API terms are unchecked | About 20 to 25 (Whitespace 6, Jadu 6, Bartec 4, AchieveForms where it exposes a lookup, and a few more) | Medium per platform, and each is reverse engineering that can break | The 133 bespoke councils get nothing from it |
+| F | **Open data lookup**: OS Open UPRN (every UPRN with a point, open licence) plus OpenStreetMap house numbers. Find the OpenStreetMap object with their postcode and number, then the UPRN nearest it | Types postcode and number. Same as now | Yes. The data is open; hosting it (static files on Pages) is free | All 215, where OpenStreetMap knows the house number | Large: build the lookup files, a resolver in the sign-up step, tests | Depends on how complete OpenStreetMap house numbers are, which nobody has measured for us. Flats (many UPRNs, one door) and wrong matches give a wrong bin day. OpenStreetMap is licensed ODbL: a lookup file derived from it has to be shared under the same licence and credited |
+| E | **Ask a finder site for an API** (uprn.uk, whatsmyuprn.com, findmyaddress.co.uk) | Same as now, if it works | Unknown | All | One email each | No reply, or a charge. Costs nothing to try |
+| C | **Postcode to homes on a map**, resident taps theirs | Taps a dot on a map | Yes | All, in principle | Large | Tapping the right house in a terrace is error-prone. Probably also unacceptable |
 
 ## Recommendation
 
-1. **Do E now.** An email costs nothing and a yes would replace A, B and C.
-2. **Do A first as the quick win.** It is the only option that lights up a large number of councils with a small
-   build. Make it honest and safe: say plainly that this council needs a UPRN, link to a finder, and after sign-up show
-   the dates we found ("does this look right? Bins on Thursday") so a wrong UPRN is noticed straight away. Keep it
-   behind a clear label so the councils with a normal postcode-and-number flow stay simple.
-3. **Do B for platforms that cover several councils** if A's drop-off turns out to be bad: Whitespace, Jadu, Bartec,
-   AchieveForms. That is about 20 to 25 councils with the nicest experience.
-4. **Leave C** until A and B are tried. It is the only route to everyone, but it is the most work and the least safe.
+1. **Measure F before building anything** (a spike is running, see the end of this file). It runs upstream's public test
+   UPRNs through the idea in reverse: is there an OpenStreetMap house number at that home, does it carry the postcode,
+   and does the UPRN nearest it lead back to the same home. If the rate is high, F is the only route that covers every
+   council with the experience we want. If it is low, F is out and the answer is B plus E.
+2. **Do E in parallel.** An email costs nothing and a yes would replace B and F.
+3. **Do B for platforms that cover several councils** (Whitespace, Jadu, Bartec, AchieveForms): about 20 to 25 councils
+   with the experience we want. Check each platform's address-search terms first.
+4. **Leave C** unless nothing else works, and ask first.
 
-## What A needs, in order
+## What building F would involve (if the spike says yes)
 
-1. **Measure the prize** (running now, see the end of this file): each UPRN council once with upstream's public test
-   UPRN, to see how many fetch and give a usable calendar. That is the real upper bound for A.
-2. **Generate registry entries** for the ones that work. The probe, bin-name mapping and generator already exist; they
-   need a UPRN mode (the registry entry takes `inputs: ["uprn"]`, which the fetcher, store and feed already support
-   because B&NES runs on one).
-3. **Sign-up page.** `canFindUprn` already exists in `web/src/coverage.ts` for exactly this; add a UPRN box and wording
-   for councils whose entry has `inputs: ["uprn"]`, and a "show me what you found" step after sign-up.
-4. **Privacy.** A UPRN identifies a property, so it is personal data like the postcode and house number. The privacy
-   policy and `docs/privacy.md` already list "UPRN (councils that need one)"; add the finder sites by name (we send people
-   to them, we don't send them anything).
-5. **Check the finders' terms** before linking, and what happens if one disappears (the page should still work for
-   anyone who already knows their UPRN).
+1. Registry entries for the UPRN councils whose scraper works with a UPRN (the measurement below says how many).
+2. A workflow that builds lookup files from OS Open UPRN and OpenStreetMap, sharded by postcode area so a lookup
+   downloads a small file, published on Pages under ODbL with credit.
+3. In the sign-up step: for a UPRN council, look the postcode and number up in the shard, show what we found for the
+   resident to confirm ("Bins on Thursday, next food waste 5 November. Is that right?"), and offer "that's not right"
+   rather than guess. Refuse rather than guess if the number is ambiguous or missing.
+4. Privacy: the lookup files are public data, we store only the UPRN, and the policy lists OpenStreetMap and OS Open UPRN
+   as sources.
 
 ## What I can't tell you yet
 
-- How many of the 187 really produce a complete calendar (bin names, general and recycling bins present).
-- Whether residents will go and find their UPRN. Nothing here measures that; the first people to try it will tell us.
+- How complete OpenStreetMap house numbers are around the homes we need. The spike measures this on a sample of about
+  190 homes; it is a sample, not the country.
+- How many of the 187 UPRN councils that passed upstream's test really produce a complete calendar (the UPRN probe below).
 - How many people these councils cover (the population file is missing from the census).
-- The terms of the finder sites, and whether any will give us an API.
+- The terms of the finder sites and of each platform's address search.
