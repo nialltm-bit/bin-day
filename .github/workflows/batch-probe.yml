@@ -37,6 +37,9 @@ jobs:
           done
           echo "Chrome service not ready" >&2; exit 1
       - name: Probe each council, one request at a time
+        env:
+          PROBE_RETRY: "1"
+          PROBE_FAILED: "1"
         run: python scripts/batch_probe.py "$RUNNER_TEMP/input.json" docs/spike-results/full-suite.json docs/spike-results/batch-probe.json 10 http://localhost:4444
       - name: Commit the results
         run: |

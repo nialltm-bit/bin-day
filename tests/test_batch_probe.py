@@ -46,3 +46,9 @@ def test_the_bare_number_is_the_leading_number_of_the_house():
     assert probe.leading_number("12A Rose Road") == "12A"
     assert probe.leading_number("Rose Cottage") is None
     assert probe.leading_number("61") == "61"
+
+
+def test_a_council_that_failed_upstream_is_tried_only_when_asked():
+    assert "FailsUpstream" not in names()
+    found = [name for name, _ in probe.candidates(INPUTS, PASSED, frozenset(), include_failed=True)]
+    assert "FailsUpstream" in found and "UprnCouncil" not in found
