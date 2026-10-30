@@ -1,18 +1,10 @@
 # Generated registry report (2026-10-30)
 
-Added 9 councils. Left out 73.
+Added 1 councils. Left out 81.
 
 ## Added
 
-- BlackpoolCouncil (E06000009)
-- CalderdaleCouncil (E08000033)
-- LondonBoroughCamdenCouncil (E09000007)
-- MidlothianCouncil (S12000019)
-- ScottishBordersCouncil (S12000026)
-- ThurrockCouncil (E06000034)
-- ValeofGlamorganCouncil (W06000014)
-- WalthamForest (E09000031)
-- WestMorlandAndFurness (E06000064)
+- SheffieldCityCouncil (E08000039)
 
 ## Left out, and why
 
@@ -83,9 +75,17 @@ Added 9 councils. Left out 73.
 - WinchesterCityCouncil: already in the registry (left unchanged)
 - WirralCouncil: already in the registry (left unchanged)
 - WokinghamBoroughCouncil: already in the registry (left unchanged)
+- BlackpoolCouncil: already in the registry (left unchanged)
 - BroxtoweBoroughCouncil: probe failed (ValueError)
+- CalderdaleCouncil: already in the registry (left unchanged)
 - LincolnCouncil: unrecognised bin name 'Green Bin'
+- LondonBoroughCamdenCouncil: already in the registry (left unchanged)
+- MidlothianCouncil: already in the registry (left unchanged)
 - MorayCouncil: unrecognised bin name 'Green Bin'
-- SheffieldCityCouncil: upstream says E08000019 but the test postcode is in E08000039
+- ScottishBordersCouncil: already in the registry (left unchanged)
 - SouthDerbyshireDistrictCouncil: unrecognised bin name 'Black and Food Waste Bins'
+- ThurrockCouncil: already in the registry (left unchanged)
 - UttlesfordDistrictCouncil: unrecognised bin name 'green'
+- ValeofGlamorganCouncil: already in the registry (left unchanged)
+- WalthamForest: already in the registry (left unchanged)
+- WestMorlandAndFurness: already in the registry (left unchanged)

@@ -1434,6 +1434,44 @@
       "notes": "Generated from upstream's test inputs and a probe on 2026-10-30: plain HTTP (no browser in the module), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword, and are not checked by a person. A bare house number: not applicable. No colours are set."
     },
     {
+      "ons_code": "E08000039",
+      "name": "Sheffield",
+      "status": "supported",
+      "schedule": "next_only",
+      "source": {
+        "type": "ukbcd",
+        "module": "SheffieldCityCouncil",
+        "url": "https://wasteservices.sheffield.gov.uk",
+        "skip_get_url": true
+      },
+      "inputs": [
+        "postcode",
+        "house_number"
+      ],
+      "house_input": "number_or_name",
+      "needs_selenium": false,
+      "bin_types": {
+        "Black Bin": {
+          "stream": "general",
+          "label": "Black Bin"
+        },
+        "Blue Bin": {
+          "stream": "recycling",
+          "label": "Blue Bin"
+        },
+        "Brown Bin": {
+          "stream": "garden",
+          "label": "Brown Bin"
+        }
+      },
+      "test_address": {
+        "postcode": "S7 1RY",
+        "house_number": "22"
+      },
+      "last_verified": "2026-10-30",
+      "notes": "Generated from upstream's test inputs and a probe on 2026-10-30: plain HTTP (no browser in the module), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword, and are not checked by a person. A bare house number: not applicable. No colours are set."
+    },
+    {
       "ons_code": "E09000003",
       "name": "Barnet",
       "status": "supported",
