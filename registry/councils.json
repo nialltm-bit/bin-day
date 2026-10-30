@@ -548,6 +548,44 @@
       "notes": "Generated from upstream's test inputs and a probe on 2026-10-28: plain HTTP (no browser in the module), returned a full schedule of 11 dates over 112 days. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
     },
     {
+      "ons_code": "E07000077",
+      "name": "Uttlesford",
+      "status": "supported",
+      "schedule": "full",
+      "source": {
+        "type": "ukbcd",
+        "module": "UttlesfordDistrictCouncil",
+        "url": "https://bins.uttlesford.gov.uk/",
+        "skip_get_url": true
+      },
+      "inputs": [
+        "postcode",
+        "house_number"
+      ],
+      "house_input": "number_or_name",
+      "needs_selenium": true,
+      "bin_types": {
+        "black": {
+          "stream": "general",
+          "label": "black"
+        },
+        "brown": {
+          "stream": "garden",
+          "label": "brown"
+        },
+        "green": {
+          "stream": "recycling",
+          "label": "green"
+        }
+      },
+      "test_address": {
+        "postcode": "CM23 5QF",
+        "house_number": "72, Birchanger Lane"
+      },
+      "last_verified": "2026-10-30",
+      "notes": "Generated from upstream's test inputs and a probe on 2026-10-30: drives a browser (Selenium), returned a full schedule of 6 dates over 35 days. Bin streams were mapped from the council's own bin names by keyword, except 'green', which were read from the council's website (see docs/spike-results/bin-colour-evidence.json), and are not checked by a person. A bare house number: same house. No colours are set."
+    },
+    {
       "ons_code": "E07000080",
       "name": "Forest of Dean",
       "status": "supported",
