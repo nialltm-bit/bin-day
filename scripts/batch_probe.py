@@ -5,7 +5,9 @@ records: whether it worked, the bin names, whether it returns one date per bin o
 number finds the same house as the full text. It also notes whether the module's source mentions a browser.
 
 A council that upstream runs with a browser is probed through the Selenium service at the address given, if there is one.
-Councils already in the output file are skipped, so a run only does the new ones. Set PROBE_ALL=1 to redo everything.
+Councils already in the output file are skipped, so a run only does the new ones.
+Set PROBE_ALL=1 to redo everything, PROBE_RETRY=1 to redo the ones that failed, and PROBE_FAILED=1 to include
+councils that failed upstream's own test.
 
 Usage: batch_probe.py <upstream input.json> <full-suite.json> <output json> [pause seconds] [selenium url]
 Logs and output are public, so they hold council module names, bin names and counts, never an address.
@@ -27,12 +29,14 @@ def passed_modules(suite_path):
     return {re.search(r"\[(.+)\]", c["test"]).group(1) for c in suite["cases"] if c["status"] == "passed"}
 
 
-def candidates(inputs, passed, done=frozenset()):
-    """Councils that take a postcode and a house number (no UPRN), passed upstream's own test, and aren't done yet."""
+def candidates(inputs, passed, done=frozenset(), include_failed=False):
+    """Councils that take a postcode and a house number (no UPRN), passed upstream's own test, and aren't done yet.
+    With include_failed, councils that did not pass upstream's test are tried as well (that test can fail only because
+    of where it ran, so the probe is the better judge)."""
     for name, entry in sorted(inputs.items()):
         if entry.get("uprn") or not (entry.get("postcode") and entry.get("house_number")):
             continue
-        if name not in passed or name in done:
+        if (name not in passed and not include_failed) or name in done:
             continue
         yield name, entry
 
@@ -95,9 +99,11 @@ def main(input_path, suite_path, out_path, pause="10", selenium_url=None):
     previous = []
     if os.path.exists(out_path) and os.environ.get("PROBE_ALL") != "1":
         previous = json.load(open(out_path))["results"]
+    if os.environ.get("PROBE_RETRY") == "1":  # try again the councils whose probe failed
+        previous = [row for row in previous if row.get("ok")]
     done = {row["module"] for row in previous}
     results = list(previous)
-    todo = list(candidates(inputs, passed_modules(suite_path), done))
+    todo = list(candidates(inputs, passed_modules(suite_path), done, os.environ.get("PROBE_FAILED") == "1"))
     print(f"already probed: {len(done)} | to probe now: {len(todo)}")
     for name, entry in todo:
         row = {"module": name, "ons_code": entry.get("LAD24CD"), "browser_in_source": uses_browser(name)}

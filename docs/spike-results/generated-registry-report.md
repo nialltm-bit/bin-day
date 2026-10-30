@@ -4,7 +4,7 @@ Added 1 councils. Left out 81.
 
 ## Added
 
-- SheffieldCityCouncil (E08000039)
+- UttlesfordDistrictCouncil (E07000077)
 
 ## Left out, and why
 
@@ -65,7 +65,7 @@ Added 1 councils. Left out 81.
 - PeterboroughCityCouncil: unrecognised bin name 'Empty Bin 240L Green'
 - SevenoaksDistrictCouncil: already in the registry (left unchanged)
 - SomersetCouncil: already in the registry (left unchanged)
-- SouthKestevenDistrictCouncil: unrecognised bin name 'GREEN'
+- SouthKestevenDistrictCouncil: unrecognised bin name 'Purple Bin'
 - StHelensBC: already in the registry (left unchanged)
 - StirlingCouncil: unrecognised bin name 'Food and Garden'
 - SwaleBoroughCouncil: unrecognised bin name 'green bin'
@@ -83,9 +83,9 @@ Added 1 councils. Left out 81.
 - MidlothianCouncil: already in the registry (left unchanged)
 - MorayCouncil: unrecognised bin name 'Green Bin'
 - ScottishBordersCouncil: already in the registry (left unchanged)
+- SheffieldCityCouncil: already in the registry (left unchanged)
 - SouthDerbyshireDistrictCouncil: unrecognised bin name 'Black and Food Waste Bins'
 - ThurrockCouncil: already in the registry (left unchanged)
-- UttlesfordDistrictCouncil: unrecognised bin name 'green'
 - ValeofGlamorganCouncil: already in the registry (left unchanged)
 - WalthamForest: already in the registry (left unchanged)
 - WestMorlandAndFurness: already in the registry (left unchanged)
