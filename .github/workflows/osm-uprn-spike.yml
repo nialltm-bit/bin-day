@@ -30,6 +30,7 @@ jobs:
         run: |
           curl -fsSL -o "$RUNNER_TEMP/uprn.zip" "https://api.os.uk/downloads/v1/products/OpenUPRN/downloads?area=GB&format=CSV&redirect"
           unzip -o -q "$RUNNER_TEMP/uprn.zip" -d "$RUNNER_TEMP/uprn"
+          chmod -R u+rwX,a+r "$RUNNER_TEMP/uprn"
           ls "$RUNNER_TEMP/uprn" | sed 's/[0-9]//g'
       - name: Measure
         run: python scripts/spike_osm_uprn.py "$RUNNER_TEMP/input.json" "$(ls $RUNNER_TEMP/uprn/*.csv | head -1)" docs/spike-results/osm-uprn.json 2
