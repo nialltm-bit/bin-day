@@ -1,14 +1,9 @@
-# Generated registry report (2026-10-28)
+# Generated registry report (2026-10-30)
 
 Added 0 councils. Left out 67.
 
 ## Added
 
-
-## Re-checked against the current mapping rules
-
-- taken out until its bin names can be settled: East Hampshire
-- taken out until its bin names can be settled: Test Valley
 
 ## Left out, and why
 
