@@ -13,6 +13,7 @@ Usage: batch_probe.py <upstream input.json> <full-suite.json> <output json> [pau
 Logs and output are public, so they hold council module names, bin names and counts, never an address.
 """
 import importlib
+import importlib.util
 import json
 import os
 import re
@@ -86,8 +87,9 @@ def run_module(name, entry, house_number, selenium_url=None):
 
 
 def uses_browser(name):
-    module = importlib.import_module(f"uk_bin_collection.uk_bin_collection.councils.{name}")
-    text = open(module.__file__, encoding="utf-8").read().lower()
+    # Read the source without importing it: a module whose own dependency is missing must not stop the whole run.
+    spec = importlib.util.find_spec(f"uk_bin_collection.uk_bin_collection.councils.{name}")
+    text = open(spec.origin, encoding="utf-8").read().lower()
     return "selenium" in text or "webdriver" in text
 
 

@@ -2,7 +2,7 @@ name: Probe the UPRN councils with upstream's test UPRN
 
 # Measures how many councils that need a UPRN would work if we could find a resident's UPRN: runs each once with
 # upstream's public test UPRN (scripts/batch_probe.py with PROBE_UPRN=1). The results are kept apart from the registry's
-# (docs/spike-results/uprn-probe.json). Upstream's test addresses only; nothing here is a real person's address.
+# (docs/spike-results/uprn-probe.json); councils already in that file are skipped. Upstream's test addresses only; nothing here is a real person's address.
 on:
   workflow_dispatch:
   push:
