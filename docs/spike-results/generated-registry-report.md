@@ -64,7 +64,7 @@ Added 0 councils. Left out 67.
 - PeterboroughCityCouncil: unrecognised bin name 'Empty Bin 240L Green'
 - SevenoaksDistrictCouncil: already in the registry (left unchanged)
 - SomersetCouncil: already in the registry (left unchanged)
-- SouthKestevenDistrictCouncil: unrecognised bin name 'Purple Bin'
+- SouthKestevenDistrictCouncil: unrecognised bin name 'GREEN'
 - StHelensBC: already in the registry (left unchanged)
 - StirlingCouncil: unrecognised bin name 'Food and Garden'
 - SwaleBoroughCouncil: unrecognised bin name 'green bin'
