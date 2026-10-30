@@ -43,6 +43,43 @@
       "flags": []
     },
     {
+      "ons_code": "E06000009",
+      "name": "Blackpool",
+      "schedule": "next_only",
+      "browser": false,
+      "address": {
+        "postcode": "FY3 8EB",
+        "house_number": "61"
+      },
+      "url": "https://www.blackpool.gov.uk/",
+      "ok": true,
+      "bins": [
+        {
+          "name": "Empty Bin 23ltr Food Caddy",
+          "stream": "food",
+          "next": [
+            "2026-11-04",
+            "2026-11-11"
+          ]
+        },
+        {
+          "name": "Empty Bin Domestic Refuse 240L",
+          "stream": "general",
+          "next": [
+            "2026-11-04"
+          ]
+        },
+        {
+          "name": "Empty Bin Paper & Card 240L",
+          "stream": "recycling",
+          "next": [
+            "2026-11-11"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
       "ons_code": "E06000011",
       "name": "East Riding of Yorkshire",
       "schedule": "next_only",
@@ -52,31 +89,12 @@
         "house_number": "14"
       },
       "url": "https://www.eastriding.gov.uk",
-      "ok": true,
-      "bins": [
-        {
-          "name": "Blue Bin (Recycling)",
-          "stream": "recycling",
-          "next": [
-            "2026-10-30"
-          ]
-        },
-        {
-          "name": "Brown Bin (Garden Waste)",
-          "stream": "garden",
-          "next": [
-            "2026-11-11"
-          ]
-        },
-        {
-          "name": "Green Bin (General Waste)",
-          "stream": "general",
-          "next": [
-            "2026-11-06"
-          ]
-        }
-      ],
-      "flags": []
+      "ok": false,
+      "error": "ReadTimeout",
+      "bins": [],
+      "flags": [
+        "did not fetch (ReadTimeout)"
+      ]
     },
     {
       "ons_code": "E06000022",
@@ -115,6 +133,58 @@
           "stream": "recycling",
           "next": [
             "2026-10-30"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "ons_code": "E06000034",
+      "name": "Thurrock",
+      "schedule": "full",
+      "browser": false,
+      "address": {
+        "postcode": "RM17 6TX",
+        "house_number": "10"
+      },
+      "url": "https://www.thurrock.gov.uk",
+      "ok": true,
+      "bins": [
+        {
+          "name": "Blue Bin",
+          "stream": "recycling",
+          "next": [
+            "2026-11-05",
+            "2026-11-19",
+            "2026-12-03"
+          ]
+        },
+        {
+          "name": "Brown Bin",
+          "stream": "garden",
+          "next": [
+            "2026-11-05",
+            "2026-11-19",
+            "2026-12-03"
+          ]
+        },
+        {
+          "name": "Food Bin",
+          "stream": "food",
+          "next": [
+            "2026-11-05",
+            "2026-11-12",
+            "2026-11-19",
+            "2026-11-26"
+          ]
+        },
+        {
+          "name": "Green/Grey Bin",
+          "stream": "general",
+          "next": [
+            "2026-11-12",
+            "2026-11-26",
+            "2026-12-10"
           ]
         }
       ],
@@ -250,12 +320,73 @@
         "house_number": "44"
       },
       "url": "https://enviroservices.brighton-hove.gov.uk/link/collections",
-      "ok": false,
-      "error": "FetchError: response has no collections",
-      "bins": [],
-      "flags": [
-        "did not fetch (FetchError: response has no collections)"
-      ]
+      "ok": true,
+      "bins": [
+        {
+          "name": "Food waste",
+          "stream": "food",
+          "next": [
+            "2026-11-05"
+          ]
+        },
+        {
+          "name": "Garden Waste",
+          "stream": "garden",
+          "next": [
+            "2026-11-06"
+          ]
+        },
+        {
+          "name": "Recycling",
+          "stream": "recycling",
+          "next": [
+            "2026-11-02"
+          ]
+        },
+        {
+          "name": "Refuse",
+          "stream": "general",
+          "next": [
+            "2026-11-05"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "ons_code": "E06000064",
+      "name": "Westmorland and Furness",
+      "schedule": "full",
+      "browser": false,
+      "address": {
+        "postcode": "LA9 4QU",
+        "house_number": "23"
+      },
+      "url": "https://www.westmorlandandfurness.gov.uk/",
+      "ok": true,
+      "bins": [
+        {
+          "name": "General Waste",
+          "stream": "general",
+          "next": [
+            "2026-11-05",
+            "2026-11-19",
+            "2026-12-03",
+            "2026-12-17"
+          ]
+        },
+        {
+          "name": "Recyclable waste",
+          "stream": "recycling",
+          "next": [
+            "2026-11-12",
+            "2026-11-26",
+            "2026-12-10",
+            "2026-12-24"
+          ]
+        }
+      ],
+      "flags": []
     },
     {
       "ons_code": "E06000066",
@@ -267,12 +398,31 @@
         "house_number": "5"
       },
       "url": "https://www.somerset.gov.uk/",
-      "ok": false,
-      "error": "TimeoutException",
-      "bins": [],
-      "flags": [
-        "did not fetch (TimeoutException)"
-      ]
+      "ok": true,
+      "bins": [
+        {
+          "name": "Food Recycling",
+          "stream": "food",
+          "next": [
+            "2026-11-04"
+          ]
+        },
+        {
+          "name": "Recycling Collection",
+          "stream": "recycling",
+          "next": [
+            "2026-11-04"
+          ]
+        },
+        {
+          "name": "Rubbish Collection",
+          "stream": "general",
+          "next": [
+            "2026-11-18"
+          ]
+        }
+      ],
+      "flags": []
     },
     {
       "ons_code": "E07000037",
@@ -1176,30 +1326,12 @@
         "house_number": "15"
       },
       "url": "https://www.sthelens.gov.uk/",
-      "ok": true,
-      "bins": [
-        {
-          "name": "General non-recyclable waste",
-          "stream": "general",
-          "next": [
-            "2026-11-06",
-            "2026-11-20",
-            "2026-12-04",
-            "2026-12-18"
-          ]
-        },
-        {
-          "name": "Recycling",
-          "stream": "recycling",
-          "next": [
-            "2026-10-30",
-            "2026-11-06",
-            "2026-11-13",
-            "2026-11-20"
-          ]
-        }
-      ],
-      "flags": []
+      "ok": false,
+      "error": "FetchError: response has no collections",
+      "bins": [],
+      "flags": [
+        "did not fetch (FetchError: response has no collections)"
+      ]
     },
     {
       "ons_code": "E08000015",
@@ -1336,6 +1468,59 @@
       "flags": []
     },
     {
+      "ons_code": "E08000033",
+      "name": "Calderdale",
+      "schedule": "next_only",
+      "browser": false,
+      "address": {
+        "postcode": "HX3 5EQ",
+        "house_number": "95"
+      },
+      "url": "https://www.calderdale.gov.uk/environment/waste/household-collections/collectiondayfinder.jsp",
+      "ok": false,
+      "error": "HTTPError",
+      "bins": [],
+      "flags": [
+        "did not fetch (HTTPError)"
+      ]
+    },
+    {
+      "ons_code": "E08000039",
+      "name": "Sheffield",
+      "schedule": "next_only",
+      "browser": false,
+      "address": {
+        "postcode": "S7 1RY",
+        "house_number": "22"
+      },
+      "url": "https://wasteservices.sheffield.gov.uk",
+      "ok": true,
+      "bins": [
+        {
+          "name": "Black Bin",
+          "stream": "general",
+          "next": [
+            "2026-11-09"
+          ]
+        },
+        {
+          "name": "Blue Bin",
+          "stream": "recycling",
+          "next": [
+            "2026-11-02"
+          ]
+        },
+        {
+          "name": "Brown Bin",
+          "stream": "garden",
+          "next": [
+            "2026-11-16"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
       "ons_code": "E09000003",
       "name": "Barnet",
       "schedule": "next_only",
@@ -1440,6 +1625,42 @@
       "flags": []
     },
     {
+      "ons_code": "E09000007",
+      "name": "Camden",
+      "schedule": "next_only",
+      "browser": false,
+      "address": {
+        "postcode": "NW6 1PL",
+        "house_number": "27"
+      },
+      "url": "https://recyclingandrubbishcollections.camden.gov.uk",
+      "ok": true,
+      "bins": [
+        {
+          "name": "Food collection",
+          "stream": "food",
+          "next": [
+            "2026-11-04"
+          ]
+        },
+        {
+          "name": "Recycling collection",
+          "stream": "recycling",
+          "next": [
+            "2026-11-04"
+          ]
+        },
+        {
+          "name": "Rubbish collection",
+          "stream": "general",
+          "next": [
+            "2026-11-04"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
       "ons_code": "E09000008",
       "name": "Croydon",
       "schedule": "next_only",
@@ -1512,7 +1733,7 @@
           "name": "brown bin",
           "stream": "garden",
           "next": [
-            "2026-11-10"
+            "2026-11-03"
           ]
         }
       ],
@@ -1558,6 +1779,49 @@
             "2026-11-17",
             "2026-12-01",
             "2026-12-15"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "ons_code": "E09000031",
+      "name": "Waltham Forest",
+      "schedule": "next_only",
+      "browser": true,
+      "address": {
+        "postcode": "E17 4PW",
+        "house_number": "17 Chingford Road, Walthamstow"
+      },
+      "url": "https://portal.walthamforest.gov.uk/AchieveForms/?mode=fill&consentMessage=yes&form_uri=sandbox-publish://AF-Process-d62ccdd2-3de9-48eb-a229-8e20cbdd6393/AF-Stage-8bf39bf9-5391-4c24-857f-0dc2025c67f4/definition.json&process=1&process_uri=sandbox-processes://AF-Process-d62ccdd2-3de9-48eb-a229-8e20cbdd6393&process_id=AF-Process-d62ccdd2-3de9-48eb-a229-8e20cbdd6393",
+      "ok": true,
+      "bins": [
+        {
+          "name": "Food Waste Collection Service",
+          "stream": "food",
+          "next": [
+            "2026-10-30"
+          ]
+        },
+        {
+          "name": "Garden Waste Collection Service",
+          "stream": "garden",
+          "next": [
+            "2026-10-30"
+          ]
+        },
+        {
+          "name": "Recycling Collection Service",
+          "stream": "recycling",
+          "next": [
+            "2026-10-30"
+          ]
+        },
+        {
+          "name": "Refuse Collection Service",
+          "stream": "general",
+          "next": [
+            "2026-11-06"
           ]
         }
       ],
@@ -1633,6 +1897,108 @@
           "next": [
             "2026-11-05",
             "2026-11-19"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "ons_code": "S12000019",
+      "name": "Midlothian",
+      "schedule": "next_only",
+      "browser": true,
+      "address": {
+        "postcode": "EH19 2EB",
+        "house_number": "52"
+      },
+      "url": "https://www.midlothian.gov.uk/info/1054/bins_and_recycling/343/bin_collection_days",
+      "ok": true,
+      "bins": [
+        {
+          "name": "Cardboard",
+          "stream": "recycling",
+          "next": [
+            "2026-11-16"
+          ]
+        },
+        {
+          "name": "Food waste",
+          "stream": "food",
+          "next": [
+            "2026-11-04"
+          ]
+        },
+        {
+          "name": "Garden waste",
+          "stream": "garden",
+          "next": [
+            "2026-10-30"
+          ]
+        },
+        {
+          "name": "General waste",
+          "stream": "general",
+          "next": [
+            "2026-11-02"
+          ]
+        },
+        {
+          "name": "Glass",
+          "stream": "recycling",
+          "next": [
+            "2026-11-06"
+          ]
+        },
+        {
+          "name": "Recycling",
+          "stream": "recycling",
+          "next": [
+            "2026-11-09"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "ons_code": "S12000026",
+      "name": "Scottish Borders",
+      "schedule": "full",
+      "browser": false,
+      "address": {
+        "postcode": "TD1 1QN",
+        "house_number": "1"
+      },
+      "url": "https://www.scotborders.gov.uk",
+      "ok": true,
+      "bins": [
+        {
+          "name": "Food",
+          "stream": "food",
+          "next": [
+            "2026-11-05",
+            "2026-11-12",
+            "2026-11-19",
+            "2026-11-26"
+          ]
+        },
+        {
+          "name": "General Waste",
+          "stream": "general",
+          "next": [
+            "2026-11-11",
+            "2026-11-25",
+            "2026-12-09",
+            "2026-12-23"
+          ]
+        },
+        {
+          "name": "Recycling",
+          "stream": "recycling",
+          "next": [
+            "2026-11-06",
+            "2026-11-20",
+            "2026-12-04",
+            "2026-12-18"
           ]
         }
       ],
@@ -1737,6 +2103,41 @@
           "next": [
             "2026-11-02",
             "2026-11-09"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "ons_code": "W06000014",
+      "name": "The Vale of Glamorgan",
+      "schedule": "full",
+      "browser": false,
+      "address": {
+        "postcode": "CF63 4AE",
+        "house_number": "3"
+      },
+      "url": "https://www.valeofglamorgan.gov.uk/en/living/Recycling-and-Waste/",
+      "ok": true,
+      "bins": [
+        {
+          "name": "Black bag",
+          "stream": "general",
+          "next": [
+            "2026-11-04",
+            "2026-11-25",
+            "2026-12-16",
+            "2027-01-06"
+          ]
+        },
+        {
+          "name": "Separated recycling",
+          "stream": "recycling",
+          "next": [
+            "2026-11-04",
+            "2026-11-11",
+            "2026-11-18",
+            "2026-11-25"
           ]
         }
       ],

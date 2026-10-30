@@ -3,7 +3,7 @@
 Every covered council, run once with its public test address. This catches councils that don't fetch and results that
 can't be right (a bin on two weekdays, odd gaps, no general or recycling bin). It cannot say the dates are true.
 
-- Councils checked: 41. Fetched: 39. Did not fetch: 2.
+- Councils checked: 51. Fetched: 48. Did not fetch: 3.
 - Fetched but flagged: 0.
 
 ## To check by hand
@@ -32,27 +32,39 @@ Address: CO2 8UN, 29. Council site: https://www.colchester.gov.uk/your-recycling
 | Mixed recycling (paper/card/plastics/tins/cans) | recycling | 2026-11-12 |
 | Non-recyclable rubbish | general | 2026-11-05, 2026-11-19 |
 
-### East Riding of Yorkshire
+### Blackpool
 
-Address: HU17 8LG, 14. Council site: https://www.eastriding.gov.uk
-
-| Bin (council's name) | We call it | Next dates |
-|---|---|---|
-| Blue Bin (Recycling) | recycling | 2026-10-30 |
-| Brown Bin (Garden Waste) | garden | 2026-11-11 |
-| Green Bin (General Waste) | general | 2026-11-06 |
-
-### Forest of Dean
-
-Address: GL15 6JT, ELMOGAL, PARKEND ROAD, BREAM, LYDNEY. Council site: https://community.fdean.gov.uk/s/waste-collection-enquiry
+Address: FY3 8EB, 61. Council site: https://www.blackpool.gov.uk/
 
 | Bin (council's name) | We call it | Next dates |
 |---|---|---|
-| 240 Litre Refuse | general | 2026-11-12 |
-| Blue Bag | recycling | 2026-11-05 |
-| Garden Bin | garden | 2026-11-05 |
-| Green Recycling Box | recycling | 2026-11-05 |
-| Outdoor Food Caddy | food | 2026-11-05 |
+| Empty Bin 23ltr Food Caddy | food | 2026-11-04, 2026-11-11 |
+| Empty Bin Domestic Refuse 240L | general | 2026-11-04 |
+| Empty Bin Paper & Card 240L | recycling | 2026-11-11 |
+
+### Brighton and Hove
+
+Address: BN1 8NE, 44. Council site: https://enviroservices.brighton-hove.gov.uk/link/collections
+
+| Bin (council's name) | We call it | Next dates |
+|---|---|---|
+| Food waste | food | 2026-11-05 |
+| Garden Waste | garden | 2026-11-06 |
+| Recycling | recycling | 2026-11-02 |
+| Refuse | general | 2026-11-05 |
+
+### Midlothian
+
+Address: EH19 2EB, 52. Council site: https://www.midlothian.gov.uk/info/1054/bins_and_recycling/343/bin_collection_days
+
+| Bin (council's name) | We call it | Next dates |
+|---|---|---|
+| Cardboard | recycling | 2026-11-16 |
+| Food waste | food | 2026-11-04 |
+| Garden waste | garden | 2026-10-30 |
+| General waste | general | 2026-11-02 |
+| Glass | recycling | 2026-11-06 |
+| Recycling | recycling | 2026-11-09 |
 
 ### Ceredigion
 
@@ -85,22 +97,30 @@ Address: EN4 8TB, 26A. Council site: https://www.barnet.gov.uk/recycling-and-was
 | General Waste | general | 2026-11-02, 2026-11-09 |
 | Recycling Bin | recycling | 2026-11-02, 2026-11-09 |
 
-### Brighton and Hove
+### East Riding of Yorkshire
 
-Address: BN1 8NE, 44. Council site: https://enviroservices.brighton-hove.gov.uk/link/collections
+Address: HU17 8LG, 14. Council site: https://www.eastriding.gov.uk
+
+
+- Flag: did not fetch (ReadTimeout)
+
+### St. Helens
+
+Address: L34 2GA, 15. Council site: https://www.sthelens.gov.uk/
 
 
 - Flag: did not fetch (FetchError: response has no collections)
 
-### Somerset
+### Calderdale
 
-Address: TA6 4AA, 5. Council site: https://www.somerset.gov.uk/
+Address: HX3 5EQ, 95. Council site: https://www.calderdale.gov.uk/environment/waste/household-collections/collectiondayfinder.jsp
 
 
-- Flag: did not fetch (TimeoutException)
+- Flag: did not fetch (HTTPError)
 
 ## Did not fetch
 
-- Brighton and Hove: FetchError: response has no collections
-- Somerset: TimeoutException
+- East Riding of Yorkshire: ReadTimeout
+- St. Helens: FetchError: response has no collections
+- Calderdale: HTTPError
 
