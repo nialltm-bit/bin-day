@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-28",
+  "date": "2026-10-30",
   "results": [
     {
       "ons_code": "E06000003",
@@ -17,10 +17,10 @@
           "name": "FOOD",
           "stream": "food",
           "next": [
-            "2026-10-28",
             "2026-11-04",
             "2026-11-11",
-            "2026-11-18"
+            "2026-11-18",
+            "2026-11-25"
           ]
         },
         {
@@ -35,7 +35,6 @@
           "name": "REFUSE",
           "stream": "general",
           "next": [
-            "2026-10-28",
             "2026-11-11",
             "2026-11-25"
           ]
@@ -66,7 +65,7 @@
           "name": "Brown Bin (Garden Waste)",
           "stream": "garden",
           "next": [
-            "2026-10-28"
+            "2026-11-11"
           ]
         },
         {
@@ -137,16 +136,15 @@
           "name": "Food",
           "stream": "food",
           "next": [
-            "2026-10-30",
             "2026-11-06",
-            "2026-11-13"
+            "2026-11-13",
+            "2026-11-20"
           ]
         },
         {
           "name": "General waste",
           "stream": "general",
           "next": [
-            "2026-10-30",
             "2026-11-20",
             "2026-12-11"
           ]
@@ -187,10 +185,10 @@
           "name": "Recycling",
           "stream": "recycling",
           "next": [
-            "2026-11-02",
-            "2026-11-16",
-            "2026-11-30",
-            "2026-12-14"
+            "2026-11-09",
+            "2026-11-23",
+            "2026-12-07",
+            "2026-12-21"
           ]
         },
         {
@@ -252,38 +250,12 @@
         "house_number": "44"
       },
       "url": "https://enviroservices.brighton-hove.gov.uk/link/collections",
-      "ok": true,
-      "bins": [
-        {
-          "name": "Food waste",
-          "stream": "food",
-          "next": [
-            "2026-10-29"
-          ]
-        },
-        {
-          "name": "Garden Waste",
-          "stream": "garden",
-          "next": [
-            "2026-11-06"
-          ]
-        },
-        {
-          "name": "Recycling",
-          "stream": "recycling",
-          "next": [
-            "2026-11-02"
-          ]
-        },
-        {
-          "name": "Refuse",
-          "stream": "general",
-          "next": [
-            "2026-10-29"
-          ]
-        }
-      ],
-      "flags": []
+      "ok": false,
+      "error": "FetchError: response has no collections",
+      "bins": [],
+      "flags": [
+        "did not fetch (FetchError: response has no collections)"
+      ]
     },
     {
       "ons_code": "E06000066",
@@ -295,31 +267,12 @@
         "house_number": "5"
       },
       "url": "https://www.somerset.gov.uk/",
-      "ok": true,
-      "bins": [
-        {
-          "name": "Food Recycling",
-          "stream": "food",
-          "next": [
-            "2026-10-28"
-          ]
-        },
-        {
-          "name": "Recycling Collection",
-          "stream": "recycling",
-          "next": [
-            "2026-10-28"
-          ]
-        },
-        {
-          "name": "Rubbish Collection",
-          "stream": "general",
-          "next": [
-            "2026-10-28"
-          ]
-        }
-      ],
-      "flags": []
+      "ok": false,
+      "error": "TimeoutException",
+      "bins": [],
+      "flags": [
+        "did not fetch (TimeoutException)"
+      ]
     },
     {
       "ons_code": "E07000037",
@@ -337,20 +290,20 @@
           "name": "Food",
           "stream": "food",
           "next": [
-            "2026-10-28",
             "2026-11-04",
             "2026-11-11",
-            "2026-11-18"
+            "2026-11-18",
+            "2026-11-25"
           ]
         },
         {
           "name": "Recycling",
           "stream": "recycling",
           "next": [
-            "2026-10-28",
             "2026-11-11",
             "2026-11-25",
-            "2026-12-09"
+            "2026-12-09",
+            "2026-12-23"
           ]
         },
         {
@@ -382,7 +335,6 @@
           "name": "Food waste",
           "stream": "food",
           "next": [
-            "2026-10-29",
             "2026-11-05",
             "2026-11-12",
             "2026-11-19"
@@ -392,7 +344,6 @@
           "name": "Glass",
           "stream": "recycling",
           "next": [
-            "2026-10-29",
             "2026-11-12"
           ]
         },
@@ -400,7 +351,6 @@
           "name": "Mixed recycling (paper/card/plastics/tins/cans)",
           "stream": "recycling",
           "next": [
-            "2026-10-29",
             "2026-11-12"
           ]
         },
@@ -431,10 +381,10 @@
           "name": "Garden Waste (Green Bin)",
           "stream": "garden",
           "next": [
-            "2026-10-29",
             "2026-11-05",
             "2026-11-12",
-            "2026-11-19"
+            "2026-11-19",
+            "2026-11-26"
           ]
         },
         {
@@ -451,10 +401,10 @@
           "name": "Recyclables (Black Bin)",
           "stream": "recycling",
           "next": [
-            "2026-10-29",
             "2026-11-12",
             "2026-11-26",
-            "2026-12-10"
+            "2026-12-10",
+            "2026-12-24"
           ]
         }
       ],
@@ -476,14 +426,14 @@
           "name": "240 Litre Refuse",
           "stream": "general",
           "next": [
-            "2026-10-29"
+            "2026-11-12"
           ]
         },
         {
           "name": "Blue Bag",
           "stream": "recycling",
           "next": [
-            "2026-10-29"
+            "2026-11-05"
           ]
         },
         {
@@ -497,14 +447,14 @@
           "name": "Green Recycling Box",
           "stream": "recycling",
           "next": [
-            "2026-10-29"
+            "2026-11-05"
           ]
         },
         {
           "name": "Outdoor Food Caddy",
           "stream": "food",
           "next": [
-            "2026-10-29"
+            "2026-11-05"
           ]
         }
       ],
@@ -576,14 +526,14 @@
           "name": "Cardboard & Paper",
           "stream": "recycling",
           "next": [
-            "2026-10-29"
+            "2026-11-19"
           ]
         },
         {
           "name": "Food Waste",
           "stream": "food",
           "next": [
-            "2026-10-29"
+            "2026-11-05"
           ]
         },
         {
@@ -638,7 +588,8 @@
           "stream": "recycling",
           "next": [
             "2026-11-02",
-            "2026-11-16"
+            "2026-11-16",
+            "2026-11-30"
           ]
         },
         {
@@ -747,7 +698,7 @@
           "name": "Food",
           "stream": "food",
           "next": [
-            "2026-10-29"
+            "2026-11-05"
           ]
         },
         {
@@ -761,7 +712,7 @@
           "name": "Recycling",
           "stream": "recycling",
           "next": [
-            "2026-10-29"
+            "2026-11-12"
           ]
         },
         {
@@ -790,7 +741,7 @@
           "name": "Brown bin",
           "stream": "garden",
           "next": [
-            "2026-10-29"
+            "2026-11-12"
           ]
         },
         {
@@ -804,7 +755,7 @@
           "name": "Grey bin",
           "stream": "general",
           "next": [
-            "2026-10-29"
+            "2026-11-12"
           ]
         }
       ],
@@ -869,7 +820,7 @@
           "name": "1100 Litre Recycling",
           "stream": "recycling",
           "next": [
-            "2026-10-29"
+            "2026-11-05"
           ]
         },
         {
@@ -883,14 +834,14 @@
           "name": "140 Litre Food",
           "stream": "food",
           "next": [
-            "2026-10-29"
+            "2026-11-05"
           ]
         },
         {
           "name": "240 Litre Glass",
           "stream": "recycling",
           "next": [
-            "2026-10-29"
+            "2026-11-05"
           ]
         }
       ],
@@ -938,7 +889,8 @@
           "name": "Recycling Collection",
           "stream": "recycling",
           "next": [
-            "2026-11-09"
+            "2026-11-09",
+            "2026-11-30"
           ]
         },
         {
@@ -978,7 +930,8 @@
           "stream": "garden",
           "next": [
             "2026-11-02",
-            "2026-11-16"
+            "2026-11-16",
+            "2026-11-30"
           ]
         },
         {
@@ -1058,8 +1011,8 @@
           "name": "Food Waste Bin",
           "stream": "food",
           "next": [
-            "2026-10-28",
-            "2026-11-04"
+            "2026-11-04",
+            "2026-11-11"
           ]
         },
         {
@@ -1080,7 +1033,7 @@
           "name": "Rubbish Bin",
           "stream": "general",
           "next": [
-            "2026-10-28"
+            "2026-11-11"
           ]
         }
       ],
@@ -1102,10 +1055,10 @@
           "name": "Food waste",
           "stream": "food",
           "next": [
-            "2026-10-29",
             "2026-11-05",
             "2026-11-12",
-            "2026-11-19"
+            "2026-11-19",
+            "2026-11-26"
           ]
         },
         {
@@ -1120,7 +1073,6 @@
           "name": "Rubbish",
           "stream": "general",
           "next": [
-            "2026-10-29",
             "2026-11-12",
             "2026-11-26"
           ]
@@ -1208,7 +1160,7 @@
           "name": "grey",
           "stream": "general",
           "next": [
-            "2026-10-29"
+            "2026-11-19"
           ]
         }
       ],
@@ -1275,30 +1227,30 @@
           "name": "Grey food waste",
           "stream": "food",
           "next": [
-            "2026-10-29",
             "2026-11-05",
             "2026-11-12",
-            "2026-11-19"
+            "2026-11-19",
+            "2026-11-26"
           ]
         },
         {
           "name": "Grey recycling",
           "stream": "recycling",
           "next": [
-            "2026-10-29",
             "2026-11-12",
             "2026-11-26",
-            "2026-12-10"
+            "2026-12-10",
+            "2026-12-24"
           ]
         },
         {
           "name": "Small grey",
           "stream": "general",
           "next": [
-            "2026-10-29",
             "2026-11-05",
             "2026-11-12",
-            "2026-11-19"
+            "2026-11-19",
+            "2026-11-26"
           ]
         }
       ],
@@ -1438,10 +1390,10 @@
           "name": "Food waste collection",
           "stream": "food",
           "next": [
-            "2026-10-28",
             "2026-11-04",
             "2026-11-11",
-            "2026-11-18"
+            "2026-11-18",
+            "2026-11-25"
           ]
         },
         {
@@ -1468,10 +1420,10 @@
           "name": "Recycling collection",
           "stream": "recycling",
           "next": [
-            "2026-10-28",
             "2026-11-11",
             "2026-11-25",
-            "2026-12-09"
+            "2026-12-09",
+            "2026-12-23"
           ]
         },
         {
@@ -1503,14 +1455,14 @@
           "name": "Food waste",
           "stream": "food",
           "next": [
-            "2026-10-29"
+            "2026-11-05"
           ]
         },
         {
           "name": "General rubbish",
           "stream": "general",
           "next": [
-            "2026-10-29"
+            "2026-11-12"
           ]
         },
         {
@@ -1524,7 +1476,7 @@
           "name": "Paper and card recycling",
           "stream": "recycling",
           "next": [
-            "2026-10-29"
+            "2026-11-12"
           ]
         }
       ],
@@ -1560,7 +1512,7 @@
           "name": "brown bin",
           "stream": "garden",
           "next": [
-            "2026-11-03"
+            "2026-11-10"
           ]
         }
       ],
@@ -1627,7 +1579,8 @@
           "name": "Black Landfill",
           "stream": "general",
           "next": [
-            "2026-11-06"
+            "2026-11-06",
+            "2026-11-20"
           ]
         },
         {
@@ -1664,7 +1617,6 @@
           "name": "BrownBin",
           "stream": "garden",
           "next": [
-            "2026-10-29",
             "2026-11-12"
           ]
         },
@@ -1672,7 +1624,6 @@
           "name": "RecycleBin",
           "stream": "recycling",
           "next": [
-            "2026-10-29",
             "2026-11-12"
           ]
         },
@@ -1680,7 +1631,8 @@
           "name": "ResidualBin",
           "stream": "general",
           "next": [
-            "2026-11-05"
+            "2026-11-05",
+            "2026-11-19"
           ]
         }
       ],
