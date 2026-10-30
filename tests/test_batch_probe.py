@@ -52,3 +52,8 @@ def test_a_council_that_failed_upstream_is_tried_only_when_asked():
     assert "FailsUpstream" not in names()
     found = [name for name, _ in probe.candidates(INPUTS, PASSED, frozenset(), include_failed=True)]
     assert "FailsUpstream" in found and "UprnCouncil" not in found
+
+
+def test_uprn_mode_picks_the_councils_that_have_a_uprn_and_passed_upstream():
+    found = [name for name, _ in probe.uprn_candidates(INPUTS, PASSED, frozenset({"AlreadyDone"}))]
+    assert found == ["UprnAndNumber", "UprnCouncil"]

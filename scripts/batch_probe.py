@@ -41,6 +41,14 @@ def candidates(inputs, passed, done=frozenset(), include_failed=False):
         yield name, entry
 
 
+def uprn_candidates(inputs, passed, done=frozenset()):
+    """Councils whose upstream test gives a UPRN, passed upstream's own test, and aren't done yet. Used only to measure how
+    many UPRN councils would work if we could find a UPRN (PROBE_UPRN=1); the results are kept apart from the registry's."""
+    for name, entry in sorted(inputs.items()):
+        if entry.get("uprn") and name in passed and name not in done:
+            yield name, entry
+
+
 class Timeout(Exception):
     pass
 
@@ -52,7 +60,13 @@ def _on_alarm(signum, frame):
 def run_module(name, entry, house_number, selenium_url=None):
     from uk_bin_collection.uk_bin_collection.collect_data import UKBinCollectionApp
 
-    args = [name, entry["url"], f"-p={entry['postcode']}", f"-n={house_number}"]
+    args = [name, entry["url"]]
+    if entry.get("postcode"):
+        args.append(f"-p={entry['postcode']}")
+    if house_number:
+        args.append(f"-n={house_number}")
+    if os.environ.get("PROBE_UPRN") == "1" and entry.get("uprn"):
+        args.append(f"-u={entry['uprn']}")
     if entry.get("web_driver") and selenium_url:
         args.append(f"-w={selenium_url}")
     if entry.get("skip_get_url") is True:
@@ -103,19 +117,24 @@ def main(input_path, suite_path, out_path, pause="10", selenium_url=None):
         previous = [row for row in previous if row.get("ok")]
     done = {row["module"] for row in previous}
     results = list(previous)
-    todo = list(candidates(inputs, passed_modules(suite_path), done, os.environ.get("PROBE_FAILED") == "1"))
+    if os.environ.get("PROBE_UPRN") == "1":
+        todo = list(uprn_candidates(inputs, passed_modules(suite_path), done))
+    else:
+        todo = list(candidates(inputs, passed_modules(suite_path), done, os.environ.get("PROBE_FAILED") == "1"))
     print(f"already probed: {len(done)} | to probe now: {len(todo)}")
     for name, entry in todo:
         row = {"module": name, "ons_code": entry.get("LAD24CD"), "browser_in_source": uses_browser(name)}
         try:
-            full = run_module(name, entry, str(entry["house_number"]), selenium_url)
+            full = run_module(name, entry, str(entry.get("house_number") or ""), selenium_url)
             row.update(describe(full))
             row["ok"] = bool(full)
         except Exception as err:  # upstream modules raise anything
             row.update({"ok": False, "error": type(err).__name__})
             full = None
-        number = leading_number(str(entry["house_number"]))
-        if full and number and number != str(entry["house_number"]).strip():
+        number = leading_number(str(entry.get("house_number") or ""))
+        if os.environ.get("PROBE_UPRN") == "1":  # the bare-number check means nothing when the UPRN picks the house
+            row["bare_number"] = "not_applicable"
+        elif full and number and number != str(entry.get("house_number")).strip():
             time.sleep(float(pause))
             try:
                 bare = run_module(name, entry, number, selenium_url)
