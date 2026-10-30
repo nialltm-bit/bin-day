@@ -1,0 +1,297 @@
+{
+ "results": [
+  {
+   "module": "AberdeenCityCouncil",
+   "ons_code": "S12000033",
+   "browser_in_source": false,
+   "bins": [
+    "Garden",
+    "General",
+    "Recycling"
+   ],
+   "most_dates_for_one_bin": 2,
+   "span_days": 14,
+   "schedule": "next_only",
+   "gaps_days": [
+    14
+   ],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "AberdeenshireCouncil",
+   "ons_code": "S12000034",
+   "browser_in_source": false,
+   "bins": [
+    "Blue lid bin recycling",
+    "Orange lid bin recycling",
+    "Refuse",
+    "food waste"
+   ],
+   "most_dates_for_one_bin": 3,
+   "span_days": 14,
+   "schedule": "next_only",
+   "gaps_days": [
+    7
+   ],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "AmberValleyBoroughCouncil",
+   "ons_code": "E07000032",
+   "browser_in_source": false,
+   "bins": [
+    "RECYCLING",
+    "REFUSE"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "ArdsAndNorthDownCouncil",
+   "ons_code": "N09000011",
+   "browser_in_source": false,
+   "bins": [
+    "Blue Bin",
+    "Glass Collection Box",
+    "Green /Brown Bin",
+    "Grey Bin"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "ArgyllandButeCouncil",
+   "ons_code": "S12000035",
+   "browser_in_source": true,
+   "bins": [
+    "General",
+    "Recycling"
+   ],
+   "most_dates_for_one_bin": 4,
+   "span_days": 42,
+   "schedule": "full",
+   "gaps_days": [
+    14,
+    21
+   ],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "ArmaghBanbridgeCraigavonCouncil",
+   "ons_code": "N09000002",
+   "browser_in_source": false,
+   "bins": [
+    "Domestic",
+    "Garden",
+    "Recycling"
+   ],
+   "most_dates_for_one_bin": 7,
+   "span_days": 84,
+   "schedule": "full",
+   "gaps_days": [
+    14
+   ],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "AshfordBoroughCouncil",
+   "ons_code": "E07000105",
+   "browser_in_source": true,
+   "bins": [
+    "Food Waste",
+    "Household Refuse",
+    "Recycling"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "BCPCouncil",
+   "ons_code": "E06000058",
+   "browser_in_source": false,
+   "bins": [
+    "Food waste",
+    "Garden Waste",
+    "Recycling",
+    "Rubbish"
+   ],
+   "most_dates_for_one_bin": 2,
+   "span_days": 14,
+   "schedule": "next_only",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "BarnsleyMBCouncil",
+   "ons_code": "E08000016",
+   "browser_in_source": false,
+   "bins": [
+    "Blue bin",
+    "Green bin",
+    "Grey bin"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "BasildonCouncil",
+   "ons_code": "E07000066",
+   "browser_in_source": true,
+   "bins": [
+    "Black Wheelie Bin",
+    "Blue Bag",
+    "Green Caddy",
+    "Green Wheelie Bin (Active)",
+    "Orange Box",
+    "White Bag"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "BasingstokeCouncil",
+   "ons_code": "E07000084",
+   "browser_in_source": false,
+   "bins": [
+    "food",
+    "garden",
+    "glass",
+    "recycling",
+    "waste"
+   ],
+   "most_dates_for_one_bin": 6,
+   "span_days": 84,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    13,
+    14,
+    15,
+    28
+   ],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "BathAndNorthEastSomersetCouncil",
+   "ons_code": "E06000022",
+   "browser_in_source": false,
+   "bins": [
+    "Black Rubbish Bin (140L)",
+    "Blue Recycling Bag for Cardboard",
+    "Food Recycling Collection Bin",
+    "Green Recycling Box"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "BedfordBoroughCouncil",
+   "ons_code": "E06000055",
+   "browser_in_source": false,
+   "bins": [
+    "Black bin",
+    "Caddy bin",
+    "Green bin",
+    "Orange bin"
+   ],
+   "most_dates_for_one_bin": 2,
+   "span_days": 7,
+   "schedule": "next_only",
+   "gaps_days": [
+    7
+   ],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "BedfordshireCouncil",
+   "ons_code": "E06000056",
+   "browser_in_source": false,
+   "bins": [
+    "Food waste",
+    "Recycling",
+    "Refuse (black bin)"
+   ],
+   "most_dates_for_one_bin": 27,
+   "span_days": 182,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "BelfastCityCouncil",
+   "ons_code": "N09000003",
+   "browser_in_source": false,
+   "bins": [
+    "Compost bin",
+    "General waste bin",
+    "Glass recycling bin",
+    "Recycling bin"
+   ],
+   "most_dates_for_one_bin": 1,
+   "span_days": 0,
+   "schedule": "next_only",
+   "gaps_days": [],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "BexleyCouncil",
+   "ons_code": "E09000004",
+   "browser_in_source": false,
+   "bins": [
+    "Blue Lidded Wheelie Bin (Paper and card)",
+    "Brown Caddy (Food waste)",
+    "Brown Wheelie Bin (Garden waste)",
+    "Green Wheelie Bin (Non-recyclable waste)",
+    "White Lidded Wheelie Bin (Plastics, cans and glass)"
+   ],
+   "most_dates_for_one_bin": 9,
+   "span_days": 56,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true,
+   "bare_number": "not_applicable"
+  }
+ ]
+}
