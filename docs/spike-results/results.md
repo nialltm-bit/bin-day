@@ -1,6 +1,6 @@
 # Spike results (FRE-263)
 
-Run: 2026-10-26T15:56:15+00:00, uk_bin_collection 0.173.5
+Run: 2026-10-30T10:47:23+00:00, uk_bin_collection 0.173.5
 
 16 of 16 councils returned bins.
 

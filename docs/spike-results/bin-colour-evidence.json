@@ -40,22 +40,34 @@
     }
   },
   "NorthWestLeicestershire": {
-    "pages_read": 0,
+    "pages_read": 10,
     "bins": {
       "Purple Bag": {
         "stream": null,
-        "votes": {},
-        "pages": []
+        "votes": {
+          "recycling": 1
+        },
+        "pages": [
+          "https://www.nwleics.gov.uk/pages/recyclingcontainers"
+        ]
       },
       "Red Box": {
         "stream": null,
-        "votes": {},
-        "pages": []
+        "votes": {
+          "recycling": 1
+        },
+        "pages": [
+          "https://www.nwleics.gov.uk/pages/recyclingcontainers"
+        ]
       },
       "Yellow Bag": {
         "stream": null,
-        "votes": {},
-        "pages": []
+        "votes": {
+          "recycling": 1
+        },
+        "pages": [
+          "https://www.nwleics.gov.uk/pages/recyclingcontainers"
+        ]
       }
     }
   },
@@ -187,25 +199,17 @@
     }
   },
   "SouthKestevenDistrictCouncil": {
-    "pages_read": 12,
+    "pages_read": 0,
     "bins": {
       "GREEN": {
-        "stream": "garden",
-        "votes": {
-          "garden": 3
-        },
-        "pages": [
-          "https://www.southkesteven.gov.uk/gardenwasteFAQs"
-        ]
+        "stream": null,
+        "votes": {},
+        "pages": []
       },
       "Purple Bin": {
         "stream": null,
-        "votes": {
-          "food": 1
-        },
-        "pages": [
-          "https://www.southkesteven.gov.uk/recycling"
-        ]
+        "votes": {},
+        "pages": []
       }
     }
   },
