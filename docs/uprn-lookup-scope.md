@@ -59,10 +59,25 @@ could not fetch the ONS file), so I can't say how many people these cover.
 4. Privacy: the lookup files are public data, we store only the UPRN, and the policy lists OpenStreetMap and OS Open UPRN
    as sources.
 
+## Measured: how big the prize is (2026-10-30)
+
+Each UPRN council was run once with upstream's public test UPRN (`.github/workflows/uprn-probe.yml`, results in
+`docs/spike-results/uprn-probe.json`).
+
+- 197 councils probed (the ones whose scraper passed upstream's own test); **194 returned dates**. Three failed: a missing
+  library in upstream's module, a connection timeout, and a page element the browser could not click.
+- Of the 194, **122 councils that are not yet in the registry would map cleanly** with the keyword rules we already have
+  (every bin recognised, and a general waste and a recycling bin present). 55 more are held back by bin names we can't map
+  yet (colours, combined bins), 10 by an incomplete set of bins. These go on the exceptions list as usual.
+- 128 of the 194 give only the next date per bin (learned frequencies fill the rest over time); 66 give a full schedule;
+  24 need a browser.
+
+So if a UPRN could be found for a resident, about 120 more councils could be added with the pipeline we already have.
+The whole question is the lookup.
+
 ## What I can't tell you yet
 
 - How complete OpenStreetMap house numbers are around the homes we need. The spike measures this on a sample of about
   190 homes; it is a sample, not the country.
-- How many of the 187 UPRN councils that passed upstream's test really produce a complete calendar (the UPRN probe below).
 - How many people these councils cover (the population file is missing from the census).
 - The terms of the finder sites and of each platform's address search.
