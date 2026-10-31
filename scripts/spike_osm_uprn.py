@@ -23,6 +23,7 @@ import urllib.request
 
 OVERPASS = "https://overpass-api.de/api/interpreter"
 NEAR_METRES = 15
+DEADLINE_SECONDS = 40 * 60
 BOX_DEGREES = 0.004  # about 440 m north-south, enough to hold every UPRN near a test home
 
 
@@ -91,10 +92,10 @@ def read_points(csv_path, wanted):
 
 def osm_objects(lat, lon):
     """OpenStreetMap objects with a house number within 30 m of a point."""
-    query = f'[out:json][timeout:30];nwr(around:30,{lat},{lon})["addr:housenumber"];out tags center;'
+    query = f'[out:json][timeout:20];nwr(around:30,{lat},{lon})["addr:housenumber"];out tags center;'
     body = urllib.parse.urlencode({"data": query}).encode()
     request = urllib.request.Request(OVERPASS, data=body, headers={"User-Agent": "bin-day-spike/1.0"})
-    with urllib.request.urlopen(request, timeout=60) as response:
+    with urllib.request.urlopen(request, timeout=25) as response:
         elements = json.load(response)["elements"]
     out = []
     for e in elements:
@@ -110,7 +111,11 @@ def main(input_path, csv_path, out_path, pause="2"):
     points, around = read_points(csv_path, wanted)
     print(f"test homes: {len(homes)} | found in OS Open UPRN: {sum(1 for u, _ in homes.values() if u in points)}")
     rows = []
+    started = time.time()
     for module, (uprn, postcode) in sorted(homes.items()):
+        if time.time() - started > DEADLINE_SECONDS:  # keep what was measured rather than run for hours
+            rows.append({"module": module, "in_open_uprn": uprn in points, "error": "deadline"})
+            continue
         if uprn not in points:
             rows.append({"module": module, "in_open_uprn": False})
             continue
@@ -123,6 +128,7 @@ def main(input_path, csv_path, out_path, pause="2"):
             continue
         neighbours = {u: p for u, p in around.items() if abs(p[0] - lat) <= BOX_DEGREES and abs(p[1] - lon) <= BOX_DEGREES}
         rows.append({"module": module, "in_open_uprn": True, **judge(uprn, (lat, lon), neighbours, objects, postcode)})
+        json.dump({"results": rows}, open(out_path, "w"), indent=1)  # saved as we go
         time.sleep(float(pause))
     measured = [r for r in rows if "covered" in r]
     summary = {key: sum(1 for r in measured if r[key]) for key in ("covered", "postcode", "roundtrip")}
