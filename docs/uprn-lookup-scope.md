@@ -39,16 +39,27 @@ could not fetch the ONS file), so I can't say how many people these cover.
 
 ## Recommendation
 
-1. **Measure F before building anything** (a spike is running, see the end of this file). It runs upstream's public test
-   UPRNs through the idea in reverse: is there an OpenStreetMap house number at that home, does it carry the postcode,
-   and does the UPRN nearest it lead back to the same home. If the rate is high, F is the only route that covers every
-   council with the experience we want. If it is low, F is out and the answer is B plus E.
-2. **Do E in parallel.** An email costs nothing and a yes would replace B and F.
-3. **Do B for platforms that cover several councils** (Whitespace, Jadu, Bartec, AchieveForms): about 20 to 25 councils
+1. **F is out** (the measurement above). That leaves B and E.
+2. **Do E.** An email costs nothing and a yes would replace B and F.
+3. **Then B, for platforms that cover several councils** (Whitespace, Jadu, Bartec, AchieveForms): about 20 to 25 councils
    with the experience we want. Check each platform's address-search terms first.
 4. **Leave C** unless nothing else works, and ask first.
 
-## What building F would involve (if the spike says yes)
+## Result of the open-data spike (2026-11-01)
+
+Measured against a Geofabrik OpenStreetMap extract of Great Britain and OS Open UPRN, on 207 of upstream's public test
+homes (`docs/spike-results/osm-uprn.json`, counts only):
+
+- An OpenStreetMap object with a house number within 15 m of the home: **12 of 207 (6%)**.
+- The UPRN nearest that object is the home's own UPRN: **5 of 207 (2%)**.
+- A matching postcode on that object: **0 of 207**.
+
+That is far too low to rely on: for about 94% of homes OpenStreetMap has nothing to match a typed house number against, and
+a wrong match gives a wrong bin day. **F is ruled out.** One caution: this is a sample of upstream's test addresses, a
+15 m radius is strict, and I did not validate the measurement against a known-good set. The gap to a usable rate is large enough
+that I don't expect a looser radius to close it.
+
+## What building F would have involved (kept for the record)
 
 1. Registry entries for the UPRN councils whose scraper works with a UPRN (the measurement below says how many).
 2. A workflow that builds lookup files from OS Open UPRN and OpenStreetMap, sharded by postcode area so a lookup
