@@ -359,6 +359,40 @@
       "notes": "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: not applicable. No colours are set."
     },
     {
+      "ons_code": "E06000046",
+      "name": "Isle of Wight",
+      "status": "supported",
+      "schedule": "full",
+      "source": {
+        "type": "ukbcd",
+        "module": "IsleOfWightCouncil",
+        "url": "https://digitalservices.iow.gov.uk/wasteday",
+        "skip_get_url": true
+      },
+      "inputs": [
+        "postcode",
+        "house_number"
+      ],
+      "house_input": "number_or_name",
+      "needs_selenium": true,
+      "bin_types": {
+        "Non-recyclable waste": {
+          "stream": "general",
+          "label": "Non-recyclable waste"
+        },
+        "Recycling": {
+          "stream": "recycling",
+          "label": "Recycling"
+        }
+      },
+      "test_address": {
+        "postcode": "PO30 1JW",
+        "house_number": "Orme House Nursery 125"
+      },
+      "last_verified": "2026-10-30",
+      "notes": "Generated from upstream's test inputs and a probe on 2026-10-30: drives a browser (Selenium), returned a full schedule of 13 dates over 182 days. Bin streams were mapped from the council's own bin names by keyword, and are not checked by a person. A bare house number: not applicable. No colours are set."
+    },
+    {
       "ons_code": "E06000064",
       "name": "Westmorland and Furness",
       "status": "supported",
@@ -839,6 +873,44 @@
       },
       "last_verified": "2026-10-28",
       "notes": "Generated from upstream's test inputs and a probe on 2026-10-28: drives a browser (Selenium), returned only the next date per bin, so how often each bin is emptied is learned from repeat fetches (fetcher/learned.py) and the feed shows only confirmed dates until then. Bin streams were mapped from the council's own bin names by keyword and are not checked against the council's website. A bare house number: same house. No colours are set."
+    },
+    {
+      "ons_code": "E07000132",
+      "name": "Hinckley and Bosworth",
+      "status": "supported",
+      "schedule": "full",
+      "source": {
+        "type": "ukbcd",
+        "module": "HinckleyandBosworthBoroughCouncil",
+        "url": "https://www.hinckley-bosworth.gov.uk",
+        "skip_get_url": true
+      },
+      "inputs": [
+        "postcode",
+        "house_number"
+      ],
+      "house_input": "number_or_name",
+      "needs_selenium": true,
+      "bin_types": {
+        "Black bin": {
+          "stream": "general",
+          "label": "Black bin"
+        },
+        "Blue lidded bin": {
+          "stream": "recycling",
+          "label": "Blue lidded bin"
+        },
+        "Food waste caddy": {
+          "stream": "food",
+          "label": "Food waste caddy"
+        }
+      },
+      "test_address": {
+        "postcode": "LE10 0FT",
+        "house_number": "2"
+      },
+      "last_verified": "2026-10-30",
+      "notes": "Generated from upstream's test inputs and a probe on 2026-10-30: drives a browser (Selenium), returned a full schedule of 52 dates over 357 days. Bin streams were mapped from the council's own bin names by keyword, and are not checked by a person. A bare house number: not applicable. No colours are set."
     },
     {
       "ons_code": "E07000144",

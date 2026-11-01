@@ -293,13 +293,6 @@
    "bare_number": "same_house"
   },
   {
-   "module": "HinckleyandBosworthBoroughCouncil",
-   "ons_code": "E07000132",
-   "browser_in_source": true,
-   "ok": false,
-   "error": "ReadTimeout"
-  },
-  {
    "module": "LisburnCastlereaghCityCouncil",
    "ons_code": "N09000007",
    "browser_in_source": false,
@@ -653,13 +646,6 @@
    "bare_number": "not_applicable"
   },
   {
-   "module": "ChelmsfordCityCouncil",
-   "ons_code": "E07000070",
-   "browser_in_source": true,
-   "ok": false,
-   "error": "ValueError"
-  },
-  {
    "module": "ColchesterCityCouncil",
    "ons_code": "E07000071",
    "browser_in_source": true,
@@ -836,13 +822,6 @@
    ],
    "ok": true,
    "bare_number": "not_applicable"
-  },
-  {
-   "module": "IsleOfWightCouncil",
-   "ons_code": null,
-   "browser_in_source": true,
-   "ok": false,
-   "error": "ConnectionError"
   },
   {
    "module": "KnowsleyMBCouncil",
@@ -1228,13 +1207,6 @@
    "bare_number": "not_applicable"
   },
   {
-   "module": "BroxtoweBoroughCouncil",
-   "ons_code": "E07000172",
-   "browser_in_source": true,
-   "ok": false,
-   "error": "ValueError"
-  },
-  {
    "module": "CalderdaleCouncil",
    "ons_code": "E08000033",
    "browser_in_source": false,
@@ -1468,6 +1440,260 @@
    ],
    "ok": true,
    "bare_number": "not_applicable"
+  },
+  {
+   "module": "AshfieldDistrictCouncil",
+   "ons_code": "E07000170",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "module": "BarkingDagenham",
+   "ons_code": "E09000002",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "module": "BostonBoroughCouncil",
+   "ons_code": "E07000136",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "module": "BroxtoweBoroughCouncil",
+   "ons_code": "E07000172",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "ValueError"
+  },
+  {
+   "module": "ChelmsfordCityCouncil",
+   "ons_code": "E07000070",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "ValueError"
+  },
+  {
+   "module": "ChichesterDistrictCouncil",
+   "ons_code": "E07000225",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "module": "DacorumBoroughCouncil",
+   "ons_code": "E07000096",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "Timeout"
+  },
+  {
+   "module": "DumfriesandGallowayCouncil",
+   "ons_code": "S12000006",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "HTTPError"
+  },
+  {
+   "module": "EastDevonDC",
+   "ons_code": "E07000040",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "HTTPError"
+  },
+  {
+   "module": "EastLindseyDistrictCouncil",
+   "ons_code": "E07000137",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "module": "EastRenfrewshireCouncil",
+   "ons_code": "S12000011",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "module": "GatesheadCouncil",
+   "ons_code": "E08000037",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "HTTPError"
+  },
+  {
+   "module": "HaltonBoroughCouncil",
+   "ons_code": "E06000006",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "ValueError"
+  },
+  {
+   "module": "HinckleyandBosworthBoroughCouncil",
+   "ons_code": "E07000132",
+   "browser_in_source": true,
+   "bins": [
+    "Black bin",
+    "Blue lidded bin",
+    "Food waste caddy"
+   ],
+   "most_dates_for_one_bin": 52,
+   "span_days": 357,
+   "schedule": "full",
+   "gaps_days": [
+    7,
+    14
+   ],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "HorshamDistrictCouncil",
+   "ons_code": "E07000227",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "ConnectionError"
+  },
+  {
+   "module": "InverclydeCouncil",
+   "ons_code": null,
+   "browser_in_source": false,
+   "ok": false,
+   "error": "ConnectTimeout"
+  },
+  {
+   "module": "IsleOfWightCouncil",
+   "ons_code": null,
+   "browser_in_source": true,
+   "bins": [
+    "Non-recyclable waste",
+    "Recycling"
+   ],
+   "most_dates_for_one_bin": 13,
+   "span_days": 182,
+   "schedule": "full",
+   "gaps_days": [
+    14,
+    28
+   ],
+   "ok": true,
+   "bare_number": "not_applicable"
+  },
+  {
+   "module": "LancasterCityCouncil",
+   "ons_code": "E07000121",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "MissingSchema"
+  },
+  {
+   "module": "MidAndEastAntrimBoroughCouncil",
+   "ons_code": "N09000008",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "ValueError"
+  },
+  {
+   "module": "MidSussexDistrictCouncil",
+   "ons_code": "E07000228",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "HTTPError"
+  },
+  {
+   "module": "NorwichCityCouncil",
+   "ons_code": "E07000148",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "HTTPError"
+  },
+  {
+   "module": "PowysCouncil",
+   "ons_code": "W06000023",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "HTTPError"
+  },
+  {
+   "module": "PrestonCityCouncil",
+   "ons_code": "E07000123",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "Timeout"
+  },
+  {
+   "module": "SouthTynesideCouncil",
+   "ons_code": "E08000023",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "JSONDecodeError"
+  },
+  {
+   "module": "StocktonOnTeesCouncil",
+   "ons_code": "E06000004",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "module": "SunderlandCityCouncil",
+   "ons_code": "E08000024",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "HTTPError"
+  },
+  {
+   "module": "SwanseaCouncil",
+   "ons_code": "W06000011",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "HTTPError"
+  },
+  {
+   "module": "TorfaenCouncil",
+   "ons_code": null,
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "module": "WaverleyBoroughCouncil",
+   "ons_code": "E07000216",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "IndexError"
+  },
+  {
+   "module": "WestBerkshireCouncil",
+   "ons_code": "E06000037",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "module": "WestDevonBoroughCouncil",
+   "ons_code": "E07000047",
+   "browser_in_source": true,
+   "ok": false,
+   "error": "TimeoutException"
+  },
+  {
+   "module": "WokingBoroughCouncil",
+   "ons_code": "E07000217",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "IndexError"
+  },
+  {
+   "module": "WolverhamptonCityCouncil",
+   "ons_code": "E08000031",
+   "browser_in_source": false,
+   "ok": false,
+   "error": "HTTPError"
   }
  ]
 }

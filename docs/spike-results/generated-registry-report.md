@@ -1,10 +1,11 @@
 # Generated registry report (2026-10-30)
 
-Added 1 councils. Left out 81.
+Added 2 councils. Left out 109.
 
 ## Added
 
-- UttlesfordDistrictCouncil (E07000077)
+- HinckleyandBosworthBoroughCouncil (E07000132)
+- IsleOfWightCouncil (E06000046)
 
 ## Left out, and why
 
@@ -23,7 +24,6 @@ Added 1 councils. Left out 81.
 - HackneyCouncil: already in the registry (left unchanged)
 - HighPeakCouncil: already in the registry (left unchanged)
 - Hillingdon: unrecognised bin name 'Household'
-- HinckleyandBosworthBoroughCouncil: probe failed (ReadTimeout)
 - LisburnCastlereaghCityCouncil: already in the registry (left unchanged)
 - NewcastleCityCouncil: already in the registry (left unchanged)
 - NorthWestLeicestershire: unrecognised bin name 'Purple Bag'
@@ -43,7 +43,6 @@ Added 1 councils. Left out 81.
 - BrightonandHoveCityCouncil: already in the registry (left unchanged)
 - BroadlandDistrictCouncil: already in the registry (left unchanged)
 - CeredigionCountyCouncil: already in the registry (left unchanged)
-- ChelmsfordCityCouncil: probe failed (ValueError)
 - ColchesterCityCouncil: already in the registry (left unchanged)
 - CotswoldDistrictCouncil: unrecognised bin name 'White Bag'
 - CroydonCouncil: already in the registry (left unchanged)
@@ -54,7 +53,6 @@ Added 1 councils. Left out 81.
 - ForestOfDeanDistrictCouncil: already in the registry (left unchanged)
 - GuildfordCouncil: already in the registry (left unchanged)
 - HertsmereBoroughCouncil: unrecognised bin name 'Green'
-- IsleOfWightCouncil: probe failed (ConnectionError)
 - KnowsleyMBCouncil: unrecognised bin name 'Maroon'
 - MaidstoneBoroughCouncil: already in the registry (left unchanged)
 - MidSuffolkDistrictCouncil: already in the registry (left unchanged)
@@ -76,7 +74,6 @@ Added 1 councils. Left out 81.
 - WirralCouncil: already in the registry (left unchanged)
 - WokinghamBoroughCouncil: already in the registry (left unchanged)
 - BlackpoolCouncil: already in the registry (left unchanged)
-- BroxtoweBoroughCouncil: probe failed (ValueError)
 - CalderdaleCouncil: already in the registry (left unchanged)
 - LincolnCouncil: unrecognised bin name 'Green Bin'
 - LondonBoroughCamdenCouncil: already in the registry (left unchanged)
@@ -86,6 +83,38 @@ Added 1 councils. Left out 81.
 - SheffieldCityCouncil: already in the registry (left unchanged)
 - SouthDerbyshireDistrictCouncil: unrecognised bin name 'Black and Food Waste Bins'
 - ThurrockCouncil: already in the registry (left unchanged)
+- UttlesfordDistrictCouncil: already in the registry (left unchanged)
 - ValeofGlamorganCouncil: already in the registry (left unchanged)
 - WalthamForest: already in the registry (left unchanged)
 - WestMorlandAndFurness: already in the registry (left unchanged)
+- AshfieldDistrictCouncil: probe failed (TimeoutException)
+- BarkingDagenham: probe failed (TimeoutException)
+- BostonBoroughCouncil: probe failed (TimeoutException)
+- BroxtoweBoroughCouncil: probe failed (ValueError)
+- ChelmsfordCityCouncil: probe failed (ValueError)
+- ChichesterDistrictCouncil: probe failed (TimeoutException)
+- DacorumBoroughCouncil: probe failed (Timeout)
+- DumfriesandGallowayCouncil: probe failed (HTTPError)
+- EastDevonDC: probe failed (HTTPError)
+- EastLindseyDistrictCouncil: probe failed (TimeoutException)
+- EastRenfrewshireCouncil: probe failed (TimeoutException)
+- GatesheadCouncil: probe failed (HTTPError)
+- HaltonBoroughCouncil: probe failed (ValueError)
+- HorshamDistrictCouncil: probe failed (ConnectionError)
+- InverclydeCouncil: probe failed (ConnectTimeout)
+- LancasterCityCouncil: probe failed (MissingSchema)
+- MidAndEastAntrimBoroughCouncil: probe failed (ValueError)
+- MidSussexDistrictCouncil: probe failed (HTTPError)
+- NorwichCityCouncil: probe failed (HTTPError)
+- PowysCouncil: probe failed (HTTPError)
+- PrestonCityCouncil: probe failed (Timeout)
+- SouthTynesideCouncil: probe failed (JSONDecodeError)
+- StocktonOnTeesCouncil: probe failed (TimeoutException)
+- SunderlandCityCouncil: probe failed (HTTPError)
+- SwanseaCouncil: probe failed (HTTPError)
+- TorfaenCouncil: probe failed (TimeoutException)
+- WaverleyBoroughCouncil: probe failed (IndexError)
+- WestBerkshireCouncil: probe failed (TimeoutException)
+- WestDevonBoroughCouncil: probe failed (TimeoutException)
+- WokingBoroughCouncil: probe failed (IndexError)
+- WolverhamptonCityCouncil: probe failed (HTTPError)

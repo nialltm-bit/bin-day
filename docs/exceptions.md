@@ -1,6 +1,6 @@
 # Exceptions: councils not on the site yet
 
-309 of 361 councils are not covered; 52 are. Each is here with why and what it would take.
+307 of 361 councils are not covered; 54 are. Each is here with why and what it would take.
 Rebuilt from the census, the batch probe and the registry by `scripts/exceptions.py`; the same data is in `exceptions.csv`.
 
 | Group | Councils |
@@ -8,9 +8,9 @@ Rebuilt from the census, the batch probe and the registry by `scripts/exceptions
 | Bin names are colours or ambiguous | 14 |
 | Bin names that combine streams | 7 |
 | Calendar would be incomplete | 2 |
-| Probe failed | 4 |
+| Probe failed | 25 |
 | Not probed yet | 0 |
-| Failed upstream's own test | 23 |
+| Failed upstream's own test | 0 |
 | Needs a UPRN | 215 |
 | Takes another kind of input | 39 |
 | No upstream module | 5 |
@@ -38,7 +38,7 @@ Rebuilt from the census, the batch probe and the registry by `scripts/exceptions
 
 ## Bin names that combine streams (7)
 
-**What it takes:** Decide how a name like 'Food & Garden' or 'Glass+Food' should appear in the calendar (one bin with two kinds of waste).
+**What it takes:** Decide how a name like 'Food & Garden' or 'Glass+Food' should appear in the calendar (one bin, two kinds of waste).
 
 | Council | ONS | Why | Bins the council returns |
 |---|---|---|---|
@@ -52,53 +52,44 @@ Rebuilt from the census, the batch probe and the registry by `scripts/exceptions
 
 ## Calendar would be incomplete (2)
 
-**What it takes:** The bins found lack a general waste or recycling bin. Check whether the module drops one, or whether the council really collects it elsewhere.
+**What it takes:** The bins found lack a general waste or recycling bin. Check whether the module drops one or the council collects it elsewhere.
 
 | Council | ONS | Why | Bins the council returns |
 |---|---|---|---|
 | East Hampshire | E07000085 | the bins found have no general waste bin, so the calendar would be incomplete | Recycling (green bin) and glass box(es) |
 | Test Valley | E07000093 | the bins found have no general waste and no recycling bin, so the calendar would be incomplete | Food Waste, Garden Waste |
 
-## Probe failed (4)
+## Probe failed (25)
 
 **What it takes:** Re-run the probe; if it still fails, the module may be broken or blocked from GitHub's network.
 
 | Council | ONS | Why | Bins the council returns |
 |---|---|---|---|
+| Ashfield | E07000170 | probe failed (TimeoutException) |  |
+| Barking and Dagenham | E09000002 | probe failed (TimeoutException) |  |
+| Boston | E07000136 | probe failed (TimeoutException) |  |
 | Chelmsford | E07000070 | probe failed (ValueError) |  |
-| Hinckley and Bosworth | E07000132 | probe failed (ReadTimeout) |  |
-| Isle of Wight | E06000046 | probe failed (ConnectionError) |  |
+| Chichester | E07000225 | probe failed (TimeoutException) |  |
+| Dacorum | E07000096 | probe failed (Timeout) |  |
+| East Lindsey | E07000137 | probe failed (TimeoutException) |  |
+| East Renfrewshire | S12000011 | probe failed (TimeoutException) |  |
+| Gateshead | E08000037 | probe failed (HTTPError) |  |
+| Halton | E06000006 | probe failed (ValueError) |  |
+| Inverclyde | S12000018 | probe failed (ConnectTimeout) |  |
+| Lancaster | E07000121 | probe failed (MissingSchema) |  |
+| Mid Sussex | E07000228 | probe failed (HTTPError) |  |
+| Mid and East Antrim | N09000008 | probe failed (ValueError) |  |
+| Norwich | E07000148 | probe failed (HTTPError) |  |
+| Powys | W06000023 | probe failed (HTTPError) |  |
+| Preston | E07000123 | probe failed (Timeout) |  |
+| South Tyneside | E08000023 | probe failed (JSONDecodeError) |  |
+| Stockton-on-Tees | E06000004 | probe failed (TimeoutException) |  |
+| Sunderland | E08000024 | probe failed (HTTPError) |  |
+| Swansea | W06000011 | probe failed (HTTPError) |  |
+| Waverley | E07000216 | probe failed (IndexError) |  |
+| West Berkshire | E06000037 | probe failed (TimeoutException) |  |
+| Woking | E07000217 | probe failed (IndexError) |  |
 | Wyre Forest | E07000239 | source.url must be an https URL | Black/Grey Rubbish Bin, Green Recycling Bin |
-
-## Failed upstream's own test (23)
-
-**What it takes:** The module did not pass upstream's test in our run: broken upstream, or blocked from GitHub's network. Needs a look at the module.
-
-| Council | ONS | Why | Bins the council returns |
-|---|---|---|---|
-| Ashfield | E07000170 | failed upstream's own test |  |
-| Barking and Dagenham | E09000002 | failed upstream's own test |  |
-| Boston | E07000136 | failed upstream's own test |  |
-| Chichester | E07000225 | failed upstream's own test |  |
-| Dacorum | E07000096 | failed upstream's own test |  |
-| East Lindsey | E07000137 | failed upstream's own test |  |
-| East Renfrewshire | S12000011 | failed upstream's own test |  |
-| Gateshead | E08000037 | failed upstream's own test |  |
-| Halton | E06000006 | failed upstream's own test |  |
-| Inverclyde | S12000018 | failed upstream's own test |  |
-| Lancaster | E07000121 | failed upstream's own test |  |
-| Mid Sussex | E07000228 | failed upstream's own test |  |
-| Mid and East Antrim | N09000008 | failed upstream's own test |  |
-| Norwich | E07000148 | failed upstream's own test |  |
-| Powys | W06000023 | failed upstream's own test |  |
-| Preston | E07000123 | failed upstream's own test |  |
-| South Tyneside | E08000023 | failed upstream's own test |  |
-| Stockton-on-Tees | E06000004 | failed upstream's own test |  |
-| Sunderland | E08000024 | failed upstream's own test |  |
-| Swansea | W06000011 | failed upstream's own test |  |
-| Waverley | E07000216 | failed upstream's own test |  |
-| West Berkshire | E06000037 | failed upstream's own test |  |
-| Woking | E07000217 | failed upstream's own test |  |
 
 ## Needs a UPRN (215)
 

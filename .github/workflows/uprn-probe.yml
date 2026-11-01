@@ -1,0 +1,50 @@
+name: Probe the UPRN councils with upstream's test UPRN
+
+# Measures how many councils that need a UPRN would work if we could find a resident's UPRN: runs each once with
+# upstream's public test UPRN (scripts/batch_probe.py with PROBE_UPRN=1). The results are kept apart from the registry's
+# (docs/spike-results/uprn-probe.json); councils already in that file are skipped. Upstream's test addresses only; nothing here is a real person's address.
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/nifty-faraday-obdwan]
+    paths:
+      - .github/workflows/uprn-probe.yml
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Start a Chrome service for councils that need a browser
+        run: docker run -d --name selenium -p 4444:4444 --shm-size=2g selenium/standalone-chrome:latest
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install uk_bin_collection==0.173.5
+      - run: curl -fsSL -o "$RUNNER_TEMP/input.json" https://raw.githubusercontent.com/robbrad/UKBinCollectionData/0.173.5/uk_bin_collection/tests/input.json
+      - name: Wait for the Chrome service
+        run: |
+          for i in $(seq 1 60); do
+            curl -fs http://localhost:4444/status | grep -q '"ready": *true' && exit 0
+            sleep 2
+          done
+          echo "Chrome service not ready" >&2; exit 1
+      - name: Probe each council, one request at a time
+        env:
+          PROBE_UPRN: "1"
+        run: python scripts/batch_probe.py "$RUNNER_TEMP/input.json" docs/spike-results/full-suite.json docs/spike-results/uprn-probe.json 5 http://localhost:4444
+      - name: Commit the results
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/spike-results/uprn-probe.json
+          git commit -m "Add the UPRN council probe results [skip ci]" || exit 0
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
