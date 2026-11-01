@@ -136,16 +136,23 @@ def objects_from_geojsonseq(lines):
     return out
 
 
+BATCH = 20  # osmium keeps every output open at once; 220 at once used up the runner's memory
+
+
 def cut_squares(pbf_path, work, points):
-    """Cut a square around each home out of the extract, one small file per home (osmium extract with a config file)."""
-    extracts = [
-        {"output": f"{uprn}.osm.pbf", "bbox": [lon - CUT_DEGREES, lat - CUT_DEGREES, lon + CUT_DEGREES, lat + CUT_DEGREES]}
-        for uprn, (lat, lon) in points.items()
-    ]
-    config = work / "extracts.json"
-    config.write_text(json.dumps({"directory": str(work / "squares"), "extracts": extracts}))
+    """Cut a square around each home out of the extract, one small file per home (osmium extract with a config file),
+    a few homes at a time."""
     (work / "squares").mkdir(parents=True, exist_ok=True)
-    subprocess.run(["osmium", "extract", "--overwrite", "-c", str(config), str(pbf_path)], check=True)
+    items = list(points.items())
+    for start in range(0, len(items), BATCH):
+        extracts = [
+            {"output": f"{uprn}.osm.pbf", "bbox": [lon - CUT_DEGREES, lat - CUT_DEGREES, lon + CUT_DEGREES, lat + CUT_DEGREES]}
+            for uprn, (lat, lon) in items[start:start + BATCH]
+        ]
+        config = work / "extracts.json"
+        config.write_text(json.dumps({"directory": str(work / "squares"), "extracts": extracts}))
+        subprocess.run(["osmium", "extract", "--overwrite", "-c", str(config), str(pbf_path)], check=True)
+        print(f"cut {min(start + BATCH, len(items))} of {len(items)} squares", flush=True)
 
 
 def square_objects(work, uprn):
