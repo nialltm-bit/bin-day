@@ -40,6 +40,7 @@ jobs:
           ls -l "$RUNNER_TEMP/gb.osm.pbf" | awk '{print $5}'
       - name: Measure
         run: |
+          df -h "$RUNNER_TEMP" | tail -1; free -m | sed -n 2p
           mkdir -p "$RUNNER_TEMP/work"
           python scripts/spike_osm_uprn.py "$RUNNER_TEMP/input.json" "$(ls $RUNNER_TEMP/uprn/*.csv | head -1)" "$RUNNER_TEMP/gb.osm.pbf" "$RUNNER_TEMP/work" docs/spike-results/osm-uprn.json
       - name: Commit the results

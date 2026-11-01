@@ -17,7 +17,6 @@ extract and exports it, then this script reads the address objects from those sq
 
 Usage: spike_osm_uprn.py <upstream input.json> <OS Open UPRN csv> <Great Britain .osm.pbf> <work dir> <output json>
 """
-import csv
 import json
 import math
 import subprocess
@@ -73,22 +72,33 @@ def test_homes(inputs):
     return homes
 
 
+def _columns(header_line):
+    names = [n.strip().strip('"').upper() for n in header_line.strip().split(",")]
+    return names.index("UPRN"), names.index("LATITUDE"), names.index("LONGITUDE")
+
+
 def read_points(csv_path, wanted):
-    """Points for the wanted UPRNs, then every UPRN within a box around each of them. Streams the file twice."""
+    """Points for the wanted UPRNs, then every UPRN within a box around each of them. Streams the file twice, line by line
+    (the file has about 40 million rows, so this avoids building a dict per row)."""
     points = {}
-    with open(csv_path, newline="", encoding="utf-8-sig") as handle:
-        for row in csv.DictReader(handle):
-            if row["UPRN"] in wanted:
-                points[row["UPRN"]] = (float(row["LATITUDE"]), float(row["LONGITUDE"]))
+    with open(csv_path, encoding="utf-8-sig") as handle:
+        iu, ila, ilo = _columns(handle.readline())
+        for line in handle:
+            parts = line.split(",")
+            if parts[iu] in wanted:
+                points[parts[iu]] = (float(parts[ila]), float(parts[ilo]))
                 if len(points) == len(wanted):
                     break
-    grid = {}  # a coarse grid, so each of the ~40 million rows is compared with the few homes near it, not all of them
+    print(f"first pass done: {len(points)} of {len(wanted)} test UPRNs found", flush=True)
+    grid = {}  # a coarse grid, so each row is compared with the few homes near it, not all of them
     for la, lo in points.values():
         grid.setdefault((int(la // BOX_DEGREES), int(lo // BOX_DEGREES)), []).append((la, lo))
     around = {}
-    with open(csv_path, newline="", encoding="utf-8-sig") as handle:
-        for row in csv.DictReader(handle):
-            lat, lon = float(row["LATITUDE"]), float(row["LONGITUDE"])
+    with open(csv_path, encoding="utf-8-sig") as handle:
+        iu, ila, ilo = _columns(handle.readline())
+        for count, line in enumerate(handle, 1):
+            parts = line.split(",")
+            lat, lon = float(parts[ila]), float(parts[ilo])
             cy, cx = int(lat // BOX_DEGREES), int(lon // BOX_DEGREES)
             if any(
                 abs(lat - la) <= BOX_DEGREES and abs(lon - lo) <= BOX_DEGREES
@@ -96,7 +106,9 @@ def read_points(csv_path, wanted):
                 for dx in (-1, 0, 1)
                 for la, lo in grid.get((cy + dy, cx + dx), ())
             ):
-                around[row["UPRN"]] = (lat, lon)
+                around[parts[iu]] = (lat, lon)
+            if count % 10_000_000 == 0:
+                print(f"second pass: {count // 1_000_000} million rows", flush=True)
     return points, around
 
 
