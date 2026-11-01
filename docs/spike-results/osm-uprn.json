@@ -1,32 +1,39 @@
 {
  "summary": {
-  "covered": 1,
+  "covered": 12,
   "postcode": 0,
-  "roundtrip": 1,
-  "measured": 5,
-  "test_homes": 222,
-  "errors": 208
+  "roundtrip": 5,
+  "measured": 207,
+  "test_homes": 221
  },
  "results": [
   {
    "module": "AberdeenCityCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "AberdeenshireCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "AmberValleyBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "AngusCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "ArdsAndNorthDownCouncil",
@@ -43,17 +50,23 @@
   {
    "module": "AshfordBoroughCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BCPCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BarnsleyMBCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BasildonCouncil",
@@ -65,7 +78,9 @@
   {
    "module": "BasingstokeCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BathAndNorthEastSomersetCouncil",
@@ -77,216 +92,296 @@
   {
    "module": "BedfordBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BedfordshireCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
-  },
-  {
-   "module": "BelfastCityCouncil",
-   "in_open_uprn": false
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BexleyCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BirminghamCityCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BlabyDistrictCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BlackburnCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BlackpoolCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BlaenauGwentCountyBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BolsoverCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BoltonCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BradfordMDC",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BraintreeDistrictCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BrecklandCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BristolCityCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BromsgroveDistrictCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BroxbourneCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BroxtoweBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BuckinghamshireCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "BurnleyBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "CalderdaleCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "CambridgeCityCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": true,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "CannockChaseDistrictCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "CanterburyCityCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "CardiffCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "CarmarthenshireCountyCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "CharnwoodBoroughCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "CheltenhamBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "CherwellDistrictCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "CheshireEastCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "CheshireWestAndChesterCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "ChesterfieldBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "ChorleyCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "ConwyCountyBorough",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": true,
+   "postcode": false,
+   "roundtrip": true
   },
   {
    "module": "CornwallCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "CrawleyBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "CumberlandCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "DarlingtonBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": true,
+   "postcode": false,
+   "roundtrip": true
   },
   {
    "module": "DartfordBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "DenbighshireCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "DerbyCityCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "DerbyshireDalesDistrictCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "DorsetCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "DoverDistrictCouncil",
@@ -298,32 +393,44 @@
   {
    "module": "DudleyCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "DumfriesandGallowayCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "DundeeCityCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "DurhamCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "EalingCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "EastCambridgeshireCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": true,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "EastDevonDC",
@@ -332,139 +439,191 @@
   {
    "module": "EastDunbartonshireCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "EastHertsCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "EastSuffolkCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "EastbourneBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "EastleighBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "EdenDistrictCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "ElmbridgeBoroughCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "EpsomandEwellBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "ErewashBoroughCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "ExeterCityCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "FalkirkCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": true,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "FarehamBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "FlintshireCountyCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "FolkestoneandHytheDistrictCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "GlasgowCityCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "GloucesterCityCouncil",
    "in_open_uprn": true,
-   "covered": true,
+   "covered": false,
    "postcode": false,
-   "roundtrip": true
+   "roundtrip": false
   },
   {
    "module": "GreatYarmouthBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "GwyneddCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "HarboroughDistrictCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "HaringeyCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "HarlowCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "HarrogateBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "HartDistrictCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "HartlepoolBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "HastingsBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "HerefordshireCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "HighlandCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "HorshamDistrictCouncil",
@@ -480,52 +639,72 @@
   {
    "module": "HuntingdonDistrictCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "HyndburnBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "IsleOfAngleseyCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "IslingtonCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "KingsLynnandWestNorfolkBC",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "KirkleesCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LeedsCityCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LeicesterCityCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LewesDistrictCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LichfieldDistrictCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LincolnCouncil",
@@ -534,52 +713,72 @@
   {
    "module": "LiverpoolCityCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LondonBoroughCamdenCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LondonBoroughEaling",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LondonBoroughHarrow",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LondonBoroughHavering",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LondonBoroughHounslow",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LondonBoroughLambeth",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LondonBoroughLewisham",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LondonBoroughOfRichmondUponThames",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": true,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LondonBoroughRedbridge",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "LondonBoroughSutton",
@@ -588,37 +787,51 @@
   {
    "module": "LutonBoroughCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "MaldonDistrictCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "MalvernHillsDC",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": true,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "ManchesterCityCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "MansfieldDistrictCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "MedwayCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "MeltonBoroughCouncil",
    "in_open_uprn": true,
-   "error": "HTTPError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "MertonCouncil",
@@ -627,497 +840,677 @@
   {
    "module": "MidDevonCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "MiltonKeynesCityCouncil",
    "in_open_uprn": true,
-   "error": "TimeoutError"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "MoleValleyDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "MonmouthshireCountyCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NewForestCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NewarkAndSherwoodDC",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NewcastleUnderLymeCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NewhamCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": true,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NewportCityCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NorthAyrshireCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NorthDevonCountyCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NorthEastLincs",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NorthKestevenDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NorthLincolnshireCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NorthNorthamptonshireCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NorthSomersetCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NorthTynesideCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NorthWarwickshireBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NorthYorkshire",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "NorthumberlandCouncil",
-   "in_open_uprn": false,
-   "error": "deadline"
+   "in_open_uprn": false
   },
   {
    "module": "NottinghamCityCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "OadbyAndWigstonBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "OxfordCityCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "PerthAndKinrossCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "PlymouthCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "PortsmouthCityCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "RedditchBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "ReigateAndBansteadBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": true,
+   "postcode": false,
+   "roundtrip": true
   },
   {
    "module": "RenfrewshireCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "RhonddaCynonTaffCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "RochdaleCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "RotherDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "RugbyBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "RunnymedeBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "RushcliffeBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "RushmoorCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "SalfordCityCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "SandwellBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "ScottishBordersCouncil",
-   "in_open_uprn": false,
-   "error": "deadline"
+   "in_open_uprn": false
   },
   {
    "module": "SheffieldCityCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "SouthAyrshireCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "SouthDerbyshireDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "SouthGloucestershireCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "SouthHamsDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "SouthHollandDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "SouthNorfolkCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "SouthOxfordshireCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "SouthRibbleCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "SouthStaffordshireDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "SouthamptonCityCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "SouthendOnSeaCityCouncil",
-   "in_open_uprn": false,
-   "error": "deadline"
+   "in_open_uprn": false
   },
   {
    "module": "SouthwarkCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "StAlbansCityAndDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "StaffordBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "StaffordshireMoorlandsDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "StevenageBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "StratfordUponAvonCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "StroudDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "SwindonBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "TamesideMBCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "TamworthBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "TandridgeDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "TeignbridgeCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "TelfordAndWrekinCouncil",
-   "in_open_uprn": false,
-   "error": "deadline"
+   "in_open_uprn": false
   },
   {
    "module": "TendringDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "TewkesburyBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "ThanetDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "ThreeRiversDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": true,
+   "postcode": false,
+   "roundtrip": true
   },
   {
    "module": "TonbridgeAndMallingBC",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "TorbayCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": true,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "TorridgeDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "TowerHamletsCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "TunbridgeWellsCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "UttlesfordDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "ValeofGlamorganCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "ValeofWhiteHorseCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WalsallCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WalthamForest",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": true,
+   "postcode": false,
+   "roundtrip": true
   },
   {
    "module": "WandsworthCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WarringtonBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WatfordBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WealdenDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WelhatCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WestDevonBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WestDunbartonshireCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WestLancashireBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WestMorlandAndFurness",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WestNorthamptonshireCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WestSuffolkCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WestminsterCityCouncil",
-   "in_open_uprn": false,
-   "error": "deadline"
+   "in_open_uprn": false
   },
   {
    "module": "WiganBoroughCouncil",
-   "in_open_uprn": false,
-   "error": "deadline"
+   "in_open_uprn": false
   },
   {
    "module": "WiltshireCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WindsorAndMaidenheadCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WolverhamptonCityCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WorcesterCityCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WrexhamCountyBoroughCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WychavonDistrictCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "WyreCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   },
   {
    "module": "YorkCouncil",
    "in_open_uprn": true,
-   "error": "deadline"
+   "covered": false,
+   "postcode": false,
+   "roundtrip": false
   }
  ]
 }
