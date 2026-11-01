@@ -82,12 +82,20 @@ def read_points(csv_path, wanted):
                 points[row["UPRN"]] = (float(row["LATITUDE"]), float(row["LONGITUDE"]))
                 if len(points) == len(wanted):
                     break
-    boxes = list(points.values())
+    grid = {}  # a coarse grid, so each of the ~40 million rows is compared with the few homes near it, not all of them
+    for la, lo in points.values():
+        grid.setdefault((int(la // BOX_DEGREES), int(lo // BOX_DEGREES)), []).append((la, lo))
     around = {}
     with open(csv_path, newline="", encoding="utf-8-sig") as handle:
         for row in csv.DictReader(handle):
             lat, lon = float(row["LATITUDE"]), float(row["LONGITUDE"])
-            if any(abs(lat - la) <= BOX_DEGREES and abs(lon - lo) <= BOX_DEGREES for la, lo in boxes):
+            cy, cx = int(lat // BOX_DEGREES), int(lon // BOX_DEGREES)
+            if any(
+                abs(lat - la) <= BOX_DEGREES and abs(lon - lo) <= BOX_DEGREES
+                for dy in (-1, 0, 1)
+                for dx in (-1, 0, 1)
+                for la, lo in grid.get((cy + dy, cx + dx), ())
+            ):
                 around[row["UPRN"]] = (lat, lon)
     return points, around
 

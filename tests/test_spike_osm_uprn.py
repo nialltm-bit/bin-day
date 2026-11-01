@@ -53,3 +53,14 @@ def test_geojsonseq_gives_house_number_objects_with_a_centre_and_postcode():
     assert [o["postcode"] for o in found] == ["AB1 2CD", None]
     assert found[0]["lat"] == 51.0 and found[0]["lon"] == -1.0
     assert 51.0 < found[1]["lat"] < 51.0003 and -1.0 < found[1]["lon"] < -0.9998
+
+
+def test_read_points_keeps_the_uprns_around_a_home_and_drops_the_rest(tmp_path):
+    csv_file = tmp_path / "uprn.csv"
+    csv_file.write_text(
+        "UPRN,X_COORDINATE,Y_COORDINATE,LATITUDE,LONGITUDE\\n"
+        "1,0,0,51.0,-1.0\\n2,0,0,51.001,-1.0\\n3,0,0,52.0,-1.0\\n4,0,0,51.0039,-1.0039\\n5,0,0,51.01,-1.0\\n"
+    )
+    points, around = spike.read_points(str(csv_file), {"1"})
+    assert points == {"1": (51.0, -1.0)}
+    assert sorted(around) == ["1", "2", "4"]
