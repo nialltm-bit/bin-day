@@ -39,3 +39,17 @@ def test_only_numeric_uprns_are_test_homes():
         "D": {"uprn": "123"},
     }
     assert spike.test_homes(inputs) == {"A": ("100012345678", "AB1 2CD")}
+
+
+def test_geojsonseq_gives_house_number_objects_with_a_centre_and_postcode():
+    lines = [
+        '\x1e{"type":"Feature","properties":{"addr:housenumber":"4","addr:postcode":"AB1 2CD"},'
+        '"geometry":{"type":"Point","coordinates":[-1.0,51.0]}}',
+        '\x1e{"type":"Feature","properties":{"addr:housenumber":"6"},"geometry":{"type":"Polygon","coordinates":[[[-1.0,51.0],[-1.0,51.0002],[-0.9998,51.0002],[-0.9998,51.0],[-1.0,51.0]]]}}',
+        '\x1e{"type":"Feature","properties":{"name":"A pub"},"geometry":{"type":"Point","coordinates":[-1.0,51.0]}}',
+        "",
+    ]
+    found = spike.objects_from_geojsonseq(lines)
+    assert [o["postcode"] for o in found] == ["AB1 2CD", None]
+    assert found[0]["lat"] == 51.0 and found[0]["lon"] == -1.0
+    assert 51.0 < found[1]["lat"] < 51.0003 and -1.0 < found[1]["lon"] < -0.9998

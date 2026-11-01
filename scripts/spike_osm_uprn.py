@@ -11,20 +11,22 @@ work, using upstream's public test UPRNs (each is a home we know the UPRN of):
 
 Only counts and council module names are printed or saved, never a UPRN, postcode or coordinates: logs are public.
 
-Usage: spike_osm_uprn.py <upstream input.json> <OS Open UPRN csv> <output json> [pause seconds]
+The OpenStreetMap side comes from a downloaded extract (Geofabrik's Great Britain file), not the public Overpass service,
+which refused most requests from GitHub's network. `osmium` (osmium-tool) cuts a small square around each home out of the
+extract and exports it, then this script reads the address objects from those squares.
+
+Usage: spike_osm_uprn.py <upstream input.json> <OS Open UPRN csv> <Great Britain .osm.pbf> <work dir> <output json>
 """
 import csv
 import json
 import math
+import subprocess
 import sys
-import time
-import urllib.parse
-import urllib.request
+from pathlib import Path
 
-OVERPASS = "https://overpass-api.de/api/interpreter"
 NEAR_METRES = 15
-DEADLINE_SECONDS = 40 * 60
 BOX_DEGREES = 0.004  # about 440 m north-south, enough to hold every UPRN near a test home
+CUT_DEGREES = 0.0015  # the square cut from the extract around each home, about 160 m each way
 
 
 def metres(lat1, lon1, lat2, lon2):
@@ -90,52 +92,75 @@ def read_points(csv_path, wanted):
     return points, around
 
 
-def osm_objects(lat, lon):
-    """OpenStreetMap objects with a house number within 30 m of a point."""
-    query = f'[out:json][timeout:20];nwr(around:30,{lat},{lon})["addr:housenumber"];out tags center;'
-    body = urllib.parse.urlencode({"data": query}).encode()
-    request = urllib.request.Request(OVERPASS, data=body, headers={"User-Agent": "bin-day-spike/1.0"})
-    with urllib.request.urlopen(request, timeout=25) as response:
-        elements = json.load(response)["elements"]
+def objects_from_geojsonseq(lines):
+    """OpenStreetMap objects with a house number, as [{lat, lon, postcode}], from `osmium export -f geojsonseq` lines."""
     out = []
-    for e in elements:
-        centre = e if e["type"] == "node" else e.get("center")
-        if centre:
-            out.append({"lat": centre["lat"], "lon": centre["lon"], "postcode": e.get("tags", {}).get("addr:postcode")})
+    for line in lines:
+        line = line.strip().lstrip("\x1e")
+        if not line:
+            continue
+        feature = json.loads(line)
+        props = feature.get("properties") or {}
+        if not props.get("addr:housenumber"):
+            continue
+        geometry = feature.get("geometry") or {}
+        if geometry.get("type") == "Point":
+            lon, lat = geometry["coordinates"]
+        elif geometry.get("type") == "Polygon":
+            ring = geometry["coordinates"][0]
+            lon = sum(p[0] for p in ring) / len(ring)
+            lat = sum(p[1] for p in ring) / len(ring)
+        else:
+            continue
+        out.append({"lat": lat, "lon": lon, "postcode": props.get("addr:postcode")})
     return out
 
 
-def main(input_path, csv_path, out_path, pause="2"):
-    homes = test_homes(json.load(open(input_path)))
+def cut_squares(pbf_path, work, points):
+    """Cut a square around each home out of the extract, one small file per home (osmium extract with a config file)."""
+    extracts = [
+        {"output": f"{uprn}.osm.pbf", "bbox": [lon - CUT_DEGREES, lat - CUT_DEGREES, lon + CUT_DEGREES, lat + CUT_DEGREES]}
+        for uprn, (lat, lon) in points.items()
+    ]
+    config = work / "extracts.json"
+    config.write_text(json.dumps({"directory": str(work / "squares"), "extracts": extracts}))
+    (work / "squares").mkdir(parents=True, exist_ok=True)
+    subprocess.run(["osmium", "extract", "--overwrite", "-c", str(config), str(pbf_path)], check=True)
+
+
+def square_objects(work, uprn):
+    path = work / "squares" / f"{uprn}.osm.pbf"
+    if not path.exists():
+        return []
+    result = subprocess.run(
+        ["osmium", "export", "-f", "geojsonseq", "--geometry-types=point,polygon", str(path)],
+        check=True, capture_output=True, text=True,
+    )
+    return objects_from_geojsonseq(result.stdout.splitlines())
+
+
+def main(input_path, csv_path, pbf_path, work_dir, out_path):
+    work = Path(work_dir)
+    homes = {m: h for m, h in test_homes(json.load(open(input_path))).items() if not str(h[1] or "").upper().startswith("BT")}
     wanted = {uprn for uprn, _ in homes.values()}
     points, around = read_points(csv_path, wanted)
-    print(f"test homes: {len(homes)} | found in OS Open UPRN: {sum(1 for u, _ in homes.values() if u in points)}")
+    print(f"test homes in Great Britain: {len(homes)} | found in OS Open UPRN: {len(points)}")
+    cut_squares(pbf_path, work, points)
     rows = []
-    started = time.time()
     for module, (uprn, postcode) in sorted(homes.items()):
-        if time.time() - started > DEADLINE_SECONDS:  # keep what was measured rather than run for hours
-            rows.append({"module": module, "in_open_uprn": uprn in points, "error": "deadline"})
-            continue
         if uprn not in points:
             rows.append({"module": module, "in_open_uprn": False})
             continue
         lat, lon = points[uprn]
-        try:
-            objects = osm_objects(lat, lon)
-        except Exception as err:  # the public service can be busy
-            rows.append({"module": module, "in_open_uprn": True, "error": type(err).__name__})
-            time.sleep(float(pause))
-            continue
+        objects = square_objects(work, uprn)
         neighbours = {u: p for u, p in around.items() if abs(p[0] - lat) <= BOX_DEGREES and abs(p[1] - lon) <= BOX_DEGREES}
         rows.append({"module": module, "in_open_uprn": True, **judge(uprn, (lat, lon), neighbours, objects, postcode)})
-        json.dump({"results": rows}, open(out_path, "w"), indent=1)  # saved as we go
-        time.sleep(float(pause))
     measured = [r for r in rows if "covered" in r]
     summary = {key: sum(1 for r in measured if r[key]) for key in ("covered", "postcode", "roundtrip")}
-    summary.update({"measured": len(measured), "test_homes": len(homes), "errors": sum(1 for r in rows if "error" in r)})
+    summary.update({"measured": len(measured), "test_homes": len(homes)})
     json.dump({"summary": summary, "results": rows}, open(out_path, "w"), indent=1)
     print(json.dumps(summary))
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:5])
+    main(*sys.argv[1:6])

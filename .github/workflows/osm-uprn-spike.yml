@@ -1,7 +1,7 @@
 name: Spike - can open data turn a postcode and house number into a UPRN
 
 # Measures (scripts/spike_osm_uprn.py) how often OS Open UPRN plus OpenStreetMap house numbers would find a home's UPRN,
-# using upstream's public test UPRNs. Counts only; nothing here is a real person's address. Writes
+# using upstream's public test UPRNs and a downloaded OpenStreetMap extract (Geofabrik, Great Britain). Counts only; nothing here is a real person's address. Writes
 # docs/spike-results/osm-uprn.json.
 on:
   workflow_dispatch:
@@ -17,7 +17,7 @@ permissions:
 jobs:
   spike:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,8 +32,16 @@ jobs:
           unzip -o -q "$RUNNER_TEMP/uprn.zip" -d "$RUNNER_TEMP/uprn"
           chmod -R u+rwX,a+r "$RUNNER_TEMP/uprn"
           ls "$RUNNER_TEMP/uprn" | sed 's/[0-9]//g'
+      - name: Install osmium-tool
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq osmium-tool
+      - name: Download the OpenStreetMap extract for Great Britain (Geofabrik, ODbL)
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/gb.osm.pbf" https://download.geofabrik.de/europe/great-britain-latest.osm.pbf
+          ls -l "$RUNNER_TEMP/gb.osm.pbf" | awk '{print $5}'
       - name: Measure
-        run: python scripts/spike_osm_uprn.py "$RUNNER_TEMP/input.json" "$(ls $RUNNER_TEMP/uprn/*.csv | head -1)" docs/spike-results/osm-uprn.json 2
+        run: |
+          mkdir -p "$RUNNER_TEMP/work"
+          python scripts/spike_osm_uprn.py "$RUNNER_TEMP/input.json" "$(ls $RUNNER_TEMP/uprn/*.csv | head -1)" "$RUNNER_TEMP/gb.osm.pbf" "$RUNNER_TEMP/work" docs/spike-results/osm-uprn.json
       - name: Commit the results
         if: always()
         run: |
