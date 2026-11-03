@@ -1,0 +1,6 @@
+{
+  "note": "Pushing a change to this file runs the Postcode agreement check on this branch with these settings (a manual run from the Actions tab uses its own inputs instead). Keep target_postcodes at 2 for a smoke test of about 200 requests.",
+  "target_postcodes": "2",
+  "max_lookups": "",
+  "seed": "298"
+}

@@ -23,6 +23,10 @@ on:
         description: Seed for the random postcodes, so a run can be repeated
         type: string
         default: "298"
+  push:
+    branches: [nialltm/fre-298-postcode-guess-cover-uprn-councils-without-knowing-the]
+    paths:
+      - scripts/postcode_agreement_request.json  # a push runs it only when this request changes, so editing the scripts never asks a council for anything
 
 permissions:
   contents: write
@@ -37,6 +41,9 @@ jobs:
     timeout-minutes: 120
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
+      target: ${{ steps.settings.outputs.target }}
+      max_lookups: ${{ steps.settings.outputs.max_lookups }}
+      seed: ${{ steps.settings.outputs.seed }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -44,13 +51,29 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Settings, from the inputs or (on a push) the request file
+        id: settings
+        env:
+          TARGET: ${{ inputs.target_postcodes }}
+          MAX_LOOKUPS: ${{ inputs.max_lookups }}
+          SEED: ${{ inputs.seed }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            TARGET=$(jq -r .target_postcodes scripts/postcode_agreement_request.json)
+            MAX_LOOKUPS=$(jq -r .max_lookups scripts/postcode_agreement_request.json)
+            SEED=$(jq -r .seed scripts/postcode_agreement_request.json)
+          fi
+          echo "target=$TARGET" >> "$GITHUB_OUTPUT"
+          echo "max_lookups=$MAX_LOOKUPS" >> "$GITHUB_OUTPUT"
+          echo "seed=$SEED" >> "$GITHUB_OUTPUT"
+          echo "Comparing $TARGET postcodes per council (seed $SEED, lookup limit override: ${MAX_LOOKUPS:-none})"
       - name: List the councils
         id: matrix
         run: |
           echo "matrix=$(jq -c '{include: .councils}' scripts/postcode_guess_councils.json)" >> "$GITHUB_OUTPUT"
       - name: Draw random postcodes from ONSUD
         env:
-          SEED: ${{ inputs.seed || '298' }}
+          SEED: ${{ steps.settings.outputs.seed }}
         run: python -m scripts.postcode_sample scripts/postcode_guess_councils.json "$RUNNER_TEMP/samples.json" --seed "$SEED"
       - uses: actions/upload-artifact@v4
         with:
@@ -92,8 +115,8 @@ jobs:
       - name: Compare the homes on each postcode, one request at a time
         env:
           MODULE: ${{ matrix.module }}
-          TARGET: ${{ inputs.target_postcodes || '50' }}
-          MAX_LOOKUPS: ${{ inputs.max_lookups }}
+          TARGET: ${{ needs.sample.outputs.target }}
+          MAX_LOOKUPS: ${{ needs.sample.outputs.max_lookups }}
         run: |
           mkdir -p results
           python -m scripts.postcode_agreement scripts/postcode_guess_councils.json "$RUNNER_TEMP/samples/samples.json" "$RUNNER_TEMP/input.json" \
