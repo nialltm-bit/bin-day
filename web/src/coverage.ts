@@ -39,14 +39,17 @@ export type Outcome =
    */
   | { kind: "ready"; postcode: string; ons_code: string; name: string; ask: "house_number" | "first_line" | "address_list" };
 
+/** What the page says when it can't go on to the address step: one line, and where useful a way forward. */
 export interface Message {
-  headline: string;
-  detail: string;
+  text: string;
   /** Offer to count this person's interest for this council (council only, no postcode, no email). */
-  waitlist?: { ons_code: string };
+  waitlist?: { ons_code: string; name: string };
   /** A place to find the answer elsewhere. */
   help?: { label: string; url: string };
 }
+
+/** Every outcome except ready, which goes straight on to the address step. */
+export type Stop = Exclude<Outcome, { kind: "ready" }>;
 
 export const FIND_COUNCIL_URL = "https://www.gov.uk/find-local-council";
 const POSTCODES_IO = "https://api.postcodes.io/postcodes/";
@@ -145,59 +148,31 @@ export async function lookup(rawPostcode: string, deps: LookupDeps): Promise<Out
   return classifyCouncil(postcode, onsCode, cleanName(result.admin_district), deps.councils, deps.canFindUprn === true);
 }
 
-const find = { label: "Find your council's own bin day page", url: FIND_COUNCIL_URL };
+const find = { label: "Find your council", url: FIND_COUNCIL_URL };
 
 /** The words to show. None of them promises to tell anyone anything later, because we hold no contact details. */
-export function messageFor(outcome: Outcome): Message {
+export function messageFor(outcome: Stop): Message {
   switch (outcome.kind) {
     case "bad_postcode":
-      return { headline: "That doesn't look like a UK postcode", detail: "Check it and try again. For example: BA1 5AW." };
+      return { text: "That doesn't look like a postcode." };
     case "postcode_not_found":
-      return {
-        headline: "We can't find that postcode",
-        detail: "Check it for typos. Very new postcodes may not be listed yet.",
-      };
+      return { text: "We can't find that postcode." };
     case "lookup_failed":
-      return { headline: "Something went wrong looking that up", detail: "Nothing is wrong with your postcode. Please try again in a minute." };
+      return { text: "Something went wrong. Try again in a minute." };
     case "outside_coverage":
-      return { headline: "We only cover councils in Great Britain and Northern Ireland", detail: "Your council's own website will have your bin days.", help: find };
+      return { text: "We only cover Great Britain and Northern Ireland.", help: find };
     case "council_unknown":
-      return {
-        headline: "We couldn't work out which council collects your bins",
-        detail: "Postcodes on a council boundary can be hard to place. Your council's own website will have your bin days.",
-        help: find,
-      };
+      return { text: "We couldn't tell which council collects here.", help: find };
     case "council_not_covered":
-      return {
-        headline: `We don't cover ${outcome.name} yet`,
-        detail:
-          "We're adding councils one at a time. We don't keep email addresses, so we can't tell you when it's added, but you can add your council to the count below. It helps us choose which to add next.",
-        waitlist: { ons_code: outcome.ons_code },
-        help: find,
-      };
+      return { text: `We don't cover ${outcome.name} yet.`, waitlist: { ons_code: outcome.ons_code, name: outcome.name }, help: find };
     case "council_needs_address_lookup":
-      return {
-        headline: `We can't find addresses in ${outcome.name} yet`,
-        detail:
-          "We know how to get bin days from this council, but we can't yet match your address to its records. We don't keep email addresses, so we can't tell you when this changes, but you can add your council to the count below.",
-        waitlist: { ons_code: outcome.ons_code },
-        help: find,
-      };
+      return { text: `We can't find addresses in ${outcome.name} yet.`, waitlist: { ons_code: outcome.ons_code, name: outcome.name }, help: find };
     case "council_unavailable":
-      return {
-        headline: `${outcome.name}'s bin day data isn't working right now`,
-        detail: "We know about it. Please try again later, or see your council's own website.",
-        help: find,
-      };
-    case "ready":
-      return {
-        headline: `Your council is ${outcome.name}`,
-        detail:
-          outcome.ask === "address_list"
-            ? "Pick your address."
-            : outcome.ask === "first_line"
-              ? "Enter the first line of your address, for example 12 High Street."
-              : "Enter your house number or name.",
-      };
+      return { text: `${outcome.name} isn't working right now. Try again later.`, help: find };
   }
+}
+
+/** What the address field asks for, as its placeholder and accessible name. */
+export function houseLabel(ask: "house_number" | "first_line"): string {
+  return ask === "first_line" ? "First line of address" : "House number or name";
 }

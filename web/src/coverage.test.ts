@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import councilData from "../../registry/councils.json";
-import { type CouncilEntry, type Outcome, canAskForHouseNumber, classifyCouncil, lookup, messageFor, normalisePostcode } from "./coverage";
+import { type CouncilEntry, type Stop, canAskForHouseNumber, classifyCouncil, houseLabel, lookup, messageFor, normalisePostcode } from "./coverage";
 
 const REAL = (councilData as { councils: CouncilEntry[] }).councils;
 const FAKE: CouncilEntry[] = [
@@ -42,8 +42,8 @@ describe("classifyCouncil", () => {
   it("asks for the whole first line where the council's system needs it, and says so in the words shown", () => {
     const out = classifyCouncil("AA1 1AA", "E06000094", "x", FAKE);
     expect(out).toMatchObject({ kind: "ready", ask: "first_line" });
-    expect(messageFor(out).detail).toMatch(/first line of your address/);
-    expect(messageFor(classifyCouncil("AA1 1AA", "E06000099", "x", FAKE)).detail).toBe("Enter your house number or name.");
+    expect(houseLabel("first_line")).toBe("First line of address");
+    expect(houseLabel("house_number")).toBe("House number or name");
   });
 
   it("with the real registry, Newcastle is ready and asks for the first line", () => {
@@ -139,7 +139,7 @@ describe("lookup", () => {
 });
 
 describe("messageFor", () => {
-  const outcomes: Outcome[] = [
+  const outcomes: Stop[] = [
     { kind: "bad_postcode" },
     { kind: "postcode_not_found", postcode: "AA1 1AA" },
     { kind: "lookup_failed" },
@@ -148,37 +148,36 @@ describe("messageFor", () => {
     { kind: "council_not_covered", postcode: "AA1 1AA", ons_code: "E06000001", name: "Hartlepool" },
     { kind: "council_needs_address_lookup", postcode: "AA1 1AA", ons_code: "E06000022", name: "Bath" },
     { kind: "council_unavailable", postcode: "AA1 1AA", ons_code: "E06000098", name: "Brokenshire" },
-    { kind: "ready", postcode: "AA1 1AA", ons_code: "E06000099", name: "Numberton", ask: "house_number" },
   ];
 
   it("has words for every outcome", () => {
     for (const outcome of outcomes) {
       const message = messageFor(outcome);
-      expect(message.headline.length, outcome.kind).toBeGreaterThan(0);
-      expect(message.detail.length, outcome.kind).toBeGreaterThan(0);
+      expect(message.text.length, outcome.kind).toBeGreaterThan(0);
+      expect(message.text, outcome.kind).toMatch(/\.$/);
     }
   });
 
   it("never promises to tell anyone anything or asks for contact details", () => {
     for (const outcome of outcomes) {
-      const text = `${messageFor(outcome).headline} ${messageFor(outcome).detail}`.toLowerCase();
+      const text = messageFor(outcome).text.toLowerCase();
       expect(text, outcome.kind).not.toMatch(/we'll (tell|let|email|notify|contact)|we will (tell|let|email|notify|contact)|leave your email|your email/);
     }
   });
 
-  it("offers the count only where a council could be added, and carries only the council code", () => {
+  it("offers the count only where a council could be added", () => {
     for (const outcome of outcomes) {
       const message = messageFor(outcome);
       const offered = outcome.kind === "council_not_covered" || outcome.kind === "council_needs_address_lookup";
       expect(message.waitlist !== undefined, outcome.kind).toBe(offered);
-      if (message.waitlist) expect(Object.keys(message.waitlist)).toEqual(["ons_code"]);
+      if (message.waitlist) expect(Object.keys(message.waitlist)).toEqual(["ons_code", "name"]);
     }
   });
 
   it("points everyone who can't get bin days here to somewhere else that can", () => {
     for (const outcome of outcomes) {
       const message = messageFor(outcome);
-      const stuck = !["ready", "bad_postcode", "postcode_not_found", "lookup_failed"].includes(outcome.kind);
+      const stuck = !["bad_postcode", "postcode_not_found", "lookup_failed"].includes(outcome.kind);
       expect(message.help !== undefined, outcome.kind).toBe(stuck);
       if (message.help) expect(message.help.url).toMatch(/^https:\/\/www\.gov\.uk\//);
     }

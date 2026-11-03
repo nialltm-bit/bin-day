@@ -1,4 +1,4 @@
-/** The "Where we cover" section of the homepage: a list and a map of the same data. */
+/** The coverage page: a map and a list of the same data. */
 import type { CouncilEntry } from "./coverage";
 import { type CouncilView, LABELS, ORDER, type Shapes, boundsOf, buildViews, centreOf, describe, filterViews, isLondon, summary, viewBoxFor } from "./coverage-data";
 
@@ -52,7 +52,6 @@ export async function mountCoverage(root: HTMLElement, { registry, loadShapes }:
   select(shapes === null ? "list" : "map");
 
   root.replaceChildren(
-    el("h2", { id: "coverage-title" }, "Where we cover"),
     summaryLine,
     tabs,
     mapPanel,
@@ -66,10 +65,10 @@ export async function mountCoverage(root: HTMLElement, { registry, loadShapes }:
 }
 
 function buildList(views: CouncilView[], outlinesMissing: boolean): HTMLElement {
-  const search = el("input", { type: "search", id: "coverage-search", autocomplete: "off", placeholder: "Type a council name" });
-  const label = el("label", { for: "coverage-search" }, "Find your council");
+  const search = el("input", { type: "search", id: "coverage-search", autocomplete: "off", placeholder: "Council", "aria-label": "Council" });
+  
   const results = el("div", { class: "results" });
-  const panel = el("div", { role: "tabpanel", id: "coverage-list", "aria-labelledby": "coverage-tab-list" }, label, search, results);
+  const panel = el("div", { role: "tabpanel", id: "coverage-list", "aria-labelledby": "coverage-tab-list" }, search, results);
   if (outlinesMissing) {
     panel.append(el("p", { class: "note" }, "The full list of councils didn't load, so this shows only the councils we have work on."));
   }
@@ -134,7 +133,7 @@ function buildMap(views: CouncilView[], shapes: Shapes | null): HTMLElement {
     return panel;
   }
   const byCode = new Map(views.map((v) => [v.code, v]));
-  const info = el("p", { class: "map-info", "aria-live": "polite" }, "Tap a council to see its status.");
+  const info = el("p", { class: "map-info", "aria-live": "polite" });
   const label = "coloured by whether we cover each council. The list shows the same information.";
 
   const [, , mainWidth] = shapes.viewBox.split(" ").map(Number);

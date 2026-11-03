@@ -106,12 +106,11 @@ The "couldn't confirm" event keeps one UID, so it moves along each day instead o
 
 1. Redeploy the script with the new `Code.js` (see "To change the script later" in `store.md`). It adds a
    `subscriptions` tab to the Sheet by itself.
-2. Open the test page (`/bin-day/subscribe-test.html` on the site), paste the web app URL, enter your UPRN or the
-   public test UPRN `100120000855`, and press the button. It gives an https link and a webcal link.
+2. Sign up on the homepage, or run the "End-to-end sign-up test" workflow with a public test address. Either gives
+   you a feed token.
 3. Subscribe to the link in a calendar app. An address needs one fetch first: if it has no data yet you will see
    the "getting your collection dates" event. The test UPRN already has data in the Sheet.
 
-The test page is temporary. The real sign-up page is FRE-271.
 
 ## Results
 

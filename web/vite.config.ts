@@ -1,16 +1,14 @@
 import { defineConfig } from "vite";
 
-// GitHub Pages serves the site from /bin-day/.
+const page = (file: string) => new URL(file, import.meta.url).pathname;
+
+// GitHub Pages serves the site from /bin-day/. The e2e workflows find the homepage's script as assets/main-*.js, so
+// the homepage entry keeps the name "main".
 export default defineConfig({
   base: "/bin-day/",
   build: {
     rollupOptions: {
-      input: {
-        main: new URL("./index.html", import.meta.url).pathname,
-        privacy: new URL("./privacy.html", import.meta.url).pathname,
-        poc: new URL("./poc.html", import.meta.url).pathname,
-        subscribeTest: new URL("./subscribe-test.html", import.meta.url).pathname,
-      },
+      input: { main: page("./index.html"), coverage: page("./coverage.html"), privacy: page("./privacy.html") },
     },
   },
 });

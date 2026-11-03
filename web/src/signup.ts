@@ -3,7 +3,7 @@
  * mistake is caught before sending, but the script still checks everything again.
  */
 import type { Outcome } from "./coverage";
-import { feedLinksForToken } from "./poc-helpers";
+import { feedLinksForToken } from "./feed-links";
 
 /** What a person may type for the house. The script accepts the same characters and nothing that could be a formula. */
 export const HOUSE_NUMBER = /^[A-Za-z0-9][A-Za-z0-9 ,'./-]{0,99}$/;
@@ -18,7 +18,7 @@ export function checkHouse(raw: string, ask: Ask): HouseCheck {
   if (value === "") return { ok: false, error: ask === "first_line" ? "Enter the first line of your address." : "Enter your house number or name." };
   if (!HOUSE_NUMBER.test(value)) return { ok: false, error: "Use letters, numbers and ordinary punctuation only." };
   if (ask === "first_line" && value.split(/[\s,]+/).filter(Boolean).length < 2) {
-    return { ok: false, error: "Enter the whole first line, for example 12 High Street. A number on its own isn't enough for this council." };
+    return { ok: false, error: "Enter the whole first line, like 12 High Street." };
   }
   return { ok: true, value };
 }
@@ -49,7 +49,7 @@ export function explain(error: string): string {
     case "network":
       return "We couldn't reach the service. Check your connection and try again.";
     case "first line needed":
-      return "Enter the whole first line of your address, for example 12 High Street.";
+      return "Enter the whole first line, like 12 High Street.";
     case "bad house_number":
     case "bad address":
       return "That address doesn't look right. Use letters, numbers and ordinary punctuation only.";

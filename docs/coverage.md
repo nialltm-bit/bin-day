@@ -43,7 +43,9 @@ count, first and last time. This replaces the email waitlist in FRE-274 for v1, 
 that straddles a boundary is given to one council, so the page asks for the house number and the council's own system
 has the last word. We have not tested a straddling postcode.
 
-## The homepage coverage section ("Where we cover")
+## The coverage page (`coverage.html`)
+
+Linked from the homepage footer. The homepage itself is only the lookup: the postcode answers "do you cover me" for the one council that matters to the person.
 
 Two views of the same data, chosen with tabs: **List** (with a "find your council" box) and **Map**.
 
