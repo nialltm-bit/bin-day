@@ -1,0 +1,1811 @@
+{
+ "councils": [
+  {
+   "module": "AshfordBoroughCouncil",
+   "name": "Ashford",
+   "platform": "Bespoke council site (needs a browser)",
+   "control": false,
+   "ons_codes": [
+    "E07000105"
+   ],
+   "started_at": "2026-11-03T11:19:26+00:00",
+   "finished_at": "2026-11-03T12:05:16+00:00",
+   "stopped_because": "stopped after 15 failed lookups in a row (blocked or broken)",
+   "postcodes_in_council": 4026,
+   "postcodes_with_one_uprn": 173,
+   "postcodes_checked": 12,
+   "postcodes_comparable": 10,
+   "postcodes_agreeing": 10,
+   "agreeing_share": 1.0,
+   "agreeing_share_95pc_range": [
+    0.7225,
+    1.0
+   ],
+   "postcodes_not_comparable": 2,
+   "postcodes_ties_for_majority": 0,
+   "homes_compared": 216,
+   "homes_off_majority": 0,
+   "homes_off_majority_share": 0.0,
+   "disagreeing_postcodes_by_kind": {},
+   "disagreeing_postcodes_by_stream": {},
+   "by_postcode_size": {
+    "2-9 UPRNs": {
+     "comparable": 0,
+     "agreeing": 0
+    },
+    "10-24 UPRNs": {
+     "comparable": 5,
+     "agreeing": 5
+    },
+    "25+ UPRNs": {
+     "comparable": 5,
+     "agreeing": 5
+    }
+   },
+   "lookups": 272,
+   "lookup_outcomes": {
+    "upstream:NoSuchElementException": 47,
+    "dates": 216,
+    "upstream:TimeoutException": 9
+   },
+   "lookups_giving_dates_share": 0.7941,
+   "seconds_per_lookup": {
+    "mean": 5.43,
+    "median": 4.95,
+    "p95": 8.14,
+    "max": 14.91
+   },
+   "unmapped_bin_names": {},
+   "postcodes": [
+    {
+     "outcode": "TN24",
+     "uprns_total": 38,
+     "looked_up": 38,
+     "homes_with_dates": 31,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "TN25",
+     "uprns_total": 31,
+     "looked_up": 31,
+     "homes_with_dates": 29,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "TN24",
+     "uprns_total": 52,
+     "looked_up": 40,
+     "homes_with_dates": 38,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "TN23",
+     "uprns_total": 14,
+     "looked_up": 14,
+     "homes_with_dates": 14,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "TN27",
+     "uprns_total": 20,
+     "looked_up": 20,
+     "homes_with_dates": 12,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "TN23",
+     "uprns_total": 13,
+     "looked_up": 13,
+     "homes_with_dates": 13,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "TN27",
+     "uprns_total": 18,
+     "looked_up": 18,
+     "homes_with_dates": 17,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "TN27",
+     "uprns_total": 28,
+     "looked_up": 28,
+     "homes_with_dates": 21,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "TN26",
+     "uprns_total": 20,
+     "looked_up": 20,
+     "homes_with_dates": 16,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "TN23",
+     "uprns_total": 10,
+     "looked_up": 10,
+     "homes_with_dates": 0,
+     "comparable": false
+    },
+    {
+     "outcode": "TN24",
+     "uprns_total": 25,
+     "looked_up": 25,
+     "homes_with_dates": 25,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "TN17",
+     "uprns_total": 27,
+     "looked_up": 15,
+     "homes_with_dates": 0,
+     "comparable": false
+    }
+   ]
+  },
+  {
+   "module": "CheltenhamBoroughCouncil",
+   "name": "Cheltenham",
+   "platform": "Bespoke council site",
+   "control": false,
+   "ons_codes": [
+    "E07000078"
+   ],
+   "started_at": "2026-11-03T11:18:59+00:00",
+   "finished_at": "2026-11-03T11:52:38+00:00",
+   "stopped_because": "stopped after 15 failed lookups in a row (blocked or broken)",
+   "postcodes_in_council": 3860,
+   "postcodes_with_one_uprn": 211,
+   "postcodes_checked": 10,
+   "postcodes_comparable": 9,
+   "postcodes_agreeing": 9,
+   "agreeing_share": 1.0,
+   "agreeing_share_95pc_range": [
+    0.7008,
+    1.0
+   ],
+   "postcodes_not_comparable": 1,
+   "postcodes_ties_for_majority": 0,
+   "homes_compared": 119,
+   "homes_off_majority": 0,
+   "homes_off_majority_share": 0.0,
+   "disagreeing_postcodes_by_kind": {},
+   "disagreeing_postcodes_by_stream": {},
+   "by_postcode_size": {
+    "2-9 UPRNs": {
+     "comparable": 5,
+     "agreeing": 5
+    },
+    "10-24 UPRNs": {
+     "comparable": 2,
+     "agreeing": 2
+    },
+    "25+ UPRNs": {
+     "comparable": 2,
+     "agreeing": 2
+    }
+   },
+   "lookups": 153,
+   "lookup_outcomes": {
+    "upstream:KeyError": 34,
+    "dates": 119
+   },
+   "lookups_giving_dates_share": 0.7778,
+   "seconds_per_lookup": {
+    "mean": 9.42,
+    "median": 5.93,
+    "p95": 39.2,
+    "max": 40.91
+   },
+   "unmapped_bin_names": {},
+   "postcodes": [
+    {
+     "outcode": "GL50",
+     "uprns_total": 8,
+     "looked_up": 8,
+     "homes_with_dates": 7,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GL51",
+     "uprns_total": 3,
+     "looked_up": 3,
+     "homes_with_dates": 3,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GL52",
+     "uprns_total": 54,
+     "looked_up": 40,
+     "homes_with_dates": 39,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GL51",
+     "uprns_total": 3,
+     "looked_up": 3,
+     "homes_with_dates": 2,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GL50",
+     "uprns_total": 2,
+     "looked_up": 2,
+     "homes_with_dates": 2,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GL51",
+     "uprns_total": 22,
+     "looked_up": 22,
+     "homes_with_dates": 20,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GL51",
+     "uprns_total": 6,
+     "looked_up": 6,
+     "homes_with_dates": 6,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GL51",
+     "uprns_total": 46,
+     "looked_up": 40,
+     "homes_with_dates": 28,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GL51",
+     "uprns_total": 14,
+     "looked_up": 14,
+     "homes_with_dates": 12,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GL51",
+     "uprns_total": 282,
+     "looked_up": 15,
+     "homes_with_dates": 0,
+     "comparable": false
+    }
+   ]
+  },
+  {
+   "module": "DurhamCouncil",
+   "name": "Durham",
+   "platform": "Bartec",
+   "control": false,
+   "ons_codes": [
+    "E06000047"
+   ],
+   "started_at": "2026-11-03T11:19:03+00:00",
+   "finished_at": "2026-11-03T13:18:37+00:00",
+   "stopped_because": "reached the limit on lookups",
+   "postcodes_in_council": 16375,
+   "postcodes_with_one_uprn": 536,
+   "postcodes_checked": 36,
+   "postcodes_comparable": 35,
+   "postcodes_agreeing": 31,
+   "agreeing_share": 0.8857,
+   "agreeing_share_95pc_range": [
+    0.7405,
+    0.9546
+   ],
+   "postcodes_not_comparable": 1,
+   "postcodes_ties_for_majority": 0,
+   "homes_compared": 590,
+   "homes_off_majority": 4,
+   "homes_off_majority_share": 0.0068,
+   "disagreeing_postcodes_by_kind": {
+    "other_week": 1,
+    "different_weekday": 3
+   },
+   "disagreeing_postcodes_by_stream": {
+    "general": 4,
+    "recycling": 2,
+    "food": 2
+   },
+   "by_postcode_size": {
+    "2-9 UPRNs": {
+     "comparable": 11,
+     "agreeing": 11
+    },
+    "10-24 UPRNs": {
+     "comparable": 11,
+     "agreeing": 9
+    },
+    "25+ UPRNs": {
+     "comparable": 13,
+     "agreeing": 11
+    }
+   },
+   "lookups": 718,
+   "lookup_outcomes": {
+    "empty": 127,
+    "dates": 591
+   },
+   "lookups_giving_dates_share": 0.8231,
+   "seconds_per_lookup": {
+    "mean": 2.67,
+    "median": 2.83,
+    "p95": 3.55,
+    "max": 10.81
+   },
+   "unmapped_bin_names": {
+    "Collect Mattress": 1,
+    "Organic": 110
+   },
+   "postcodes": [
+    {
+     "outcode": "DL14",
+     "uprns_total": 10,
+     "looked_up": 10,
+     "homes_with_dates": 7,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH2",
+     "uprns_total": 45,
+     "looked_up": 40,
+     "homes_with_dates": 34,
+     "comparable": true,
+     "agree": false,
+     "off_majority": 1,
+     "kinds": [
+      "other_week"
+     ],
+     "tied": false
+    },
+    {
+     "outcode": "SR8",
+     "uprns_total": 31,
+     "looked_up": 31,
+     "homes_with_dates": 26,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH7",
+     "uprns_total": 12,
+     "looked_up": 12,
+     "homes_with_dates": 8,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH4",
+     "uprns_total": 18,
+     "looked_up": 18,
+     "homes_with_dates": 15,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH9",
+     "uprns_total": 4,
+     "looked_up": 4,
+     "homes_with_dates": 3,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DL12",
+     "uprns_total": 14,
+     "looked_up": 14,
+     "homes_with_dates": 12,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DL17",
+     "uprns_total": 41,
+     "looked_up": 40,
+     "homes_with_dates": 34,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH6",
+     "uprns_total": 28,
+     "looked_up": 28,
+     "homes_with_dates": 16,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH2",
+     "uprns_total": 26,
+     "looked_up": 26,
+     "homes_with_dates": 20,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH9",
+     "uprns_total": 21,
+     "looked_up": 21,
+     "homes_with_dates": 18,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH9",
+     "uprns_total": 9,
+     "looked_up": 9,
+     "homes_with_dates": 6,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "SR8",
+     "uprns_total": 49,
+     "looked_up": 40,
+     "homes_with_dates": 40,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH6",
+     "uprns_total": 9,
+     "looked_up": 9,
+     "homes_with_dates": 6,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH1",
+     "uprns_total": 7,
+     "looked_up": 7,
+     "homes_with_dates": 3,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "SR8",
+     "uprns_total": 91,
+     "looked_up": 40,
+     "homes_with_dates": 36,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH3",
+     "uprns_total": 29,
+     "looked_up": 29,
+     "homes_with_dates": 26,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DL13",
+     "uprns_total": 10,
+     "looked_up": 10,
+     "homes_with_dates": 2,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DL12",
+     "uprns_total": 4,
+     "looked_up": 4,
+     "homes_with_dates": 4,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH1",
+     "uprns_total": 9,
+     "looked_up": 9,
+     "homes_with_dates": 3,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH6",
+     "uprns_total": 8,
+     "looked_up": 8,
+     "homes_with_dates": 7,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DL13",
+     "uprns_total": 7,
+     "looked_up": 7,
+     "homes_with_dates": 3,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "SR7",
+     "uprns_total": 23,
+     "looked_up": 23,
+     "homes_with_dates": 22,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DL14",
+     "uprns_total": 15,
+     "looked_up": 15,
+     "homes_with_dates": 7,
+     "comparable": true,
+     "agree": false,
+     "off_majority": 1,
+     "kinds": [
+      "different_weekday"
+     ],
+     "tied": false
+    },
+    {
+     "outcode": "DL14",
+     "uprns_total": 16,
+     "looked_up": 16,
+     "homes_with_dates": 9,
+     "comparable": true,
+     "agree": false,
+     "off_majority": 1,
+     "kinds": [
+      "different_weekday"
+     ],
+     "tied": false
+    },
+    {
+     "outcode": "DH7",
+     "uprns_total": 17,
+     "looked_up": 17,
+     "homes_with_dates": 13,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH7",
+     "uprns_total": 6,
+     "looked_up": 6,
+     "homes_with_dates": 3,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH6",
+     "uprns_total": 53,
+     "looked_up": 40,
+     "homes_with_dates": 38,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "SR8",
+     "uprns_total": 36,
+     "looked_up": 36,
+     "homes_with_dates": 31,
+     "comparable": true,
+     "agree": false,
+     "off_majority": 1,
+     "kinds": [
+      "different_weekday"
+     ],
+     "tied": false
+    },
+    {
+     "outcode": "DL16",
+     "uprns_total": 41,
+     "looked_up": 40,
+     "homes_with_dates": 39,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH9",
+     "uprns_total": 5,
+     "looked_up": 5,
+     "homes_with_dates": 1,
+     "comparable": false
+    },
+    {
+     "outcode": "DL14",
+     "uprns_total": 7,
+     "looked_up": 7,
+     "homes_with_dates": 6,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH6",
+     "uprns_total": 7,
+     "looked_up": 7,
+     "homes_with_dates": 6,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "SR8",
+     "uprns_total": 55,
+     "looked_up": 40,
+     "homes_with_dates": 40,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "TS28",
+     "uprns_total": 20,
+     "looked_up": 20,
+     "homes_with_dates": 20,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DL14",
+     "uprns_total": 30,
+     "looked_up": 30,
+     "homes_with_dates": 27,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    }
+   ]
+  },
+  {
+   "module": "HartDistrictCouncil",
+   "name": "Hart",
+   "platform": "Whitespace",
+   "control": false,
+   "ons_codes": [
+    "E07000089"
+   ],
+   "started_at": "2026-11-03T11:19:02+00:00",
+   "finished_at": "2026-11-03T13:22:32+00:00",
+   "stopped_because": "reached the limit on lookups",
+   "postcodes_in_council": 2997,
+   "postcodes_with_one_uprn": 114,
+   "postcodes_checked": 39,
+   "postcodes_comparable": 38,
+   "postcodes_agreeing": 38,
+   "agreeing_share": 1.0,
+   "agreeing_share_95pc_range": [
+    0.9082,
+    1.0
+   ],
+   "postcodes_not_comparable": 1,
+   "postcodes_ties_for_majority": 0,
+   "homes_compared": 559,
+   "homes_off_majority": 0,
+   "homes_off_majority_share": 0.0,
+   "disagreeing_postcodes_by_kind": {},
+   "disagreeing_postcodes_by_stream": {},
+   "by_postcode_size": {
+    "2-9 UPRNs": {
+     "comparable": 7,
+     "agreeing": 7
+    },
+    "10-24 UPRNs": {
+     "comparable": 21,
+     "agreeing": 21
+    },
+    "25+ UPRNs": {
+     "comparable": 10,
+     "agreeing": 10
+    }
+   },
+   "lookups": 742,
+   "lookup_outcomes": {
+    "empty": 182,
+    "dates": 560
+   },
+   "lookups_giving_dates_share": 0.7547,
+   "seconds_per_lookup": {
+    "mean": 0.73,
+    "median": 0.77,
+    "p95": 0.92,
+    "max": 4.66
+   },
+   "unmapped_bin_names": {},
+   "postcodes": [
+    {
+     "outcode": "GU17",
+     "uprns_total": 5,
+     "looked_up": 5,
+     "homes_with_dates": 4,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU52",
+     "uprns_total": 12,
+     "looked_up": 12,
+     "homes_with_dates": 9,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU52",
+     "uprns_total": 7,
+     "looked_up": 7,
+     "homes_with_dates": 7,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "RG27",
+     "uprns_total": 12,
+     "looked_up": 12,
+     "homes_with_dates": 9,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 13,
+     "looked_up": 13,
+     "homes_with_dates": 13,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "RG29",
+     "uprns_total": 13,
+     "looked_up": 13,
+     "homes_with_dates": 12,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "RG29",
+     "uprns_total": 15,
+     "looked_up": 15,
+     "homes_with_dates": 9,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "RG29",
+     "uprns_total": 16,
+     "looked_up": 16,
+     "homes_with_dates": 15,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU46",
+     "uprns_total": 12,
+     "looked_up": 12,
+     "homes_with_dates": 10,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 12,
+     "looked_up": 12,
+     "homes_with_dates": 11,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU52",
+     "uprns_total": 44,
+     "looked_up": 40,
+     "homes_with_dates": 36,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 9,
+     "looked_up": 9,
+     "homes_with_dates": 9,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU52",
+     "uprns_total": 19,
+     "looked_up": 19,
+     "homes_with_dates": 19,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "RG29",
+     "uprns_total": 20,
+     "looked_up": 20,
+     "homes_with_dates": 12,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 17,
+     "looked_up": 17,
+     "homes_with_dates": 16,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU46",
+     "uprns_total": 15,
+     "looked_up": 15,
+     "homes_with_dates": 13,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "RG29",
+     "uprns_total": 15,
+     "looked_up": 15,
+     "homes_with_dates": 8,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU46",
+     "uprns_total": 36,
+     "looked_up": 36,
+     "homes_with_dates": 29,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 8,
+     "looked_up": 8,
+     "homes_with_dates": 7,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "RG27",
+     "uprns_total": 43,
+     "looked_up": 40,
+     "homes_with_dates": 35,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 7,
+     "looked_up": 7,
+     "homes_with_dates": 5,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU10",
+     "uprns_total": 18,
+     "looked_up": 18,
+     "homes_with_dates": 15,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 5,
+     "looked_up": 5,
+     "homes_with_dates": 0,
+     "comparable": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 33,
+     "looked_up": 33,
+     "homes_with_dates": 26,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "RG27",
+     "uprns_total": 17,
+     "looked_up": 17,
+     "homes_with_dates": 10,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 16,
+     "looked_up": 16,
+     "homes_with_dates": 13,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 6,
+     "looked_up": 6,
+     "homes_with_dates": 6,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU17",
+     "uprns_total": 29,
+     "looked_up": 29,
+     "homes_with_dates": 26,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 30,
+     "looked_up": 30,
+     "homes_with_dates": 22,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 22,
+     "looked_up": 22,
+     "homes_with_dates": 17,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 32,
+     "looked_up": 32,
+     "homes_with_dates": 4,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "RG27",
+     "uprns_total": 23,
+     "looked_up": 23,
+     "homes_with_dates": 11,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU46",
+     "uprns_total": 46,
+     "looked_up": 40,
+     "homes_with_dates": 10,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 30,
+     "looked_up": 30,
+     "homes_with_dates": 25,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 15,
+     "looked_up": 15,
+     "homes_with_dates": 9,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 5,
+     "looked_up": 5,
+     "homes_with_dates": 5,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU51",
+     "uprns_total": 24,
+     "looked_up": 24,
+     "homes_with_dates": 24,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU52",
+     "uprns_total": 33,
+     "looked_up": 33,
+     "homes_with_dates": 29,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU52",
+     "uprns_total": 21,
+     "looked_up": 21,
+     "homes_with_dates": 19,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    }
+   ]
+  },
+  {
+   "module": "OxfordCityCouncil",
+   "name": "Oxford",
+   "platform": "Jadu",
+   "control": false,
+   "ons_codes": [
+    "E07000178"
+   ],
+   "started_at": "2026-11-03T11:18:54+00:00",
+   "finished_at": "2026-11-03T12:05:52+00:00",
+   "stopped_because": "stopped after 15 failed lookups in a row (blocked or broken)",
+   "postcodes_in_council": 3694,
+   "postcodes_with_one_uprn": 298,
+   "postcodes_checked": 12,
+   "postcodes_comparable": 10,
+   "postcodes_agreeing": 9,
+   "agreeing_share": 0.9,
+   "agreeing_share_95pc_range": [
+    0.5958,
+    0.9821
+   ],
+   "postcodes_not_comparable": 2,
+   "postcodes_ties_for_majority": 0,
+   "homes_compared": 228,
+   "homes_off_majority": 1,
+   "homes_off_majority_share": 0.0044,
+   "disagreeing_postcodes_by_kind": {
+    "different_weekday": 1
+   },
+   "disagreeing_postcodes_by_stream": {
+    "general": 1
+   },
+   "by_postcode_size": {
+    "2-9 UPRNs": {
+     "comparable": 2,
+     "agreeing": 2
+    },
+    "10-24 UPRNs": {
+     "comparable": 2,
+     "agreeing": 2
+    },
+    "25+ UPRNs": {
+     "comparable": 6,
+     "agreeing": 5
+    }
+   },
+   "lookups": 282,
+   "lookup_outcomes": {
+    "dates": 228,
+    "upstream:ValueError": 41,
+    "empty": 13
+   },
+   "lookups_giving_dates_share": 0.8085,
+   "seconds_per_lookup": {
+    "mean": 6.25,
+    "median": 6.28,
+    "p95": 8.06,
+    "max": 10.26
+   },
+   "unmapped_bin_names": {},
+   "postcodes": [
+    {
+     "outcode": "OX3",
+     "uprns_total": 27,
+     "looked_up": 27,
+     "homes_with_dates": 25,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "OX4",
+     "uprns_total": 26,
+     "looked_up": 26,
+     "homes_with_dates": 22,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "OX2",
+     "uprns_total": 7,
+     "looked_up": 7,
+     "homes_with_dates": 4,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "OX3",
+     "uprns_total": 20,
+     "looked_up": 20,
+     "homes_with_dates": 17,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "OX3",
+     "uprns_total": 47,
+     "looked_up": 40,
+     "homes_with_dates": 38,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "OX2",
+     "uprns_total": 38,
+     "looked_up": 38,
+     "homes_with_dates": 35,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "OX3",
+     "uprns_total": 15,
+     "looked_up": 15,
+     "homes_with_dates": 14,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "OX4",
+     "uprns_total": 54,
+     "looked_up": 40,
+     "homes_with_dates": 40,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "OX1",
+     "uprns_total": 63,
+     "looked_up": 40,
+     "homes_with_dates": 27,
+     "comparable": true,
+     "agree": false,
+     "off_majority": 1,
+     "kinds": [
+      "different_weekday"
+     ],
+     "tied": false
+    },
+    {
+     "outcode": "OX3",
+     "uprns_total": 7,
+     "looked_up": 7,
+     "homes_with_dates": 6,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "OX4",
+     "uprns_total": 20,
+     "looked_up": 20,
+     "homes_with_dates": 0,
+     "comparable": false
+    },
+    {
+     "outcode": "OX3",
+     "uprns_total": 47,
+     "looked_up": 2,
+     "homes_with_dates": 0,
+     "comparable": false
+    }
+   ]
+  },
+  {
+   "module": "StevenageBoroughCouncil",
+   "name": "Stevenage",
+   "platform": "Granicus/Firmstep AchieveForms",
+   "control": false,
+   "ons_codes": [
+    "E07000243"
+   ],
+   "started_at": "2026-11-03T11:19:02+00:00",
+   "finished_at": "2026-11-03T11:30:15+00:00",
+   "stopped_because": "stopped after 15 failed lookups in a row (blocked or broken)",
+   "postcodes_in_council": 1940,
+   "postcodes_with_one_uprn": 110,
+   "postcodes_checked": 4,
+   "postcodes_comparable": 3,
+   "postcodes_agreeing": 3,
+   "agreeing_share": 1.0,
+   "agreeing_share_95pc_range": [
+    0.4385,
+    1.0
+   ],
+   "postcodes_not_comparable": 1,
+   "postcodes_ties_for_majority": 0,
+   "homes_compared": 51,
+   "homes_off_majority": 0,
+   "homes_off_majority_share": 0.0,
+   "disagreeing_postcodes_by_kind": {},
+   "disagreeing_postcodes_by_stream": {},
+   "by_postcode_size": {
+    "2-9 UPRNs": {
+     "comparable": 2,
+     "agreeing": 2
+    },
+    "10-24 UPRNs": {
+     "comparable": 0,
+     "agreeing": 0
+    },
+    "25+ UPRNs": {
+     "comparable": 1,
+     "agreeing": 1
+    }
+   },
+   "lookups": 68,
+   "lookup_outcomes": {
+    "upstream:ValueError": 17,
+    "dates": 51
+   },
+   "lookups_giving_dates_share": 0.75,
+   "seconds_per_lookup": {
+    "mean": 2.19,
+    "median": 1.89,
+    "p95": 3.63,
+    "max": 6.12
+   },
+   "unmapped_bin_names": {},
+   "postcodes": [
+    {
+     "outcode": "SG1",
+     "uprns_total": 4,
+     "looked_up": 4,
+     "homes_with_dates": 2,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "SG1",
+     "uprns_total": 9,
+     "looked_up": 9,
+     "homes_with_dates": 9,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "SG2",
+     "uprns_total": 55,
+     "looked_up": 40,
+     "homes_with_dates": 40,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "SG1",
+     "uprns_total": 49,
+     "looked_up": 15,
+     "homes_with_dates": 0,
+     "comparable": false
+    }
+   ]
+  },
+  {
+   "module": "BathAndNorthEastSomersetCouncil",
+   "name": "Bath and North East Somerset",
+   "platform": "Bespoke council site (control)",
+   "control": true,
+   "ons_codes": [
+    "E06000022"
+   ],
+   "started_at": "2026-11-03T11:19:02+00:00",
+   "finished_at": "2026-11-03T11:59:32+00:00",
+   "stopped_because": "reached the limit on lookups",
+   "postcodes_in_council": 5998,
+   "postcodes_with_one_uprn": 266,
+   "postcodes_checked": 16,
+   "postcodes_comparable": 13,
+   "postcodes_agreeing": 13,
+   "agreeing_share": 1.0,
+   "agreeing_share_95pc_range": [
+    0.7719,
+    1.0
+   ],
+   "postcodes_not_comparable": 3,
+   "postcodes_ties_for_majority": 0,
+   "homes_compared": 182,
+   "homes_off_majority": 0,
+   "homes_off_majority_share": 0.0,
+   "disagreeing_postcodes_by_kind": {},
+   "disagreeing_postcodes_by_stream": {},
+   "by_postcode_size": {
+    "2-9 UPRNs": {
+     "comparable": 4,
+     "agreeing": 4
+    },
+    "10-24 UPRNs": {
+     "comparable": 5,
+     "agreeing": 5
+    },
+    "25+ UPRNs": {
+     "comparable": 4,
+     "agreeing": 4
+    }
+   },
+   "lookups": 244,
+   "lookup_outcomes": {
+    "empty": 62,
+    "dates": 182
+   },
+   "lookups_giving_dates_share": 0.7459,
+   "seconds_per_lookup": {
+    "mean": 0.76,
+    "median": 0.74,
+    "p95": 0.94,
+    "max": 1.56
+   },
+   "unmapped_bin_names": {},
+   "postcodes": [
+    {
+     "outcode": "BA1",
+     "uprns_total": 3,
+     "looked_up": 3,
+     "homes_with_dates": 0,
+     "comparable": false
+    },
+    {
+     "outcode": "BS39",
+     "uprns_total": 24,
+     "looked_up": 24,
+     "homes_with_dates": 22,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "BA3",
+     "uprns_total": 7,
+     "looked_up": 7,
+     "homes_with_dates": 5,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "BA3",
+     "uprns_total": 2,
+     "looked_up": 2,
+     "homes_with_dates": 0,
+     "comparable": false
+    },
+    {
+     "outcode": "BS31",
+     "uprns_total": 12,
+     "looked_up": 12,
+     "homes_with_dates": 12,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "BA2",
+     "uprns_total": 15,
+     "looked_up": 15,
+     "homes_with_dates": 7,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "BA2",
+     "uprns_total": 10,
+     "looked_up": 10,
+     "homes_with_dates": 9,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "BA2",
+     "uprns_total": 33,
+     "looked_up": 33,
+     "homes_with_dates": 8,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "BA1",
+     "uprns_total": 37,
+     "looked_up": 37,
+     "homes_with_dates": 34,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "BA1",
+     "uprns_total": 3,
+     "looked_up": 3,
+     "homes_with_dates": 0,
+     "comparable": false
+    },
+    {
+     "outcode": "BS31",
+     "uprns_total": 28,
+     "looked_up": 28,
+     "homes_with_dates": 24,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "BA2",
+     "uprns_total": 19,
+     "looked_up": 19,
+     "homes_with_dates": 13,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "BS40",
+     "uprns_total": 3,
+     "looked_up": 3,
+     "homes_with_dates": 3,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "BA2",
+     "uprns_total": 3,
+     "looked_up": 3,
+     "homes_with_dates": 2,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "BA2",
+     "uprns_total": 5,
+     "looked_up": 5,
+     "homes_with_dates": 4,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "BA2",
+     "uprns_total": 48,
+     "looked_up": 40,
+     "homes_with_dates": 39,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+  "note": "The councils the postcode agreement check runs in (FRE-298 phase 0). One per platform, chosen because the council's scraper returned dates in docs/spike-results/uprn-probe.json, every bin name maps to a stream with fetcher/streams.py, and it needs only a UPRN (and a postcode). B&NES is the control: it was measured by hand on 2 Nov 2026 (94% of postcodes agree), so the same method should land near that.",
+  "councils": [
+    {"module": "CheltenhamBoroughCouncil", "name": "Cheltenham", "platform": "Bespoke council site", "ons_codes": ["E07000078"], "needs_selenium": false, "max_lookups": 750},
+    {"module": "HartDistrictCouncil", "name": "Hart", "platform": "Whitespace", "ons_codes": ["E07000089"], "needs_selenium": false, "max_lookups": 750},
+    {"module": "OxfordCityCouncil", "name": "Oxford", "platform": "Jadu", "ons_codes": ["E07000178"], "needs_selenium": false, "max_lookups": 750},
+    {"module": "DurhamCouncil", "name": "Durham", "platform": "Bartec", "ons_codes": ["E06000047"], "needs_selenium": false, "max_lookups": 750},
+    {"module": "StevenageBoroughCouncil", "name": "Stevenage", "platform": "Granicus/Firmstep AchieveForms", "ons_codes": ["E07000243"], "needs_selenium": false, "max_lookups": 750},
+    {"module": "AshfordBoroughCouncil", "name": "Ashford", "platform": "Bespoke council site (needs a browser)", "ons_codes": ["E07000105"], "needs_selenium": true, "max_lookups": 750},
+    {"module": "BathAndNorthEastSomersetCouncil", "name": "Bath and North East Somerset", "platform": "Bespoke council site (control)", "ons_codes": ["E06000022"], "needs_selenium": false, "max_lookups": 250, "control": true}
+  ]
+}

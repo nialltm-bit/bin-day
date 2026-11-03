@@ -1,0 +1,41 @@
+name: ONSUD stats for the postcode guess
+
+# FRE-298 phase 0, step 1. Downloads the newest ONS UPRN Directory (ONSUD, Open Government Licence), checks it has a UPRN, postcode and
+# council column, and reports how many UPRNs sit on a postcode and how big a file per outcode would be. The raw data is read as a
+# stream and thrown away with the runner; only the counts are committed (docs/spike-results/onsud-stats.json). No UPRN or postcode
+# is printed or saved.
+on:
+  workflow_dispatch:
+  push:
+    branches: [nialltm/fre-298-postcode-guess-cover-uprn-councils-without-knowing-the]
+    paths:
+      - .github/workflows/onsud-stats.yml
+      - scripts/onsud.py
+      - scripts/onsud_stats.py
+
+permissions:
+  contents: write
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download ONSUD and measure it
+        run: |
+          set -o pipefail
+          python -m scripts.onsud_stats docs/spike-results/onsud-stats.json | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Commit the counts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/spike-results/onsud-stats.json
+          git commit -m "Add the ONSUD postcode statistics [skip ci]" || exit 0
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
