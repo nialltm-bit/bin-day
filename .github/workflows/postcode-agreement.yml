@@ -1,0 +1,134 @@
+name: Postcode agreement check
+
+# FRE-298 phase 0, step 2. Do homes on the same postcode share a bin schedule? For seven UPRN councils (six platforms plus B&NES as
+# a control, see scripts/postcode_guess_councils.json) this draws random postcodes from the ONS UPRN Directory, runs the council's
+# real UKBinCollectionData scraper for every UPRN on each (up to 40), and compares the next dates per stream.
+#
+# Requests: one per UPRN, never faster than the default 10 seconds per council (fetcher/ratelimit.py), at most 750 per council
+# (250 for the control), so about 4,750 in all at most. Each council runs in its own job, so no council is asked twice at once.
+# Logs and results are public: counts, timings, error kinds and outcodes, never a postcode, UPRN or upstream error message.
+# Run it by hand with target_postcodes 2 first to check the plumbing (about 200 requests).
+on:
+  workflow_dispatch:
+    inputs:
+      target_postcodes:
+        description: Postcodes to compare in each council (use 2 for a smoke test)
+        type: string
+        default: "50"
+      max_lookups:
+        description: Optional. Overrides every council's limit on lookups
+        type: string
+        default: ""
+      seed:
+        description: Seed for the random postcodes, so a run can be repeated
+        type: string
+        default: "298"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: postcode-agreement
+  cancel-in-progress: false
+
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: List the councils
+        id: matrix
+        run: |
+          echo "matrix=$(jq -c '{include: .councils}' scripts/postcode_guess_councils.json)" >> "$GITHUB_OUTPUT"
+      - name: Draw random postcodes from ONSUD
+        env:
+          SEED: ${{ inputs.seed || '298' }}
+        run: python -m scripts.postcode_sample scripts/postcode_guess_councils.json "$RUNNER_TEMP/samples.json" --seed "$SEED"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: samples
+          path: ${{ runner.temp }}/samples.json
+          retention-days: 1
+
+  measure:
+    needs: sample
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.sample.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Start a Chrome service for councils that need a browser
+        if: matrix.needs_selenium
+        run: docker run -d --name selenium -p 4444:4444 --shm-size=2g selenium/standalone-chrome:latest
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r fetcher/requirements.txt
+      - run: curl -fsSL -o "$RUNNER_TEMP/input.json" https://raw.githubusercontent.com/robbrad/UKBinCollectionData/0.173.5/uk_bin_collection/tests/input.json
+      - uses: actions/download-artifact@v4
+        with:
+          name: samples
+          path: ${{ runner.temp }}/samples
+      - name: Wait for the Chrome service
+        if: matrix.needs_selenium
+        run: |
+          for i in $(seq 1 60); do
+            curl -fs http://localhost:4444/status | grep -q '"ready": *true' && exit 0
+            sleep 2
+          done
+          echo "Chrome service not ready" >&2; exit 1
+      - name: Compare the homes on each postcode, one request at a time
+        env:
+          MODULE: ${{ matrix.module }}
+          TARGET: ${{ inputs.target_postcodes || '50' }}
+          MAX_LOOKUPS: ${{ inputs.max_lookups }}
+        run: |
+          mkdir -p results
+          python -m scripts.postcode_agreement scripts/postcode_guess_councils.json "$RUNNER_TEMP/samples/samples.json" "$RUNNER_TEMP/input.json" \
+            "$MODULE" "results/$MODULE.json" --selenium-url http://localhost:4444 --target-postcodes "$TARGET" --max-minutes 335 \
+            ${MAX_LOOKUPS:+--max-lookups "$MAX_LOOKUPS"}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: result-${{ matrix.module }}
+          path: results/${{ matrix.module }}.json
+          retention-days: 7
+
+  report:
+    needs: [sample, measure]
+    if: always() && needs.sample.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: result-*
+          path: ${{ runner.temp }}/results
+      - name: Put the councils together
+        run: python -m scripts.postcode_report "$RUNNER_TEMP/results" docs/spike-results/postcode-agreement.json | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Commit the results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/spike-results/postcode-agreement.json
+          git commit -m "Add the postcode agreement results [skip ci]" || exit 0
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
