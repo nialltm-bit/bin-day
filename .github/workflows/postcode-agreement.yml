@@ -23,6 +23,10 @@ on:
         description: Seed for the random postcodes, so a run can be repeated
         type: string
         default: "298"
+      only:
+        description: Optional. Comma separated council modules to run, such as DurhamCouncil,HartDistrictCouncil. Empty runs all
+        type: string
+        default: ""
   push:
     branches: [nialltm/fre-298-postcode-guess-cover-uprn-councils-without-knowing-the]
     paths:
@@ -44,6 +48,7 @@ jobs:
       target: ${{ steps.settings.outputs.target }}
       max_lookups: ${{ steps.settings.outputs.max_lookups }}
       seed: ${{ steps.settings.outputs.seed }}
+      only: ${{ steps.settings.outputs.only }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -57,20 +62,25 @@ jobs:
           TARGET: ${{ inputs.target_postcodes }}
           MAX_LOOKUPS: ${{ inputs.max_lookups }}
           SEED: ${{ inputs.seed }}
+          ONLY: ${{ inputs.only }}
         run: |
           if [ "$GITHUB_EVENT_NAME" = "push" ]; then
             TARGET=$(jq -r .target_postcodes scripts/postcode_agreement_request.json)
             MAX_LOOKUPS=$(jq -r .max_lookups scripts/postcode_agreement_request.json)
             SEED=$(jq -r .seed scripts/postcode_agreement_request.json)
+            ONLY=$(jq -r '.only // ""' scripts/postcode_agreement_request.json)
           fi
           echo "target=$TARGET" >> "$GITHUB_OUTPUT"
           echo "max_lookups=$MAX_LOOKUPS" >> "$GITHUB_OUTPUT"
           echo "seed=$SEED" >> "$GITHUB_OUTPUT"
+          echo "only=$ONLY" >> "$GITHUB_OUTPUT"
           echo "Comparing $TARGET postcodes per council (seed $SEED, lookup limit override: ${MAX_LOOKUPS:-none})"
       - name: List the councils
         id: matrix
+        env:
+          ONLY: ${{ steps.settings.outputs.only }}
         run: |
-          echo "matrix=$(jq -c '{include: .councils}' scripts/postcode_guess_councils.json)" >> "$GITHUB_OUTPUT"
+          echo "matrix=$(jq -c --arg only "$ONLY" '{include: [.councils[] | select($only == "" or (.module as $m | $only | split(",") | index($m)))]}' scripts/postcode_guess_councils.json)" >> "$GITHUB_OUTPUT"
       - name: Draw random postcodes from ONSUD
         env:
           SEED: ${{ steps.settings.outputs.seed }}

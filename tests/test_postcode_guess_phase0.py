@@ -252,3 +252,21 @@ def test_a_bin_that_maps_to_no_stream_is_dropped_and_named_instead_of_losing_the
     assert [b["type"] for b in kept["bins"]] == ["Refuse", "Batteries"]  # batteries is on the ignore list, so it goes to normalise
     assert dropped == ["Collect Mattress"]
     assert agreement.drop_unmapped_bins({}, "odd") == ("odd", [])
+
+
+def test_a_report_of_some_councils_replaces_only_those_and_keeps_the_rest(tmp_path):
+    def result(module):
+        config = {"module": module, "name": module, "platform": "P", "ons_codes": ["E1"]}
+        stats = {"seconds": [1.0], "outcomes": agreement.Counter({"dates": 1}), "unmapped": agreement.Counter()}
+        return agreement.summarise(config, {"postcodes_in_council": 1, "postcodes_with_one_uprn": 0}, [], stats, "done", "now")
+
+    out = tmp_path / "all.json"
+    out.write_text(json.dumps({"councils": [result("A"), result("B")]}))
+    fresh = tmp_path / "fresh"
+    fresh.mkdir()
+    newer = result("B")
+    newer["stopped_because"] = "second run"
+    (fresh / "b.json").write_text(json.dumps(newer))
+    assert postcode_report.main(str(fresh), str(out)) == 0
+    councils = {c["module"]: c for c in json.loads(out.read_text())["councils"]}
+    assert set(councils) == {"A", "B"} and councils["B"]["stopped_because"] == "second run"

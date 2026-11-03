@@ -1,6 +1,7 @@
 {
-  "note": "Pushing a change to this file runs the Postcode agreement check on this branch with these settings (a manual run from the Actions tab uses its own inputs instead). A target of 2 is a smoke test of about 250 requests. 50 runs until each council reaches 50 comparable postcodes or its limit on lookups (750, 250 for the control).",
+  "note": "Pushing a change to this file runs the Postcode agreement check on this branch with these settings (a manual run from the Actions tab uses its own inputs instead). Run 2: only the four councils whose first run was cut short by a safety stop that fired too early, with a new seed so the postcodes are new. A target of 2 is a smoke test of about 250 requests.",
   "target_postcodes": "50",
-  "max_lookups": "",
-  "seed": "298"
+  "max_lookups": "500",
+  "seed": "299",
+  "only": "AshfordBoroughCouncil,CheltenhamBoroughCouncil,OxfordCityCouncil,StevenageBoroughCouncil"
 }

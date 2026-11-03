@@ -31,10 +31,15 @@ def table(results: list[dict]) -> str:
 
 
 def main(folder: str, output: str) -> int:
-    results = [json.load(open(p)) for p in sorted(Path(folder).glob("**/*.json"))]
-    if not results:
+    fresh = [json.load(open(p)) for p in sorted(Path(folder).glob("**/*.json"))]
+    if not fresh:
         print("no results found")
         return 1
+    # A run of only some councils replaces just those and keeps the others already in the file.
+    kept = []
+    if Path(output).exists():
+        kept = [r for r in json.load(open(output))["councils"] if r["module"] not in {f["module"] for f in fresh}]
+    results = kept + fresh
     results.sort(key=lambda r: (r["control"], r["name"]))
     with open(output, "w") as out:
         json.dump({"councils": results}, out, indent=1)

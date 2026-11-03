@@ -33,7 +33,7 @@ from fetcher.ratelimit import DEFAULT_MIN_INTERVAL, CouncilRateLimiter
 from fetcher.upstream import run_ukbcd
 
 COMPARED = ("general", "recycling", "food")  # garden waste is opt-in and paid, so it is left out
-MAX_CONSECUTIVE_ERRORS = 15  # a council that fails this many in a row is blocking us or broken: stop asking
+MAX_CONSECUTIVE_ERRORS = 40  # this many lookups in a row with no dates means blocked or broken: stop asking. (15 was too few: a run of non-homes also gives nothing)
 SIZE_BUCKETS = (("2-9 UPRNs", 2, 9), ("10-24 UPRNs", 10, 24), ("25+ UPRNs", 25, 10_000))
 
 
@@ -156,7 +156,7 @@ def check_postcode(council: dict, sample: dict, selenium_url: str | None, limite
             else:
                 outcomes["dates_but_no_compared_stream"] += 1
         stats["outcomes"][result["outcome"]] += 1
-        stats["consecutive_errors"] = 0 if result["outcome"] in ("dates", "empty") else stats["consecutive_errors"] + 1
+        stats["consecutive_errors"] = 0 if result["outcome"] == "dates" else stats["consecutive_errors"] + 1
         if stats["consecutive_errors"] >= MAX_CONSECUTIVE_ERRORS:
             break
     record = {
@@ -271,7 +271,7 @@ def main(argv: list[str]) -> int:
         with open(args.output, "w") as out:  # saved as we go, so a long run keeps its progress
             json.dump(summarise(config, drawn, records, stats, "still running", started_at), out, indent=1)
         if stats["consecutive_errors"] >= MAX_CONSECUTIVE_ERRORS:
-            stopped = f"stopped after {MAX_CONSECUTIVE_ERRORS} failed lookups in a row (blocked or broken)"
+            stopped = f"stopped after {MAX_CONSECUTIVE_ERRORS} lookups in a row with no dates (blocked or broken)"
             break
 
     summary = summarise(config, drawn, records, stats, stopped, started_at)
