@@ -1,0 +1,2197 @@
+{
+ "rows_read": 41593127,
+ "csv_files_read": 11,
+ "csv_files_skipped_no_uprn_or_postcode_column": 27,
+ "columns_used": {
+  "uprn": "uprn",
+  "postcode": "pcds",
+  "council": "lad26cd"
+ },
+ "rows_without_a_full_postcode": 534569,
+ "rows_without_a_council": 0,
+ "uprns": 41058558,
+ "postcodes": 1735815,
+ "councils": 350,
+ "uprns_per_postcode": {
+  "median": 18,
+  "p95": 62,
+  "max": 6830,
+  "mean": 23.7,
+  "p99": 93,
+  "single_uprn_share": 0.0411,
+  "over_40_share_of_postcodes": 0.1624,
+  "over_40_share_of_uprns": 0.4161
+ },
+ "postcodes_spanning_two_or_more_councils": 17092,
+ "outcode_files": {
+  "layout": "one JSON object per outcode: {\"AB1 2CD\":{\"E0600000X\":[uprn,uprn]}}, UPRNs sorted, no spaces",
+  "outcodes": 2838,
+  "postcodes_per_outcode": {
+   "median": 595,
+   "p95": 1295,
+   "max": 2788,
+   "mean": 611.6
+  },
+  "uprns_per_outcode": {
+   "median": 13567,
+   "p95": 32302,
+   "max": 95157,
+   "mean": 14467.4
+  },
+  "json_bytes": {
+   "median": 172942,
+   "p95": 430195,
+   "max": 1275213,
+   "mean": 185946.0,
+   "total": 527714854
+  },
+  "gzip_bytes": {
+   "median": 40520,
+   "p95": 94650,
+   "max": 267527,
+   "mean": 42844.9,
+   "total": 121593898
+  },
+  "largest_outcodes": [
+   {
+    "outcode": "CR0",
+    "json_bytes": 1275213,
+    "gzip_bytes": 267527,
+    "uprns": 95157
+   },
+   {
+    "outcode": "N1",
+    "json_bytes": 890135,
+    "gzip_bytes": 198798,
+    "uprns": 71678
+   },
+   {
+    "outcode": "SE1",
+    "json_bytes": 869498,
+    "gzip_bytes": 189340,
+    "uprns": 65343
+   },
+   {
+    "outcode": "E17",
+    "json_bytes": 811182,
+    "gzip_bytes": 164876,
+    "uprns": 60577
+   },
+   {
+    "outcode": "LE2",
+    "json_bytes": 772269,
+    "gzip_bytes": 178815,
+    "uprns": 62947
+   }
+  ]
+ },
+ "per_council": {
+  "E06000001": {
+   "uprns": 57289,
+   "postcodes": 2711,
+   "single_uprn_postcodes": 98,
+   "over_cap_postcodes": 387
+  },
+  "E06000002": {
+   "uprns": 82691,
+   "postcodes": 3865,
+   "single_uprn_postcodes": 133,
+   "over_cap_postcodes": 457
+  },
+  "E06000003": {
+   "uprns": 82575,
+   "postcodes": 4110,
+   "single_uprn_postcodes": 136,
+   "over_cap_postcodes": 403
+  },
+  "E06000004": {
+   "uprns": 126178,
+   "postcodes": 5513,
+   "single_uprn_postcodes": 196,
+   "over_cap_postcodes": 786
+  },
+  "E06000005": {
+   "uprns": 69023,
+   "postcodes": 3229,
+   "single_uprn_postcodes": 286,
+   "over_cap_postcodes": 468
+  },
+  "E06000006": {
+   "uprns": 77151,
+   "postcodes": 3166,
+   "single_uprn_postcodes": 142,
+   "over_cap_postcodes": 589
+  },
+  "E06000007": {
+   "uprns": 119999,
+   "postcodes": 5502,
+   "single_uprn_postcodes": 349,
+   "over_cap_postcodes": 863
+  },
+  "E06000008": {
+   "uprns": 86038,
+   "postcodes": 3460,
+   "single_uprn_postcodes": 174,
+   "over_cap_postcodes": 700
+  },
+  "E06000009": {
+   "uprns": 100425,
+   "postcodes": 3535,
+   "single_uprn_postcodes": 124,
+   "over_cap_postcodes": 802
+  },
+  "E06000010": {
+   "uprns": 175898,
+   "postcodes": 5837,
+   "single_uprn_postcodes": 168,
+   "over_cap_postcodes": 1575
+  },
+  "E06000011": {
+   "uprns": 265116,
+   "postcodes": 11100,
+   "single_uprn_postcodes": 326,
+   "over_cap_postcodes": 1668
+  },
+  "E06000012": {
+   "uprns": 99787,
+   "postcodes": 4481,
+   "single_uprn_postcodes": 113,
+   "over_cap_postcodes": 602
+  },
+  "E06000013": {
+   "uprns": 105416,
+   "postcodes": 4896,
+   "single_uprn_postcodes": 111,
+   "over_cap_postcodes": 618
+  },
+  "E06000014": {
+   "uprns": 123760,
+   "postcodes": 5466,
+   "single_uprn_postcodes": 221,
+   "over_cap_postcodes": 735
+  },
+  "E06000015": {
+   "uprns": 149530,
+   "postcodes": 5578,
+   "single_uprn_postcodes": 188,
+   "over_cap_postcodes": 1010
+  },
+  "E06000016": {
+   "uprns": 186691,
+   "postcodes": 6115,
+   "single_uprn_postcodes": 155,
+   "over_cap_postcodes": 1489
+  },
+  "E06000017": {
+   "uprns": 28599,
+   "postcodes": 1320,
+   "single_uprn_postcodes": 52,
+   "over_cap_postcodes": 195
+  },
+  "E06000018": {
+   "uprns": 206321,
+   "postcodes": 6795,
+   "single_uprn_postcodes": 254,
+   "over_cap_postcodes": 1757
+  },
+  "E06000019": {
+   "uprns": 153198,
+   "postcodes": 6912,
+   "single_uprn_postcodes": 241,
+   "over_cap_postcodes": 1013
+  },
+  "E06000020": {
+   "uprns": 109449,
+   "postcodes": 5223,
+   "single_uprn_postcodes": 250,
+   "over_cap_postcodes": 670
+  },
+  "E06000021": {
+   "uprns": 154565,
+   "postcodes": 6559,
+   "single_uprn_postcodes": 281,
+   "over_cap_postcodes": 1064
+  },
+  "E06000022": {
+   "uprns": 117208,
+   "postcodes": 5998,
+   "single_uprn_postcodes": 266,
+   "over_cap_postcodes": 659
+  },
+  "E06000023": {
+   "uprns": 284582,
+   "postcodes": 11722,
+   "single_uprn_postcodes": 447,
+   "over_cap_postcodes": 1543
+  },
+  "E06000024": {
+   "uprns": 136674,
+   "postcodes": 6415,
+   "single_uprn_postcodes": 230,
+   "over_cap_postcodes": 718
+  },
+  "E06000025": {
+   "uprns": 167888,
+   "postcodes": 7298,
+   "single_uprn_postcodes": 239,
+   "over_cap_postcodes": 913
+  },
+  "E06000026": {
+   "uprns": 166756,
+   "postcodes": 6260,
+   "single_uprn_postcodes": 255,
+   "over_cap_postcodes": 1218
+  },
+  "E06000027": {
+   "uprns": 96497,
+   "postcodes": 3767,
+   "single_uprn_postcodes": 142,
+   "over_cap_postcodes": 766
+  },
+  "E06000030": {
+   "uprns": 131074,
+   "postcodes": 5270,
+   "single_uprn_postcodes": 256,
+   "over_cap_postcodes": 1011
+  },
+  "E06000031": {
+   "uprns": 114110,
+   "postcodes": 4427,
+   "single_uprn_postcodes": 273,
+   "over_cap_postcodes": 1016
+  },
+  "E06000032": {
+   "uprns": 113966,
+   "postcodes": 3243,
+   "single_uprn_postcodes": 126,
+   "over_cap_postcodes": 1149
+  },
+  "E06000033": {
+   "uprns": 103492,
+   "postcodes": 3562,
+   "single_uprn_postcodes": 160,
+   "over_cap_postcodes": 880
+  },
+  "E06000034": {
+   "uprns": 93822,
+   "postcodes": 3296,
+   "single_uprn_postcodes": 118,
+   "over_cap_postcodes": 802
+  },
+  "E06000035": {
+   "uprns": 146353,
+   "postcodes": 6195,
+   "single_uprn_postcodes": 242,
+   "over_cap_postcodes": 1001
+  },
+  "E06000036": {
+   "uprns": 65209,
+   "postcodes": 3107,
+   "single_uprn_postcodes": 143,
+   "over_cap_postcodes": 471
+  },
+  "E06000037": {
+   "uprns": 100618,
+   "postcodes": 5501,
+   "single_uprn_postcodes": 269,
+   "over_cap_postcodes": 500
+  },
+  "E06000038": {
+   "uprns": 91826,
+   "postcodes": 3811,
+   "single_uprn_postcodes": 295,
+   "over_cap_postcodes": 720
+  },
+  "E06000039": {
+   "uprns": 71323,
+   "postcodes": 2880,
+   "single_uprn_postcodes": 217,
+   "over_cap_postcodes": 526
+  },
+  "E06000040": {
+   "uprns": 94143,
+   "postcodes": 4581,
+   "single_uprn_postcodes": 234,
+   "over_cap_postcodes": 582
+  },
+  "E06000041": {
+   "uprns": 93402,
+   "postcodes": 4494,
+   "single_uprn_postcodes": 231,
+   "over_cap_postcodes": 587
+  },
+  "E06000042": {
+   "uprns": 156668,
+   "postcodes": 7829,
+   "single_uprn_postcodes": 423,
+   "over_cap_postcodes": 926
+  },
+  "E06000043": {
+   "uprns": 198636,
+   "postcodes": 5071,
+   "single_uprn_postcodes": 278,
+   "over_cap_postcodes": 1856
+  },
+  "E06000044": {
+   "uprns": 130679,
+   "postcodes": 4428,
+   "single_uprn_postcodes": 188,
+   "over_cap_postcodes": 1220
+  },
+  "E06000045": {
+   "uprns": 145195,
+   "postcodes": 5777,
+   "single_uprn_postcodes": 187,
+   "over_cap_postcodes": 1000
+  },
+  "E06000046": {
+   "uprns": 102114,
+   "postcodes": 5131,
+   "single_uprn_postcodes": 156,
+   "over_cap_postcodes": 590
+  },
+  "E06000047": {
+   "uprns": 350224,
+   "postcodes": 16375,
+   "single_uprn_postcodes": 536,
+   "over_cap_postcodes": 2242
+  },
+  "E06000049": {
+   "uprns": 260597,
+   "postcodes": 12438,
+   "single_uprn_postcodes": 745,
+   "over_cap_postcodes": 1654
+  },
+  "E06000050": {
+   "uprns": 232552,
+   "postcodes": 11005,
+   "single_uprn_postcodes": 450,
+   "over_cap_postcodes": 1356
+  },
+  "E06000051": {
+   "uprns": 223483,
+   "postcodes": 12844,
+   "single_uprn_postcodes": 552,
+   "over_cap_postcodes": 975
+  },
+  "E06000052": {
+   "uprns": 435406,
+   "postcodes": 21935,
+   "single_uprn_postcodes": 728,
+   "over_cap_postcodes": 2471
+  },
+  "E06000053": {
+   "uprns": 2878,
+   "postcodes": 95,
+   "single_uprn_postcodes": 12,
+   "over_cap_postcodes": 28
+  },
+  "E06000054": {
+   "uprns": 326173,
+   "postcodes": 17017,
+   "single_uprn_postcodes": 727,
+   "over_cap_postcodes": 1848
+  },
+  "E06000055": {
+   "uprns": 113252,
+   "postcodes": 4872,
+   "single_uprn_postcodes": 178,
+   "over_cap_postcodes": 713
+  },
+  "E06000056": {
+   "uprns": 170541,
+   "postcodes": 6980,
+   "single_uprn_postcodes": 336,
+   "over_cap_postcodes": 1355
+  },
+  "E06000057": {
+   "uprns": 244334,
+   "postcodes": 13221,
+   "single_uprn_postcodes": 487,
+   "over_cap_postcodes": 1272
+  },
+  "E06000058": {
+   "uprns": 245280,
+   "postcodes": 9452,
+   "single_uprn_postcodes": 363,
+   "over_cap_postcodes": 1795
+  },
+  "E06000059": {
+   "uprns": 260680,
+   "postcodes": 13324,
+   "single_uprn_postcodes": 487,
+   "over_cap_postcodes": 1430
+  },
+  "E06000060": {
+   "uprns": 331427,
+   "postcodes": 16243,
+   "single_uprn_postcodes": 626,
+   "over_cap_postcodes": 1792
+  },
+  "E06000061": {
+   "uprns": 212508,
+   "postcodes": 8601,
+   "single_uprn_postcodes": 435,
+   "over_cap_postcodes": 1637
+  },
+  "E06000062": {
+   "uprns": 254267,
+   "postcodes": 9889,
+   "single_uprn_postcodes": 482,
+   "over_cap_postcodes": 2004
+  },
+  "E06000063": {
+   "uprns": 201123,
+   "postcodes": 10501,
+   "single_uprn_postcodes": 418,
+   "over_cap_postcodes": 1192
+  },
+  "E06000064": {
+   "uprns": 170587,
+   "postcodes": 9528,
+   "single_uprn_postcodes": 402,
+   "over_cap_postcodes": 904
+  },
+  "E06000065": {
+   "uprns": 505150,
+   "postcodes": 24085,
+   "single_uprn_postcodes": 906,
+   "over_cap_postcodes": 3240
+  },
+  "E06000066": {
+   "uprns": 393559,
+   "postcodes": 20493,
+   "single_uprn_postcodes": 825,
+   "over_cap_postcodes": 2165
+  },
+  "E07000008": {
+   "uprns": 85380,
+   "postcodes": 2872,
+   "single_uprn_postcodes": 181,
+   "over_cap_postcodes": 718
+  },
+  "E07000009": {
+   "uprns": 59547,
+   "postcodes": 2238,
+   "single_uprn_postcodes": 108,
+   "over_cap_postcodes": 523
+  },
+  "E07000010": {
+   "uprns": 65690,
+   "postcodes": 3065,
+   "single_uprn_postcodes": 184,
+   "over_cap_postcodes": 491
+  },
+  "E07000011": {
+   "uprns": 133964,
+   "postcodes": 5220,
+   "single_uprn_postcodes": 205,
+   "over_cap_postcodes": 1054
+  },
+  "E07000012": {
+   "uprns": 105319,
+   "postcodes": 4276,
+   "single_uprn_postcodes": 151,
+   "over_cap_postcodes": 839
+  },
+  "E07000032": {
+   "uprns": 81632,
+   "postcodes": 2969,
+   "single_uprn_postcodes": 108,
+   "over_cap_postcodes": 708
+  },
+  "E07000033": {
+   "uprns": 51892,
+   "postcodes": 2160,
+   "single_uprn_postcodes": 83,
+   "over_cap_postcodes": 389
+  },
+  "E07000034": {
+   "uprns": 68564,
+   "postcodes": 2880,
+   "single_uprn_postcodes": 112,
+   "over_cap_postcodes": 456
+  },
+  "E07000035": {
+   "uprns": 59139,
+   "postcodes": 2351,
+   "single_uprn_postcodes": 109,
+   "over_cap_postcodes": 462
+  },
+  "E07000036": {
+   "uprns": 68673,
+   "postcodes": 2458,
+   "single_uprn_postcodes": 65,
+   "over_cap_postcodes": 574
+  },
+  "E07000037": {
+   "uprns": 61081,
+   "postcodes": 2916,
+   "single_uprn_postcodes": 146,
+   "over_cap_postcodes": 395
+  },
+  "E07000038": {
+   "uprns": 62261,
+   "postcodes": 2892,
+   "single_uprn_postcodes": 132,
+   "over_cap_postcodes": 382
+  },
+  "E07000039": {
+   "uprns": 78024,
+   "postcodes": 2798,
+   "single_uprn_postcodes": 136,
+   "over_cap_postcodes": 654
+  },
+  "E07000040": {
+   "uprns": 108684,
+   "postcodes": 6196,
+   "single_uprn_postcodes": 230,
+   "over_cap_postcodes": 520
+  },
+  "E07000041": {
+   "uprns": 80630,
+   "postcodes": 3616,
+   "single_uprn_postcodes": 205,
+   "over_cap_postcodes": 501
+  },
+  "E07000042": {
+   "uprns": 68071,
+   "postcodes": 3566,
+   "single_uprn_postcodes": 135,
+   "over_cap_postcodes": 357
+  },
+  "E07000043": {
+   "uprns": 82528,
+   "postcodes": 3819,
+   "single_uprn_postcodes": 139,
+   "over_cap_postcodes": 538
+  },
+  "E07000044": {
+   "uprns": 72782,
+   "postcodes": 4307,
+   "single_uprn_postcodes": 202,
+   "over_cap_postcodes": 357
+  },
+  "E07000045": {
+   "uprns": 91166,
+   "postcodes": 4741,
+   "single_uprn_postcodes": 214,
+   "over_cap_postcodes": 528
+  },
+  "E07000046": {
+   "uprns": 64936,
+   "postcodes": 2859,
+   "single_uprn_postcodes": 110,
+   "over_cap_postcodes": 418
+  },
+  "E07000047": {
+   "uprns": 40771,
+   "postcodes": 2617,
+   "single_uprn_postcodes": 118,
+   "over_cap_postcodes": 159
+  },
+  "E07000061": {
+   "uprns": 61452,
+   "postcodes": 2872,
+   "single_uprn_postcodes": 126,
+   "over_cap_postcodes": 374
+  },
+  "E07000062": {
+   "uprns": 61444,
+   "postcodes": 2044,
+   "single_uprn_postcodes": 94,
+   "over_cap_postcodes": 527
+  },
+  "E07000063": {
+   "uprns": 64006,
+   "postcodes": 3439,
+   "single_uprn_postcodes": 176,
+   "over_cap_postcodes": 309
+  },
+  "E07000064": {
+   "uprns": 72432,
+   "postcodes": 3224,
+   "single_uprn_postcodes": 154,
+   "over_cap_postcodes": 436
+  },
+  "E07000065": {
+   "uprns": 107345,
+   "postcodes": 6064,
+   "single_uprn_postcodes": 259,
+   "over_cap_postcodes": 477
+  },
+  "E07000066": {
+   "uprns": 96826,
+   "postcodes": 4135,
+   "single_uprn_postcodes": 147,
+   "over_cap_postcodes": 636
+  },
+  "E07000067": {
+   "uprns": 103791,
+   "postcodes": 4659,
+   "single_uprn_postcodes": 193,
+   "over_cap_postcodes": 665
+  },
+  "E07000068": {
+   "uprns": 46778,
+   "postcodes": 2187,
+   "single_uprn_postcodes": 110,
+   "over_cap_postcodes": 281
+  },
+  "E07000069": {
+   "uprns": 48366,
+   "postcodes": 2061,
+   "single_uprn_postcodes": 55,
+   "over_cap_postcodes": 251
+  },
+  "E07000070": {
+   "uprns": 109330,
+   "postcodes": 4372,
+   "single_uprn_postcodes": 241,
+   "over_cap_postcodes": 846
+  },
+  "E07000071": {
+   "uprns": 118723,
+   "postcodes": 5249,
+   "single_uprn_postcodes": 188,
+   "over_cap_postcodes": 627
+  },
+  "E07000072": {
+   "uprns": 77329,
+   "postcodes": 3637,
+   "single_uprn_postcodes": 224,
+   "over_cap_postcodes": 446
+  },
+  "E07000073": {
+   "uprns": 63684,
+   "postcodes": 1807,
+   "single_uprn_postcodes": 117,
+   "over_cap_postcodes": 669
+  },
+  "E07000074": {
+   "uprns": 48908,
+   "postcodes": 2017,
+   "single_uprn_postcodes": 45,
+   "over_cap_postcodes": 347
+  },
+  "E07000075": {
+   "uprns": 50125,
+   "postcodes": 2174,
+   "single_uprn_postcodes": 88,
+   "over_cap_postcodes": 328
+  },
+  "E07000076": {
+   "uprns": 102347,
+   "postcodes": 4817,
+   "single_uprn_postcodes": 157,
+   "over_cap_postcodes": 533
+  },
+  "E07000077": {
+   "uprns": 62937,
+   "postcodes": 3120,
+   "single_uprn_postcodes": 127,
+   "over_cap_postcodes": 346
+  },
+  "E07000078": {
+   "uprns": 77798,
+   "postcodes": 3860,
+   "single_uprn_postcodes": 211,
+   "over_cap_postcodes": 427
+  },
+  "E07000079": {
+   "uprns": 68045,
+   "postcodes": 3751,
+   "single_uprn_postcodes": 178,
+   "over_cap_postcodes": 374
+  },
+  "E07000080": {
+   "uprns": 59219,
+   "postcodes": 3356,
+   "single_uprn_postcodes": 258,
+   "over_cap_postcodes": 298
+  },
+  "E07000081": {
+   "uprns": 76462,
+   "postcodes": 3101,
+   "single_uprn_postcodes": 137,
+   "over_cap_postcodes": 537
+  },
+  "E07000082": {
+   "uprns": 80298,
+   "postcodes": 4241,
+   "single_uprn_postcodes": 207,
+   "over_cap_postcodes": 436
+  },
+  "E07000083": {
+   "uprns": 67347,
+   "postcodes": 3270,
+   "single_uprn_postcodes": 201,
+   "over_cap_postcodes": 450
+  },
+  "E07000084": {
+   "uprns": 108063,
+   "postcodes": 5115,
+   "single_uprn_postcodes": 270,
+   "over_cap_postcodes": 692
+  },
+  "E07000085": {
+   "uprns": 76396,
+   "postcodes": 4264,
+   "single_uprn_postcodes": 198,
+   "over_cap_postcodes": 361
+  },
+  "E07000086": {
+   "uprns": 74017,
+   "postcodes": 3465,
+   "single_uprn_postcodes": 133,
+   "over_cap_postcodes": 440
+  },
+  "E07000087": {
+   "uprns": 63468,
+   "postcodes": 3313,
+   "single_uprn_postcodes": 147,
+   "over_cap_postcodes": 267
+  },
+  "E07000088": {
+   "uprns": 44136,
+   "postcodes": 1829,
+   "single_uprn_postcodes": 68,
+   "over_cap_postcodes": 305
+  },
+  "E07000089": {
+   "uprns": 56737,
+   "postcodes": 2997,
+   "single_uprn_postcodes": 114,
+   "over_cap_postcodes": 275
+  },
+  "E07000090": {
+   "uprns": 67652,
+   "postcodes": 3131,
+   "single_uprn_postcodes": 166,
+   "over_cap_postcodes": 414
+  },
+  "E07000091": {
+   "uprns": 114523,
+   "postcodes": 5557,
+   "single_uprn_postcodes": 247,
+   "over_cap_postcodes": 602
+  },
+  "E07000092": {
+   "uprns": 56037,
+   "postcodes": 2356,
+   "single_uprn_postcodes": 91,
+   "over_cap_postcodes": 350
+  },
+  "E07000093": {
+   "uprns": 78085,
+   "postcodes": 3894,
+   "single_uprn_postcodes": 173,
+   "over_cap_postcodes": 475
+  },
+  "E07000094": {
+   "uprns": 87530,
+   "postcodes": 4272,
+   "single_uprn_postcodes": 210,
+   "over_cap_postcodes": 535
+  },
+  "E07000095": {
+   "uprns": 51582,
+   "postcodes": 2469,
+   "single_uprn_postcodes": 128,
+   "over_cap_postcodes": 275
+  },
+  "E07000096": {
+   "uprns": 84203,
+   "postcodes": 4072,
+   "single_uprn_postcodes": 166,
+   "over_cap_postcodes": 411
+  },
+  "E07000098": {
+   "uprns": 56718,
+   "postcodes": 3067,
+   "single_uprn_postcodes": 204,
+   "over_cap_postcodes": 246
+  },
+  "E07000099": {
+   "uprns": 83145,
+   "postcodes": 3967,
+   "single_uprn_postcodes": 188,
+   "over_cap_postcodes": 518
+  },
+  "E07000102": {
+   "uprns": 49029,
+   "postcodes": 2592,
+   "single_uprn_postcodes": 147,
+   "over_cap_postcodes": 255
+  },
+  "E07000103": {
+   "uprns": 53676,
+   "postcodes": 2445,
+   "single_uprn_postcodes": 259,
+   "over_cap_postcodes": 369
+  },
+  "E07000105": {
+   "uprns": 89804,
+   "postcodes": 4026,
+   "single_uprn_postcodes": 173,
+   "over_cap_postcodes": 574
+  },
+  "E07000106": {
+   "uprns": 102289,
+   "postcodes": 4540,
+   "single_uprn_postcodes": 150,
+   "over_cap_postcodes": 629
+  },
+  "E07000107": {
+   "uprns": 63702,
+   "postcodes": 2485,
+   "single_uprn_postcodes": 160,
+   "over_cap_postcodes": 513
+  },
+  "E07000108": {
+   "uprns": 78763,
+   "postcodes": 3916,
+   "single_uprn_postcodes": 118,
+   "over_cap_postcodes": 429
+  },
+  "E07000109": {
+   "uprns": 56525,
+   "postcodes": 2291,
+   "single_uprn_postcodes": 100,
+   "over_cap_postcodes": 396
+  },
+  "E07000110": {
+   "uprns": 104782,
+   "postcodes": 5502,
+   "single_uprn_postcodes": 225,
+   "over_cap_postcodes": 529
+  },
+  "E07000111": {
+   "uprns": 71435,
+   "postcodes": 3754,
+   "single_uprn_postcodes": 187,
+   "over_cap_postcodes": 365
+  },
+  "E07000112": {
+   "uprns": 75705,
+   "postcodes": 3645,
+   "single_uprn_postcodes": 162,
+   "over_cap_postcodes": 453
+  },
+  "E07000113": {
+   "uprns": 89558,
+   "postcodes": 4126,
+   "single_uprn_postcodes": 167,
+   "over_cap_postcodes": 570
+  },
+  "E07000114": {
+   "uprns": 93534,
+   "postcodes": 4011,
+   "single_uprn_postcodes": 135,
+   "over_cap_postcodes": 619
+  },
+  "E07000115": {
+   "uprns": 78543,
+   "postcodes": 4099,
+   "single_uprn_postcodes": 257,
+   "over_cap_postcodes": 408
+  },
+  "E07000116": {
+   "uprns": 74672,
+   "postcodes": 3937,
+   "single_uprn_postcodes": 124,
+   "over_cap_postcodes": 376
+  },
+  "E07000117": {
+   "uprns": 59044,
+   "postcodes": 2420,
+   "single_uprn_postcodes": 109,
+   "over_cap_postcodes": 438
+  },
+  "E07000118": {
+   "uprns": 71246,
+   "postcodes": 2960,
+   "single_uprn_postcodes": 125,
+   "over_cap_postcodes": 536
+  },
+  "E07000119": {
+   "uprns": 55779,
+   "postcodes": 2401,
+   "single_uprn_postcodes": 143,
+   "over_cap_postcodes": 382
+  },
+  "E07000120": {
+   "uprns": 51975,
+   "postcodes": 2030,
+   "single_uprn_postcodes": 85,
+   "over_cap_postcodes": 452
+  },
+  "E07000121": {
+   "uprns": 90690,
+   "postcodes": 4279,
+   "single_uprn_postcodes": 181,
+   "over_cap_postcodes": 488
+  },
+  "E07000122": {
+   "uprns": 56073,
+   "postcodes": 2977,
+   "single_uprn_postcodes": 172,
+   "over_cap_postcodes": 281
+  },
+  "E07000123": {
+   "uprns": 89088,
+   "postcodes": 3580,
+   "single_uprn_postcodes": 198,
+   "over_cap_postcodes": 697
+  },
+  "E07000124": {
+   "uprns": 39928,
+   "postcodes": 2056,
+   "single_uprn_postcodes": 112,
+   "over_cap_postcodes": 239
+  },
+  "E07000125": {
+   "uprns": 42968,
+   "postcodes": 2440,
+   "single_uprn_postcodes": 116,
+   "over_cap_postcodes": 271
+  },
+  "E07000126": {
+   "uprns": 64742,
+   "postcodes": 2697,
+   "single_uprn_postcodes": 65,
+   "over_cap_postcodes": 444
+  },
+  "E07000127": {
+   "uprns": 73866,
+   "postcodes": 2841,
+   "single_uprn_postcodes": 121,
+   "over_cap_postcodes": 571
+  },
+  "E07000128": {
+   "uprns": 78156,
+   "postcodes": 3315,
+   "single_uprn_postcodes": 116,
+   "over_cap_postcodes": 514
+  },
+  "E07000129": {
+   "uprns": 54669,
+   "postcodes": 2367,
+   "single_uprn_postcodes": 200,
+   "over_cap_postcodes": 366
+  },
+  "E07000130": {
+   "uprns": 117423,
+   "postcodes": 3915,
+   "single_uprn_postcodes": 142,
+   "over_cap_postcodes": 909
+  },
+  "E07000131": {
+   "uprns": 64992,
+   "postcodes": 2695,
+   "single_uprn_postcodes": 117,
+   "over_cap_postcodes": 471
+  },
+  "E07000132": {
+   "uprns": 70063,
+   "postcodes": 2672,
+   "single_uprn_postcodes": 124,
+   "over_cap_postcodes": 558
+  },
+  "E07000133": {
+   "uprns": 37514,
+   "postcodes": 1627,
+   "single_uprn_postcodes": 74,
+   "over_cap_postcodes": 274
+  },
+  "E07000134": {
+   "uprns": 66434,
+   "postcodes": 2725,
+   "single_uprn_postcodes": 111,
+   "over_cap_postcodes": 470
+  },
+  "E07000135": {
+   "uprns": 29507,
+   "postcodes": 1213,
+   "single_uprn_postcodes": 74,
+   "over_cap_postcodes": 191
+  },
+  "E07000136": {
+   "uprns": 42415,
+   "postcodes": 2108,
+   "single_uprn_postcodes": 119,
+   "over_cap_postcodes": 276
+  },
+  "E07000137": {
+   "uprns": 132887,
+   "postcodes": 5328,
+   "single_uprn_postcodes": 210,
+   "over_cap_postcodes": 728
+  },
+  "E07000138": {
+   "uprns": 65055,
+   "postcodes": 2528,
+   "single_uprn_postcodes": 141,
+   "over_cap_postcodes": 430
+  },
+  "E07000139": {
+   "uprns": 71182,
+   "postcodes": 3448,
+   "single_uprn_postcodes": 103,
+   "over_cap_postcodes": 433
+  },
+  "E07000140": {
+   "uprns": 58520,
+   "postcodes": 2859,
+   "single_uprn_postcodes": 106,
+   "over_cap_postcodes": 409
+  },
+  "E07000141": {
+   "uprns": 89334,
+   "postcodes": 4215,
+   "single_uprn_postcodes": 160,
+   "over_cap_postcodes": 555
+  },
+  "E07000142": {
+   "uprns": 62484,
+   "postcodes": 3378,
+   "single_uprn_postcodes": 120,
+   "over_cap_postcodes": 334
+  },
+  "E07000143": {
+   "uprns": 96117,
+   "postcodes": 4793,
+   "single_uprn_postcodes": 192,
+   "over_cap_postcodes": 552
+  },
+  "E07000144": {
+   "uprns": 81776,
+   "postcodes": 4269,
+   "single_uprn_postcodes": 355,
+   "over_cap_postcodes": 520
+  },
+  "E07000145": {
+   "uprns": 65026,
+   "postcodes": 2766,
+   "single_uprn_postcodes": 90,
+   "over_cap_postcodes": 433
+  },
+  "E07000146": {
+   "uprns": 109255,
+   "postcodes": 5171,
+   "single_uprn_postcodes": 223,
+   "over_cap_postcodes": 709
+  },
+  "E07000147": {
+   "uprns": 83575,
+   "postcodes": 4571,
+   "single_uprn_postcodes": 162,
+   "over_cap_postcodes": 429
+  },
+  "E07000148": {
+   "uprns": 106203,
+   "postcodes": 3373,
+   "single_uprn_postcodes": 88,
+   "over_cap_postcodes": 872
+  },
+  "E07000149": {
+   "uprns": 95774,
+   "postcodes": 4933,
+   "single_uprn_postcodes": 222,
+   "over_cap_postcodes": 542
+  },
+  "E07000170": {
+   "uprns": 75453,
+   "postcodes": 2777,
+   "single_uprn_postcodes": 72,
+   "over_cap_postcodes": 605
+  },
+  "E07000171": {
+   "uprns": 92226,
+   "postcodes": 3983,
+   "single_uprn_postcodes": 125,
+   "over_cap_postcodes": 598
+  },
+  "E07000172": {
+   "uprns": 63602,
+   "postcodes": 2584,
+   "single_uprn_postcodes": 133,
+   "over_cap_postcodes": 448
+  },
+  "E07000173": {
+   "uprns": 68747,
+   "postcodes": 2749,
+   "single_uprn_postcodes": 107,
+   "over_cap_postcodes": 482
+  },
+  "E07000174": {
+   "uprns": 64041,
+   "postcodes": 2681,
+   "single_uprn_postcodes": 90,
+   "over_cap_postcodes": 378
+  },
+  "E07000175": {
+   "uprns": 82129,
+   "postcodes": 3728,
+   "single_uprn_postcodes": 143,
+   "over_cap_postcodes": 569
+  },
+  "E07000176": {
+   "uprns": 81675,
+   "postcodes": 3076,
+   "single_uprn_postcodes": 84,
+   "over_cap_postcodes": 609
+  },
+  "E07000177": {
+   "uprns": 108270,
+   "postcodes": 4992,
+   "single_uprn_postcodes": 230,
+   "over_cap_postcodes": 677
+  },
+  "E07000178": {
+   "uprns": 100355,
+   "postcodes": 3694,
+   "single_uprn_postcodes": 298,
+   "over_cap_postcodes": 726
+  },
+  "E07000179": {
+   "uprns": 86203,
+   "postcodes": 5397,
+   "single_uprn_postcodes": 390,
+   "over_cap_postcodes": 381
+  },
+  "E07000180": {
+   "uprns": 86341,
+   "postcodes": 4324,
+   "single_uprn_postcodes": 235,
+   "over_cap_postcodes": 461
+  },
+  "E07000181": {
+   "uprns": 71458,
+   "postcodes": 4146,
+   "single_uprn_postcodes": 250,
+   "over_cap_postcodes": 371
+  },
+  "E07000192": {
+   "uprns": 57937,
+   "postcodes": 2248,
+   "single_uprn_postcodes": 85,
+   "over_cap_postcodes": 467
+  },
+  "E07000193": {
+   "uprns": 75164,
+   "postcodes": 3066,
+   "single_uprn_postcodes": 202,
+   "over_cap_postcodes": 614
+  },
+  "E07000194": {
+   "uprns": 67094,
+   "postcodes": 3186,
+   "single_uprn_postcodes": 142,
+   "over_cap_postcodes": 407
+  },
+  "E07000195": {
+   "uprns": 75829,
+   "postcodes": 3260,
+   "single_uprn_postcodes": 128,
+   "over_cap_postcodes": 538
+  },
+  "E07000196": {
+   "uprns": 64159,
+   "postcodes": 3187,
+   "single_uprn_postcodes": 143,
+   "over_cap_postcodes": 377
+  },
+  "E07000197": {
+   "uprns": 93059,
+   "postcodes": 3955,
+   "single_uprn_postcodes": 160,
+   "over_cap_postcodes": 613
+  },
+  "E07000198": {
+   "uprns": 61071,
+   "postcodes": 3061,
+   "single_uprn_postcodes": 133,
+   "over_cap_postcodes": 343
+  },
+  "E07000199": {
+   "uprns": 43223,
+   "postcodes": 1553,
+   "single_uprn_postcodes": 54,
+   "over_cap_postcodes": 378
+  },
+  "E07000200": {
+   "uprns": 64010,
+   "postcodes": 3583,
+   "single_uprn_postcodes": 137,
+   "over_cap_postcodes": 336
+  },
+  "E07000202": {
+   "uprns": 85153,
+   "postcodes": 3353,
+   "single_uprn_postcodes": 192,
+   "over_cap_postcodes": 643
+  },
+  "E07000203": {
+   "uprns": 81270,
+   "postcodes": 4366,
+   "single_uprn_postcodes": 126,
+   "over_cap_postcodes": 429
+  },
+  "E07000207": {
+   "uprns": 80138,
+   "postcodes": 3847,
+   "single_uprn_postcodes": 204,
+   "over_cap_postcodes": 430
+  },
+  "E07000208": {
+   "uprns": 40996,
+   "postcodes": 1920,
+   "single_uprn_postcodes": 103,
+   "over_cap_postcodes": 231
+  },
+  "E07000209": {
+   "uprns": 88290,
+   "postcodes": 4373,
+   "single_uprn_postcodes": 253,
+   "over_cap_postcodes": 460
+  },
+  "E07000210": {
+   "uprns": 53563,
+   "postcodes": 3142,
+   "single_uprn_postcodes": 167,
+   "over_cap_postcodes": 242
+  },
+  "E07000211": {
+   "uprns": 80470,
+   "postcodes": 3932,
+   "single_uprn_postcodes": 307,
+   "over_cap_postcodes": 455
+  },
+  "E07000212": {
+   "uprns": 54516,
+   "postcodes": 2410,
+   "single_uprn_postcodes": 115,
+   "over_cap_postcodes": 329
+  },
+  "E07000213": {
+   "uprns": 55147,
+   "postcodes": 2509,
+   "single_uprn_postcodes": 100,
+   "over_cap_postcodes": 300
+  },
+  "E07000214": {
+   "uprns": 51805,
+   "postcodes": 2378,
+   "single_uprn_postcodes": 109,
+   "over_cap_postcodes": 301
+  },
+  "E07000215": {
+   "uprns": 52339,
+   "postcodes": 2369,
+   "single_uprn_postcodes": 113,
+   "over_cap_postcodes": 342
+  },
+  "E07000216": {
+   "uprns": 79792,
+   "postcodes": 4413,
+   "single_uprn_postcodes": 214,
+   "over_cap_postcodes": 344
+  },
+  "E07000217": {
+   "uprns": 59239,
+   "postcodes": 2597,
+   "single_uprn_postcodes": 107,
+   "over_cap_postcodes": 393
+  },
+  "E07000218": {
+   "uprns": 41003,
+   "postcodes": 2054,
+   "single_uprn_postcodes": 112,
+   "over_cap_postcodes": 266
+  },
+  "E07000219": {
+   "uprns": 74868,
+   "postcodes": 2725,
+   "single_uprn_postcodes": 77,
+   "over_cap_postcodes": 614
+  },
+  "E07000220": {
+   "uprns": 69831,
+   "postcodes": 2975,
+   "single_uprn_postcodes": 130,
+   "over_cap_postcodes": 539
+  },
+  "E07000221": {
+   "uprns": 99883,
+   "postcodes": 4997,
+   "single_uprn_postcodes": 220,
+   "over_cap_postcodes": 594
+  },
+  "E07000222": {
+   "uprns": 98294,
+   "postcodes": 4176,
+   "single_uprn_postcodes": 199,
+   "over_cap_postcodes": 592
+  },
+  "E07000223": {
+   "uprns": 39123,
+   "postcodes": 1850,
+   "single_uprn_postcodes": 376,
+   "over_cap_postcodes": 276
+  },
+  "E07000224": {
+   "uprns": 101089,
+   "postcodes": 5197,
+   "single_uprn_postcodes": 172,
+   "over_cap_postcodes": 509
+  },
+  "E07000225": {
+   "uprns": 91892,
+   "postcodes": 5004,
+   "single_uprn_postcodes": 219,
+   "over_cap_postcodes": 408
+  },
+  "E07000226": {
+   "uprns": 65573,
+   "postcodes": 2664,
+   "single_uprn_postcodes": 118,
+   "over_cap_postcodes": 440
+  },
+  "E07000227": {
+   "uprns": 89953,
+   "postcodes": 4247,
+   "single_uprn_postcodes": 196,
+   "over_cap_postcodes": 524
+  },
+  "E07000228": {
+   "uprns": 96453,
+   "postcodes": 4668,
+   "single_uprn_postcodes": 297,
+   "over_cap_postcodes": 562
+  },
+  "E07000229": {
+   "uprns": 68736,
+   "postcodes": 3025,
+   "single_uprn_postcodes": 215,
+   "over_cap_postcodes": 413
+  },
+  "E07000234": {
+   "uprns": 58936,
+   "postcodes": 2943,
+   "single_uprn_postcodes": 140,
+   "over_cap_postcodes": 323
+  },
+  "E07000235": {
+   "uprns": 58962,
+   "postcodes": 2835,
+   "single_uprn_postcodes": 149,
+   "over_cap_postcodes": 336
+  },
+  "E07000236": {
+   "uprns": 55146,
+   "postcodes": 1624,
+   "single_uprn_postcodes": 62,
+   "over_cap_postcodes": 535
+  },
+  "E07000237": {
+   "uprns": 58524,
+   "postcodes": 2539,
+   "single_uprn_postcodes": 153,
+   "over_cap_postcodes": 399
+  },
+  "E07000238": {
+   "uprns": 86591,
+   "postcodes": 3990,
+   "single_uprn_postcodes": 184,
+   "over_cap_postcodes": 547
+  },
+  "E07000239": {
+   "uprns": 64626,
+   "postcodes": 3023,
+   "single_uprn_postcodes": 157,
+   "over_cap_postcodes": 421
+  },
+  "E07000240": {
+   "uprns": 83783,
+   "postcodes": 4611,
+   "single_uprn_postcodes": 278,
+   "over_cap_postcodes": 397
+  },
+  "E07000241": {
+   "uprns": 67603,
+   "postcodes": 3273,
+   "single_uprn_postcodes": 160,
+   "over_cap_postcodes": 286
+  },
+  "E07000242": {
+   "uprns": 86578,
+   "postcodes": 4734,
+   "single_uprn_postcodes": 260,
+   "over_cap_postcodes": 470
+  },
+  "E07000243": {
+   "uprns": 54826,
+   "postcodes": 1940,
+   "single_uprn_postcodes": 110,
+   "over_cap_postcodes": 465
+  },
+  "E07000244": {
+   "uprns": 184932,
+   "postcodes": 9152,
+   "single_uprn_postcodes": 295,
+   "over_cap_postcodes": 1086
+  },
+  "E07000245": {
+   "uprns": 124070,
+   "postcodes": 5395,
+   "single_uprn_postcodes": 205,
+   "over_cap_postcodes": 755
+  },
+  "E08000001": {
+   "uprns": 161191,
+   "postcodes": 7270,
+   "single_uprn_postcodes": 302,
+   "over_cap_postcodes": 1028
+  },
+  "E08000002": {
+   "uprns": 106619,
+   "postcodes": 5045,
+   "single_uprn_postcodes": 251,
+   "over_cap_postcodes": 600
+  },
+  "E08000003": {
+   "uprns": 349284,
+   "postcodes": 14229,
+   "single_uprn_postcodes": 607,
+   "over_cap_postcodes": 1961
+  },
+  "E08000004": {
+   "uprns": 124920,
+   "postcodes": 5919,
+   "single_uprn_postcodes": 242,
+   "over_cap_postcodes": 718
+  },
+  "E08000005": {
+   "uprns": 120982,
+   "postcodes": 5777,
+   "single_uprn_postcodes": 237,
+   "over_cap_postcodes": 710
+  },
+  "E08000006": {
+   "uprns": 184572,
+   "postcodes": 6703,
+   "single_uprn_postcodes": 273,
+   "over_cap_postcodes": 1399
+  },
+  "E08000007": {
+   "uprns": 172463,
+   "postcodes": 6780,
+   "single_uprn_postcodes": 212,
+   "over_cap_postcodes": 1241
+  },
+  "E08000008": {
+   "uprns": 159232,
+   "postcodes": 6056,
+   "single_uprn_postcodes": 180,
+   "over_cap_postcodes": 1198
+  },
+  "E08000009": {
+   "uprns": 132800,
+   "postcodes": 6442,
+   "single_uprn_postcodes": 285,
+   "over_cap_postcodes": 659
+  },
+  "E08000010": {
+   "uprns": 187822,
+   "postcodes": 7995,
+   "single_uprn_postcodes": 250,
+   "over_cap_postcodes": 1327
+  },
+  "E08000011": {
+   "uprns": 90560,
+   "postcodes": 3843,
+   "single_uprn_postcodes": 97,
+   "over_cap_postcodes": 494
+  },
+  "E08000012": {
+   "uprns": 337805,
+   "postcodes": 10521,
+   "single_uprn_postcodes": 420,
+   "over_cap_postcodes": 2636
+  },
+  "E08000013": {
+   "uprns": 107538,
+   "postcodes": 4891,
+   "single_uprn_postcodes": 170,
+   "over_cap_postcodes": 685
+  },
+  "E08000014": {
+   "uprns": 167250,
+   "postcodes": 6712,
+   "single_uprn_postcodes": 268,
+   "over_cap_postcodes": 1087
+  },
+  "E08000015": {
+   "uprns": 186518,
+   "postcodes": 8665,
+   "single_uprn_postcodes": 229,
+   "over_cap_postcodes": 801
+  },
+  "E08000017": {
+   "uprns": 192543,
+   "postcodes": 8121,
+   "single_uprn_postcodes": 254,
+   "over_cap_postcodes": 1284
+  },
+  "E08000018": {
+   "uprns": 150479,
+   "postcodes": 6565,
+   "single_uprn_postcodes": 163,
+   "over_cap_postcodes": 1039
+  },
+  "E08000021": {
+   "uprns": 182511,
+   "postcodes": 6732,
+   "single_uprn_postcodes": 294,
+   "over_cap_postcodes": 1367
+  },
+  "E08000022": {
+   "uprns": 130760,
+   "postcodes": 5090,
+   "single_uprn_postcodes": 210,
+   "over_cap_postcodes": 945
+  },
+  "E08000023": {
+   "uprns": 93502,
+   "postcodes": 3600,
+   "single_uprn_postcodes": 84,
+   "over_cap_postcodes": 712
+  },
+  "E08000024": {
+   "uprns": 168340,
+   "postcodes": 7176,
+   "single_uprn_postcodes": 217,
+   "over_cap_postcodes": 1070
+  },
+  "E08000025": {
+   "uprns": 602737,
+   "postcodes": 21505,
+   "single_uprn_postcodes": 971,
+   "over_cap_postcodes": 4660
+  },
+  "E08000026": {
+   "uprns": 210338,
+   "postcodes": 6435,
+   "single_uprn_postcodes": 212,
+   "over_cap_postcodes": 1572
+  },
+  "E08000027": {
+   "uprns": 185101,
+   "postcodes": 7295,
+   "single_uprn_postcodes": 325,
+   "over_cap_postcodes": 1385
+  },
+  "E08000028": {
+   "uprns": 184037,
+   "postcodes": 6984,
+   "single_uprn_postcodes": 234,
+   "over_cap_postcodes": 1378
+  },
+  "E08000029": {
+   "uprns": 118602,
+   "postcodes": 4771,
+   "single_uprn_postcodes": 226,
+   "over_cap_postcodes": 870
+  },
+  "E08000030": {
+   "uprns": 147872,
+   "postcodes": 5624,
+   "single_uprn_postcodes": 173,
+   "over_cap_postcodes": 1156
+  },
+  "E08000031": {
+   "uprns": 148705,
+   "postcodes": 5946,
+   "single_uprn_postcodes": 545,
+   "over_cap_postcodes": 1214
+  },
+  "E08000032": {
+   "uprns": 382951,
+   "postcodes": 14998,
+   "single_uprn_postcodes": 413,
+   "over_cap_postcodes": 2710
+  },
+  "E08000033": {
+   "uprns": 149339,
+   "postcodes": 7362,
+   "single_uprn_postcodes": 265,
+   "over_cap_postcodes": 947
+  },
+  "E08000034": {
+   "uprns": 264887,
+   "postcodes": 11547,
+   "single_uprn_postcodes": 386,
+   "over_cap_postcodes": 1786
+  },
+  "E08000035": {
+   "uprns": 546816,
+   "postcodes": 20876,
+   "single_uprn_postcodes": 767,
+   "over_cap_postcodes": 3867
+  },
+  "E08000036": {
+   "uprns": 200396,
+   "postcodes": 9687,
+   "single_uprn_postcodes": 376,
+   "over_cap_postcodes": 1128
+  },
+  "E08000037": {
+   "uprns": 127006,
+   "postcodes": 5188,
+   "single_uprn_postcodes": 192,
+   "over_cap_postcodes": 921
+  },
+  "E08000038": {
+   "uprns": 143537,
+   "postcodes": 6912,
+   "single_uprn_postcodes": 186,
+   "over_cap_postcodes": 775
+  },
+  "E08000039": {
+   "uprns": 361052,
+   "postcodes": 11782,
+   "single_uprn_postcodes": 572,
+   "over_cap_postcodes": 2888
+  },
+  "E09000001": {
+   "uprns": 22767,
+   "postcodes": 1570,
+   "single_uprn_postcodes": 202,
+   "over_cap_postcodes": 130
+  },
+  "E09000002": {
+   "uprns": 106896,
+   "postcodes": 3095,
+   "single_uprn_postcodes": 79,
+   "over_cap_postcodes": 1037
+  },
+  "E09000003": {
+   "uprns": 214591,
+   "postcodes": 8949,
+   "single_uprn_postcodes": 479,
+   "over_cap_postcodes": 1471
+  },
+  "E09000004": {
+   "uprns": 119333,
+   "postcodes": 4408,
+   "single_uprn_postcodes": 148,
+   "over_cap_postcodes": 909
+  },
+  "E09000005": {
+   "uprns": 189478,
+   "postcodes": 5965,
+   "single_uprn_postcodes": 281,
+   "over_cap_postcodes": 1640
+  },
+  "E09000006": {
+   "uprns": 177013,
+   "postcodes": 7276,
+   "single_uprn_postcodes": 342,
+   "over_cap_postcodes": 1031
+  },
+  "E09000007": {
+   "uprns": 192809,
+   "postcodes": 8199,
+   "single_uprn_postcodes": 2031,
+   "over_cap_postcodes": 1563
+  },
+  "E09000008": {
+   "uprns": 209582,
+   "postcodes": 7091,
+   "single_uprn_postcodes": 281,
+   "over_cap_postcodes": 1696
+  },
+  "E09000009": {
+   "uprns": 193536,
+   "postcodes": 6569,
+   "single_uprn_postcodes": 454,
+   "over_cap_postcodes": 1623
+  },
+  "E09000010": {
+   "uprns": 165010,
+   "postcodes": 6295,
+   "single_uprn_postcodes": 281,
+   "over_cap_postcodes": 1213
+  },
+  "E09000011": {
+   "uprns": 168806,
+   "postcodes": 5266,
+   "single_uprn_postcodes": 228,
+   "over_cap_postcodes": 1454
+  },
+  "E09000012": {
+   "uprns": 178990,
+   "postcodes": 4623,
+   "single_uprn_postcodes": 186,
+   "over_cap_postcodes": 1671
+  },
+  "E09000013": {
+   "uprns": 141553,
+   "postcodes": 3692,
+   "single_uprn_postcodes": 233,
+   "over_cap_postcodes": 1367
+  },
+  "E09000014": {
+   "uprns": 155097,
+   "postcodes": 4526,
+   "single_uprn_postcodes": 221,
+   "over_cap_postcodes": 1541
+  },
+  "E09000015": {
+   "uprns": 118027,
+   "postcodes": 4980,
+   "single_uprn_postcodes": 248,
+   "over_cap_postcodes": 786
+  },
+  "E09000016": {
+   "uprns": 131048,
+   "postcodes": 5058,
+   "single_uprn_postcodes": 239,
+   "over_cap_postcodes": 983
+  },
+  "E09000017": {
+   "uprns": 152104,
+   "postcodes": 6201,
+   "single_uprn_postcodes": 299,
+   "over_cap_postcodes": 1000
+  },
+  "E09000018": {
+   "uprns": 142212,
+   "postcodes": 4894,
+   "single_uprn_postcodes": 226,
+   "over_cap_postcodes": 1204
+  },
+  "E09000019": {
+   "uprns": 166115,
+   "postcodes": 5718,
+   "single_uprn_postcodes": 1060,
+   "over_cap_postcodes": 1535
+  },
+  "E09000020": {
+   "uprns": 134583,
+   "postcodes": 4240,
+   "single_uprn_postcodes": 235,
+   "over_cap_postcodes": 1166
+  },
+  "E09000021": {
+   "uprns": 98807,
+   "postcodes": 3541,
+   "single_uprn_postcodes": 155,
+   "over_cap_postcodes": 728
+  },
+  "E09000022": {
+   "uprns": 199167,
+   "postcodes": 6207,
+   "single_uprn_postcodes": 298,
+   "over_cap_postcodes": 1830
+  },
+  "E09000023": {
+   "uprns": 171445,
+   "postcodes": 5052,
+   "single_uprn_postcodes": 233,
+   "over_cap_postcodes": 1626
+  },
+  "E09000024": {
+   "uprns": 118301,
+   "postcodes": 3725,
+   "single_uprn_postcodes": 182,
+   "over_cap_postcodes": 1126
+  },
+  "E09000025": {
+   "uprns": 194716,
+   "postcodes": 4393,
+   "single_uprn_postcodes": 163,
+   "over_cap_postcodes": 2073
+  },
+  "E09000026": {
+   "uprns": 135921,
+   "postcodes": 4664,
+   "single_uprn_postcodes": 189,
+   "over_cap_postcodes": 1137
+  },
+  "E09000027": {
+   "uprns": 109667,
+   "postcodes": 4387,
+   "single_uprn_postcodes": 218,
+   "over_cap_postcodes": 789
+  },
+  "E09000028": {
+   "uprns": 204344,
+   "postcodes": 7148,
+   "single_uprn_postcodes": 1134,
+   "over_cap_postcodes": 1826
+  },
+  "E09000029": {
+   "uprns": 105678,
+   "postcodes": 3852,
+   "single_uprn_postcodes": 120,
+   "over_cap_postcodes": 835
+  },
+  "E09000030": {
+   "uprns": 221869,
+   "postcodes": 5911,
+   "single_uprn_postcodes": 378,
+   "over_cap_postcodes": 2073
+  },
+  "E09000031": {
+   "uprns": 144192,
+   "postcodes": 3869,
+   "single_uprn_postcodes": 211,
+   "over_cap_postcodes": 1537
+  },
+  "E09000032": {
+   "uprns": 207143,
+   "postcodes": 6302,
+   "single_uprn_postcodes": 574,
+   "over_cap_postcodes": 2058
+  },
+  "E09000033": {
+   "uprns": 240272,
+   "postcodes": 13009,
+   "single_uprn_postcodes": 1444,
+   "over_cap_postcodes": 1689
+  },
+  "S12000005": {
+   "uprns": 31426,
+   "postcodes": 1355,
+   "single_uprn_postcodes": 66,
+   "over_cap_postcodes": 241
+  },
+  "S12000006": {
+   "uprns": 108656,
+   "postcodes": 6927,
+   "single_uprn_postcodes": 378,
+   "over_cap_postcodes": 401
+  },
+  "S12000008": {
+   "uprns": 77797,
+   "postcodes": 4043,
+   "single_uprn_postcodes": 180,
+   "over_cap_postcodes": 413
+  },
+  "S12000010": {
+   "uprns": 71843,
+   "postcodes": 3318,
+   "single_uprn_postcodes": 116,
+   "over_cap_postcodes": 469
+  },
+  "S12000011": {
+   "uprns": 48632,
+   "postcodes": 2556,
+   "single_uprn_postcodes": 143,
+   "over_cap_postcodes": 260
+  },
+  "S12000013": {
+   "uprns": 33179,
+   "postcodes": 944,
+   "single_uprn_postcodes": 17,
+   "over_cap_postcodes": 282
+  },
+  "S12000014": {
+   "uprns": 97209,
+   "postcodes": 4181,
+   "single_uprn_postcodes": 136,
+   "over_cap_postcodes": 667
+  },
+  "S12000017": {
+   "uprns": 220544,
+   "postcodes": 7863,
+   "single_uprn_postcodes": 262,
+   "over_cap_postcodes": 1631
+  },
+  "S12000018": {
+   "uprns": 50714,
+   "postcodes": 2316,
+   "single_uprn_postcodes": 114,
+   "over_cap_postcodes": 356
+  },
+  "S12000019": {
+   "uprns": 56890,
+   "postcodes": 3074,
+   "single_uprn_postcodes": 85,
+   "over_cap_postcodes": 311
+  },
+  "S12000020": {
+   "uprns": 73076,
+   "postcodes": 3394,
+   "single_uprn_postcodes": 110,
+   "over_cap_postcodes": 464
+  },
+  "S12000021": {
+   "uprns": 96613,
+   "postcodes": 4233,
+   "single_uprn_postcodes": 114,
+   "over_cap_postcodes": 609
+  },
+  "S12000023": {
+   "uprns": 20011,
+   "postcodes": 735,
+   "single_uprn_postcodes": 20,
+   "over_cap_postcodes": 170
+  },
+  "S12000026": {
+   "uprns": 100211,
+   "postcodes": 4554,
+   "single_uprn_postcodes": 182,
+   "over_cap_postcodes": 646
+  },
+  "S12000027": {
+   "uprns": 21419,
+   "postcodes": 656,
+   "single_uprn_postcodes": 37,
+   "over_cap_postcodes": 174
+  },
+  "S12000028": {
+   "uprns": 72141,
+   "postcodes": 3618,
+   "single_uprn_postcodes": 196,
+   "over_cap_postcodes": 437
+  },
+  "S12000029": {
+   "uprns": 209663,
+   "postcodes": 8727,
+   "single_uprn_postcodes": 217,
+   "over_cap_postcodes": 1524
+  },
+  "S12000030": {
+   "uprns": 62989,
+   "postcodes": 2947,
+   "single_uprn_postcodes": 125,
+   "over_cap_postcodes": 406
+  },
+  "S12000033": {
+   "uprns": 161101,
+   "postcodes": 6352,
+   "single_uprn_postcodes": 349,
+   "over_cap_postcodes": 1324
+  },
+  "S12000034": {
+   "uprns": 172259,
+   "postcodes": 9943,
+   "single_uprn_postcodes": 399,
+   "over_cap_postcodes": 847
+  },
+  "S12000035": {
+   "uprns": 82429,
+   "postcodes": 3397,
+   "single_uprn_postcodes": 162,
+   "over_cap_postcodes": 575
+  },
+  "S12000036": {
+   "uprns": 365528,
+   "postcodes": 13554,
+   "single_uprn_postcodes": 553,
+   "over_cap_postcodes": 3105
+  },
+  "S12000038": {
+   "uprns": 120133,
+   "postcodes": 4716,
+   "single_uprn_postcodes": 171,
+   "over_cap_postcodes": 971
+  },
+  "S12000039": {
+   "uprns": 58812,
+   "postcodes": 2397,
+   "single_uprn_postcodes": 75,
+   "over_cap_postcodes": 484
+  },
+  "S12000040": {
+   "uprns": 109088,
+   "postcodes": 4300,
+   "single_uprn_postcodes": 180,
+   "over_cap_postcodes": 917
+  },
+  "S12000041": {
+   "uprns": 85348,
+   "postcodes": 4064,
+   "single_uprn_postcodes": 149,
+   "over_cap_postcodes": 476
+  },
+  "S12000042": {
+   "uprns": 102986,
+   "postcodes": 4459,
+   "single_uprn_postcodes": 142,
+   "over_cap_postcodes": 715
+  },
+  "S12000045": {
+   "uprns": 58801,
+   "postcodes": 3265,
+   "single_uprn_postcodes": 126,
+   "over_cap_postcodes": 263
+  },
+  "S12000047": {
+   "uprns": 262268,
+   "postcodes": 10336,
+   "single_uprn_postcodes": 354,
+   "over_cap_postcodes": 2127
+  },
+  "S12000048": {
+   "uprns": 116950,
+   "postcodes": 5551,
+   "single_uprn_postcodes": 239,
+   "over_cap_postcodes": 742
+  },
+  "S12000049": {
+   "uprns": 493051,
+   "postcodes": 15771,
+   "single_uprn_postcodes": 775,
+   "over_cap_postcodes": 4225
+  },
+  "S12000050": {
+   "uprns": 183844,
+   "postcodes": 8019,
+   "single_uprn_postcodes": 297,
+   "over_cap_postcodes": 1336
+  },
+  "W06000001": {
+   "uprns": 51208,
+   "postcodes": 2890,
+   "single_uprn_postcodes": 91,
+   "over_cap_postcodes": 254
+  },
+  "W06000002": {
+   "uprns": 103900,
+   "postcodes": 5609,
+   "single_uprn_postcodes": 199,
+   "over_cap_postcodes": 565
+  },
+  "W06000003": {
+   "uprns": 82116,
+   "postcodes": 4138,
+   "single_uprn_postcodes": 150,
+   "over_cap_postcodes": 469
+  },
+  "W06000004": {
+   "uprns": 79509,
+   "postcodes": 3475,
+   "single_uprn_postcodes": 101,
+   "over_cap_postcodes": 442
+  },
+  "W06000005": {
+   "uprns": 96723,
+   "postcodes": 4571,
+   "single_uprn_postcodes": 133,
+   "over_cap_postcodes": 635
+  },
+  "W06000006": {
+   "uprns": 85142,
+   "postcodes": 4396,
+   "single_uprn_postcodes": 115,
+   "over_cap_postcodes": 443
+  },
+  "W06000008": {
+   "uprns": 62792,
+   "postcodes": 3099,
+   "single_uprn_postcodes": 126,
+   "over_cap_postcodes": 339
+  },
+  "W06000009": {
+   "uprns": 97279,
+   "postcodes": 5039,
+   "single_uprn_postcodes": 128,
+   "over_cap_postcodes": 498
+  },
+  "W06000010": {
+   "uprns": 119619,
+   "postcodes": 6752,
+   "single_uprn_postcodes": 324,
+   "over_cap_postcodes": 699
+  },
+  "W06000011": {
+   "uprns": 148319,
+   "postcodes": 5778,
+   "single_uprn_postcodes": 285,
+   "over_cap_postcodes": 1128
+  },
+  "W06000012": {
+   "uprns": 85138,
+   "postcodes": 3702,
+   "single_uprn_postcodes": 127,
+   "over_cap_postcodes": 533
+  },
+  "W06000013": {
+   "uprns": 84933,
+   "postcodes": 3300,
+   "single_uprn_postcodes": 149,
+   "over_cap_postcodes": 709
+  },
+  "W06000014": {
+   "uprns": 79976,
+   "postcodes": 3119,
+   "single_uprn_postcodes": 70,
+   "over_cap_postcodes": 574
+  },
+  "W06000015": {
+   "uprns": 227848,
+   "postcodes": 7632,
+   "single_uprn_postcodes": 318,
+   "over_cap_postcodes": 1702
+  },
+  "W06000016": {
+   "uprns": 150409,
+   "postcodes": 5456,
+   "single_uprn_postcodes": 139,
+   "over_cap_postcodes": 1278
+  },
+  "W06000018": {
+   "uprns": 103374,
+   "postcodes": 4388,
+   "single_uprn_postcodes": 134,
+   "over_cap_postcodes": 687
+  },
+  "W06000019": {
+   "uprns": 41797,
+   "postcodes": 1862,
+   "single_uprn_postcodes": 73,
+   "over_cap_postcodes": 268
+  },
+  "W06000020": {
+   "uprns": 53815,
+   "postcodes": 2596,
+   "single_uprn_postcodes": 103,
+   "over_cap_postcodes": 273
+  },
+  "W06000021": {
+   "uprns": 65502,
+   "postcodes": 3338,
+   "single_uprn_postcodes": 122,
+   "over_cap_postcodes": 366
+  },
+  "W06000022": {
+   "uprns": 97900,
+   "postcodes": 3682,
+   "single_uprn_postcodes": 92,
+   "over_cap_postcodes": 755
+  },
+  "W06000023": {
+   "uprns": 111113,
+   "postcodes": 6222,
+   "single_uprn_postcodes": 236,
+   "over_cap_postcodes": 550
+  },
+  "W06000024": {
+   "uprns": 36607,
+   "postcodes": 1646,
+   "single_uprn_postcodes": 54,
+   "over_cap_postcodes": 261
+  }
+ },
+ "release": {
+  "title": "ONS UPRN Directory (September 2026) (Epoch 128)",
+  "id": "4198f5e0d6654d8a9661d0c15d4f912b",
+  "type": "CSV Collection",
+  "modified": 1791212294000,
+  "size": -1
+ }
+}
