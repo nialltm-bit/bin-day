@@ -23,7 +23,6 @@ POSTCODE_COLUMNS = ("pcds", "pcd8", "pcd7", "pcd", "postcode")  # the spaced pos
 COUNCIL_COLUMN = re.compile(r"^lad(\d{2})cd$")  # lad25cd: the year changes with each release
 POSTCODE = re.compile(r"^[A-Z]{1,2}[0-9][A-Z0-9]?[0-9][A-Z]{2}$")
 MONTHS = ("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec")
-MIN_RELEASE_BYTES = 200_000_000  # a release is gigabytes; this skips the guide and look-up items that share the title
 
 
 class OnsudError(Exception):
@@ -75,9 +74,10 @@ def newest_release() -> dict:
     items = candidates()
     for item in items:
         print("candidate:", item["title"], "|", item.get("type"), "| size", item.get("size"), "| modified", item.get("modified"))
-    releases = [i for i in items if (i.get("size") or 0) >= MIN_RELEASE_BYTES]
+    # The portal reports no size for these items, so tell the data from its user guide by title, and take the newest month.
+    releases = [i for i in items if "user guide" not in i["title"].lower() and release_order(i)[0] > 0]
     if not releases:
-        raise OnsudError("no ONSUD release found on the ONS portal (no candidate is large enough to be the data)")
+        raise OnsudError("no dated ONSUD release found on the ONS portal")
     return releases[0]
 
 

@@ -75,13 +75,18 @@ def test_rows_skip_what_has_no_postcode_or_council_and_count_it(release):
     assert (totals.without_postcode, totals.without_council) == (1, 1)
 
 
-def test_the_newest_release_is_the_latest_month_and_ignores_small_items():
+def test_the_newest_release_is_the_latest_month_and_not_its_user_guide(monkeypatch):
     items = [
         {"title": "ONS UPRN Directory (ONSUD) - May 2026", "modified": 1},
         {"title": "ONS UPRN Directory (ONSUD) - Aug 2026", "modified": 2},
         {"title": "ONS UPRN Directory user guide", "modified": 99},
     ]
     assert sorted(items, key=onsud.release_order, reverse=True)[0]["title"].endswith("Aug 2026")
+    items.append({"id": "g", "title": "ONS UPRN Directory (September 2026) (Epoch 128) User Guide", "modified": 5})
+    items.append({"id": "r", "title": "ONS UPRN Directory (September 2026) (Epoch 128)", "modified": 4})
+    items.append({"id": "l", "title": "ONSUD_LATEST", "modified": 999})
+    monkeypatch.setattr(onsud, "candidates", lambda: sorted(items, key=onsud.release_order, reverse=True))
+    assert onsud.newest_release()["id"] == "r"
 
 
 def test_stats_count_uprns_per_postcode_and_size_the_outcode_files(release):
