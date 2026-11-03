@@ -3,7 +3,7 @@ name: Deploy site
 on:
   push:
     branches: [main]
-    # registry/** because the homepage's list and map are built from the council registry
+    # registry/** because the lookup and the coverage page are built from the council registry
     paths: [web/**, registry/**, .github/workflows/pages.yml]
   workflow_dispatch:
 

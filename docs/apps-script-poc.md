@@ -21,9 +21,9 @@ Use the account you'd be happy to use for the product. Anyone with the URL can c
 
 **A. The script answers.** Open the URL in a browser. You should see `{"ok":true,"service":"bin-day-poc",...}`. Add `?feed=poc` and you should see calendar text starting `BEGIN:VCALENDAR`.
 
-**B. Pages can call the script.** Open <https://nialltm-bit.github.io/bin-day/poc.html> (live once the PR is merged), paste the URL and press both buttons. GET and POST should both show `HTTP 200` and JSON.
+**B. Pages can call the script.** Run the "End-to-end sign-up test" workflow. It reads the script address from the deployed homepage and calls it the way the page does.
 
-**C. Subscribe from each calendar app** using the feed URL (`...exec?feed=poc`; the poc page shows the `https` and `webcal` links):
+**C. Subscribe from each calendar app** using the feed URL (`...exec?feed=poc`, or the same with `webcal:` in place of `https:`):
 - Google Calendar on the web: **Other calendars**, **+**, **From URL**.
 - Apple Calendar: on iPhone, Settings, Calendar, Accounts, Add Account, Other, Add Subscribed Calendar. On Mac, File, New Calendar Subscription.
 - Outlook: Add calendar, Subscribe from web.

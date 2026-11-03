@@ -1,13 +1,17 @@
 # The lookup page (FRE-271)
 
-The top of the homepage. A person types a postcode and gets either a calendar link or an honest reason they can't yet.
+The homepage. A person types a postcode and gets either their bin days and a calendar link, or an honest reason they can't yet.
+
+The page carries no taglines, helper text or secondary labels. Fields name themselves with their placeholder (and an
+`aria-label`), every message is one line, and the only guidance kept is the Google reminder line (below), because no
+layout can fix that.
 
 ## The flow
 
 1. **Postcode.** Checked against postcodes.io for the council (`web/src/coverage.ts`). Every outcome has its own wording; see `docs/coverage.md`.
 2. **Council we can help with.** The page asks for what that council's source needs, from `house_input` in the registry: a house number or name, or the whole first line of the address. A bare number is refused for a council that needs the first line, in the page and again in the script.
-3. **Garden waste.** Yes or no, with no default, because a wrong default would hide a bin someone has.
-4. **Show my bin days.** Sends `subscribe` to the Apps Script (council, postcode, house, garden) and gets a private feed token back. The page shows buttons for Google, Apple and Outlook, and the link to copy, and straight away shows the next few collections (see "Fetching at sign-up" below).
+3. **Garden waste.** A Yes / No control with no default, because a wrong default would hide a bin someone has.
+4. **Show my bin days.** Sends `subscribe` to the Apps Script (council, postcode, house, garden) and gets a private feed token back. The page shows the next few collections (see "Fetching at sign-up" below), one button for the calendar that suits the device, and the other calendars and Copy link as quiet links. Expected dates are shown in muted text. If the council doesn't recognise the address, the calendar options are taken away.
 5. **Council we can't help with.** The message, a link to the official find-your-council page, and (where a council could be added) a button that adds the person's council to the count. Only the council code is sent.
 
 Nothing is stored in the browser. Editing the postcode clears everything below it.
@@ -27,7 +31,7 @@ The script used to carry a copy of the council registry inside it, so every batc
 - **Checked before it is used.** Only the small part of each council the script reads is kept, and every entry is checked. An entry that fails is left out (that council then simply isn't supported, which is a safe way to fail), and a file with no usable council is refused.
 - **Falls back safely.** If GitHub can't be reached, or the file doesn't pass, the script uses the copy bundled into it. That copy is only as new as the last time you pasted in the script, so it is a safety net, not the plan.
 - **The repository** is `nialltm-bit/bin-day`, or whatever the `GITHUB_REPO` script property says. Nothing else needs setting; the script already has permission to make outside requests.
-- **The homepage** (the list and the map) is built from the registry when the site is built, so the site is redeployed whenever `registry/**` changes on `main`.
+- **The coverage page** (the list and the map) is built from the registry when the site is built, so the site is redeployed whenever `registry/**` changes on `main`.
 - Code changes still need a new script version. Council changes don't.
 
 ## Fetching at sign-up
@@ -59,16 +63,14 @@ The script must also be redeployed with the latest `apps-script/dist/Code.js` fo
 
 `web/src/signup.ts` and `web/src/lookup-view.ts` have unit tests for the checks, the request, the reasons the script can give and the calendar links. The whole page was also driven in a browser at phone width with the postcode service and the script faked: bad and unknown postcodes, the postcode service down, Channel Islands, a council we don't cover (and the count), a UPRN council, a ready council (bare number refused, missing garden answer, successful sign-up, links, clearing). The poll was checked with the script faked to answer pending twice and then ready (dates shown after about 10 seconds), and to answer failed (the message shown at once). The script's `subscribe` and `upcoming` actions, the shared date logic and the request for a fetch are unit tested. None of it has been run against the real script, the real GitHub token or a real fetch.
 
-## Calendar setup guide (FRE-273)
+## Adding to a calendar (FRE-273)
 
-After sign-up the page shows three add buttons (Google, Apple, Outlook) and a short guide for each, in `web/src/calendar-guide.ts`.
-The browser's own description picks which comes first (Apple devices: Apple; Windows: Outlook; Android and anything else:
-Google), the first guide starts open and the others fold. Each guide ends with the night-before notification: Google's
-needs a step in Google Calendar's settings because Google ignores reminders that come with a subscribed calendar; Apple's is
-built in (6pm the evening before) with a check for the Remove Alerts setting; Outlook's is built in but Outlook doesn't
-always show it, and the guide says so.
+`web/src/add-to-calendar.ts`. The browser's own description picks the main button (Apple devices: Apple Calendar; Windows:
+Outlook; Android and anything else: Google Calendar). The other two and Copy link sit under it as links.
 
-Not done: the screenshots the ticket asked for (those need real accounts on each calendar) and the email-reminder
-alternative (no email in v1; see FRE-271 and FRE-285). Every step is written from how the calendars are documented and has
-not been tried on a live account: check each guide on a real Google, Apple and Outlook account before launch, especially
-the Outlook reminder and the Google "All-day event notifications" wording.
+Apple and Outlook take the 6pm-the-evening-before alert from the feed. Google ignores alerts in subscribed calendars, so the
+page keeps one line: "Google Calendar won't remind you on its own. Add a notification in the calendar's settings." Doing
+the reminder ourselves (so Google users don't need the step) is left for later.
+
+Not tried on live accounts yet: check the add links and the alerts on a real Google, Apple and Outlook account before
+launch, especially whether Outlook shows the alert.

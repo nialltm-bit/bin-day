@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { GUIDES, detectDevice, orderFor } from "./calendar-guide";
+import { GOOGLE_REMINDER, NAMES, detectDevice, orderFor } from "./add-to-calendar";
 
 const IPHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1";
 const MAC = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15";
@@ -28,19 +28,13 @@ describe("orderFor", () => {
   });
 });
 
-describe("the guides", () => {
-  it("each end with the night-before notification, in the calendar's own words", () => {
-    expect(GUIDES.google.steps.join(" ")).toContain("1 day before at 6:00pm");
-    expect(GUIDES.apple.steps.join(" ")).toContain("6pm the evening before");
-    expect(GUIDES.outlook.steps.join(" ")).toContain("6pm the evening before");
+describe("the words", () => {
+  it("name each calendar", () => {
+    expect(NAMES).toEqual({ google: "Google Calendar", apple: "Apple Calendar", outlook: "Outlook" });
   });
-  it("say plainly that Google ignores the built-in reminder, so the step is needed", () => {
-    expect(GUIDES.google.steps.join(" ")).toMatch(/Google ignores reminders/);
-  });
-  it("are short: no more than four steps each", () => {
-    for (const guide of Object.values(GUIDES)) expect(guide.steps.length).toBeLessThanOrEqual(4);
-  });
-  it("name each calendar's add button", () => {
-    expect(Object.values(GUIDES).map((g) => g.button)).toEqual(["Add to Google Calendar", "Add to Apple Calendar", "Add to Outlook"]);
+  it("tell a Google user the reminder is theirs to set, in one sentence pair", () => {
+    expect(GOOGLE_REMINDER).toMatch(/^Google Calendar/);
+    expect(GOOGLE_REMINDER).toMatch(/notification/);
+    expect(GOOGLE_REMINDER.length).toBeLessThan(100);
   });
 });
