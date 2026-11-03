@@ -1,0 +1,579 @@
+{
+ "councils": [
+  {
+   "module": "AshfordBoroughCouncil",
+   "name": "Ashford",
+   "platform": "Bespoke council site (needs a browser)",
+   "control": false,
+   "ons_codes": [
+    "E07000105"
+   ],
+   "started_at": "2026-11-03T11:00:42+00:00",
+   "finished_at": "2026-11-03T11:12:12+00:00",
+   "stopped_because": "reached the target number of postcodes",
+   "postcodes_in_council": 4026,
+   "postcodes_with_one_uprn": 173,
+   "postcodes_checked": 2,
+   "postcodes_comparable": 2,
+   "postcodes_agreeing": 2,
+   "agreeing_share": 1.0,
+   "agreeing_share_95pc_range": [
+    0.3424,
+    1.0
+   ],
+   "postcodes_not_comparable": 0,
+   "postcodes_ties_for_majority": 0,
+   "homes_compared": 59,
+   "homes_off_majority": 0,
+   "homes_off_majority_share": 0.0,
+   "disagreeing_postcodes_by_kind": {},
+   "disagreeing_postcodes_by_stream": {},
+   "by_postcode_size": {
+    "2-9 UPRNs": {
+     "comparable": 0,
+     "agreeing": 0
+    },
+    "10-24 UPRNs": {
+     "comparable": 0,
+     "agreeing": 0
+    },
+    "25+ UPRNs": {
+     "comparable": 2,
+     "agreeing": 2
+    }
+   },
+   "lookups": 69,
+   "lookup_outcomes": {
+    "upstream:NoSuchElementException": 9,
+    "dates": 59,
+    "upstream:TimeoutException": 1
+   },
+   "lookups_giving_dates_share": 0.8551,
+   "seconds_per_lookup": {
+    "mean": 5.23,
+    "median": 4.81,
+    "p95": 6.69,
+    "max": 14.87
+   },
+   "unmapped_bin_names": {},
+   "postcodes": [
+    {
+     "outcode": "TN24",
+     "uprns_total": 38,
+     "looked_up": 38,
+     "homes_with_dates": 30,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "TN25",
+     "uprns_total": 31,
+     "looked_up": 31,
+     "homes_with_dates": 29,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    }
+   ]
+  },
+  {
+   "module": "CheltenhamBoroughCouncil",
+   "name": "Cheltenham",
+   "platform": "Bespoke council site",
+   "control": false,
+   "ons_codes": [
+    "E07000078"
+   ],
+   "started_at": "2026-11-03T11:00:24+00:00",
+   "finished_at": "2026-11-03T11:02:06+00:00",
+   "stopped_because": "reached the target number of postcodes",
+   "postcodes_in_council": 3860,
+   "postcodes_with_one_uprn": 211,
+   "postcodes_checked": 2,
+   "postcodes_comparable": 2,
+   "postcodes_agreeing": 2,
+   "agreeing_share": 1.0,
+   "agreeing_share_95pc_range": [
+    0.3424,
+    1.0
+   ],
+   "postcodes_not_comparable": 0,
+   "postcodes_ties_for_majority": 0,
+   "homes_compared": 10,
+   "homes_off_majority": 0,
+   "homes_off_majority_share": 0.0,
+   "disagreeing_postcodes_by_kind": {},
+   "disagreeing_postcodes_by_stream": {},
+   "by_postcode_size": {
+    "2-9 UPRNs": {
+     "comparable": 2,
+     "agreeing": 2
+    },
+    "10-24 UPRNs": {
+     "comparable": 0,
+     "agreeing": 0
+    },
+    "25+ UPRNs": {
+     "comparable": 0,
+     "agreeing": 0
+    }
+   },
+   "lookups": 11,
+   "lookup_outcomes": {
+    "upstream:KeyError": 1,
+    "dates": 10
+   },
+   "lookups_giving_dates_share": 0.9091,
+   "seconds_per_lookup": {
+    "mean": 3.04,
+    "median": 2.83,
+    "p95": 5.43,
+    "max": 5.43
+   },
+   "unmapped_bin_names": {},
+   "postcodes": [
+    {
+     "outcode": "GL50",
+     "uprns_total": 8,
+     "looked_up": 8,
+     "homes_with_dates": 7,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GL51",
+     "uprns_total": 3,
+     "looked_up": 3,
+     "homes_with_dates": 3,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    }
+   ]
+  },
+  {
+   "module": "DurhamCouncil",
+   "name": "Durham",
+   "platform": "Bartec",
+   "control": false,
+   "ons_codes": [
+    "E06000047"
+   ],
+   "started_at": "2026-11-03T11:00:19+00:00",
+   "finished_at": "2026-11-03T11:08:30+00:00",
+   "stopped_because": "reached the target number of postcodes",
+   "postcodes_in_council": 16375,
+   "postcodes_with_one_uprn": 536,
+   "postcodes_checked": 2,
+   "postcodes_comparable": 2,
+   "postcodes_agreeing": 1,
+   "agreeing_share": 0.5,
+   "agreeing_share_95pc_range": [
+    0.0945,
+    0.9055
+   ],
+   "postcodes_not_comparable": 0,
+   "postcodes_ties_for_majority": 0,
+   "homes_compared": 40,
+   "homes_off_majority": 1,
+   "homes_off_majority_share": 0.025,
+   "disagreeing_postcodes_by_kind": {
+    "other_week": 1
+   },
+   "disagreeing_postcodes_by_stream": {
+    "general": 1
+   },
+   "by_postcode_size": {
+    "2-9 UPRNs": {
+     "comparable": 0,
+     "agreeing": 0
+    },
+    "10-24 UPRNs": {
+     "comparable": 1,
+     "agreeing": 1
+    },
+    "25+ UPRNs": {
+     "comparable": 1,
+     "agreeing": 0
+    }
+   },
+   "lookups": 50,
+   "lookup_outcomes": {
+    "empty": 9,
+    "dates": 40,
+    "unmapped_bin_name": 1
+   },
+   "lookups_giving_dates_share": 0.8,
+   "seconds_per_lookup": {
+    "mean": 2.74,
+    "median": 2.89,
+    "p95": 3.77,
+    "max": 4.68
+   },
+   "unmapped_bin_names": {
+    "Collect Mattress": 1
+   },
+   "postcodes": [
+    {
+     "outcode": "DL14",
+     "uprns_total": 10,
+     "looked_up": 10,
+     "homes_with_dates": 7,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "DH2",
+     "uprns_total": 45,
+     "looked_up": 40,
+     "homes_with_dates": 33,
+     "comparable": true,
+     "agree": false,
+     "off_majority": 1,
+     "kinds": [
+      "other_week"
+     ],
+     "tied": false
+    }
+   ]
+  },
+  {
+   "module": "ElmbridgeBoroughCouncil",
+   "name": "Elmbridge",
+   "platform": "Granicus/Firmstep AchieveForms",
+   "control": false,
+   "ons_codes": [
+    "E07000207"
+   ],
+   "started_at": "2026-11-03T11:00:30+00:00",
+   "finished_at": "2026-11-03T11:05:13+00:00",
+   "stopped_because": "stopped after 15 failed lookups in a row (blocked or broken)",
+   "postcodes_in_council": 3847,
+   "postcodes_with_one_uprn": 204,
+   "postcodes_checked": 2,
+   "postcodes_comparable": 1,
+   "postcodes_agreeing": 1,
+   "agreeing_share": 1.0,
+   "agreeing_share_95pc_range": [
+    0.2065,
+    1.0
+   ],
+   "postcodes_not_comparable": 1,
+   "postcodes_ties_for_majority": 0,
+   "homes_compared": 3,
+   "homes_off_majority": 0,
+   "homes_off_majority_share": 0.0,
+   "disagreeing_postcodes_by_kind": {},
+   "disagreeing_postcodes_by_stream": {},
+   "by_postcode_size": {
+    "2-9 UPRNs": {
+     "comparable": 0,
+     "agreeing": 0
+    },
+    "10-24 UPRNs": {
+     "comparable": 1,
+     "agreeing": 1
+    },
+    "25+ UPRNs": {
+     "comparable": 0,
+     "agreeing": 0
+    }
+   },
+   "lookups": 29,
+   "lookup_outcomes": {
+    "upstream:AttributeError": 11,
+    "dates": 3,
+    "upstream:KeyError": 15
+   },
+   "lookups_giving_dates_share": 0.1034,
+   "seconds_per_lookup": {
+    "mean": 3.23,
+    "median": 3.12,
+    "p95": 4.06,
+    "max": 5.54
+   },
+   "unmapped_bin_names": {},
+   "postcodes": [
+    {
+     "outcode": "KT10",
+     "uprns_total": 14,
+     "looked_up": 14,
+     "homes_with_dates": 3,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "KT12",
+     "uprns_total": 61,
+     "looked_up": 15,
+     "homes_with_dates": 0,
+     "comparable": false
+    }
+   ]
+  },
+  {
+   "module": "HartDistrictCouncil",
+   "name": "Hart",
+   "platform": "Whitespace",
+   "control": false,
+   "ons_codes": [
+    "E07000089"
+   ],
+   "started_at": "2026-11-03T11:00:15+00:00",
+   "finished_at": "2026-11-03T11:02:55+00:00",
+   "stopped_because": "reached the target number of postcodes",
+   "postcodes_in_council": 2997,
+   "postcodes_with_one_uprn": 114,
+   "postcodes_checked": 2,
+   "postcodes_comparable": 2,
+   "postcodes_agreeing": 2,
+   "agreeing_share": 1.0,
+   "agreeing_share_95pc_range": [
+    0.3424,
+    1.0
+   ],
+   "postcodes_not_comparable": 0,
+   "postcodes_ties_for_majority": 0,
+   "homes_compared": 13,
+   "homes_off_majority": 0,
+   "homes_off_majority_share": 0.0,
+   "disagreeing_postcodes_by_kind": {},
+   "disagreeing_postcodes_by_stream": {},
+   "by_postcode_size": {
+    "2-9 UPRNs": {
+     "comparable": 1,
+     "agreeing": 1
+    },
+    "10-24 UPRNs": {
+     "comparable": 1,
+     "agreeing": 1
+    },
+    "25+ UPRNs": {
+     "comparable": 0,
+     "agreeing": 0
+    }
+   },
+   "lookups": 17,
+   "lookup_outcomes": {
+    "empty": 4,
+    "dates": 13
+   },
+   "lookups_giving_dates_share": 0.7647,
+   "seconds_per_lookup": {
+    "mean": 0.63,
+    "median": 0.53,
+    "p95": 2.33,
+    "max": 2.33
+   },
+   "unmapped_bin_names": {},
+   "postcodes": [
+    {
+     "outcode": "GU17",
+     "uprns_total": 5,
+     "looked_up": 5,
+     "homes_with_dates": 4,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "GU52",
+     "uprns_total": 12,
+     "looked_up": 12,
+     "homes_with_dates": 9,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    }
+   ]
+  },
+  {
+   "module": "OxfordCityCouncil",
+   "name": "Oxford",
+   "platform": "Jadu",
+   "control": false,
+   "ons_codes": [
+    "E07000178"
+   ],
+   "started_at": "2026-11-03T11:00:16+00:00",
+   "finished_at": "2026-11-03T11:09:02+00:00",
+   "stopped_because": "reached the target number of postcodes",
+   "postcodes_in_council": 3694,
+   "postcodes_with_one_uprn": 298,
+   "postcodes_checked": 2,
+   "postcodes_comparable": 2,
+   "postcodes_agreeing": 2,
+   "agreeing_share": 1.0,
+   "agreeing_share_95pc_range": [
+    0.3424,
+    1.0
+   ],
+   "postcodes_not_comparable": 0,
+   "postcodes_ties_for_majority": 0,
+   "homes_compared": 47,
+   "homes_off_majority": 0,
+   "homes_off_majority_share": 0.0,
+   "disagreeing_postcodes_by_kind": {},
+   "disagreeing_postcodes_by_stream": {},
+   "by_postcode_size": {
+    "2-9 UPRNs": {
+     "comparable": 0,
+     "agreeing": 0
+    },
+    "10-24 UPRNs": {
+     "comparable": 0,
+     "agreeing": 0
+    },
+    "25+ UPRNs": {
+     "comparable": 2,
+     "agreeing": 2
+    }
+   },
+   "lookups": 53,
+   "lookup_outcomes": {
+    "dates": 47,
+    "upstream:ValueError": 2,
+    "empty": 4
+   },
+   "lookups_giving_dates_share": 0.8868,
+   "seconds_per_lookup": {
+    "mean": 6.0,
+    "median": 6.31,
+    "p95": 7.39,
+    "max": 10.71
+   },
+   "unmapped_bin_names": {},
+   "postcodes": [
+    {
+     "outcode": "OX3",
+     "uprns_total": 27,
+     "looked_up": 27,
+     "homes_with_dates": 25,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "OX4",
+     "uprns_total": 26,
+     "looked_up": 26,
+     "homes_with_dates": 22,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    }
+   ]
+  },
+  {
+   "module": "BathAndNorthEastSomersetCouncil",
+   "name": "Bath and North East Somerset",
+   "platform": "Bespoke council site (control)",
+   "control": true,
+   "ons_codes": [
+    "E06000022"
+   ],
+   "started_at": "2026-11-03T11:00:19+00:00",
+   "finished_at": "2026-11-03T11:05:50+00:00",
+   "stopped_because": "reached the target number of postcodes",
+   "postcodes_in_council": 5998,
+   "postcodes_with_one_uprn": 266,
+   "postcodes_checked": 3,
+   "postcodes_comparable": 2,
+   "postcodes_agreeing": 2,
+   "agreeing_share": 1.0,
+   "agreeing_share_95pc_range": [
+    0.3424,
+    1.0
+   ],
+   "postcodes_not_comparable": 1,
+   "postcodes_ties_for_majority": 0,
+   "homes_compared": 27,
+   "homes_off_majority": 0,
+   "homes_off_majority_share": 0.0,
+   "disagreeing_postcodes_by_kind": {},
+   "disagreeing_postcodes_by_stream": {},
+   "by_postcode_size": {
+    "2-9 UPRNs": {
+     "comparable": 1,
+     "agreeing": 1
+    },
+    "10-24 UPRNs": {
+     "comparable": 1,
+     "agreeing": 1
+    },
+    "25+ UPRNs": {
+     "comparable": 0,
+     "agreeing": 0
+    }
+   },
+   "lookups": 34,
+   "lookup_outcomes": {
+    "empty": 7,
+    "dates": 27
+   },
+   "lookups_giving_dates_share": 0.7941,
+   "seconds_per_lookup": {
+    "mean": 0.74,
+    "median": 0.76,
+    "p95": 1.75,
+    "max": 1.9
+   },
+   "unmapped_bin_names": {},
+   "postcodes": [
+    {
+     "outcode": "BA1",
+     "uprns_total": 3,
+     "looked_up": 3,
+     "homes_with_dates": 0,
+     "comparable": false
+    },
+    {
+     "outcode": "BS39",
+     "uprns_total": 24,
+     "looked_up": 24,
+     "homes_with_dates": 22,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    },
+    {
+     "outcode": "BA3",
+     "uprns_total": 7,
+     "looked_up": 7,
+     "homes_with_dates": 5,
+     "comparable": true,
+     "agree": true,
+     "off_majority": 0,
+     "kinds": [],
+     "tied": false
+    }
+   ]
+  }
+ ]
+}
