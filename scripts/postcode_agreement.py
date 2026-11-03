@@ -26,6 +26,7 @@ import time
 from collections import Counter
 from datetime import UTC, date, datetime
 
+from fetcher import registry, streams
 from fetcher.model import Address, FetchError, UnmappedBinError, UpstreamError
 from fetcher.normalise import normalise
 from fetcher.ratelimit import DEFAULT_MIN_INTERVAL, CouncilRateLimiter
@@ -98,16 +99,33 @@ def classify_error(err: Exception) -> str:
     return f"other:{type(err).__name__}"
 
 
+def drop_unmapped_bins(council: dict, response: object) -> tuple[object, list[str]]:
+    """Takes out bins whose name maps to no stream ("Collect Mattress"), so one odd bin does not lose the whole home.
+
+    The live fetcher fails the fetch on such a name, on purpose. Here only the compared streams matter, so the names are
+    counted and reported instead.
+    """
+    if not isinstance(response, dict) or not isinstance(response.get("bins"), list):
+        return response, []
+    kept, dropped = [], []
+    for item in response["bins"]:
+        name = str(item.get("type")) if isinstance(item, dict) else None
+        if name and not registry.stream_for(council, name) and not streams.stream_for(name) and not streams.is_ignored(name):
+            dropped.append(name)
+        else:
+            kept.append(item)
+    return {**response, "bins": kept}, dropped
+
+
 def lookup(council: dict, address: Address, selenium_url: str | None, limiter: CouncilRateLimiter, interval: float) -> dict:
     limiter.wait(council["ons_code"], interval)
     started = time.monotonic()
     result: dict = {"outcome": "dates", "collections": [], "unmapped": []}
     try:
-        result["collections"] = normalise(council, run_ukbcd(council, address, selenium_url))
+        response, result["unmapped"] = drop_unmapped_bins(council, run_ukbcd(council, address, selenium_url))
+        result["collections"] = normalise(council, response)
     except Exception as err:  # the fetcher's errors, or anything a scraper raises that it did not wrap
         result["outcome"] = classify_error(err)
-        if isinstance(err, UnmappedBinError):
-            result["unmapped"] = [n.strip() for n in str(err).split(":", 1)[-1].split(",") if n.strip()]
     result["seconds"] = time.monotonic() - started
     return result
 

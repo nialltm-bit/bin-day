@@ -5,7 +5,7 @@
     {"module": "HartDistrictCouncil", "name": "Hart", "platform": "Whitespace", "ons_codes": ["E07000089"], "needs_selenium": false, "max_lookups": 750},
     {"module": "OxfordCityCouncil", "name": "Oxford", "platform": "Jadu", "ons_codes": ["E07000178"], "needs_selenium": false, "max_lookups": 750},
     {"module": "DurhamCouncil", "name": "Durham", "platform": "Bartec", "ons_codes": ["E06000047"], "needs_selenium": false, "max_lookups": 750},
-    {"module": "ElmbridgeBoroughCouncil", "name": "Elmbridge", "platform": "Granicus/Firmstep AchieveForms", "ons_codes": ["E07000207"], "needs_selenium": false, "max_lookups": 750},
+    {"module": "StevenageBoroughCouncil", "name": "Stevenage", "platform": "Granicus/Firmstep AchieveForms", "ons_codes": ["E07000243"], "needs_selenium": false, "max_lookups": 750},
     {"module": "AshfordBoroughCouncil", "name": "Ashford", "platform": "Bespoke council site (needs a browser)", "ons_codes": ["E07000105"], "needs_selenium": true, "max_lookups": 750},
     {"module": "BathAndNorthEastSomersetCouncil", "name": "Bath and North East Somerset", "platform": "Bespoke council site (control)", "ons_codes": ["E06000022"], "needs_selenium": false, "max_lookups": 250, "control": true}
   ]

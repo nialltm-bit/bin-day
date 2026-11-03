@@ -243,3 +243,12 @@ def test_the_whole_check_runs_with_a_fake_scraper_and_keeps_postcodes_out_of_its
     assert result["stopped_because"] == "ran out of drawn postcodes"
     text = out.read_text() + capsys.readouterr().out
     assert "ZZ1" not in text.replace('"outcode": "ZZ1"', "") and "ZZ2 2BB" not in text and "fake.gov.uk/?uprn" not in text
+
+
+def test_a_bin_that_maps_to_no_stream_is_dropped_and_named_instead_of_losing_the_home():
+    response = {"bins": [{"type": "Refuse", "collectionDate": "10/12/2099"}, {"type": "Collect Mattress", "collectionDate": "11/12/2099"},
+                         {"type": "Batteries", "collectionDate": "12/12/2099"}]}
+    kept, dropped = agreement.drop_unmapped_bins({}, response)
+    assert [b["type"] for b in kept["bins"]] == ["Refuse", "Batteries"]  # batteries is on the ignore list, so it goes to normalise
+    assert dropped == ["Collect Mattress"]
+    assert agreement.drop_unmapped_bins({}, "odd") == ("odd", [])
